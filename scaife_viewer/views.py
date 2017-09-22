@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from lxml import etree
 from MyCapytain.resolvers.cts.api import HttpCtsResolver
@@ -39,6 +39,9 @@ def reader(request):
 
     retriever = HttpCtsRetriever("https://perseus-cts.us1.eldarioncloud.com/api/cts")
     resolver = HttpCtsResolver(retriever)
+    reffs = resolver.getReffs(urn)
+    if len(reffs):
+        return redirect("/reader" + f"?urn={urn}:{reffs[0]}")
     tei = resolver.getTextualNode(urn).resource
     with open("tei.xsl") as f:
         transform = etree.XSLT(etree.XML(f.read()))
