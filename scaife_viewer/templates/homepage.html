@@ -6,5 +6,12 @@
 
 {% block body_class %}home{% endblock %}
 
-{% block body_base %}
+{% block body %}
+  <table class="table">
+    {% for resource in resources %}
+    <tr>
+      <td><a href="{% if resource.readable %}reader/{% endif %}?urn={{ resource.urn }}">{{ resource.label }}</a></td>
+    </tr>
+    {% endfor %}
+  </table>
 {% endblock %}
