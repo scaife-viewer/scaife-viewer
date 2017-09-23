@@ -42,13 +42,22 @@ def reader(request):
     reffs = resolver.getReffs(urn)
     if len(reffs):
         return redirect("/reader" + f"?urn={urn}:{reffs[0]}")
-    tei = resolver.getTextualNode(urn).resource
+    node = resolver.getTextualNode(urn)
+    tei = node.resource
     with open("tei.xsl") as f:
         transform = etree.XSLT(etree.XML(f.read()))
     text = transform(tei)
 
+    base_urn, subref = urn.rsplit(":", 1)
+    next_urn = f"{base_urn}:{node.nextId}" if node.nextId else None
+    prev_urn = f"{base_urn}:{node.prevId}" if node.prevId else None
+
     ctx = {
         "text": text,
+        "next": next_urn,
+        "prev": prev_urn,
+        "ancestors": [],  # @@@
+        "children": [],  # @@@
     }
 
     return render(request, "reader.html", ctx)
