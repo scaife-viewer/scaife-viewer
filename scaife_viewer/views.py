@@ -17,7 +17,7 @@ def home(request):
     # This is effectively the same as resolver.getMetadata, but tweaked very slightly
     # to allow displaying a the collection of text groups.
     retriever = HttpCtsRetriever("https://perseus-cts.us1.eldarioncloud.com/api/cts")
-    ti = XmlCtsTextInventoryMetadata.parse(retriever.getCapabilities(urn=str(urn)))
+    ti = XmlCtsTextInventoryMetadata.parse(retriever.getCapabilities(urn=urn))
     if urn:
         ti = [x for x in [ti] + ti.descendants if x.id == str(urn)][0]
     resources = []
@@ -55,11 +55,22 @@ def reader(request):
     next_urn = f"{version_urn}:{node.nextId}" if node.nextId else None
     prev_urn = f"{version_urn}:{node.prevId}" if node.prevId else None
 
+    ancestors = []
+    ref = urn.reference
+    parent = ref.parent
+    while parent is not None:
+        ancestors.append({
+            "urn": f"{version_urn}:{parent}",
+            "label": str(parent),
+        })
+        parent = parent.parent
+
     ctx = {
+        "urn": urn,
         "text": text,
         "next": next_urn,
         "prev": prev_urn,
-        "ancestors": [],  # @@@
+        "ancestors": ancestors,
         "children": [],  # @@@
     }
 

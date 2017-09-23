@@ -7,6 +7,9 @@
 {% block body_class %}reader{% endblock %}
 
 {% block body %}
+  {% if prev %}<a href="?urn={{ prev }}">Prev</a>{% endif %}
+  {% if next %}<a href="?urn={{ next }}">Next</a>{% endif %}
+  <div>{% if ancestors %}Ancestors: {% for ancestor in ancestors %}<a href="?urn={{ ancestor.urn }}">{{ ancestor.label }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}{% endif %}</div>
   <p>
     {{ text|safe }}
   </p>
