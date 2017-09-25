@@ -1,0 +1,66 @@
+header {
+  nav {
+    @extend .navbar;
+    @extend .navbar-expand-lg;
+    @extend .navbar-light;
+    @extend .bg-light;
+    div.topbar-container {
+      @extend .container;
+      >a {
+        @extend .navbar-brand;
+      }
+      button.expand {
+        @extend .navbar-toggler;
+        i {
+          @include icon(bars);
+        }
+      }
+      .nav-container {
+        @extend .collapse;
+        @extend .navbar-collapse;
+        .main-bar {
+          @extend .navbar-nav;
+          @extend .mr-auto;
+          li {
+            @extend .nav-item;
+            a {
+              @extend .nav-link;
+            }
+          }
+        }
+        .account-bar {
+          @extend .navbar-nav;
+          li {
+            @extend .nav-item;
+            a {
+              @extend .nav-link;
+            }
+          }
+          .user {
+            @extend .navbar-text;
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+            i {
+              @include icon(user);
+            }
+          }
+          .settings {
+            i {
+              @include icon(cog);
+            }
+          }
+          .logout {
+            i {
+              @include icon(power-off);
+            }
+          }
+          .login {
+            i {
+              @include icon(power-off);
+            }
+          }
+        }
+      }
+    }
+  }
+}

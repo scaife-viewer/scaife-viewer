@@ -2,21 +2,21 @@
 {% load account_tags %}
 
 
-<ul class="nav navbar-nav pull-right">
+<ul class="navbar-nav">
     {% if request.user.is_authenticated %}
-        <p class="navbar-text">
+        <li class="navbar-text">
             <i class="fa fa-user"></i> {% user_display request.user %}
-        </p>
-        <li>
-            <a href="{% url 'account_settings' %}"><i class="fa fa-cog"></i> {% trans "Settings" %}</a>
         </li>
-        <li>
-            <a id="account_logout" href="{% url 'account_logout' %}"><i class="fa fa-power-off"></i> {% trans "Log out" %}</a>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'account_settings' %}"><i class="fa fa-cog"></i> {% trans "Settings" %}</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="account_logout" href="{% url 'account_logout' %}"><i class="fa fa-power-off"></i> {% trans "Log out" %}</a>
         </li>
     {% else %}
-        <li><a href="{% url 'account_login' %}">{% trans "Log in" %}</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'account_login' %}">{% trans "Log in" %}</a></li>
         {% if ACCOUNT_OPEN_SIGNUP %}
-            <li><a href="{% url 'account_signup' %}">{% trans "Sign up" %}</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'account_signup' %}">{% trans "Sign up" %}</a></li>
         {% endif %}
     {% endif %}
 </ul>

@@ -6,12 +6,40 @@
 
 
 {% block styles %}
-    {% include "_styles.html" %}
+    <link href="{% static "css/app.css" %}" rel="stylesheet" />
 {% endblock %}
 
 
 {% block extra_head_base %}
     {% block extra_head %}{% endblock %}
+{% endblock %}
+
+
+{% block topbar_base %}
+<header>
+    <div class="navbar {% block navbar_class %}navbar-expand-lg navbar-light bg-light{% endblock %}">
+        <div class="container">
+        {% block topbar %}
+            {% block site_brand %}<a class="navbar-brand" href="{% url "home" %}">{{ SITE_NAME }}</a>{% endblock %}
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+                <span class="fa fa-bars"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                {% block nav %}
+                    <ul class="navbar-nav mr-auto">
+                        {% block nav_items %}{% comment %}
+                        <li class="nav-item"><a class="nav-link" href="#tab_one">One</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#tab_two">Two</a></li>
+                        {% endcomment %}{% endblock %}
+                    </ul>
+                {% endblock %}
+                {% block account_bar %}{% include "_account_bar.html" %}{% endblock %}
+            </div>
+        {% endblock %}
+        </div>
+    </div>
+</header>
 {% endblock %}
 
 
@@ -21,7 +49,7 @@
 
 
 {% block scripts %}
-    {% include "_scripts.html" %}
+    <script src="{% static "js/site.js" %}"></script>
 {% endblock %}
 
 {% block extra_body_base %}

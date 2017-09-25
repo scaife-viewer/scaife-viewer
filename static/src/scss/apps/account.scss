@@ -1,0 +1,83 @@
+@import "node_modules/bootstrap/scss/bootstrap";  // Seems to only be needed during dev; get errors in console despite seeing the results render ok
+body.account {
+  &.account-settings .account-settings,
+  &.account-password .account-password,
+  &.account-delete .account-delete {
+    @extend .active;
+  }
+  .subnav-container {
+    margin-top: 15px;
+    @extend .row;
+    .settings-nav {
+      @extend .col-sm-12;
+      @extend .col-md-6;
+      @extend .col-lg-4;
+      @extend .list-group;
+      .heading {
+        @extend .list-group-item;
+        h5 {
+          @extend .mb-1;
+        }
+      }
+      a {
+        @extend .list-group-item;
+        @extend .list-group-item-action;
+      }
+    }
+    section {
+      @extend .col-sm-12;
+      @extend .col-md-6;
+      @extend .col-lg-8;
+    }
+  }
+  .login,
+  .logout,
+  .signup,
+  .password-reset,
+  .email-confirmation,
+  .password-reset-sent,
+  .password-reset-token {
+    margin-top: 15px;
+    @extend .row;
+    >div {
+      @extend .col-sm-12;
+      @extend .col-md-6;
+      @extend .col-lg-4;
+      form {
+        legend {}
+        button {
+          @extend .btn;
+          @extend .btn-primary;
+        }
+        a.forgot-password {
+          display: block;
+          margin: 5px 0;
+          font-size: 90%;
+        }
+      }
+      p.login-signup {
+        margin-top: 15px;
+        background-color: $gray-100;
+        padding: 10px 15px;
+        border-radius: 5px;
+        border: 1px solid $gray-200;
+        color: $gray-700;
+        text-align: center;
+      }
+      .has-error {
+        .help-block {
+          color: $red;
+        }
+      }
+      p.help-text {
+        margin-top: 35px;
+        font-size: 80%;
+      }
+    }
+    >aside {
+      @extend .col-sm-12;
+      @extend .col-md-4;
+      @extend .col-lg-4;
+    }
+  }
+}

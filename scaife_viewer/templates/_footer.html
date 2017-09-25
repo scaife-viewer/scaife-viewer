@@ -1,3 +1,7 @@
 {% load i18n %}
 
-{% trans "&copy; 2017 &lt;your company here&gt;" %}
+{% now "Y" as current_year %}
+
+{% blocktrans %}
+&copy; {{ current_year }} &lt;your company here&gt;
+{% endblocktrans %}
