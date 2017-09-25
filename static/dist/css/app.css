@@ -17247,7 +17247,11 @@ div.text.text-xl {
     height: auto;
     font-size: 100%; } }
 
-#navtable div:hover {
+#navtable div.active:hover, #navtable body.account.account-settings div.account-settings:hover, body.account.account-settings #navtable div.account-settings:hover, #navtable
+body.account.account-password div.account-password:hover,
+body.account.account-password #navtable div.account-password:hover, #navtable
+body.account.account-delete div.account-delete:hover,
+body.account.account-delete #navtable div.account-delete:hover {
   background: #FAFAFA; }
 
 #navtable div#left, #navtable div#right {

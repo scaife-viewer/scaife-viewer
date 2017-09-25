@@ -22,8 +22,16 @@
   </div>
   </div>
   <div id="navtable">
-      <div id="left">{% if passage.prev_urn %}<a href="{% url 'reader' passage.prev_urn %}"><span>&laquo;</span>&nbsp;prev</a>{% endif %}</div>
+      {% if passage.prev_urn %}
+        <div id="left" class="active"><a href="{% url 'reader' passage.prev_urn %}"><span>&laquo;</span>&nbsp;prev</a></div>
+      {% else %}
+        <div id="left"></div>
+      {% endif %}
       <div id="center"><a href="#">ref</a></div>
-      <div id="right">{% if passage.next_urn %}<a href="{% url 'reader' passage.next_urn %}">next&nbsp;<span>&raquo;</span></a>{% endif %}</div>
+      {% if passage.next_urn %}
+        <div id="right" class="active"><a href="{% url 'reader' passage.next_urn %}">next&nbsp;<span>&raquo;</span></a></div>
+      {% else %}
+        <div id="right"></div>
+      {% endif %}
   </div>
 {% endblock %}
