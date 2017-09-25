@@ -9766,6 +9766,9 @@ header nav div.topbar-container .nav-container .account-bar .login i {
 body {
   font-family: 'Noto Sans'; }
 
+#content_body {
+  padding-top: 50px; }
+
 /*!
  * Bootstrap v4.0.0-beta (https://getbootstrap.com)
  * Copyright 2011-2017 The Bootstrap Authors
@@ -17201,7 +17204,6 @@ body.account .password-reset-token {
 div.text {
   font-family: 'Noto Serif';
   max-width: 550px;
-  margin-top: 50px;
   margin-bottom: 50px; }
 
 div.text.text-xs {
