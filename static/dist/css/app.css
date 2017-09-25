@@ -9757,6 +9757,12 @@ header nav div.topbar-container .nav-container .account-bar .login i {
   -moz-osx-font-smoothing: grayscale;
   font-size: inherit; }
 
+.navbar-brand, header nav div.topbar-container > a {
+  font-family: 'Noto Serif'; }
+  .navbar-brand img, header nav div.topbar-container > a img {
+    height: 60px;
+    margin: -12px 0; }
+
 body {
   font-family: 'Noto Sans'; }
 
