@@ -7,7 +7,7 @@
 {% block body_class %}reader{% endblock %}
 
 {% block body %}
-  <div>{% if ancestors %}Ancestors: {% for ancestor in ancestors %}<a href="?urn={{ ancestor.urn }}">{{ ancestor.label }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}{% endif %}</div>
+  <div>{% if passage.ancestors %}Ancestors: {% for ancestor in passage.ancestors %}<a href="{% url 'reader' ancestor.urn %}">{{ ancestor.label }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}{% endif %}</div>
   <div class="overall">
   <div class="left">
       <div class="text text-md">
@@ -16,14 +16,14 @@
   </div>
   <div class="right">
       <div class="text text-md">
-          {{ text|safe }}
+          {{ passage.render|safe }}
         </div>
     </div>
   </div>
   </div>
   <div id="navtable">
-      <div id="left"><a href="?urn={{ prev }}"><span>&laquo;</span>&nbsp;prev</a></div>
+      <div id="left">{% if passage.prev_urn %}<a href="{% url 'reader' passage.prev_urn %}"><span>&laquo;</span>&nbsp;prev</a>{% endif %}</div>
       <div id="center"><a href="#">ref</a></div>
-      <div id="right"><a href="?urn={{ next }}">next&nbsp;<span>&raquo;</span></a></div>
+      <div id="right">{% if passage.next_urn %}<a href="{% url 'reader' passage.next_urn %}">next&nbsp;<span>&raquo;</span></a>{% endif %}</div>
   </div>
 {% endblock %}

@@ -1,77 +1,32 @@
 from django.shortcuts import render, redirect
 
-from lxml import etree
-from MyCapytain.common.reference import URN
-from MyCapytain.resolvers.cts.api import HttpCtsResolver
-from MyCapytain.resources.collections.cts import XmlCtsTextInventoryMetadata
-from MyCapytain.retrievers.cts5 import HttpCtsRetriever
+from .cts import CTS
 
 
 def home(request):
-
-    urn = request.GET.get("urn")
-    if urn:
-        urn = URN(urn)
-
-    # The follow code is a super simple way of traversing a CTS API.
-    # This is effectively the same as resolver.getMetadata, but tweaked very slightly
-    # to allow displaying a the collection of text groups.
-    retriever = HttpCtsRetriever("https://perseus-cts.us1.eldarioncloud.com/api/cts")
-    ti = XmlCtsTextInventoryMetadata.parse(retriever.getCapabilities(urn=urn))
-    if urn:
-        ti = [x for x in [ti] + ti.descendants if x.id == str(urn)][0]
-    resources = []
-    for o in ti.members:
-        resource = {
-            "urn": o.id,
-            "label": o.get_label(lang="eng"),
-            "readable": o.readable,
-        }
-        resources.append(resource)
-
+    cts = CTS()
     ctx = {
-        "resources": resources,
+        "resources": cts.resources(),
     }
-
     return render(request, "homepage.html", ctx)
 
 
-def reader(request):
-
-    urn = URN(request.GET["urn"])
-    version_urn = urn.upTo(URN.VERSION)
-
-    retriever = HttpCtsRetriever("https://perseus-cts.us1.eldarioncloud.com/api/cts")
-    resolver = HttpCtsResolver(retriever)
-    reffs = resolver.getReffs(urn)
-    if len(reffs):
-        return redirect("/reader" + f"?urn={version_urn}:{reffs[0]}")
-    node = resolver.getTextualNode(urn)
-    tei = node.resource
-    with open("tei.xsl") as f:
-        transform = etree.XSLT(etree.XML(f.read()))
-    text = transform(tei)
-
-    next_urn = f"{version_urn}:{node.nextId}" if node.nextId else None
-    prev_urn = f"{version_urn}:{node.prevId}" if node.prevId else None
-
-    ancestors = []
-    ref = urn.reference
-    parent = ref.parent
-    while parent is not None:
-        ancestors.append({
-            "urn": f"{version_urn}:{parent}",
-            "label": str(parent),
-        })
-        parent = parent.parent
-
+def cts_resource(request, urn):
+    cts = CTS()
+    if not cts.is_resource(urn):
+        raise Exception("not resource")
     ctx = {
-        "urn": urn,
-        "text": text,
-        "next": next_urn,
-        "prev": prev_urn,
-        "ancestors": ancestors,
-        "children": [],  # @@@
+        "resources": cts.resources(urn=urn),
     }
+    return render(request, "cts_resource.html", ctx)
 
+
+def reader(request, urn):
+    cts = CTS()
+    if cts.is_resource(urn):
+        return redirect("reader", urn=cts.first_urn(urn))
+    passage = cts.passage(urn)
+    ctx = {
+        "passage": passage,
+    }
     return render(request, "reader.html", ctx)
