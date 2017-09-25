@@ -2,8 +2,8 @@ header {
   nav {
     @extend .navbar;
     @extend .navbar-expand-lg;
-    @extend .navbar-light;
-    @extend .bg-light;
+    @extend .navbar-dark;
+    @extend .bg-dark;
     div.topbar-container {
       @extend .container;
       >a {
