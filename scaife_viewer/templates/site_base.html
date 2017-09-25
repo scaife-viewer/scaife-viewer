@@ -19,7 +19,7 @@
 
 {% block topbar_base %}
 <header>
-    <div class="navbar {% block navbar_class %}navbar-expand-lg navbar-light bg-light{% endblock %}">
+    <nav>
         <div class="container">
         {% block topbar %}
             {% block site_brand %}<a class="navbar-brand" href="{% url "home" %}"><img src="{% static 'images/perseus_running_man.png' %}"> {{ SITE_NAME }}</a>{% endblock %}
@@ -40,7 +40,7 @@
             </div>
         {% endblock %}
         </div>
-    </div>
+    </nav>
 </header>
 {% endblock %}
 
