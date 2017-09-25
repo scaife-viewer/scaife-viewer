@@ -479,23 +479,23 @@ pre {
   max-height: 340px;
   overflow-y: scroll; }
 
-.container, header nav div.topbar-container, #content_body, footer div {
+.container, header nav div.topbar-container, #content_body {
   margin-right: auto;
   margin-left: auto;
   padding-right: 15px;
   padding-left: 15px;
   width: 100%; }
   @media (min-width: 576px) {
-    .container, header nav div.topbar-container, #content_body, footer div {
+    .container, header nav div.topbar-container, #content_body {
       max-width: 540px; } }
   @media (min-width: 768px) {
-    .container, header nav div.topbar-container, #content_body, footer div {
+    .container, header nav div.topbar-container, #content_body {
       max-width: 720px; } }
   @media (min-width: 992px) {
-    .container, header nav div.topbar-container, #content_body, footer div {
+    .container, header nav div.topbar-container, #content_body {
       max-width: 960px; } }
   @media (min-width: 1200px) {
-    .container, header nav div.topbar-container, #content_body, footer div {
+    .container, header nav div.topbar-container, #content_body {
       max-width: 1140px; } }
 
 .container-fluid {
@@ -3336,7 +3336,7 @@ body.account.account-delete .tab-content > .account-delete {
   align-items: center;
   justify-content: space-between;
   padding: 0.5rem 1rem; }
-  .navbar > .container, header nav > .container, header nav .navbar > div.topbar-container, header nav > div.topbar-container, .navbar > #content_body, header nav > #content_body, footer .navbar > div, header footer nav > div, footer header nav > div,
+  .navbar > .container, header nav > .container, header nav .navbar > div.topbar-container, header nav > div.topbar-container, .navbar > #content_body, header nav > #content_body,
   .navbar > .container-fluid, header nav > .container-fluid {
     display: flex;
     flex-wrap: wrap;
@@ -3396,7 +3396,7 @@ body.account.account-delete .tab-content > .account-delete {
   background-size: 100% 100%; }
 
 @media (max-width: 575px) {
-  .navbar-expand-sm > .container, header nav .navbar-expand-sm > div.topbar-container, .navbar-expand-sm > #content_body, footer .navbar-expand-sm > div,
+  .navbar-expand-sm > .container, header nav .navbar-expand-sm > div.topbar-container, .navbar-expand-sm > #content_body,
   .navbar-expand-sm > .container-fluid {
     padding-right: 0;
     padding-left: 0; } }
@@ -3416,7 +3416,7 @@ body.account.account-delete .tab-content > .account-delete {
       .navbar-expand-sm .navbar-nav .nav-link, .navbar-expand-sm header nav div.topbar-container .nav-container .main-bar .nav-link, header nav div.topbar-container .nav-container .navbar-expand-sm .main-bar .nav-link, .navbar-expand-sm header nav div.topbar-container .nav-container .account-bar .nav-link, header nav div.topbar-container .nav-container .navbar-expand-sm .account-bar .nav-link, header nav div.topbar-container .nav-container .main-bar li .navbar-expand-sm .navbar-nav a, .navbar-expand-sm header nav div.topbar-container .nav-container .main-bar li a, header nav div.topbar-container .nav-container .navbar-expand-sm .main-bar li a, header nav div.topbar-container .nav-container .main-bar li .navbar-expand-sm .account-bar a, header nav div.topbar-container .nav-container .account-bar li .navbar-expand-sm .navbar-nav a, header nav div.topbar-container .nav-container .account-bar li .navbar-expand-sm .main-bar a, .navbar-expand-sm header nav div.topbar-container .nav-container .account-bar li a, header nav div.topbar-container .nav-container .navbar-expand-sm .account-bar li a {
         padding-right: .5rem;
         padding-left: .5rem; }
-    .navbar-expand-sm > .container, header nav .navbar-expand-sm > div.topbar-container, .navbar-expand-sm > #content_body, footer .navbar-expand-sm > div,
+    .navbar-expand-sm > .container, header nav .navbar-expand-sm > div.topbar-container, .navbar-expand-sm > #content_body,
     .navbar-expand-sm > .container-fluid {
       flex-wrap: nowrap; }
     .navbar-expand-sm .navbar-collapse, .navbar-expand-sm header nav div.topbar-container .nav-container, header nav div.topbar-container .navbar-expand-sm .nav-container {
@@ -3425,7 +3425,7 @@ body.account.account-delete .tab-content > .account-delete {
       display: none; } }
 
 @media (max-width: 767px) {
-  .navbar-expand-md > .container, header nav .navbar-expand-md > div.topbar-container, .navbar-expand-md > #content_body, footer .navbar-expand-md > div,
+  .navbar-expand-md > .container, header nav .navbar-expand-md > div.topbar-container, .navbar-expand-md > #content_body,
   .navbar-expand-md > .container-fluid {
     padding-right: 0;
     padding-left: 0; } }
@@ -3445,7 +3445,7 @@ body.account.account-delete .tab-content > .account-delete {
       .navbar-expand-md .navbar-nav .nav-link, .navbar-expand-md header nav div.topbar-container .nav-container .main-bar .nav-link, header nav div.topbar-container .nav-container .navbar-expand-md .main-bar .nav-link, .navbar-expand-md header nav div.topbar-container .nav-container .account-bar .nav-link, header nav div.topbar-container .nav-container .navbar-expand-md .account-bar .nav-link, header nav div.topbar-container .nav-container .main-bar li .navbar-expand-md .navbar-nav a, .navbar-expand-md header nav div.topbar-container .nav-container .main-bar li a, header nav div.topbar-container .nav-container .navbar-expand-md .main-bar li a, header nav div.topbar-container .nav-container .main-bar li .navbar-expand-md .account-bar a, header nav div.topbar-container .nav-container .account-bar li .navbar-expand-md .navbar-nav a, header nav div.topbar-container .nav-container .account-bar li .navbar-expand-md .main-bar a, .navbar-expand-md header nav div.topbar-container .nav-container .account-bar li a, header nav div.topbar-container .nav-container .navbar-expand-md .account-bar li a {
         padding-right: .5rem;
         padding-left: .5rem; }
-    .navbar-expand-md > .container, header nav .navbar-expand-md > div.topbar-container, .navbar-expand-md > #content_body, footer .navbar-expand-md > div,
+    .navbar-expand-md > .container, header nav .navbar-expand-md > div.topbar-container, .navbar-expand-md > #content_body,
     .navbar-expand-md > .container-fluid {
       flex-wrap: nowrap; }
     .navbar-expand-md .navbar-collapse, .navbar-expand-md header nav div.topbar-container .nav-container, header nav div.topbar-container .navbar-expand-md .nav-container {
@@ -3454,7 +3454,7 @@ body.account.account-delete .tab-content > .account-delete {
       display: none; } }
 
 @media (max-width: 991px) {
-  .navbar-expand-lg > .container, header nav > .container, header nav .navbar-expand-lg > div.topbar-container, header nav > div.topbar-container, .navbar-expand-lg > #content_body, header nav > #content_body, footer .navbar-expand-lg > div, header footer nav > div, footer header nav > div,
+  .navbar-expand-lg > .container, header nav > .container, header nav .navbar-expand-lg > div.topbar-container, header nav > div.topbar-container, .navbar-expand-lg > #content_body, header nav > #content_body,
   .navbar-expand-lg > .container-fluid, header nav > .container-fluid {
     padding-right: 0;
     padding-left: 0; } }
@@ -3474,7 +3474,7 @@ body.account.account-delete .tab-content > .account-delete {
       .navbar-expand-lg .navbar-nav .nav-link, header nav .navbar-nav .nav-link, header nav div.topbar-container .nav-container .main-bar .nav-link, header nav div.topbar-container .nav-container .account-bar .nav-link, header nav div.topbar-container .nav-container .main-bar li a, header nav div.topbar-container .nav-container .account-bar li a {
         padding-right: .5rem;
         padding-left: .5rem; }
-    .navbar-expand-lg > .container, header nav > .container, header nav .navbar-expand-lg > div.topbar-container, header nav > div.topbar-container, .navbar-expand-lg > #content_body, header nav > #content_body, footer .navbar-expand-lg > div, header footer nav > div, footer header nav > div,
+    .navbar-expand-lg > .container, header nav > .container, header nav .navbar-expand-lg > div.topbar-container, header nav > div.topbar-container, .navbar-expand-lg > #content_body, header nav > #content_body,
     .navbar-expand-lg > .container-fluid, header nav > .container-fluid {
       flex-wrap: nowrap; }
     .navbar-expand-lg .navbar-collapse, header nav .navbar-collapse, header nav div.topbar-container .nav-container {
@@ -3483,7 +3483,7 @@ body.account.account-delete .tab-content > .account-delete {
       display: none; } }
 
 @media (max-width: 1199px) {
-  .navbar-expand-xl > .container, header nav .navbar-expand-xl > div.topbar-container, .navbar-expand-xl > #content_body, footer .navbar-expand-xl > div,
+  .navbar-expand-xl > .container, header nav .navbar-expand-xl > div.topbar-container, .navbar-expand-xl > #content_body,
   .navbar-expand-xl > .container-fluid {
     padding-right: 0;
     padding-left: 0; } }
@@ -3503,7 +3503,7 @@ body.account.account-delete .tab-content > .account-delete {
       .navbar-expand-xl .navbar-nav .nav-link, .navbar-expand-xl header nav div.topbar-container .nav-container .main-bar .nav-link, header nav div.topbar-container .nav-container .navbar-expand-xl .main-bar .nav-link, .navbar-expand-xl header nav div.topbar-container .nav-container .account-bar .nav-link, header nav div.topbar-container .nav-container .navbar-expand-xl .account-bar .nav-link, header nav div.topbar-container .nav-container .main-bar li .navbar-expand-xl .navbar-nav a, .navbar-expand-xl header nav div.topbar-container .nav-container .main-bar li a, header nav div.topbar-container .nav-container .navbar-expand-xl .main-bar li a, header nav div.topbar-container .nav-container .main-bar li .navbar-expand-xl .account-bar a, header nav div.topbar-container .nav-container .account-bar li .navbar-expand-xl .navbar-nav a, header nav div.topbar-container .nav-container .account-bar li .navbar-expand-xl .main-bar a, .navbar-expand-xl header nav div.topbar-container .nav-container .account-bar li a, header nav div.topbar-container .nav-container .navbar-expand-xl .account-bar li a {
         padding-right: .5rem;
         padding-left: .5rem; }
-    .navbar-expand-xl > .container, header nav .navbar-expand-xl > div.topbar-container, .navbar-expand-xl > #content_body, footer .navbar-expand-xl > div,
+    .navbar-expand-xl > .container, header nav .navbar-expand-xl > div.topbar-container, .navbar-expand-xl > #content_body,
     .navbar-expand-xl > .container-fluid {
       flex-wrap: nowrap; }
     .navbar-expand-xl .navbar-collapse, .navbar-expand-xl header nav div.topbar-container .nav-container, header nav div.topbar-container .navbar-expand-xl .nav-container {
@@ -3515,7 +3515,7 @@ body.account.account-delete .tab-content > .account-delete {
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: flex-start; }
-  .navbar-expand > .container, header nav .navbar-expand > div.topbar-container, .navbar-expand > #content_body, footer .navbar-expand > div,
+  .navbar-expand > .container, header nav .navbar-expand > div.topbar-container, .navbar-expand > #content_body,
   .navbar-expand > .container-fluid {
     padding-right: 0;
     padding-left: 0; }
@@ -3529,7 +3529,7 @@ body.account.account-delete .tab-content > .account-delete {
     .navbar-expand .navbar-nav .nav-link, .navbar-expand header nav div.topbar-container .nav-container .main-bar .nav-link, header nav div.topbar-container .nav-container .navbar-expand .main-bar .nav-link, .navbar-expand header nav div.topbar-container .nav-container .account-bar .nav-link, header nav div.topbar-container .nav-container .navbar-expand .account-bar .nav-link, header nav div.topbar-container .nav-container .main-bar li .navbar-expand .navbar-nav a, .navbar-expand header nav div.topbar-container .nav-container .main-bar li a, header nav div.topbar-container .nav-container .navbar-expand .main-bar li a, header nav div.topbar-container .nav-container .main-bar li .navbar-expand .account-bar a, header nav div.topbar-container .nav-container .account-bar li .navbar-expand .navbar-nav a, header nav div.topbar-container .nav-container .account-bar li .navbar-expand .main-bar a, .navbar-expand header nav div.topbar-container .nav-container .account-bar li a, header nav div.topbar-container .nav-container .navbar-expand .account-bar li a {
       padding-right: .5rem;
       padding-left: .5rem; }
-  .navbar-expand > .container, header nav .navbar-expand > div.topbar-container, .navbar-expand > #content_body, footer .navbar-expand > div,
+  .navbar-expand > .container, header nav .navbar-expand > div.topbar-container, .navbar-expand > #content_body,
   .navbar-expand > .container-fluid {
     flex-wrap: nowrap; }
   .navbar-expand .navbar-collapse, .navbar-expand header nav div.topbar-container .nav-container, header nav div.topbar-container .navbar-expand .nav-container {
@@ -9757,14 +9757,8 @@ header nav div.topbar-container .nav-container .account-bar .login i {
   -moz-osx-font-smoothing: grayscale;
   font-size: inherit; }
 
-footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 60px;
-  line-height: 60px;
-  background-color: #f8f9fa;
-  padding: 0 60px; }
+body {
+  font-family: 'Noto Sans'; }
 
 /*!
  * Bootstrap v4.0.0-beta (https://getbootstrap.com)
@@ -10246,23 +10240,23 @@ pre {
   max-height: 340px;
   overflow-y: scroll; }
 
-.container, header nav div.topbar-container, #content_body, footer div {
+.container, header nav div.topbar-container, #content_body {
   margin-right: auto;
   margin-left: auto;
   padding-right: 15px;
   padding-left: 15px;
   width: 100%; }
   @media (min-width: 576px) {
-    .container, header nav div.topbar-container, #content_body, footer div {
+    .container, header nav div.topbar-container, #content_body {
       max-width: 540px; } }
   @media (min-width: 768px) {
-    .container, header nav div.topbar-container, #content_body, footer div {
+    .container, header nav div.topbar-container, #content_body {
       max-width: 720px; } }
   @media (min-width: 992px) {
-    .container, header nav div.topbar-container, #content_body, footer div {
+    .container, header nav div.topbar-container, #content_body {
       max-width: 960px; } }
   @media (min-width: 1200px) {
-    .container, header nav div.topbar-container, #content_body, footer div {
+    .container, header nav div.topbar-container, #content_body {
       max-width: 1140px; } }
 
 .container-fluid {
@@ -13103,7 +13097,7 @@ body.account.account-delete .tab-content > .account-delete {
   align-items: center;
   justify-content: space-between;
   padding: 0.5rem 1rem; }
-  .navbar > .container, header nav > .container, header nav .navbar > div.topbar-container, header nav > div.topbar-container, .navbar > #content_body, header nav > #content_body, footer .navbar > div, header footer nav > div, footer header nav > div,
+  .navbar > .container, header nav > .container, header nav .navbar > div.topbar-container, header nav > div.topbar-container, .navbar > #content_body, header nav > #content_body,
   .navbar > .container-fluid, header nav > .container-fluid {
     display: flex;
     flex-wrap: wrap;
@@ -13163,7 +13157,7 @@ body.account.account-delete .tab-content > .account-delete {
   background-size: 100% 100%; }
 
 @media (max-width: 575px) {
-  .navbar-expand-sm > .container, header nav .navbar-expand-sm > div.topbar-container, .navbar-expand-sm > #content_body, footer .navbar-expand-sm > div,
+  .navbar-expand-sm > .container, header nav .navbar-expand-sm > div.topbar-container, .navbar-expand-sm > #content_body,
   .navbar-expand-sm > .container-fluid {
     padding-right: 0;
     padding-left: 0; } }
@@ -13183,7 +13177,7 @@ body.account.account-delete .tab-content > .account-delete {
       .navbar-expand-sm .navbar-nav .nav-link, .navbar-expand-sm header nav div.topbar-container .nav-container .main-bar .nav-link, header nav div.topbar-container .nav-container .navbar-expand-sm .main-bar .nav-link, .navbar-expand-sm header nav div.topbar-container .nav-container .account-bar .nav-link, header nav div.topbar-container .nav-container .navbar-expand-sm .account-bar .nav-link, header nav div.topbar-container .nav-container .main-bar li .navbar-expand-sm .navbar-nav a, .navbar-expand-sm header nav div.topbar-container .nav-container .main-bar li a, header nav div.topbar-container .nav-container .navbar-expand-sm .main-bar li a, header nav div.topbar-container .nav-container .main-bar li .navbar-expand-sm .account-bar a, header nav div.topbar-container .nav-container .account-bar li .navbar-expand-sm .navbar-nav a, header nav div.topbar-container .nav-container .account-bar li .navbar-expand-sm .main-bar a, .navbar-expand-sm header nav div.topbar-container .nav-container .account-bar li a, header nav div.topbar-container .nav-container .navbar-expand-sm .account-bar li a {
         padding-right: .5rem;
         padding-left: .5rem; }
-    .navbar-expand-sm > .container, header nav .navbar-expand-sm > div.topbar-container, .navbar-expand-sm > #content_body, footer .navbar-expand-sm > div,
+    .navbar-expand-sm > .container, header nav .navbar-expand-sm > div.topbar-container, .navbar-expand-sm > #content_body,
     .navbar-expand-sm > .container-fluid {
       flex-wrap: nowrap; }
     .navbar-expand-sm .navbar-collapse, .navbar-expand-sm header nav div.topbar-container .nav-container, header nav div.topbar-container .navbar-expand-sm .nav-container {
@@ -13192,7 +13186,7 @@ body.account.account-delete .tab-content > .account-delete {
       display: none; } }
 
 @media (max-width: 767px) {
-  .navbar-expand-md > .container, header nav .navbar-expand-md > div.topbar-container, .navbar-expand-md > #content_body, footer .navbar-expand-md > div,
+  .navbar-expand-md > .container, header nav .navbar-expand-md > div.topbar-container, .navbar-expand-md > #content_body,
   .navbar-expand-md > .container-fluid {
     padding-right: 0;
     padding-left: 0; } }
@@ -13212,7 +13206,7 @@ body.account.account-delete .tab-content > .account-delete {
       .navbar-expand-md .navbar-nav .nav-link, .navbar-expand-md header nav div.topbar-container .nav-container .main-bar .nav-link, header nav div.topbar-container .nav-container .navbar-expand-md .main-bar .nav-link, .navbar-expand-md header nav div.topbar-container .nav-container .account-bar .nav-link, header nav div.topbar-container .nav-container .navbar-expand-md .account-bar .nav-link, header nav div.topbar-container .nav-container .main-bar li .navbar-expand-md .navbar-nav a, .navbar-expand-md header nav div.topbar-container .nav-container .main-bar li a, header nav div.topbar-container .nav-container .navbar-expand-md .main-bar li a, header nav div.topbar-container .nav-container .main-bar li .navbar-expand-md .account-bar a, header nav div.topbar-container .nav-container .account-bar li .navbar-expand-md .navbar-nav a, header nav div.topbar-container .nav-container .account-bar li .navbar-expand-md .main-bar a, .navbar-expand-md header nav div.topbar-container .nav-container .account-bar li a, header nav div.topbar-container .nav-container .navbar-expand-md .account-bar li a {
         padding-right: .5rem;
         padding-left: .5rem; }
-    .navbar-expand-md > .container, header nav .navbar-expand-md > div.topbar-container, .navbar-expand-md > #content_body, footer .navbar-expand-md > div,
+    .navbar-expand-md > .container, header nav .navbar-expand-md > div.topbar-container, .navbar-expand-md > #content_body,
     .navbar-expand-md > .container-fluid {
       flex-wrap: nowrap; }
     .navbar-expand-md .navbar-collapse, .navbar-expand-md header nav div.topbar-container .nav-container, header nav div.topbar-container .navbar-expand-md .nav-container {
@@ -13221,7 +13215,7 @@ body.account.account-delete .tab-content > .account-delete {
       display: none; } }
 
 @media (max-width: 991px) {
-  .navbar-expand-lg > .container, header nav > .container, header nav .navbar-expand-lg > div.topbar-container, header nav > div.topbar-container, .navbar-expand-lg > #content_body, header nav > #content_body, footer .navbar-expand-lg > div, header footer nav > div, footer header nav > div,
+  .navbar-expand-lg > .container, header nav > .container, header nav .navbar-expand-lg > div.topbar-container, header nav > div.topbar-container, .navbar-expand-lg > #content_body, header nav > #content_body,
   .navbar-expand-lg > .container-fluid, header nav > .container-fluid {
     padding-right: 0;
     padding-left: 0; } }
@@ -13241,7 +13235,7 @@ body.account.account-delete .tab-content > .account-delete {
       .navbar-expand-lg .navbar-nav .nav-link, header nav .navbar-nav .nav-link, header nav div.topbar-container .nav-container .main-bar .nav-link, header nav div.topbar-container .nav-container .account-bar .nav-link, header nav div.topbar-container .nav-container .main-bar li a, header nav div.topbar-container .nav-container .account-bar li a {
         padding-right: .5rem;
         padding-left: .5rem; }
-    .navbar-expand-lg > .container, header nav > .container, header nav .navbar-expand-lg > div.topbar-container, header nav > div.topbar-container, .navbar-expand-lg > #content_body, header nav > #content_body, footer .navbar-expand-lg > div, header footer nav > div, footer header nav > div,
+    .navbar-expand-lg > .container, header nav > .container, header nav .navbar-expand-lg > div.topbar-container, header nav > div.topbar-container, .navbar-expand-lg > #content_body, header nav > #content_body,
     .navbar-expand-lg > .container-fluid, header nav > .container-fluid {
       flex-wrap: nowrap; }
     .navbar-expand-lg .navbar-collapse, header nav .navbar-collapse, header nav div.topbar-container .nav-container {
@@ -13250,7 +13244,7 @@ body.account.account-delete .tab-content > .account-delete {
       display: none; } }
 
 @media (max-width: 1199px) {
-  .navbar-expand-xl > .container, header nav .navbar-expand-xl > div.topbar-container, .navbar-expand-xl > #content_body, footer .navbar-expand-xl > div,
+  .navbar-expand-xl > .container, header nav .navbar-expand-xl > div.topbar-container, .navbar-expand-xl > #content_body,
   .navbar-expand-xl > .container-fluid {
     padding-right: 0;
     padding-left: 0; } }
@@ -13270,7 +13264,7 @@ body.account.account-delete .tab-content > .account-delete {
       .navbar-expand-xl .navbar-nav .nav-link, .navbar-expand-xl header nav div.topbar-container .nav-container .main-bar .nav-link, header nav div.topbar-container .nav-container .navbar-expand-xl .main-bar .nav-link, .navbar-expand-xl header nav div.topbar-container .nav-container .account-bar .nav-link, header nav div.topbar-container .nav-container .navbar-expand-xl .account-bar .nav-link, header nav div.topbar-container .nav-container .main-bar li .navbar-expand-xl .navbar-nav a, .navbar-expand-xl header nav div.topbar-container .nav-container .main-bar li a, header nav div.topbar-container .nav-container .navbar-expand-xl .main-bar li a, header nav div.topbar-container .nav-container .main-bar li .navbar-expand-xl .account-bar a, header nav div.topbar-container .nav-container .account-bar li .navbar-expand-xl .navbar-nav a, header nav div.topbar-container .nav-container .account-bar li .navbar-expand-xl .main-bar a, .navbar-expand-xl header nav div.topbar-container .nav-container .account-bar li a, header nav div.topbar-container .nav-container .navbar-expand-xl .account-bar li a {
         padding-right: .5rem;
         padding-left: .5rem; }
-    .navbar-expand-xl > .container, header nav .navbar-expand-xl > div.topbar-container, .navbar-expand-xl > #content_body, footer .navbar-expand-xl > div,
+    .navbar-expand-xl > .container, header nav .navbar-expand-xl > div.topbar-container, .navbar-expand-xl > #content_body,
     .navbar-expand-xl > .container-fluid {
       flex-wrap: nowrap; }
     .navbar-expand-xl .navbar-collapse, .navbar-expand-xl header nav div.topbar-container .nav-container, header nav div.topbar-container .navbar-expand-xl .nav-container {
@@ -13282,7 +13276,7 @@ body.account.account-delete .tab-content > .account-delete {
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: flex-start; }
-  .navbar-expand > .container, header nav .navbar-expand > div.topbar-container, .navbar-expand > #content_body, footer .navbar-expand > div,
+  .navbar-expand > .container, header nav .navbar-expand > div.topbar-container, .navbar-expand > #content_body,
   .navbar-expand > .container-fluid {
     padding-right: 0;
     padding-left: 0; }
@@ -13296,7 +13290,7 @@ body.account.account-delete .tab-content > .account-delete {
     .navbar-expand .navbar-nav .nav-link, .navbar-expand header nav div.topbar-container .nav-container .main-bar .nav-link, header nav div.topbar-container .nav-container .navbar-expand .main-bar .nav-link, .navbar-expand header nav div.topbar-container .nav-container .account-bar .nav-link, header nav div.topbar-container .nav-container .navbar-expand .account-bar .nav-link, header nav div.topbar-container .nav-container .main-bar li .navbar-expand .navbar-nav a, .navbar-expand header nav div.topbar-container .nav-container .main-bar li a, header nav div.topbar-container .nav-container .navbar-expand .main-bar li a, header nav div.topbar-container .nav-container .main-bar li .navbar-expand .account-bar a, header nav div.topbar-container .nav-container .account-bar li .navbar-expand .navbar-nav a, header nav div.topbar-container .nav-container .account-bar li .navbar-expand .main-bar a, .navbar-expand header nav div.topbar-container .nav-container .account-bar li a, header nav div.topbar-container .nav-container .navbar-expand .account-bar li a {
       padding-right: .5rem;
       padding-left: .5rem; }
-  .navbar-expand > .container, header nav .navbar-expand > div.topbar-container, .navbar-expand > #content_body, footer .navbar-expand > div,
+  .navbar-expand > .container, header nav .navbar-expand > div.topbar-container, .navbar-expand > #content_body,
   .navbar-expand > .container-fluid {
     flex-wrap: nowrap; }
   .navbar-expand .navbar-collapse, .navbar-expand header nav div.topbar-container .nav-container, header nav div.topbar-container .navbar-expand .nav-container {
@@ -17197,3 +17191,112 @@ body.account .password-reset-token {
   body.account .password-reset-token > div p.help-text {
     margin-top: 35px;
     font-size: 80%; }
+
+div.text {
+  font-family: 'Noto Serif';
+  max-width: 550px;
+  margin-top: 50px;
+  margin-bottom: 50px; }
+
+div.text.text-xs {
+  font-size: 12px;
+  line-height: 1.4; }
+
+div.text.text-sm {
+  font-size: 14px;
+  line-height: 1.5; }
+
+div.text.text-md {
+  font-size: 16px;
+  line-height: 1.6; }
+
+div.text.text-lg {
+  font-size: 20px;
+  line-height: 1.7; }
+
+div.text.text-xl {
+  font-size: 24px;
+  line-height: 1.8; }
+
+.overall {
+  display: flex; }
+
+.left {
+  padding-right: 2em; }
+
+.right {
+  border-left: 1px solid #DDD;
+  padding-left: 2em; }
+
+#navtable {
+  display: flex;
+  flex-wrap: nowrap;
+  z-index: 1;
+  border-top: 1px solid #DDD;
+  height: 100%; }
+
+@media all and (max-width: 520px) {
+  #navtable {
+    flex-wrap: wrap;
+    height: auto;
+    font-size: 100%; } }
+
+#navtable div:hover {
+  background: #FAFAFA; }
+
+#navtable div#left, #navtable div#right {
+  width: 40%;
+  flex-grow: 1; }
+
+@media all and (max-width: 520px) {
+  #navtable div#left, #navtable div#right {
+    width: 100%;
+    flex-grow: 0; } }
+
+#navtable div#left {
+  padding-right: 1em; }
+
+#navtable div#right {
+  padding-left: 1em;
+  text-align: right; }
+
+#navtable div#center {
+  width: 20%;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  text-align: center; }
+
+@media all and (max-width: 520px) {
+  #navtable div#center {
+    flex-grow: 1; } }
+
+#navtable div {
+  overflow: hidden; }
+
+#navtable div + div {
+  border-left: 1px solid #DDD; }
+
+@media all and (max-width: 520px) {
+  #navtable div + div {
+    border-left: 0;
+    border-top: 1px solid #DDD; } }
+
+#navtable li#left a {
+  padding-right: 1em; }
+
+#navtable li#right a {
+  padding-left: 1em; }
+
+#navtable a {
+  display: block;
+  padding: 0.5em 0.1em;
+  height: 100%;
+  color: #000;
+  opacity: 0.4;
+  hyphens: none; }
+
+#navtable a:hover {
+  color: inherit;
+  background-color: inherit;
+  opacity: 1;
+  text-decoration: none; }
