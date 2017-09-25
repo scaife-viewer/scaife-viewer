@@ -88,6 +88,18 @@ class Passage:
     def prev_urn(self):
         return f"{self.urn.upTo(URN.NO_PASSAGE)}:{self.node.prevId}" if self.node.prevId else None
 
+    def ancestors(self):
+        ancs = []
+        ref = self.urn.reference
+        parent = ref.parent
+        while parent is not None:
+            ancs.append({
+                "urn": f"{self.urn.upTo(URN.NO_PASSAGE)}:{parent}",
+                "label": str(parent),
+            })
+            parent = parent.parent
+        return ancs
+
     def render(self):
         tei = self.node.resource
         with open("tei.xsl") as f:
