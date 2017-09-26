@@ -17320,12 +17320,10 @@ body.account.account-delete #navtable div.account-delete:hover {
 
 .sidebar#left-sidebar {
   flex: 1;
-  flex-grow: 2;
   border-right: 1px solid #DDD; }
 
 .sidebar#right-sidebar {
   flex: 2;
-  flex-grow: 2;
   border-left: 1px solid #DDD; }
 
 .sidebar {
