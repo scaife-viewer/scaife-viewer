@@ -28,7 +28,8 @@
 }
 
 .sidebar {
-    transition: all .2s;
+    max-width: 600px;
+    transition: max-width .2s;
 }
 .sidebar.collapsed {
     flex: 1;
