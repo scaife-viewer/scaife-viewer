@@ -11,7 +11,7 @@
         "pk": 2,
         "model": "sites.site",
         "fields": {
-            "domain": "example.com",
+            "domain": "lk353.eu1.eldarioncloud.com",
             "name": "Scaife Digital Library Viewer"
         }
     }
