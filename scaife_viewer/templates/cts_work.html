@@ -8,7 +8,7 @@
 
 {% block body %}
   <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="#">Home</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
     {% for breadcrumb in parents %}
       <li class="breadcrumb-item"><a href="{% url 'cts_resource' breadcrumb.urn %}">{{ breadcrumb.get_label }}</a></li>
     {% endfor %}
