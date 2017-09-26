@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eu
+set -eux
 
 # Declare arg variables for clarity.
 INSTANCE=$1
