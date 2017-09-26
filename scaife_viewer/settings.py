@@ -76,6 +76,8 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
 
+STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
+
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = "^l$c$-r@q2i(n=38g+pk@^u2-2ardu(9ebb8g!wvc1kg6(p+)m"
 
