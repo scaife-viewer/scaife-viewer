@@ -1,0 +1,22 @@
+version: 2
+jobs:
+  deploy:
+    docker:
+    - image: buildpack-deps:trusty-scm
+    working_directory: ~/repo
+    steps:
+    - checkout
+    - deploy:
+        name: Eldarion Cloud
+        command: |
+          bin/ec/auth.sh
+          bin/ec/deploy.sh primary
+          bin/ec/slack-notify.sh primary
+workflows:
+  version: 2
+  deploy:
+    jobs:
+      - deploy:
+          filters:
+            branches:
+              only: master
