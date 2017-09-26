@@ -15,10 +15,11 @@ def cts_resource(request, urn):
     cts = CTS()
     if not cts.is_resource(urn):
         raise Exception("not resource")
+    resource = cts.resource(urn)
     ctx = {
-        "resources": cts.resources(urn=urn),
+        resource.kind: resource,
     }
-    return render(request, "cts_resource.html", ctx)
+    return render(request, f"cts_{resource.kind}.html", ctx)
 
 
 def reader(request, urn):

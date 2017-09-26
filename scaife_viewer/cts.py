@@ -1,9 +1,9 @@
-from typing import NamedTuple
+from typing import Any, NamedTuple
 
 from django.conf import settings
 
 from lxml import etree
-from MyCapytain.common.constants import XPATH_NAMESPACES
+from MyCapytain.common.constants import XPATH_NAMESPACES, RDF_NAMESPACES
 from MyCapytain.common.reference import URN
 from MyCapytain.common.utils import xmlparser
 from MyCapytain.resolvers.cts.api import HttpCtsResolver
@@ -16,6 +16,18 @@ class Resource(NamedTuple):
     urn: str
     label: str
     readable: bool
+
+
+class Textgroup(NamedTuple):
+
+    resource: Any
+    kind: str = "textgroup"
+
+
+class Work(NamedTuple):
+
+    resource: Any
+    kind: str = "work"
 
 
 class CTS:
@@ -35,6 +47,17 @@ class CTS:
         if urn.upTo(URN.VERSION) == str(urn):
             return True
         return False
+
+    def resource(self, urn):
+        urn = URN(urn)
+        retriever = HttpCtsRetriever(settings.CTS_API_ENDPOINT)
+        resolver = HttpCtsResolver(retriever)
+        r = resolver.getMetadata(str(urn))
+        if r.TYPE_URI == RDF_NAMESPACES.CTS.term("textgroup"):
+            return Textgroup(resource=r)
+        if r.TYPE_URI == RDF_NAMESPACES.CTS.term("work"):
+            return Work(resource=r)
+        raise Exception(f"not supported: {r.TYPE_URI}")
 
     def resources(self, urn=None):
         key = urn

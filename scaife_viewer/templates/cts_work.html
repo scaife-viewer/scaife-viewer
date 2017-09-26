@@ -1,0 +1,23 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}Home{% endblock %}
+
+{% block body_class %}home{% endblock %}
+
+{% block body %}
+  <table class="table">
+    <h1>{{ work.resource.get_label }}</h1>
+    {% for text in work.resource.texts.values %}
+      <tr>
+        <td>{{ text.SUBTYPE }}</td>
+        <td>
+          <a href="{% url 'reader' text.urn %}">{{ text.get_label }}</a>
+          <p>{{ text.get_description }}</p>
+        </td>
+        <td>{{ text.lang }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+{% endblock %}
