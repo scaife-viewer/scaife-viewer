@@ -9,3 +9,30 @@
 
 @import "reader";
 @import "pagination";
+
+.wrapper {
+    display: flex;
+}
+
+#content_body {
+    flex: 3;
+}
+
+.sidebar#left-sidebar {
+    flex: 1;
+    border-right: 1px solid #DDD;
+}
+.sidebar#right-sidebar {
+    flex: 2;
+    border-left: 1px solid #DDD;
+}
+
+.sidebar {
+    transition: all .2s;
+    max-width: 500px;
+}
+.sidebar.collapsed {
+    flex: 1;
+    max-width: 0;
+    overflow: hidden;
+}

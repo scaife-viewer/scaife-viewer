@@ -17240,8 +17240,7 @@ div.text.text-xl {
   display: flex;
   flex-wrap: nowrap;
   z-index: 1;
-  border-top: 1px solid #DDD;
-  height: 100%; }
+  border-top: 1px solid #DDD; }
 
 @media all and (max-width: 520px) {
   #navtable {
@@ -17312,3 +17311,26 @@ body.account.account-delete #navtable div.account-delete:hover {
   background-color: inherit;
   opacity: 1;
   text-decoration: none; }
+
+.wrapper {
+  display: flex; }
+
+#content_body {
+  flex: 3; }
+
+.sidebar#left-sidebar {
+  flex: 1;
+  border-right: 1px solid #DDD; }
+
+.sidebar#right-sidebar {
+  flex: 2;
+  border-left: 1px solid #DDD; }
+
+.sidebar {
+  transition: all .2s;
+  max-width: 500px; }
+
+.sidebar.collapsed {
+  flex: 1;
+  max-width: 0;
+  overflow: hidden; }

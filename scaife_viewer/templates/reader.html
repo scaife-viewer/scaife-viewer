@@ -6,7 +6,20 @@
 
 {% block body_class %}reader{% endblock %}
 
-{% block body %}
+
+{% block body_base %}
+    <div class="wrapper">
+    <div class="sidebar collapsed" id="left-sidebar">
+        <div style="padding: 5px 15px 20px 35px;">
+            SIDEBAR
+        </div>
+    </div>
+   <section id="content_body">
+       <button class="btn btn-link" style="position: absolute; top: 60px; left: 0; color: #DDD;" onclick="document.getElementById('left-sidebar').classList.toggle('collapsed')"><i class="fa fa-bars"></i></button>
+       <button class="btn btn-link" style="position: absolute; top: 60px; right: 0; color: #DDD;" onclick="document.getElementById('right-sidebar').classList.toggle('collapsed')"><i class="fa fa-bars"></i></button>
+       <div class="container">
+           {% include "_messages.html" %}
+
   <div>{% if passage.ancestors %}Ancestors: {% for ancestor in passage.ancestors %}<a href="{% url 'reader' ancestor.urn %}">{{ ancestor.label }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}{% endif %}</div>
   <div class="overall">
   <div class="left">
@@ -34,4 +47,12 @@
         <div id="right"></div>
       {% endif %}
   </div>
+
+</section>
+<div class="sidebar collapsed" id="right-sidebar">
+    <div style="padding: 5px 35px 20px 15px; text-align: right;">
+        SIDEBAR
+    </div>
+</div>
+</div>
 {% endblock %}
