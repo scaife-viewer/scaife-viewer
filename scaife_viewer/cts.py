@@ -115,7 +115,7 @@ class Passage:
 
     def render(self):
         key = f"render-{self.urn}"
-        if key not in self.render_cache:
+        if key not in self.cache:
             tei = self.node.resource
             with open("tei.xsl") as f:
                 transform = etree.XSLT(etree.XML(f.read()))
