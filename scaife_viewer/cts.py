@@ -23,6 +23,8 @@ class CTS:
     domain-specific implementations.
     """
 
+    cache = {}
+
     def is_resource(self, urn):
         urn = URN(urn)
         if urn.upTo(URN.TEXTGROUP) == str(urn):
@@ -34,24 +36,29 @@ class CTS:
         return False
 
     def resources(self, urn=None):
-        if urn:
-            urn = URN(urn)
-        # The follow code is a super simple way of traversing a CTS API.
-        # This is effectively the same as resolver.getMetadata, but tweaked very slightly
-        # to allow displaying a the collection of text groups.
-        retriever = HttpCtsRetriever("https://perseus-cts.us1.eldarioncloud.com/api/cts")
-        ti = XmlCtsTextInventoryMetadata.parse(retriever.getCapabilities(urn=urn))
-        if urn:
-            ti = [x for x in [ti] + ti.descendants if x.id == str(urn)][0]
-        resources = []
-        for o in ti.members:
-            resource = Resource(
-                urn=o.id,
-                label=o.get_label(lang="eng"),
-                readable=o.readable,
-            )
-            resources.append(resource)
-        return resources
+        key = urn
+        if key in self.cache:
+            return self.cache[key]
+        else:
+            if urn:
+                urn = URN(urn)
+            # The follow code is a super simple way of traversing a CTS API.
+            # This is effectively the same as resolver.getMetadata, but tweaked very slightly
+            # to allow displaying a the collection of text groups.
+            retriever = HttpCtsRetriever("https://perseus-cts.us1.eldarioncloud.com/api/cts")
+            ti = XmlCtsTextInventoryMetadata.parse(retriever.getCapabilities(urn=urn))
+            if urn:
+                ti = [x for x in [ti] + ti.descendants if x.id == str(urn)][0]
+            resources = []
+            for o in ti.members:
+                resource = Resource(
+                    urn=o.id,
+                    label=o.get_label(lang="eng"),
+                    readable=o.readable,
+                )
+                resources.append(resource)
+            self.cache[key] = resources
+            return resources
 
     def first_urn(self, urn):
         retriever = HttpCtsRetriever("https://perseus-cts.us1.eldarioncloud.com/api/cts")
