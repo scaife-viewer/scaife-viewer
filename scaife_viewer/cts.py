@@ -45,7 +45,7 @@ class CTS:
             # The follow code is a super simple way of traversing a CTS API.
             # This is effectively the same as resolver.getMetadata, but tweaked very slightly
             # to allow displaying a the collection of text groups.
-            retriever = HttpCtsRetriever("https://perseus-cts.us1.eldarioncloud.com/api/cts")
+            retriever = HttpCtsRetriever("https://perseus-cts.eu1.eldarioncloud.com/api/cts")
             ti = XmlCtsTextInventoryMetadata.parse(retriever.getCapabilities(urn=urn))
             if urn:
                 ti = [x for x in [ti] + ti.descendants if x.id == str(urn)][0]
@@ -61,7 +61,7 @@ class CTS:
             return resources
 
     def first_urn(self, urn):
-        retriever = HttpCtsRetriever("https://perseus-cts.us1.eldarioncloud.com/api/cts")
+        retriever = HttpCtsRetriever("https://perseus-cts.eu1.eldarioncloud.com/api/cts")
         resource = xmlparser(retriever.getFirstUrn(urn))
         first_urn = resource.xpath(
             "//ti:reply/ti:first/ti:urn/text()",
@@ -80,7 +80,7 @@ class Passage:
     @classmethod
     def load(cls, urn):
         urn = URN(urn)
-        retriever = HttpCtsRetriever("https://perseus-cts.us1.eldarioncloud.com/api/cts")
+        retriever = HttpCtsRetriever("https://perseus-cts.eu1.eldarioncloud.com/api/cts")
         resolver = HttpCtsResolver(retriever)
         node = resolver.getTextualNode(urn)
         return cls(urn, node)
