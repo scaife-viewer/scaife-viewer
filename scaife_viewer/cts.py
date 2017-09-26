@@ -78,6 +78,8 @@ class CTS:
 
 class Passage:
 
+    cache = {}
+
     @classmethod
     def load(cls, urn):
         urn = URN(urn)
@@ -97,19 +99,25 @@ class Passage:
         return f"{self.urn.upTo(URN.NO_PASSAGE)}:{self.node.prevId}" if self.node.prevId else None
 
     def ancestors(self):
-        ancs = []
-        ref = self.urn.reference
-        parent = ref.parent
-        while parent is not None:
-            ancs.append({
-                "urn": f"{self.urn.upTo(URN.NO_PASSAGE)}:{parent}",
-                "label": str(parent),
-            })
-            parent = parent.parent
-        return ancs
+        key = f"ancestor-{self.urn}"
+        if key not in self.cache:
+            ancestors = []
+            ref = self.urn.reference
+            parent = ref.parent
+            while parent is not None:
+                ancestors.append({
+                    "urn": f"{self.urn.upTo(URN.NO_PASSAGE)}:{parent}",
+                    "label": str(parent),
+                })
+                parent = parent.parent
+            self.cache[key] = ancestors
+        return self.cache[key]
 
     def render(self):
-        tei = self.node.resource
-        with open("tei.xsl") as f:
-            transform = etree.XSLT(etree.XML(f.read()))
-        return transform(tei)
+        key = f"render-{self.urn}"
+        if key not in self.render_cache:
+            tei = self.node.resource
+            with open("tei.xsl") as f:
+                transform = etree.XSLT(etree.XML(f.read()))
+            self.cache[key] = transform(tei)
+        return self.cache[key]
