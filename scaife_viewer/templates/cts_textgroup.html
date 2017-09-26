@@ -7,8 +7,15 @@
 {% block body_class %}home{% endblock %}
 
 {% block body %}
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+    {% for breadcrumb in parents %}
+      <li class="breadcrumb-item"><a href="{% url 'cts_resource' breadcrumb.urn %}">{{ breadcrumb.get_label }}</a></li>
+    {% endfor %}
+    <li class="breadcrumb-item active">{{ textgroup.resource.get_label }}</li>
+  </ol>
+  <h1>{{ textgroup.resource.get_label }}</h1>
   <table class="table">
-    <h1>{{ textgroup.resource.get_label }}</h1>
     {% for work in textgroup.resource.works.values %}
       <tr>
         <td><a href="{% url 'cts_resource' work.urn %}">{{ work.get_label }}</a></td>

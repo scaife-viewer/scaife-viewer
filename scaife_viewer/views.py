@@ -18,6 +18,7 @@ def cts_resource(request, urn):
     resource = cts.resource(urn)
     ctx = {
         resource.kind: resource,
+        "parents": list(reversed(resource.resource.parents))[1:]
     }
     return render(request, f"cts_{resource.kind}.html", ctx)
 
