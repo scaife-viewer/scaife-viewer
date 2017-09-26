@@ -108,18 +108,20 @@ class Passage:
         urn = URN(urn)
         retriever = HttpCtsRetriever(settings.CTS_API_ENDPOINT)
         resolver = HttpCtsResolver(retriever)
-        node = resolver.getTextualNode(urn)
-        return cls(urn, node)
+        metadata = resolver.getMetadata(urn.upTo(URN.NO_PASSAGE))
+        textual_node = resolver.getTextualNode(urn)
+        return cls(urn, metadata, textual_node)
 
-    def __init__(self, urn, node):
+    def __init__(self, urn, metadata, textual_node):
         self.urn = urn
-        self.node = node
+        self.metadata = metadata
+        self.textual_node = textual_node
 
     def next_urn(self):
-        return f"{self.urn.upTo(URN.NO_PASSAGE)}:{self.node.nextId}" if self.node.nextId else None
+        return f"{self.urn.upTo(URN.NO_PASSAGE)}:{self.textual_node.nextId}" if self.textual_node.nextId else None
 
     def prev_urn(self):
-        return f"{self.urn.upTo(URN.NO_PASSAGE)}:{self.node.prevId}" if self.node.prevId else None
+        return f"{self.urn.upTo(URN.NO_PASSAGE)}:{self.textual_node.prevId}" if self.textual_node.prevId else None
 
     def ancestors(self):
         key = f"ancestor-{self.urn}"
@@ -139,7 +141,7 @@ class Passage:
     def render(self):
         key = f"render-{self.urn}"
         if key not in self.cache:
-            tei = self.node.resource
+            tei = self.textual_node.resource
             with open("tei.xsl") as f:
                 transform = etree.XSLT(etree.XML(f.read()))
             self.cache[key] = transform(tei)

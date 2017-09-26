@@ -30,5 +30,6 @@ def reader(request, urn):
     passage = cts.passage(urn)
     ctx = {
         "passage": passage,
+        "parents": list(reversed(passage.metadata.parents))[1:]
     }
     return render(request, "reader.html", ctx)

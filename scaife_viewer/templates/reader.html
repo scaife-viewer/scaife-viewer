@@ -18,6 +18,14 @@
        <button class="btn btn-link" style="position: absolute; top: 60px; left: 0; color: #DDD;" onclick="document.getElementById('left-sidebar').classList.toggle('collapsed')"><i class="fa fa-bars"></i></button>
        <button class="btn btn-link" style="position: absolute; top: 60px; right: 0; color: #DDD;" onclick="document.getElementById('right-sidebar').classList.toggle('collapsed')"><i class="fa fa-bars"></i></button>
        <div class="container">
+          <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+              {% for breadcrumb in parents %}
+                  <li class="breadcrumb-item"><a href="{% url 'cts_resource' breadcrumb.urn %}">{{ breadcrumb.get_label }}</a></li>
+              {% endfor %}
+              <li class="breadcrumb-item active">{{ passage.metadata.get_label }}</li>
+          </ol>
+          <h1>{{ passage.metadata.get_label }}</h1>
            {% include "_messages.html" %}
 
   <div>{% if passage.ancestors %}Ancestors: {% for ancestor in passage.ancestors %}<a href="{% url 'reader' ancestor.urn %}">{{ ancestor.label }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}{% endif %}</div>
