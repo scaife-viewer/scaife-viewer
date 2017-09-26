@@ -1,1 +1,1 @@
-web: gunicorn --bind=0.0.0.0 --log-file=- scaife_viewer.wsgi
+web: gunicorn --bind=0.0.0.0 --log-file=- --timeout=120 scaife_viewer.wsgi
