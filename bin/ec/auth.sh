@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -ex
+set -e
 
 echo "$EC_SERVICE_ACCOUNT_KEY" | base64 --decode > ${HOME}/ec-service-key.json
 
