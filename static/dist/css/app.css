@@ -17327,8 +17327,7 @@ body.account.account-delete #navtable div.account-delete:hover {
   border-left: 1px solid #DDD; }
 
 .sidebar {
-  transition: all .2s;
-  max-width: 500px; }
+  transition: all .2s; }
 
 .sidebar.collapsed {
   flex: 1;
