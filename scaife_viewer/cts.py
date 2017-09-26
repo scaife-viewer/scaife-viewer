@@ -1,12 +1,13 @@
 from typing import NamedTuple
 
+from django.conf import settings
+
 from lxml import etree
 from MyCapytain.common.constants import XPATH_NAMESPACES
 from MyCapytain.common.reference import URN
 from MyCapytain.common.utils import xmlparser
 from MyCapytain.resolvers.cts.api import HttpCtsResolver
 from MyCapytain.resources.collections.cts import XmlCtsTextInventoryMetadata
-from MyCapytain.resources.texts.remote.cts import CtsText
 from MyCapytain.retrievers.cts5 import HttpCtsRetriever
 
 
@@ -45,7 +46,7 @@ class CTS:
             # The follow code is a super simple way of traversing a CTS API.
             # This is effectively the same as resolver.getMetadata, but tweaked very slightly
             # to allow displaying a the collection of text groups.
-            retriever = HttpCtsRetriever("https://perseus-cts.eu1.eldarioncloud.com/api/cts")
+            retriever = HttpCtsRetriever(settings.CTS_API_ENDPOINT)
             ti = XmlCtsTextInventoryMetadata.parse(retriever.getCapabilities(urn=urn))
             if urn:
                 ti = [x for x in [ti] + ti.descendants if x.id == str(urn)][0]
@@ -61,7 +62,7 @@ class CTS:
             return resources
 
     def first_urn(self, urn):
-        retriever = HttpCtsRetriever("https://perseus-cts.eu1.eldarioncloud.com/api/cts")
+        retriever = HttpCtsRetriever(settings.CTS_API_ENDPOINT)
         resource = xmlparser(retriever.getFirstUrn(urn))
         first_urn = resource.xpath(
             "//ti:reply/ti:first/ti:urn/text()",
@@ -80,7 +81,7 @@ class Passage:
     @classmethod
     def load(cls, urn):
         urn = URN(urn)
-        retriever = HttpCtsRetriever("https://perseus-cts.eu1.eldarioncloud.com/api/cts")
+        retriever = HttpCtsRetriever(settings.CTS_API_ENDPOINT)
         resolver = HttpCtsResolver(retriever)
         node = resolver.getTextualNode(urn)
         return cls(urn, node)
