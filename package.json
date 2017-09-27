@@ -49,5 +49,8 @@
     "popper.js": "^1.12.5",
     "uglify-js": "^3.1.0",
     "watchify": "^3.9.0"
+  },
+  "engines": {
+    "node": "~8.6.0"
   }
 }
