@@ -10,7 +10,8 @@
   <table class="table">
     {% for resource in resources %}
     <tr>
-      <td><a href="{% if resource.readable %}{% url 'reader' resource.urn %}{% else %}{% url 'cts_resource' resource.urn %}{% endif %}">{{ resource.label }}</a></td>
+      <td><a href="{% url 'cts_resource' resource.urn %}">{{ resource.label }}</a></td>
+      <td><code>{{ resource.urn }}</code></td>
     </tr>
     {% endfor %}
   </table>
