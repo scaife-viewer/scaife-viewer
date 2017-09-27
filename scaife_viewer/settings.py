@@ -140,6 +140,7 @@ INSTALLED_APPS = [
     "account",
     "pinax.eventlog",
     "pinax.webanalytics",
+    "raven.contrib.django.raven_compat",
 
     # project
     "scaife_viewer",
@@ -196,3 +197,8 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SECURE_SSL_REDIRECT = bool(int(os.environ.get("SECURE_SSL_REDIRECT", "0")))
 
 CTS_API_ENDPOINT = os.environ.get("CTS_API_ENDPOINT", "https://perseus-cts.eu1.eldarioncloud.com/api/cts")
+
+if "SENTRY_DSN" in os.environ:
+    RAVEN_CONFIG = {
+        "dsn": os.environ["SENTRY_DSN"],
+    }
