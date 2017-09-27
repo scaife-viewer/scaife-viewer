@@ -16,7 +16,7 @@
   </ol>
   <h1>{{ textgroup.resource.get_label }}</h1>
   <table class="table">
-    {% for work in textgroup.resource.works.values %}
+    {% for work in textgroup.works %}
       <tr>
         <td><a href="{% url 'cts_resource' work.urn %}">{{ work.get_label }}</a></td>
       </tr>

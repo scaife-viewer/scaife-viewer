@@ -13,6 +13,9 @@ from MyCapytain.resources.collections.cts import XmlCtsTextInventoryMetadata
 from MyCapytain.retrievers.cts5 import HttpCtsRetriever
 
 
+attrgetter = operator.attrgetter
+
+
 class Resource(NamedTuple):
 
     urn: str
@@ -25,11 +28,17 @@ class Textgroup(NamedTuple):
     resource: Any
     kind: str = "textgroup"
 
+    def works(self):
+        return sorted(self.resource.works.values(), key=attrgetter("id"))
+
 
 class Work(NamedTuple):
 
     resource: Any
     kind: str = "work"
+
+    def texts(self):
+        return sorted(self.resource.texts.values(), key=attrgetter("id"))
 
 
 class CTS:
