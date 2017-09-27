@@ -2,65 +2,72 @@
 
 {% load i18n %}
 
-{% block head_title %}Reader{% endblock %}
+{% block head_title %}{{ passage.metadata.get_label }}{% endblock %}
 
 {% block body_class %}reader{% endblock %}
 
 
 {% block body_base %}
-    <div class="wrapper">
+  <div class="wrapper">
+
     <div class="sidebar collapsed" id="left-sidebar">
-        <div style="padding: 5px 15px 20px 35px;">
-            SIDEBAR
-        </div>
-    </div>
-   <section id="content_body">
-       <button class="btn btn-link" style="position: absolute; top: 60px; left: 0; color: #DDD;" onclick="document.getElementById('left-sidebar').classList.toggle('collapsed')"><i class="fa fa-bars"></i></button>
-       <button class="btn btn-link" style="position: absolute; top: 60px; right: 0; color: #DDD;" onclick="document.getElementById('right-sidebar').classList.toggle('collapsed')"><i class="fa fa-bars"></i></button>
-       <div class="container">
-          <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-              {% for breadcrumb in parents %}
-                  <li class="breadcrumb-item"><a href="{% url 'cts_resource' breadcrumb.urn %}">{{ breadcrumb.get_label }}</a></li>
-              {% endfor %}
-              <li class="breadcrumb-item active">{{ passage.metadata.get_label }}</li>
-          </ol>
-          <h1>{{ passage.metadata.get_label }}</h1>
-           {% include "_messages.html" %}
-
-  <div>{% if passage.ancestors %}Ancestors: {% for ancestor in passage.ancestors %}<a href="{% url 'reader' ancestor.urn %}">{{ ancestor.label }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}{% endif %}</div>
-  <div class="overall"{% if passage.rtl %} dir="rtl"{% endif %}>
-  <div class="left">
-      <div class="text text-md">
-          {{ passage.render|safe }}
-      </div>
-  </div>
-  <div class="right">
-      <div class="text text-md">
-          {{ passage.render|safe }}
-        </div>
-    </div>
-  </div>
-  </div>
-  <div id="navtable">
-      {% if passage.prev_urn %}
-        <div id="left" class="active"><a href="{% url 'reader' passage.prev_urn %}"><span>&laquo;</span>&nbsp;prev</a></div>
-      {% else %}
-        <div id="left"></div>
-      {% endif %}
-      <div id="center"><a href="#">ref</a></div>
-      {% if passage.next_urn %}
-        <div id="right" class="active"><a href="{% url 'reader' passage.next_urn %}">next&nbsp;<span>&raquo;</span></a></div>
-      {% else %}
-        <div id="right"></div>
-      {% endif %}
-  </div>
-
-</section>
-<div class="sidebar collapsed" id="right-sidebar">
-    <div style="padding: 5px 35px 20px 15px; text-align: right;">
+      <div style="padding: 5px 15px 20px 35px;">
         SIDEBAR
+      </div>
     </div>
-</div>
-</div>
+
+    <section id="content_body">
+      <button class="btn btn-link" style="position: absolute; top: 60px; left: 0; color: #DDD;" onclick="document.getElementById('left-sidebar').classList.toggle('collapsed')"><i class="fa fa-bars"></i></button>
+      <button class="btn btn-link" style="position: absolute; top: 60px; right: 0; color: #DDD;" onclick="document.getElementById('right-sidebar').classList.toggle('collapsed')"><i class="fa fa-bars"></i></button>
+
+      <div class="container">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+          {% for breadcrumb in parents %}
+            <li class="breadcrumb-item"><a href="{% url 'cts_resource' breadcrumb.urn %}">{{ breadcrumb.get_label }}</a></li>
+          {% endfor %}
+          <li class="breadcrumb-item active">{{ passage.metadata.get_label }}</li>
+        </ol>
+
+        <h1>{{ passage.metadata.get_label }}</h1>
+
+        {% include "_messages.html" %}
+
+        <div>{% if passage.ancestors %}Ancestors: {% for ancestor in passage.ancestors %}<a href="{% url 'reader' ancestor.urn %}">{{ ancestor.label }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}{% endif %}</div>
+
+        <div class="overall"{% if passage.rtl %} dir="rtl"{% endif %}>
+          <div class="left">
+            <div class="text text-md">
+              {{ passage.render|safe }}
+            </div>
+          </div>
+          <div class="right">
+            <div class="text text-md">
+              {{ passage.render|safe }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="navtable">
+        {% if passage.prev_urn %}
+          <div id="left" class="active"><a href="{% url 'reader' passage.prev_urn %}"><span>&laquo;</span>&nbsp;prev</a></div>
+        {% else %}
+          <div id="left"></div>
+        {% endif %}
+        <div id="center"><a href="#">ref</a></div>
+        {% if passage.next_urn %}
+          <div id="right" class="active"><a href="{% url 'reader' passage.next_urn %}">next&nbsp;<span>&raquo;</span></a></div>
+        {% else %}
+          <div id="right"></div>
+        {% endif %}
+      </div>
+    </section>
+
+    <div class="sidebar collapsed" id="right-sidebar">
+      <div style="padding: 5px 35px 20px 15px; text-align: right;">
+        SIDEBAR
+      </div>
+    </div>
+  </div>
 {% endblock %}
