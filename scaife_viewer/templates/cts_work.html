@@ -6,15 +6,46 @@
 
 {% block body_class %}home{% endblock %}
 
-{% block body %}
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-    {% for breadcrumb in parents %}
-      <li class="breadcrumb-item"><a href="{% url 'cts_resource' breadcrumb.urn %}">{{ breadcrumb.get_label }}</a></li>
-    {% endfor %}
-    <li class="breadcrumb-item active">{{ work.resource.get_label }}</li>
-  </ol>
-  <h1>{{ work.resource.get_label }}</h1>
+{% block extra_head %}
+  <style>
+    section.hero {
+      background: #C56352;
+      color: #FFF;
+      padding: 20px 0;
+      margin-bottom: 20px;
+    }
+    section.hero h1 {
+      font-family: 'Noto Serif';
+      font-size: 48px;
+      font-style: italic;
+    }
+    section.hero h2 {
+        font-family: 'Noto Serif';
+        font-size: 28px;
+        margin: 0;
+    }
+    section.hero h2 a {
+        color: #FBA;
+    }
+    section.hero h2 a:hover {
+        text-decoration: none;
+    }
+  </style>
+{% endblock %}
+
+{% block body_base %}
+  <section class="hero">
+    <div class="container">
+        <h2>
+        {% for breadcrumb in parents %}
+          <a href="{% url 'cts_resource' breadcrumb.urn %}">{{ breadcrumb.get_label }}</a>
+        {% endfor %}
+    </h2>
+      <h1>{{ work.resource.get_label }}</h1>
+  </div>
+  </section>
+  <section>
+      <div class="container">
   <table class="table">
     {% for text in work.resource.texts.values %}
       <tr>
@@ -27,4 +58,6 @@
       </tr>
     {% endfor %}
   </table>
+  </div>
+  </section>
 {% endblock %}
