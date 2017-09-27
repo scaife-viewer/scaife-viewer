@@ -9,8 +9,10 @@ INSTANCE="$1"
 
 SHA_SHORT="${CIRCLE_SHA1:0:7}"
 
+AUTHOR_NAME="$(git show -s --format='%an' $SHA_SHORT)"
+
 # prepare Slack message payload
-MESSAGE="@${CIRCLE_USERNAME} deployed \`${SHA_SHORT}\` to ${INSTANCE}."
+MESSAGE="${AUTHOR_NAME} deployed \`${SHA_SHORT}\` to ${INSTANCE}."
 PAYLOAD_DATA="payload={\"channel\": \"#dev-feed\", \"username\": \"EC Deployments\", \"text\": \"${MESSAGE}\", \"icon_emoji\": \":lightning_cloud:\"}"
 
 # post to Slack
