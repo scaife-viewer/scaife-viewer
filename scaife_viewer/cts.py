@@ -1,3 +1,5 @@
+import operator
+
 from typing import Any, NamedTuple
 
 from django.conf import settings
@@ -74,7 +76,8 @@ class CTS:
             if urn:
                 ti = [x for x in [ti] + ti.descendants if x.id == str(urn)][0]
             resources = []
-            for o in ti.members:
+            members = sorted(ti.members, key=operator.attrgetter("id"))
+            for o in members:
                 resource = Resource(
                     urn=o.id,
                     label=o.get_label(lang="eng"),
