@@ -1,41 +1,76 @@
 div.text {
-    font-family: 'Noto Serif';
-    margin-bottom: 50px;
-}
-div.text.text-xs {
+
+  font-family: 'Noto Serif';
+  margin-bottom: 50px;
+
+  &.text-xs {
     max-width: 500px;
     font-size: 12px;
     line-height: 1.4;
-}
-div.text.text-sm {
+  }
+
+  &.text-sm {
     max-width: 600px;
     font-size: 14px;
     line-height: 1.5;
-}
-div.text.text-md {
+  }
+
+  &.text-md {
     max-width: 700px;
     font-size: 16px;
     line-height: 1.6;
-}
-div.text.text-lg {
+  }
+
+  &.text-lg {
     max-width: 800px;
     font-size: 20px;
     line-height: 1.7;
-}
-div.text.text-xl {
+  }
+
+  &.text-xl {
     max-width: 900px;
     font-size: 24px;
     line-height: 1.8;
+  }
 }
 
 .overall {
-    display: flex;
+  display: flex;
 }
 
 .left {
-    padding-right: 2em;
+  padding-right: 2em;
 }
 .right {
+  border-left: 1px solid #DDD;
+  padding-left: 2em;
+}
+
+.wrapper {
+  display: flex;
+}
+
+#content_body {
+  flex: 4;
+}
+
+.sidebar {
+
+  max-width: 600px;
+  transition: max-width .2s;
+
+  &#left-sidebar {
+    flex: 1;
+    border-right: 1px solid #DDD;
+  }
+  &#right-sidebar {
+    flex: 2;
     border-left: 1px solid #DDD;
-    padding-left: 2em;
+  }
+
+  &.collapsed {
+    flex: 1;
+    max-width: 0;
+    overflow: hidden;
+  }
 }

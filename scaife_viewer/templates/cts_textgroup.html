@@ -2,80 +2,47 @@
 
 {% load i18n %}
 
-{% block head_title %}Home{% endblock %}
+{% block head_title %}{{ textgroup.resource.get_label }}{% endblock %}
 
-{% block body_class %}home{% endblock %}
-
-{% block extra_head %}
-  <style>
-    section.hero {
-      background: #C56352;
-      color: #FFF;
-      padding: 20px 0;
-      margin-bottom: 20px;
-    }
-    section.hero h1 {
-      font-family: 'Noto Serif';
-      font-size: 48px;
-      font-style: italic;
-    }
-    section.hero h2 {
-        font-family: 'Noto Serif';
-        font-size: 28px;
-        margin: 0;
-    }
-    section.hero h2 a {
-        color: #FBA;
-    }
-    section.hero h2 a:hover {
-        text-decoration: none;
-    }
-    .dev-note {
-        margin: 50px 0;
-        background: #FFFAEE;
-        padding: 10px 20px;
-        font-family: 'Noto Serif';
-        font-style: italic;
-        border: 1px solid #ECA;
-    }
-    .dev-note span {
-        font-family: 'Noto Sans';
-        color: #C56352;
-    }
-  </style>
-{% endblock %}
+{% block body_class %}cts_textgroup{% endblock %}
 
 {% block body_base %}
+
   <section class="hero">
     <div class="container">
-        <h2>
+      <h2>
         {% for breadcrumb in parents %}
           <a href="{% url 'cts_resource' breadcrumb.urn %}">{{ breadcrumb.get_label }}</a>
         {% endfor %}
-    </h2>
+      </h2>
       <h1>{{ textgroup.resource.get_label }}</h1>
-  </div>
+    </div>
   </section>
+
   <section>
-      <div class="container">
-          <p class="dev-note lead">
-              <span>DEV NOTE:</span>
-              We wanted to provide a landing page for each text group that would not merely
-              list the available works but provide data about the
-              text group as a whole (both general and customized to the authenticated user
-              if appropriate). This is just a placeholder for now, so DOES just list
-              the available works, but during the development
-              process, it can evolve to include things like metadata, activity feeds,
-              visualisations, and actions that the user can take. Exactly how to
-              display works is still to be established.
-          </p>
-          <h2>Works</h2>
-  <table class="table">
-    {% for work in textgroup.works %}
-      <tr>
-        <td><a href="{% url 'cts_resource' work.urn %}">{{ work.get_label }}</a></td>
-      </tr>
-    {% endfor %}
-  </table>
+    <div class="container">
+
+      <p class="dev-note lead">
+        <span>DEV NOTE:</span>
+        We wanted to provide a landing page for each text group that would not
+        merely list the available works but provide data about the text group
+        as a whole (both general and customized to the authenticated user if
+        appropriate). This is just a placeholder for now, so DOES just list the
+        available works, but during the development process, it can evolve to
+        include things like metadata, activity feeds, visualisations, and
+        actions that the user can take. Exactly how to display works is still
+        to be established.
+      </p>
+
+      <h2>Works</h2>
+
+      <table class="table">
+        {% for work in textgroup.works %}
+          <tr>
+            <td><a href="{% url 'cts_resource' work.urn %}">{{ work.get_label }}</a></td>
+          </tr>
+        {% endfor %}
+      </table>
+    </div>
   </section>
 {% endblock %}
