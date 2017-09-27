@@ -74,3 +74,24 @@ div.text {
     overflow: hidden;
   }
 }
+
+.passage-heading {
+  margin-bottom: 20px;
+  font-family: 'Noto Serif';
+  color: #778;
+  h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: normal;
+    a {
+      color: inherit;
+    }
+  }
+  h2 {
+    margin: 0;
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: normal;
+    font-style: italic;
+  }
+}
