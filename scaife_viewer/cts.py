@@ -129,6 +129,14 @@ class Passage:
         self.metadata = metadata
         self.textual_node = textual_node
 
+    @property
+    def lang(self):
+        return self.metadata.lang
+
+    @property
+    def rtl(self):
+        return self.lang in {"heb"}
+
     def next_urn(self):
         return f"{self.urn.upTo(URN.NO_PASSAGE)}:{self.textual_node.nextId}" if self.textual_node.nextId else None
 
