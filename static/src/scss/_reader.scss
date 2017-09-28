@@ -36,14 +36,14 @@ div.text {
 
 .overall {
   display: flex;
+  justify-content: center;
 }
 
-.left {
-  padding-right: 2em;
+.left, .right {
+  padding: 0 2em;
 }
 .right {
   border-left: 1px solid #DDD;
-  padding-left: 2em;
 }
 
 .wrapper {
