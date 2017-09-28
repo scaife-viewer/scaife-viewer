@@ -5,7 +5,12 @@
     </template>
     <template v-else>
       <div class="input-group">
-        <input type="text" class="form-control" v-model="query" placeholder="Type to filter the resources...">
+        <input
+          type="text"
+          class="form-control"
+          v-model="query"
+          placeholder="Type to filter the resources..."
+        >
         <span class="input-group-addon" v-if="filtered">
           <i class="fa fa-times" @click="clearFilter"></i>
         </span>
@@ -20,7 +25,7 @@
 </template>
 
 <script>
-import _ from 'lodash';
+const debounce = require('lodash.debounce');
 
 export default {
   created() {
@@ -38,18 +43,18 @@ export default {
       resources: null,
       filteredResources: null,
       filtered: false,
-    }
+    };
   },
   watch: {
     query() {
       this.filterResources();
-    }
+    },
   },
   methods: {
     loadResources() {
       return fetch(document.location.href, {
         headers: {
-          'Accept': 'application/json',
+          Accept: 'application/json',
         },
       }).then((response) => {
         return response.json().then((data) => {
@@ -62,8 +67,8 @@ export default {
       this.filteredResources = Object.assign({}, this.resources);
       this.filtered = false;
     },
-    filterResources: _.debounce(
-      function() {
+    filterResources: debounce(
+      function f() {
         const query = this.query.trim();
         if (query === '') {
           this.clearFilter();
@@ -71,7 +76,7 @@ export default {
         }
         const r = [];
         this.resources.forEach((resource) => {
-          if (resource.label.toLowerCase().indexOf(query.toLowerCase()) != -1) {
+          if (resource.label.toLowerCase().indexOf(query.toLowerCase()) !== -1) {
             r.push(resource);
           }
         });

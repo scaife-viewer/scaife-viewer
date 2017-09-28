@@ -1,8 +1,7 @@
 {
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/pinax/pinax-project"
-  },
+  "name": "scaife-viewer",
+  "private": true,
+  "version": "0.0.1",
   "scripts": {
     "clean": "rm -rf static/dist && mkdir -p static/dist/js && mkdir -p static/dist/css && mkdir -p static/dist/images",
     "build:js": "browserify -t [ babelify --presets [ env ] ] -t envify -t vueify static/src/js/index.js | uglifyjs -c warnings=false -o static/dist/js/site.js",
@@ -24,8 +23,8 @@
     "compile": "NODE_ENV=production npm run clean && concurrently \"npm run copy:images\" \"npm run build:js\" \"npm run build:css\"",
     "heroku-postbuild": "npm run compile && npm run optimize"
   },
-  "license": "UNLICENSED",
   "dependencies": {
+    "babel-eslint": "^8.0.1",
     "babel-preset-env": "^1.6.0",
     "babelify": "^7.3.0",
     "bootstrap": "^4.0.0-beta",
@@ -37,13 +36,15 @@
     "cssnano-cli": "^1.0.5",
     "envify": "^4.1.0",
     "eslint": "^4.6.1",
-    "eslint-plugin-babel": "^4.1.2",
+    "eslint-config-airbnb-base": "^12.0.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-vue": "^3.13.0",
     "exorcist": "^0.4.0",
     "font-awesome": "^4.7.0",
     "jquery": "^3.2.1",
     "jsdom": "^11.2.0",
     "jsdom-global": "^3.0.2",
-    "lodash": "^4.17.4",
+    "lodash.debounce": "^4.0.8",
     "mocha": "^3.5.0",
     "node-sass": "^4.5.3",
     "onchange": "^3.2.1",

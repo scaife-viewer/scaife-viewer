@@ -1,33 +1,33 @@
-/* global window document */
-window.jQuery = window.$ = require('jquery');
+/* eslint-disable import/first */
 
-const $ = window.$;
+// crazy jQuery bindings
+const jQuery = require('jquery'); // eslint-disable-line import/newline-after-import
+window.jQuery = jQuery;
+window.$ = jQuery;
+const $ = jQuery;
 
-window.Popper = require('popper.js');
-require('bootstrap');
-
-import Vue from 'vue';
-import vueCustomElement from 'vue-custom-element';
-import CTSResourceTable from './components/CTSResourceTable.vue';
-import ajaxSendMethod from './ajax';
+const Vue = require('vue');
+const vueCustomElement = require('vue-custom-element');
+const CTSResourceTable = require('./components/CTSResourceTable.vue');
+const ajaxSendMethod = require('./ajax');
 
 Vue.use(vueCustomElement);
 Vue.customElement('cts-resource-table', CTSResourceTable);
 
 $(() => {
-    $(document).ajaxSend(ajaxSendMethod);
+  $(document).ajaxSend(ajaxSendMethod);
 
-    // Topbar active tab support
-    $('.topbar li').removeClass('active');
+  // Topbar active tab support
+  $('.topbar li').removeClass('active');
 
-    const classList = $('body').attr('class').split(/\s+/);
-    $.each(classList, (index, item) => {
-        const selector = `ul.nav li#tab_${item}`;
-        $(selector).addClass('active');
-    });
+  const classList = $('body').attr('class').split(/\s+/);
+  $.each(classList, (index, item) => {
+    const selector = `ul.nav li#tab_${item}`;
+    $(selector).addClass('active');
+  });
 
-    $('#account_logout, .account_logout').click(e => {
-        e.preventDefault();
-        $('#accountLogOutForm').submit();
-    });
+  $('#account_logout, .account_logout').click((e) => {
+    e.preventDefault();
+    $('#accountLogOutForm').submit();
+  });
 });
