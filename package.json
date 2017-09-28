@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "clean": "rm -rf static/dist && mkdir -p static/dist/js && mkdir -p static/dist/css && mkdir -p static/dist/images",
-    "build:js": "browserify -t [ babelify --presets [ env ] ] -t envify -t vueify static/src/js/index.js | uglifyjs -c warnings=false -o static/dist/js/site.js",
+    "build:js": "browserify -t [ babelify --presets [ env ] ] -t envify -t vueify -o static/dist/js/site.js static/src/js/index.js",
     "build:css": "node-sass static/src/scss/index.scss static/dist/css/app.css",
     "copy:images": "cp -r static/src/images/* static/dist/images/ 2>/dev/null || :",
     "optimize:js": "uglifyjs static/dist/js/site.js -m -c warnings=false -o static/dist/js/site.js",
