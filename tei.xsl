@@ -248,6 +248,9 @@
     </p>
   </xsl:template>
 
+  <xsl:template match="t:name/t:reg"></xsl:template>
+  <xsl:template match="t:name/t:placeName"><span class="placeName"><xsl:apply-templates/></span></xsl:template>
+
   <xsl:template match="t:lb" />
 
   <xsl:template match="t:ex">
