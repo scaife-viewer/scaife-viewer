@@ -36,13 +36,8 @@
 
       <h2>Works</h2>
 
-      <table class="table">
-        {% for work in textgroup.works %}
-          <tr>
-            <td><a href="{% url 'cts_resource' work.urn %}">{{ work.get_label }}</a></td>
-          </tr>
-        {% endfor %}
-      </table>
+      {# managed by Vue #}
+      <div id="resources"></div>
     </div>
   </section>
 {% endblock %}

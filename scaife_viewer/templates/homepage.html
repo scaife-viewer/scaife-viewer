@@ -7,12 +7,6 @@
 {% block body_class %}home{% endblock %}
 
 {% block body %}
-  <table class="table">
-    {% for resource in resources %}
-    <tr>
-      <td><a href="{% url 'cts_resource' resource.urn %}">{{ resource.label }}</a></td>
-      <td><code>{{ resource.urn }}</code></td>
-    </tr>
-    {% endfor %}
-  </table>
+  {# managed by Vue #}
+  <div id="resources"></div>
 {% endblock %}

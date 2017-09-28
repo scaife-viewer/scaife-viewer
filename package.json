@@ -5,7 +5,7 @@
   },
   "scripts": {
     "clean": "rm -rf static/dist && mkdir -p static/dist/js && mkdir -p static/dist/css && mkdir -p static/dist/images",
-    "build:js": "browserify -t [ babelify --presets [ env ] ] -t envify static/src/js/index.js | uglifyjs -c warnings=false -o static/dist/js/site.js",
+    "build:js": "browserify -t [ babelify --presets [ env ] ] -t envify -t vueify static/src/js/index.js | uglifyjs -c warnings=false -o static/dist/js/site.js",
     "build:css": "node-sass static/src/scss/index.scss static/dist/css/app.css",
     "copy:images": "cp -r static/src/images/* static/dist/images/ 2>/dev/null || :",
     "optimize:js": "uglifyjs static/dist/js/site.js -m -c warnings=false -o static/dist/js/site.js",
@@ -13,7 +13,7 @@
     "optimize": "npm run optimize:js && npm run optimize:css",
     "watch:test": "onchange static/src/js/**/*.js -- npm run test",
     "watch:lint": "onchange static/src/js/**/*.js -- npm run lint",
-    "watch:js": "watchify -t [ babelify --presets [ env ] ] -t envify static/src/js/index.js -o 'exorcist static/dist/js/site.js.map > static/dist/js/site.js' -dv",
+    "watch:js": "watchify -t [ babelify --presets [ env ] ] -t envify -t vueify static/src/js/index.js -o 'exorcist static/dist/js/site.js.map > static/dist/js/site.js' -dv",
     "watch:css": "node-sass static/src/scss/index.scss static/dist/css/app.css --watch -r",
     "build": "npm run clean && concurrently \"npm run build:js\" \"npm run build:css\" \"npm run copy:images\" && npm run optimize",
     "watch": "npm run clean && npm run copy:images && npm run build:css && concurrently --raw \"npm run watch:lint\" \"npm run watch:js\" \"npm run watch:css\"",
@@ -43,14 +43,19 @@
     "jquery": "^3.2.1",
     "jsdom": "^11.2.0",
     "jsdom-global": "^3.0.2",
+    "lodash": "^4.17.4",
     "mocha": "^3.5.0",
     "node-sass": "^4.5.3",
     "onchange": "^3.2.1",
     "popper.js": "^1.12.5",
     "uglify-js": "^3.1.0",
+    "vue": "^2.4.4",
     "watchify": "^3.9.0"
   },
   "engines": {
     "node": "~8.6.0"
+  },
+  "devDependencies": {
+    "vueify": "^9.4.1"
   }
 }
