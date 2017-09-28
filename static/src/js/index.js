@@ -7,8 +7,12 @@ window.Popper = require('popper.js');
 require('bootstrap');
 
 import Vue from 'vue';
+import vueCustomElement from 'vue-custom-element';
 import CTSResourceTable from './components/CTSResourceTable.vue';
 import ajaxSendMethod from './ajax';
+
+Vue.use(vueCustomElement);
+Vue.customElement('cts-resource-table', CTSResourceTable);
 
 $(() => {
     $(document).ajaxSend(ajaxSendMethod);
@@ -27,12 +31,3 @@ $(() => {
         $('#accountLogOutForm').submit();
     });
 });
-
-if (document.querySelector('#resources')) {
-  new Vue({
-    el: '#resources',
-    render(h) {
-      return h(CTSResourceTable);
-    },
-  });
-}
