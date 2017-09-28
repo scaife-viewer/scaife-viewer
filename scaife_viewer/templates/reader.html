@@ -53,7 +53,7 @@
         {% else %}
           <div id="left"></div>
         {% endif %}
-        <div id="center"><a href="#">ref</a></div>
+        <div id="center"><span class="label">{{ passage.urn }}</span></div>
         {% if passage.next_urn %}
           <div id="right" class="active"><a href="{% url 'reader' passage.next_urn %}">next&nbsp;<span>&raquo;</span></a></div>
         {% else %}

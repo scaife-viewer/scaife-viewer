@@ -39,10 +39,10 @@
 }
 
 #navtable div#center {
-  width: 20%;
   padding-left: 0.5em;
   padding-right: 0.5em;
   text-align: center;
+  flex-basis: 80%;
 }
 
 @media all and (max-width: 520px) {
@@ -66,14 +66,7 @@
   }
 }
 
-#navtable li#left a {
-  padding-right: 1em;
-}
-#navtable li#right a {
-  padding-left: 1em;
-}
-
-#navtable a {
+#navtable a, #navtable span.label {
   display: block;
   padding: 0.5em 0.1em;
   height: 100%;
