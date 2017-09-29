@@ -35,13 +35,15 @@ const store = new Vuex.Store({
         });
     },
     filterTextGroups({ state, commit }, query) {
-      const textGroups = [];
-      state.allTextGroups.forEach((textGroup) => {
-        if (textGroup.label.toLowerCase().indexOf(query.toLowerCase()) !== -1) {
-          textGroups.push(textGroup);
-        }
-      });
-      commit('setTextGroups', textGroups);
+      if (state.allTextGroups) {
+        const textGroups = [];
+        state.allTextGroups.forEach((textGroup) => {
+          if (textGroup.label.toLowerCase().indexOf(query.toLowerCase()) !== -1) {
+            textGroups.push(textGroup);
+          }
+        });
+        commit('setTextGroups', textGroups);
+      }
     },
     resetTextGroups({ state, commit }) {
       commit('setTextGroups', [...state.allTextGroups]);
@@ -56,13 +58,15 @@ const store = new Vuex.Store({
         });
     },
     filterWorks({ state, commit }, query) {
-      const works = [];
-      state.allWorks.forEach((work) => {
-        if (work.label.toLowerCase().indexOf(query.toLowerCase()) !== -1) {
-          works.push(work);
-        }
-      });
-      commit('setWorks', works);
+      if (state.allWorks) {
+        const works = [];
+        state.allWorks.forEach((work) => {
+          if (work.label.toLowerCase().indexOf(query.toLowerCase()) !== -1) {
+            works.push(work);
+          }
+        });
+        commit('setWorks', works);
+      }
     },
     resetWorks({ state, commit }) {
       commit('setWorks', [...state.allWorks]);
