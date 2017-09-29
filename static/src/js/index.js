@@ -8,11 +8,14 @@ const $ = jQuery;
 
 const Vue = require('vue');
 const vueCustomElement = require('vue-custom-element');
-const CTSResourceTable = require('./components/CTSResourceTable.vue');
+const CTSTextGroupList = require('./components/CTSTextGroupList.vue');
+const CTSWorkList = require('./components/CTSWorkList.vue');
 const ajaxSendMethod = require('./ajax');
 
 Vue.use(vueCustomElement);
-Vue.customElement('cts-resource-table', CTSResourceTable);
+
+Vue.customElement('sv-cts-textgroup-list', CTSTextGroupList);
+Vue.customElement('sv-cts-work-list', CTSWorkList);
 
 $(() => {
   $(document).ajaxSend(ajaxSendMethod);

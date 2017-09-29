@@ -1,11 +1,13 @@
 {
     "presets": [
-      ["env", {
-        "targets": {
-          "browsers": ["last 2 versions", "safari >= 7", "ie >= 8"]
-        }
-      }]
+      "env",
+      "stage-2"
     ],
+    "plugins": [
+        "transform-runtime",
+        "transform-object-rest-spread"
+     ],
+    "comments": false,
     "ignore": [
       "node_modules/",
       "dist/"
