@@ -18,11 +18,22 @@
         <i class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
       </div>
     </template>
-    <table v-else class="table">
-      <tr v-for="work in works" :key="work.url">
-        <td><a :href="work.url">{{ work.label }}</a></td>
-      </tr>
-    </table>
+    <div v-else>
+      <ul>
+        <li v-for="work in works" :key="work.url">
+          <a :href="work.url"><b>{{ work.label }}</b></a>
+          <ul>
+            <li v-for="text in work.texts" :key="text.url">
+              <b>{{ text.label }}</b>
+              <p>
+                <span class="text-muted">{{ text.description }}</span>
+                <br><a :href="text.url">Read</a>
+              </p>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 

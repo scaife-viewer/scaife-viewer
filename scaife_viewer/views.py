@@ -28,6 +28,25 @@ def home(request):
         return render(request, "homepage.html", ctx)
 
 
+def serialize_work(work):
+    return {
+        "label": work.get_label(lang="eng"),
+        "url": reverse("cts_resource", kwargs={"urn": work.urn}),
+        "texts": [
+            serialize_text(text)
+            for text in work.texts.values()
+        ]
+    }
+
+
+def serialize_text(text):
+    return {
+        "label": text.get_label(lang="eng"),
+        "description": text.get_description(lang="eng"),
+        "url": reverse("reader", kwargs={"urn": text.urn}),
+    }
+
+
 def cts_resource(request, urn):
     cts = CTS()
     if not cts.is_resource(urn):
@@ -35,21 +54,17 @@ def cts_resource(request, urn):
     resource = cts.resource(urn)
     content_type = mimeparse.best_match(["application/json", "text/html"], request.META["HTTP_ACCEPT"])
     if content_type == "application/json":
-        resources = []
         if resource.kind == "textgroup":
-            resources = resource.works()
+            works = []
+            for work in resource.works():
+                works.append(serialize_work(work))
+            obj = works
         if resource.kind == "work":
-            resources = resource.texts()
-        return JsonResponse({
-            "object": [
-                {
-                    "label": r.get_label(lang="eng"),
-                    "description": r.get_description(lang="eng") if resource.kind == "work" else "",
-                    "url": reverse("cts_resource", kwargs={"urn": r.urn})
-                }
-                for r in resources
-            ]
-        })
+            texts = []
+            for text in resource.texts():
+                texts.append(serialize_text(text))
+            obj = texts
+        return JsonResponse({"object": obj})
     if content_type == "text/html":
         ctx = {
             resource.kind: resource,
