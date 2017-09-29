@@ -1,15 +1,17 @@
 <template>
   <div>
-    <div class="input-group">
-      <input
-        type="text"
-        class="form-control"
-        v-model="query"
-        placeholder="Find a work..."
-      >
-      <span class="input-group-addon" v-if="filtered">
-        <i class="fa fa-times" @click="clearQuery"></i>
-      </span>
+    <div class="form-group">
+      <div class="input-group">
+        <input
+          type="text"
+          class="form-control"
+          v-model="query"
+          placeholder="Find a work..."
+        >
+        <span class="input-group-addon" v-if="filtered">
+          <i class="fa fa-times" @click="clearQuery"></i>
+        </span>
+      </div>
     </div>
     <template v-if="loading">
       <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
