@@ -5,7 +5,7 @@
         type="text"
         class="form-control"
         v-model="query"
-        placeholder="Type to filter the resources..."
+        placeholder="Find a text group..."
       >
       <span class="input-group-addon" v-if="filtered">
         <i class="fa fa-times" @click="clearQuery"></i>
