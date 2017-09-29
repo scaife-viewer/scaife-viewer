@@ -1,12 +1,15 @@
 {
-  "extends": [
-    "airbnb-base",
-    "plugin:vue/recommended"
-  ],
+  "extends": "airbnb-base",
+  "parser": "babel-eslint",
   "parserOptions": {
-    "parser": "babel-eslint",
     "sourceType": "module"
   },
+  "env": {
+    "browser": true
+  },
+  "plugins": [
+    "html"
+  ],
   "rules": {
     "no-param-reassign": 0
   }
