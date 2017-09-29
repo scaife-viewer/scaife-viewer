@@ -14,7 +14,9 @@
       </div>
     </div>
     <template v-if="loading">
-      <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+      <div class="text-center">
+        <i class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
+      </div>
     </template>
     <table v-else class="table">
       <tr v-for="textGroup in textGroups" :key="textGroup.url">
