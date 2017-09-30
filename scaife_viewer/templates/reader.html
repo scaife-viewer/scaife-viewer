@@ -34,17 +34,14 @@
         <div>{% if passage.ancestors %}Ancestors: {% for ancestor in passage.ancestors %}<a href="{% url 'reader' ancestor.urn %}">{{ ancestor.label }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}{% endif %}</div>
 
         <div class="overall"{% if passage.rtl %} dir="rtl"{% endif %}>
-          <div class="left">
-            <div class="text text-md">
-              {{ passage.render|safe }}
-            </div>
+          <div class="text text-md">
+            {{ passage.render|safe }}
           </div>
           {% comment %}
-          <div class="right">
-            <div class="text text-md">
-              {{ passage.render|safe }}
-            </div>
-          </div>
+          <div class="left">...</div>
+          {% endcomment %}
+          {% comment %}
+          <div class="right">...</div>
           {% endcomment %}
         </div>
       </div>
