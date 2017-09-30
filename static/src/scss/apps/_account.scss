@@ -80,3 +80,10 @@ body.account {
     }
   }
 }
+
+.nav .nav-heading {
+  @extend .nav-link;
+  @extend .disabled;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
