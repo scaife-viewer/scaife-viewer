@@ -36,18 +36,21 @@
 
       <h2>Versions</h2>
 
-      <table class="table">
+      <div class="card-deck">
         {% for text in work.texts %}
-          <tr>
-            <td>{{ text.SUBTYPE }}</td>
-            <td>
-              <a href="{% url 'reader' text.urn %}">{{ text.get_label }}</a>
-              <p>{{ text.get_description }}</p>
-            </td>
-            <td>{{ text.lang }}</td>
-          </tr>
+          <div class="version-card">
+            <div class="card-body">
+              <p class="text-subtype">{{ text.SUBTYPE }}</p>
+              <h4 class="card-title">{{ text.get_label }}</h4>
+              <p class="card-text">{{ text.get_description }}</p>
+            </div>
+            <div class="card-footer">
+              <a href="{% url 'reader' text.urn %}"><i class="fa fa-book"></i> Read ({{ text.lang }})</a>
+            </div>
+          </div>
         {% endfor %}
-      </table>
+      </div>
+
     </div>
   </section>
 {% endblock %}

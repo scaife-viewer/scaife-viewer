@@ -22,10 +22,9 @@
       <div class="work" v-for="work in works" :key="work.url">
         <h2><a :href="work.url"><b>{{ work.label }}</b></a></h2>
         <div class="card-deck">
-          <div class="card" v-for="text in work.texts" :key="text.url">
+          <div class="version-card" v-for="text in work.texts" :key="text.url">
             <div class="card-body">
               <h4 class="card-title">{{ text.label }}</h4>
-              {{ text.SUBTYPE }}
               <p class="card-text">{{ text.description }}</p>
             </div>
             <div class="card-footer">

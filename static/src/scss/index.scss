@@ -63,18 +63,35 @@ section.hero {
       font-style: italic;
     }
   }
-  .card {
-    margin-top: 10px;
-    margin-bottom: 10px;
+  margin-bottom: 50px;
+}
+
+.version-card {
+  @extend .card;
+
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+  .text-subtype {
+    margin: 0;
+    color: #778;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
   }
+
   .card-title {
     font-size: 14pt;
     font-weight: bold;
   }
+
   .card-text {
+    font-family: 'Noto Serif';
+    font-style: italic;
     @extend .text-muted;
     font-size: 10pt;
+    line-height: 14pt;
   }
+
   .card-footer {
     font-size: 11pt;
     text-align: center;
