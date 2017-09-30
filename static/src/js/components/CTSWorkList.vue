@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="work-list">
     <div class="form-group">
       <div class="input-group">
         <input
@@ -19,20 +19,21 @@
       </div>
     </template>
     <div v-else>
-      <ul>
-        <li v-for="work in works" :key="work.url">
-          <a :href="work.url"><b>{{ work.label }}</b></a>
-          <ul>
-            <li v-for="text in work.texts" :key="text.url">
-              <b>{{ text.label }}</b>
-              <p>
-                <span class="text-muted">{{ text.description }}</span>
-                <br><a :href="text.url">Read</a>
-              </p>
-            </li>
-          </ul>
-        </li>
-      </ul>
+      <div class="work" v-for="work in works" :key="work.url">
+        <h2><a :href="work.url"><b>{{ work.label }}</b></a></h2>
+        <div class="card-deck">
+          <div class="card" v-for="text in work.texts" :key="text.url">
+            <div class="card-body">
+              <h4 class="card-title">{{ text.label }}</h4>
+              {{ text.SUBTYPE }}
+              <p class="card-text">{{ text.description }}</p>
+            </div>
+            <div class="card-footer">
+              <a :href="text.url"><i class="fa fa-book"></i> Read</a>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>

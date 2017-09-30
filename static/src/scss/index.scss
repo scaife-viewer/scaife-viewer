@@ -50,3 +50,36 @@ section.hero {
     color: #C56352;
   }
 }
+
+.work-list {
+  .form-group {
+    margin-bottom: 50px;
+  }
+  .work {
+    margin-top: 2em;
+    h2 {
+      font-family: 'Noto Serif';
+      font-weight: normal;
+      font-style: italic;
+    }
+  }
+  .card {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  .card-title {
+    font-size: 14pt;
+    font-weight: bold;
+  }
+  .card-text {
+    @extend .text-muted;
+    font-size: 10pt;
+  }
+  .card-footer {
+    font-size: 11pt;
+    text-align: center;
+    a:hover {
+      text-decoration: none;
+    }
+  }
+}
