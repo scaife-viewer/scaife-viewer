@@ -163,6 +163,7 @@ div.text {
 
 .text-size-control {
   cursor: pointer;
+  color: #AAA;
 
   &.text-xs {
     font-size: 12px;
@@ -183,4 +184,13 @@ div.text {
   &.text-xl {
     font-size: 24px;
   }
+}
+
+.text.text-xs .text-size-control.text-xs,
+.text.text-sm .text-size-control.text-sm,
+.text.text-md .text-size-control.text-md,
+.text.text-lg .text-size-control.text-lg,
+.text.text-xl .text-size-control.text-xl,
+{
+  color: black;
 }
