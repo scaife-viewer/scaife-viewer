@@ -66,6 +66,23 @@ section.hero {
   margin-bottom: 50px;
 }
 
+.card-deck {
+  .card {
+    @include media-breakpoint-up(sm) {
+      min-width: 330px;
+    }
+    @include media-breakpoint-up(md) {
+      flex-grow: 0;
+    }
+    @include media-breakpoint-up(lg) {
+      min-width: 450px;
+    }
+    @include media-breakpoint-up(xl) {
+      min-width: 350px;
+    }
+  }
+}
+
 .version-card {
   @extend .card;
 
