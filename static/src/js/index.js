@@ -33,4 +33,9 @@ $(() => {
     e.preventDefault();
     $('#accountLogOutForm').submit();
   });
+
+  $('.text-size-control').click(function() {
+    $(this).closest('.text').removeClass('text-xs text-sm text-md text-lg text-xl');
+    $(this).closest('.text').addClass('text-' + $(this).data('size'));
+  })
 });

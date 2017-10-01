@@ -159,3 +159,28 @@ div.text {
     color: #778;
   }
 }
+
+
+.text-size-control {
+  cursor: pointer;
+
+  &.text-xs {
+    font-size: 12px;
+  }
+
+  &.text-sm {
+    font-size: 14px;
+  }
+
+  &.text-md {
+    font-size: 16px;
+  }
+
+  &.text-lg {
+    font-size: 20px;
+  }
+
+  &.text-xl {
+    font-size: 24px;
+  }
+}
