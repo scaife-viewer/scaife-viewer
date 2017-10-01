@@ -56,16 +56,15 @@ div.text {
 
 .sidebar {
 
-  min-width: 200px;
-  max-width: 500px;
+  max-width: 600px;
   transition: max-width .2s;
 
   &#left-sidebar {
-    flex: 2;
+    flex: 1;
     border-right: 1px solid #DDD;
   }
   &#right-sidebar {
-    flex: 3;
+    flex: 2;
     border-left: 1px solid #DDD;
   }
 
