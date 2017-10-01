@@ -43,7 +43,7 @@ class Work(NamedTuple):
 
 class CTS:
     """
-    Thin-wrapper around calling into MyCapytian library. This class provides
+    Thin-wrapper around calling into MyCapytain library. This class provides
     domain-specific implementations.
     """
 
