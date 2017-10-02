@@ -1,0 +1,19 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}Library{% endblock %}
+
+{% block body_class %}library{% endblock %}
+
+{% block body %}
+  <p class="dev-note lead">
+    <span>DEV NOTE:</span>
+    The page currently lists text groups and provides filtering to quickly
+    narrow down to what you want. What other information should be shown for
+    each text group other than label? Should we filter or even group by other
+    facets such as time period, language, geography?
+  </p>
+
+  <sv-cts-textgroup-list></sv-cts-textgroup-list>
+{% endblock %}
