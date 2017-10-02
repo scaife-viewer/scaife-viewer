@@ -5,6 +5,7 @@ from http import HTTPStatus
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
+from django.views.decorators.vary import vary_on_headers
 
 from .cts import CTS
 
@@ -13,6 +14,7 @@ def home(request):
     return render(request, "homepage.html", {})
 
 
+@vary_on_headers("Accept")
 def library(request):
     cts = CTS()
     content_type = mimeparse.best_match(["application/json", "text/html"], request.META["HTTP_ACCEPT"])
@@ -51,6 +53,7 @@ def serialize_text(text):
     }
 
 
+@vary_on_headers("Accept")
 def library_cts_resource(request, urn):
     cts = CTS()
     if not cts.is_resource(urn):
