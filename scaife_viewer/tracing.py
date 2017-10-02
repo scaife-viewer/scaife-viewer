@@ -1,10 +1,11 @@
+import base64
 import collections
 import datetime
 import json
+import os
 import time
 import threading
 
-import google.auth
 import opentracing.ext.tags as ext_tags
 
 from django.conf import settings
@@ -15,6 +16,7 @@ from basictracer.binary_propagator import BinaryPropagator
 from basictracer.text_propagator import TextPropagator
 from basictracer.recorder import SpanRecorder
 from google.auth.transport.requests import AuthorizedSession
+from google.oauth2 import service_account
 from opentracing import (
     Format,
     InvalidCarrierException,
@@ -33,11 +35,17 @@ class Recorder(SpanRecorder):
         self.pending = collections.deque()
         self.disabled = False
         self.flush_thread = None
+        self.setup_http()
 
-        credentials, self.project_id = google.auth.default(scopes=["https://www.googleapis.com/auth/trace.append"])
-        if self.project_id is None:
-            raise RuntimeError("no project ID")
-        self.http = AuthorizedSession(credentials)
+    def setup_http(self):
+        encoded_key = os.environ.get("GCP_TRACING_SERVICE_ACCOUNT")
+        if not encoded_key:
+            raise RuntimeError("missing GCP_TRACING_SERVICE_ACCOUNT")
+        service_account_key = json.loads(base64.b64decode(encoded_key))
+        self.project_id = service_account_key["project_id"]
+        credentials = service_account.Credentials.from_service_account_info(service_account_key)
+        scoped_credentials = credentials.with_scopes(["https://www.googleapis.com/auth/trace.append"])
+        self.http = AuthorizedSession(scoped_credentials)
 
     def record_span(self, span):
         self.maybe_flush()
