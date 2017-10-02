@@ -29,7 +29,10 @@ class Textgroup(NamedTuple):
     kind: str = "textgroup"
 
     def works(self):
-        return sorted(self.resource.works.values(), key=attrgetter("id"))
+        return [
+            Work(resource=work)
+            for work in sorted(self.resource.works.values(), key=attrgetter("id"))
+        ]
 
 
 class Work(NamedTuple):
@@ -38,7 +41,35 @@ class Work(NamedTuple):
     kind: str = "work"
 
     def texts(self):
-        return sorted(self.resource.texts.values(), key=attrgetter("id"))
+        texts_sorted = sorted(self.resource.texts.values(), key=attrgetter("id"))
+        r = []
+        for text in texts_sorted:
+            if text.TYPE_URI == RDF_NAMESPACES.CTS.term("edition"):
+                r.append(Text(resource=text, subkind="edition"))
+            if text.TYPE_URI == RDF_NAMESPACES.CTS.term("translation"):
+                r.append(Text(resource=text, subkind="translation"))
+            if text.TYPE_URI == RDF_NAMESPACES.CTS.term("commentary"):
+                r.append(Text(resource=text, subkind="commentary"))
+        return r
+
+
+class Text(NamedTuple):
+
+    resource: Any
+    subkind: str
+    kind: str = "text"
+
+    @property
+    def human_lang(self):
+        lang = self.resource.lang
+        if lang == "grc":
+            return "Greek"
+        elif lang == "eng":
+            return "English"
+        elif lang == "heb":
+            return "Hebrew"
+        else:
+            return lang
 
 
 class CTS:
@@ -68,6 +99,12 @@ class CTS:
             return Textgroup(resource=r)
         if r.TYPE_URI == RDF_NAMESPACES.CTS.term("work"):
             return Work(resource=r)
+        if r.TYPE_URI == RDF_NAMESPACES.CTS.term("edition"):
+            return Text(resource=r, subkind="edition")
+        if r.TYPE_URI == RDF_NAMESPACES.CTS.term("translation"):
+            return Text(resource=r, subkind="translation")
+        if r.TYPE_URI == RDF_NAMESPACES.CTS.term("commentary"):
+            return Text(resource=r, subkind="commentary")
         raise Exception(f"not supported: {r.TYPE_URI}")
 
     def resources(self, urn=None):

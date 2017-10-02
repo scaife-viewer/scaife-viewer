@@ -36,22 +36,23 @@ def library(request):
 
 def serialize_work(work):
     return {
-        "label": work.get_label(lang="eng"),
-        "url": reverse("library_cts_resource", kwargs={"urn": work.urn}),
+        "label": work.resource.get_label(lang="eng"),
+        "url": reverse("library_cts_resource", kwargs={"urn": work.resource.urn}),
         "texts": [
             serialize_text(text)
-            for text in work.texts.values()
+            for text in work.texts()
         ]
     }
 
 
 def serialize_text(text):
     return {
-        "label": text.get_label(lang="eng"),
-        "description": text.get_description(lang="eng"),
-        "subtype": text.SUBTYPE,
-        "lang": text.lang,
-        "url": reverse("library_reader", kwargs={"urn": text.urn}),
+        "label": text.resource.get_label(lang="eng"),
+        "description": text.resource.get_description(lang="eng"),
+        "subtype": text.resource.SUBTYPE,
+        "lang": text.resource.lang,
+        "human_lang": text.human_lang,
+        "url": reverse("library_reader", kwargs={"urn": text.resource.urn}),
     }
 
 
