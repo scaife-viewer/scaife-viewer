@@ -24,11 +24,12 @@
         <div class="card-deck">
           <div class="version-card" v-for="text in work.texts" :key="text.url">
             <div class="card-body">
+              <p class="text-subtype">{{ text.subtype }}</p>
               <h4 class="card-title">{{ text.label }}</h4>
               <p class="card-text">{{ text.description }}</p>
             </div>
             <div class="card-footer">
-              <a :href="text.url"><i class="fa fa-book"></i> Read</a>
+              <a :href="text.url"><i class="fa fa-book"></i> Read ({{ text.lang }})</a>
             </div>
           </div>
         </div>

@@ -49,6 +49,8 @@ def serialize_text(text):
     return {
         "label": text.get_label(lang="eng"),
         "description": text.get_description(lang="eng"),
+        "subtype": text.SUBTYPE,
+        "lang": text.lang,
         "url": reverse("library_reader", kwargs={"urn": text.urn}),
     }
 
