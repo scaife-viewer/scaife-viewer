@@ -52,7 +52,7 @@ def serialize_text(text):
         "subtype": text.resource.SUBTYPE,
         "lang": text.resource.lang,
         "human_lang": text.human_lang,
-        "url": reverse("library_reader", kwargs={"urn": text.resource.urn}),
+        "url": reverse("reader", kwargs={"urn": text.resource.urn}),
     }
 
 
@@ -84,13 +84,13 @@ def library_cts_resource(request, urn):
     return HttpResponse(status=HTTPStatus.NOT_ACCEPTABLE)
 
 
-def library_reader(request, urn):
+def reader(request, urn):
     cts = CTS()
     if cts.is_resource(urn):
-        return redirect("library_reader", urn=cts.first_urn(urn))
+        return redirect("reader", urn=cts.first_urn(urn))
     passage = cts.passage(urn)
     ctx = {
         "passage": passage,
         "parents": list(reversed(passage.metadata.parents))[1:]
     }
-    return render(request, "library/reader.html", ctx)
+    return render(request, "reader.html", ctx)

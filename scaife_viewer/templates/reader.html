@@ -31,7 +31,7 @@
           <h2>{{ passage.metadata.get_label }}</h2>
         </div>
 
-        <div>{% if passage.ancestors %}Ancestors: {% for ancestor in passage.ancestors %}<a href="{% url 'library_reader' ancestor.urn %}">{{ ancestor.label }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}{% endif %}</div>
+        <div>{% if passage.ancestors %}Ancestors: {% for ancestor in passage.ancestors %}<a href="{% url 'reader' ancestor.urn %}">{{ ancestor.label }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}{% endif %}</div>
 
         <div class="overall"{% if passage.rtl %} dir="rtl"{% endif %}>
           <div class="text text-md">
@@ -48,13 +48,13 @@
 
       <div id="navtable">
         {% if passage.prev_urn %}
-          <div id="left" class="active"><a href="{% url 'library_reader' passage.prev_urn %}"><span>&laquo;</span>&nbsp;prev</a></div>
+          <div id="left" class="active"><a href="{% url 'reader' passage.prev_urn %}"><span>&laquo;</span>&nbsp;prev</a></div>
         {% else %}
           <div id="left"></div>
         {% endif %}
         <div id="center"><span class="label">{{ passage.urn }}</span></div>
         {% if passage.next_urn %}
-          <div id="right" class="active"><a href="{% url 'library_reader' passage.next_urn %}">next&nbsp;<span>&raquo;</span></a></div>
+          <div id="right" class="active"><a href="{% url 'reader' passage.next_urn %}">next&nbsp;<span>&raquo;</span></a></div>
         {% else %}
           <div id="right"></div>
         {% endif %}
