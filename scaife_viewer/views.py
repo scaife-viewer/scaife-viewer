@@ -14,6 +14,10 @@ def home(request):
     return render(request, "homepage.html", {})
 
 
+def profile(request):
+    return render(request, "profile.html", {})
+
+
 @vary_on_headers("Accept")
 def library(request):
     cts = CTS()

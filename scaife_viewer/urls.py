@@ -4,7 +4,7 @@ from django.conf.urls.static import static
 
 from django.contrib import admin
 
-from .views import home, library, library_cts_resource, reader
+from .views import home, library, library_cts_resource, reader, profile
 
 
 urlpatterns = [
@@ -14,6 +14,7 @@ urlpatterns = [
     url(r"^library/$", library, name="library"),
     url(r"^library/(?P<urn>urn:[^/]+)/", library_cts_resource, name="library_cts_resource"),
     url(r"^reader/(?P<urn>urn:[^/]+)/$", reader, name="reader"),
+    url(r"^profile/$", profile, name="profile"),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
