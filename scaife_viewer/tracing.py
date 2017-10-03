@@ -12,8 +12,6 @@ from django.conf import settings
 from django.utils.deprecation import MiddlewareMixin
 
 from basictracer import BasicTracer
-from basictracer.binary_propagator import BinaryPropagator
-from basictracer.text_propagator import TextPropagator
 from basictracer.recorder import SpanRecorder
 from google.auth.transport.requests import AuthorizedSession
 from google.oauth2 import service_account
@@ -104,41 +102,36 @@ class Recorder(SpanRecorder):
             time.sleep(2.5)
 
 
-class NoOpRecorder(SpanRecorder):
-
-    def record_span(self, span):
-        pass
-
-
 class GCPTracer(BasicTracer):
 
     def __init__(self):
+        recorder = None
         if settings.TRACING_ACTIVATED:
             recorder = Recorder()
-        else:
-            recorder = NoOpRecorder()
         super(GCPTracer, self).__init__(recorder)
-        self.register_propagator(Format.TEXT_MAP, TextPropagator())
-        self.register_propagator(Format.HTTP_HEADERS, TextPropagator())
-        self.register_propagator(Format.BINARY, BinaryPropagator())
+        self.register_required_propagators()
 
 
-class DjangoTracer(object):
+def parse_http_headers(request):
+    prefix = "HTTP_"
+    p_len = len(prefix)
+    headers = {
+        key[p_len:].replace("_", "-").lower(): value
+        for key, value in request.META.items()
+        if key.startswith(prefix)
+    }
+    return headers
 
-    def __init__(self, tracer):
-        self._tracer = tracer
-        self._current_spans = {}
 
-    def get_span(self, request):
-        return self._current_spans.get(request, None)
+class OpenTracingMiddleware(MiddlewareMixin):
 
-    def _apply_tracing(self, request, view_func, attributes):
-        carrier = {}
-        for k, v in request.META.items():
-            k = k.lower().replace("_", "-")
-            if k.startswith("http-"):
-                k = k[5:]
-                carrier[f"ot-baggage-{k}"] = v
+    def __init__(self, get_response=None):
+        self.tracer = GCPTracer()
+        self.get_response = get_response
+        self.current_spans = {}
+
+    def process_view(self, request, view_func, view_args, view_kwargs):
+        headers = parse_http_headers(request)
         tags = {
             ext_tags.SPAN_KIND: ext_tags.SPAN_KIND_RPC_SERVER,
             ext_tags.HTTP_URL: request.path,
@@ -146,31 +139,20 @@ class DjangoTracer(object):
         }
         span = None
         operation_name = f"view:{view_func.__name__}"
-        span_ctx = self._tracer.extract(Format.HTTP_HEADERS, carrier=carrier)
-        span = self._tracer.start_span(
-            operation_name=operation_name,
-            child_of=span_ctx,
-            tags=tags,
-        )
-        self._current_spans[request] = span
-        return span
-
-    def _finish_tracing(self, request):
-        span = self._current_spans.pop(request, None)
-        if span is not None:
-            span.finish()
-
-
-class OpenTracingMiddleware(MiddlewareMixin):
-
-    def __init__(self, get_response=None):
-        self._tracer = DjangoTracer(GCPTracer())
-        self.get_response = get_response
-
-    def process_view(self, request, view_func, view_args, view_kwargs):
-        traced_attributes = []
-        self._tracer._apply_tracing(request, view_func, traced_attributes)
+        try:
+            # check http headers to see if we should extract a parent span
+            span_ctx = self.tracer.extract(Format.HTTP_HEADERS, carrier=headers)
+            span = self.tracer.start_span(
+                operation_name=operation_name,
+                child_of=span_ctx,
+                tags=tags,
+            )
+        except (InvalidCarrierException, SpanContextCorruptedException) as e:
+            span = self.tracer.start_span(operation_name=operation_name)
+        self.current_spans[request] = span
 
     def process_response(self, request, response):
-        self._tracer._finish_tracing(request)
+        span = self.current_spans.pop(request, None)
+        if span is not None:
+            span.finish()
         return response
