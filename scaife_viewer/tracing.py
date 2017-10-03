@@ -160,5 +160,5 @@ class OpenTracingMiddleware(MiddlewareMixin):
     def process_exception(self, request, exc):
         span = self.current_spans.pop(request, None)
         if span is not None:
-            span.set_tag(ext_tags.ERROR, str(exc))
+            # span.set_tag(ext_tags.ERROR, str(exc))
             span.finish()

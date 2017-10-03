@@ -30,7 +30,9 @@
               <p class="card-text">{{ text.description }}</p>
             </div>
             <div class="card-footer">
-              <a :href="text.url"><i class="fa fa-book"></i> Read ({{ text.human_lang }})</a>
+              <a :href="text.browse_url">Browse</a>
+              |
+              <a :href="text.read_url"><i class="fa fa-book"></i> Read ({{ text.human_lang }})</a>
             </div>
           </div>
         </div>

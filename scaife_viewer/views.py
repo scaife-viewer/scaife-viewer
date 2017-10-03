@@ -56,7 +56,8 @@ def serialize_text(text):
         "subtype": text.resource.SUBTYPE,
         "lang": text.resource.lang,
         "human_lang": text.human_lang,
-        "url": reverse("reader", kwargs={"urn": text.resource.urn}),
+        "browse_url": reverse("library_cts_resource", kwargs={"urn": text.resource.urn}),
+        "read_url": reverse("reader", kwargs={"urn": text.resource.urn}),
     }
 
 
