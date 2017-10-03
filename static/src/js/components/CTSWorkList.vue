@@ -7,6 +7,7 @@
           class="form-control"
           v-model="query"
           placeholder="Find a work..."
+          ref="filter-input"
         >
         <span class="input-group-addon" v-if="filtered">
           <i class="fa fa-times" @click="clearQuery"></i>
@@ -49,6 +50,7 @@ export default {
   created() {
     this.loading = true;
     this.$store.dispatch('loadWorks', document.location.href).then(() => {
+      this.$refs['filter-input'].focus();
       this.loading = false;
     });
   },

@@ -7,6 +7,7 @@
           class="form-control"
           v-model="query"
           placeholder="Find a text group..."
+          ref="filter-input"
         >
         <span class="input-group-addon" v-if="filtered">
           <i class="fa fa-times" @click="clearQuery"></i>
@@ -37,6 +38,7 @@ export default {
   created() {
     this.loading = true;
     this.$store.dispatch('loadTextGroups', document.location.href).then(() => {
+      this.$refs['filter-input'].focus();
       this.loading = false;
     });
   },
