@@ -138,7 +138,7 @@ class DjangoTracer(object):
             k = k.lower().replace("_", "-")
             if k.startswith("http-"):
                 k = k[5:]
-            carrier[k] = v
+                carrier[f"ot-baggage-{k}"] = v
         tags = {
             ext_tags.SPAN_KIND: ext_tags.SPAN_KIND_RPC_SERVER,
             ext_tags.HTTP_URL: request.path,
