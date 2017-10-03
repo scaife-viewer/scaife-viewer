@@ -58,7 +58,6 @@ class Recorder(SpanRecorder):
             "endTime": to_timestamp(span.start_time + span.duration),
             "labels": {
                 {
-                    ext_tags.PEER_HOSTNAME: "trace.cloud.google.com/http/host",
                     ext_tags.HTTP_METHOD: "trace.cloud.google.com/http/method",
                     ext_tags.HTTP_STATUS_CODE: "trace.cloud.google.com/http/status_code",
                     ext_tags.HTTP_URL: "trace.cloud.google.com/http/url",
