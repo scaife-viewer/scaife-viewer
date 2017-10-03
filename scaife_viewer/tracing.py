@@ -153,12 +153,12 @@ class OpenTracingMiddleware(MiddlewareMixin):
     def process_response(self, request, response):
         span = self.current_spans.pop(request, None)
         if span is not None:
-            span.add_tag(ext_tags.HTTP_STATUS_CODE, response.status_code)
+            span.set_tag(ext_tags.HTTP_STATUS_CODE, response.status_code)
             span.finish()
         return response
 
     def process_exception(self, request, exc):
         span = self.current_spans.pop(request, None)
         if span is not None:
-            span.add_tag(ext_tags.ERROR, str(exc))
+            span.set_tag(ext_tags.ERROR, str(exc))
             span.finish()
