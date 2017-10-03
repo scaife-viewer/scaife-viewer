@@ -148,7 +148,7 @@ class OpenTracingMiddleware(MiddlewareMixin):
                 tags=tags,
             )
         except (InvalidCarrierException, SpanContextCorruptedException) as e:
-            span = self.tracer.start_span(operation_name=operation_name)
+            span = self.tracer.start_span(operation_name=operation_name, tags=tags)
         self.current_spans[request] = span
 
     def process_response(self, request, response):
