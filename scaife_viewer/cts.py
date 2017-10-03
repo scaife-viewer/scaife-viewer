@@ -62,14 +62,15 @@ class Text(NamedTuple):
     @property
     def human_lang(self):
         lang = self.resource.lang
-        if lang == "grc":
-            return "Greek"
-        elif lang == "eng":
-            return "English"
-        elif lang == "heb":
-            return "Hebrew"
-        else:
-            return lang
+        return {
+            "grc": "Greek",
+            "lat": "Latin",
+            "heb": "Hebrew",
+            "fa":  "Farsi",
+            "eng": "English",
+            "ger": "German",
+            "fre": "French",
+        }.get(lang, lang)
 
 
 class CTS:
