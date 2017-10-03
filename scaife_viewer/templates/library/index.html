@@ -6,14 +6,26 @@
 
 {% block body_class %}library{% endblock %}
 
-{% block body %}
-  <p class="dev-note lead">
-    <span>DEV NOTE:</span>
-    The page currently lists text groups and provides filtering to quickly
-    narrow down to what you want. What other information should be shown for
-    each text group other than label? Should we filter or even group by other
-    facets such as time period, language, geography?
-  </p>
+{% block body_base %}
 
-  <sv-cts-textgroup-list></sv-cts-textgroup-list>
+  <section class="hero">
+    <div class="container">
+      <h1>Library</h1>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+
+      <p class="dev-note lead">
+        <span>DEV NOTE:</span>
+        The page currently lists text groups and provides filtering to quickly
+        narrow down to what you want. What other information should be shown
+        for each text group other than label? Should we filter or even group by
+        other facets such as time period, language, geography?
+      </p>
+
+      <sv-cts-textgroup-list></sv-cts-textgroup-list>
+    </div>
+  </section>
 {% endblock %}

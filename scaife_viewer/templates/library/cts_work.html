@@ -11,6 +11,7 @@
   <section class="hero">
     <div class="container">
       <h2>
+        <a href="{% url 'library' %}">Library &gt;</a>
         {% for breadcrumb in parents %}
           <a href="{% url 'library_cts_resource' breadcrumb.urn %}">{{ breadcrumb.get_label }}</a>
         {% endfor %}
