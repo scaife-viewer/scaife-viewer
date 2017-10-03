@@ -133,28 +133,26 @@ class DjangoTracer(object):
         return self._current_spans.get(request, None)
 
     def _apply_tracing(self, request, view_func, attributes):
-        # strip headers for trace info
-        headers = {}
+        carrier = {}
         for k, v in request.META.items():
             k = k.lower().replace("_", "-")
             if k.startswith("http-"):
                 k = k[5:]
-            headers[k] = v
+            carrier[k] = v
+        tags = {
+            ext_tags.SPAN_KIND: ext_tags.SPAN_KIND_RPC_SERVER,
+            ext_tags.HTTP_URL: request.path,
+            ext_tags.HTTP_METHOD: request.method,
+        }
         span = None
         operation_name = f"view:{view_func.__name__}"
-        try:
-            span_ctx = self._tracer.extract(Format.HTTP_HEADERS, headers)
-            span = self._tracer.start_span(operation_name=operation_name, child_of=span_ctx)
-        except (InvalidCarrierException, SpanContextCorruptedException) as e:
-            span = self._tracer.start_span(operation_name=operation_name)
-        if span is None:
-            span = self._tracer.start_span(operation_name=operation_name)
+        span_ctx = self._tracer.extract(Format.HTTP_HEADERS, carrier=carrier)
+        span = self._tracer.start_span(
+            operation_name=operation_name,
+            child_of=span_ctx,
+            tags=tags,
+        )
         self._current_spans[request] = span
-        for attr in attributes:
-            if hasattr(request, attr):
-                payload = str(getattr(request, attr))
-                if payload:
-                    span.set_tag(attr, payload)
         return span
 
     def _finish_tracing(self, request):
