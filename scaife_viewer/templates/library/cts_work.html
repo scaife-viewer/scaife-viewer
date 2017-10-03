@@ -40,12 +40,12 @@
         {% for text in work.texts %}
           <div class="version-card">
             <div class="card-body">
-              <p class="text-subtype">{{ text.SUBTYPE }}</p>
-              <h4 class="card-title">{{ text.get_label }}</h4>
-              <p class="card-text">{{ text.get_description }}</p>
+              <p class="text-subtype">{{ text.resource.SUBTYPE }}</p>
+              <h4 class="card-title">{{ text.resource.get_label }}</h4>
+              <p class="card-text">{{ text.resource.get_description }}</p>
             </div>
             <div class="card-footer">
-              <a href="{% url 'reader' text.urn %}"><i class="fa fa-book"></i> Read ({{ text.human_lang }})</a>
+              <a href="{% url 'reader' text.resource.urn %}"><i class="fa fa-book"></i> Read ({{ text.human_lang }})</a>
             </div>
           </div>
         {% endfor %}
