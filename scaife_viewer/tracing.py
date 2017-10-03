@@ -140,9 +140,8 @@ class DjangoTracer(object):
             if k.startswith("http-"):
                 k = k[5:]
             headers[k] = v
-        # start new span from trace info
         span = None
-        operation_name = view_func.__name__
+        operation_name = f"view:{view_func.__name__}"
         try:
             span_ctx = self._tracer.extract(Format.HTTP_HEADERS, headers)
             span = self._tracer.start_span(operation_name=operation_name, child_of=span_ctx)
@@ -150,9 +149,7 @@ class DjangoTracer(object):
             span = self._tracer.start_span(operation_name=operation_name)
         if span is None:
             span = self._tracer.start_span(operation_name=operation_name)
-        # add span to current spans
         self._current_spans[request] = span
-        # log any traced attributes
         for attr in attributes:
             if hasattr(request, attr):
                 payload = str(getattr(request, attr))
