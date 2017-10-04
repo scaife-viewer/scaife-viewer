@@ -35,7 +35,14 @@ $(() => {
   });
 
   $('.text-size-control').click(function() {
+    var textSize = $(this).data('size');
     $(this).closest('.text').removeClass('text-xs text-sm text-md text-lg text-xl');
-    $(this).closest('.text').addClass('text-' + $(this).data('size'));
-  })
+    $(this).closest('.text').addClass('text-' + textSize);
+    localStorage.setItem('text-size', textSize);
+  });
+
+  if (!localStorage['text-size']) {
+    localStorage.setItem('text-size', 'md');
+  }
+  $('.text').addClass('text-' + localStorage.getItem('text-size'));
 });

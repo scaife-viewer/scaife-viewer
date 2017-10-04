@@ -35,7 +35,7 @@
         <div>{% if passage.ancestors %}Ancestors: {% for ancestor in passage.ancestors %}<a href="{% url 'reader' ancestor.urn %}">{{ ancestor.label }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}{% endif %}</div>
 
         <div class="overall"{% if passage.rtl %} dir="rtl"{% endif %}>
-          <div class="text text-md">
+          <div class="text">
             {{ passage.render|safe }}
             <p class="text-center">
               <span class="text-size-control text-xs" data-size="xs">Αα</span>
