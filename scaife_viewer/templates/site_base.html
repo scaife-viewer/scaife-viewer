@@ -23,10 +23,11 @@
       <div class="container">
         {% block topbar %}
           {% block site_brand %}<a class="navbar-brand" href="{% url "home" %}"><img src="{% static 'images/perseus_running_man.png' %}"> {% block site_name %}{{ SITE_NAME }}{% endblock %}</a>{% endblock %}
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
-            <span class="fa fa-bars"></span>
-          </button>
-
+          {% block navbar-toggler %}
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+              <span class="fa fa-bars"></span>
+            </button>
+          {% endblock %}
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             {% block nav %}
               <ul class="navbar-nav mr-auto">
