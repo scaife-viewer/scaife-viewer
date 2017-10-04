@@ -5,11 +5,21 @@ from http import HTTPStatus
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
+from django.views.decorators.vary import vary_on_headers
 
 from .cts import CTS
 
 
 def home(request):
+    return render(request, "homepage.html", {})
+
+
+def profile(request):
+    return render(request, "profile.html", {})
+
+
+@vary_on_headers("Accept")
+def library(request):
     cts = CTS()
     content_type = mimeparse.best_match(["application/json", "text/html"], request.META["HTTP_ACCEPT"])
     if content_type == "application/json":
@@ -18,36 +28,41 @@ def home(request):
             "object": [
                 {
                     "label": r.label,
-                    "url": reverse("cts_resource", kwargs={"urn": r.urn})
+                    "url": reverse("library_cts_resource", kwargs={"urn": r.urn})
                 }
                 for r in resources
             ]
         })
     if content_type == "text/html":
         ctx = {}
-        return render(request, "homepage.html", ctx)
+        return render(request, "library/index.html", ctx)
 
 
 def serialize_work(work):
     return {
-        "label": work.get_label(lang="eng"),
-        "url": reverse("cts_resource", kwargs={"urn": work.urn}),
+        "label": work.resource.get_label(lang="eng"),
+        "url": reverse("library_cts_resource", kwargs={"urn": work.resource.urn}),
         "texts": [
             serialize_text(text)
-            for text in work.texts.values()
+            for text in work.texts()
         ]
     }
 
 
 def serialize_text(text):
     return {
-        "label": text.get_label(lang="eng"),
-        "description": text.get_description(lang="eng"),
-        "url": reverse("reader", kwargs={"urn": text.urn}),
+        "label": text.resource.get_label(lang="eng"),
+        "description": text.resource.get_description(lang="eng"),
+        "subtype": text.resource.SUBTYPE,
+        "lang": text.resource.lang,
+        "human_lang": text.human_lang,
+        "browse_url": reverse("library_cts_resource", kwargs={"urn": text.resource.urn}),
+        "read_url": reverse("reader", kwargs={"urn": text.resource.urn}),
     }
 
 
-def cts_resource(request, urn):
+@vary_on_headers("Accept")
+def library_cts_resource(request, urn):
     cts = CTS()
     if not cts.is_resource(urn):
         raise Exception("not resource")
@@ -70,7 +85,7 @@ def cts_resource(request, urn):
             resource.kind: resource,
             "parents": list(reversed(resource.resource.parents))[1:]
         }
-        return render(request, f"cts_{resource.kind}.html", ctx)
+        return render(request, f"library/cts_{resource.kind}.html", ctx)
     return HttpResponse(status=HTTPStatus.NOT_ACCEPTABLE)
 
 

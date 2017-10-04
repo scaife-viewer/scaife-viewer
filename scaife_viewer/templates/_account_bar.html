@@ -4,8 +4,8 @@
 
 <ul class="navbar-nav">
     {% if request.user.is_authenticated %}
-        <li class="navbar-text">
-            <i class="fa fa-user"></i> {% user_display request.user %}
+        <li class="navbar-item">
+            <a class="nav-link" href="{% url 'profile' %}"><i class="fa fa-user"></i> {% user_display request.user %}</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="{% url 'account_settings' %}"><i class="fa fa-cog"></i> {% trans "Settings" %}</a>

@@ -7,6 +7,7 @@
           class="form-control"
           v-model="query"
           placeholder="Find a work..."
+          ref="filter-input"
         >
         <span class="input-group-addon" v-if="filtered">
           <i class="fa fa-times" @click="clearQuery"></i>
@@ -24,11 +25,14 @@
         <div class="card-deck">
           <div class="version-card" v-for="text in work.texts" :key="text.url">
             <div class="card-body">
+              <p class="text-subtype">{{ text.subtype }}</p>
               <h4 class="card-title">{{ text.label }}</h4>
               <p class="card-text">{{ text.description }}</p>
             </div>
             <div class="card-footer">
-              <a :href="text.url"><i class="fa fa-book"></i> Read</a>
+              <a :href="text.browse_url">Browse</a>
+              |
+              <a :href="text.read_url"><i class="fa fa-book"></i> Read ({{ text.human_lang }})</a>
             </div>
           </div>
         </div>
@@ -48,6 +52,7 @@ export default {
   created() {
     this.loading = true;
     this.$store.dispatch('loadWorks', document.location.href).then(() => {
+      this.$refs['filter-input'].focus();
       this.loading = false;
     });
   },

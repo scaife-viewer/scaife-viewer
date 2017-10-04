@@ -11,8 +11,9 @@
   <section class="hero">
     <div class="container">
       <h2>
+        <a href="{% url 'library' %}">Library &gt;</a>
         {% for breadcrumb in parents %}
-          <a href="{% url 'cts_resource' breadcrumb.urn %}">{{ breadcrumb.get_label }}</a>
+          <a href="{% url 'library_cts_resource' breadcrumb.urn %}">{{ breadcrumb.get_label }}{% if not forloop.last %} &gt;{% endif %}</a>
         {% endfor %}
       </h2>
       <h1>{{ work.resource.get_label }}</h1>
@@ -40,12 +41,14 @@
         {% for text in work.texts %}
           <div class="version-card">
             <div class="card-body">
-              <p class="text-subtype">{{ text.SUBTYPE }}</p>
-              <h4 class="card-title">{{ text.get_label }}</h4>
-              <p class="card-text">{{ text.get_description }}</p>
+              <p class="text-subtype">{{ text.resource.SUBTYPE }}</p>
+              <h4 class="card-title">{{ text.resource.get_label }}</h4>
+              <p class="card-text">{{ text.resource.get_description }}</p>
             </div>
             <div class="card-footer">
-              <a href="{% url 'reader' text.urn %}"><i class="fa fa-book"></i> Read ({{ text.lang }})</a>
+              <a href="{% url 'library_cts_resource' text.resource.urn %}">Browse</a>
+              |
+              <a href="{% url 'reader' text.resource.urn %}"><i class="fa fa-book"></i> Read ({{ text.human_lang }})</a>
             </div>
           </div>
         {% endfor %}

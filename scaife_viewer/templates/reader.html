@@ -23,9 +23,10 @@
       <div class="container">
 
         <div class="passage-heading">
+          <a href="{% url 'library' %}">Library &gt;</a>
           <h1>
             {% for breadcrumb in parents %}
-              <a href="{% url 'cts_resource' breadcrumb.urn %}">{{ breadcrumb.get_label }}</a>{% if not forloop.last %}, {% endif %}
+              <a href="{% url 'library_cts_resource' breadcrumb.urn %}">{{ breadcrumb.get_label }}</a>{% if not forloop.last %}, {% endif %}
             {% endfor %}
           </h1>
           <h2>{{ passage.metadata.get_label }}</h2>

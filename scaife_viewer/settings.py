@@ -106,7 +106,8 @@ TEMPLATES = [
     },
 ]
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
+    "scaife_viewer.tracing.OpenTracingMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -202,3 +203,5 @@ if "SENTRY_DSN" in os.environ:
     RAVEN_CONFIG = {
         "dsn": os.environ["SENTRY_DSN"],
     }
+
+TRACING_ACTIVATED = not DEBUG

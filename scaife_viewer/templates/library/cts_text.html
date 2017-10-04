@@ -1,0 +1,33 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{{ text.resource.get_label }}{% endblock %}
+
+{% block body_class %}cts_text{% endblock %}
+
+{% block body_base %}
+
+  <section class="hero">
+    <div class="container">
+      <h2>
+        <a href="{% url 'library' %}">Library &gt;</a>
+        {% for breadcrumb in parents %}
+          <a href="{% url 'library_cts_resource' breadcrumb.urn %}">{{ breadcrumb.get_label }}{% if not forloop.last %} &gt;{% endif %}</a>
+        {% endfor %}
+      </h2>
+      <h1>{{ text.resource.get_label }}</h1>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+
+      <p class="dev-note lead">
+        <span>DEV NOTE:</span>
+        @@@ implement getReffs chunking
+      </p>
+
+    </div>
+  </section>
+{% endblock %}
