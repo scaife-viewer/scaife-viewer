@@ -180,6 +180,14 @@ section.hero2 {
   .card-title {
     font-size: 14pt;
     font-weight: bold;
+
+    a {
+      color: black;
+      &:hover {
+        color: $link-color;
+        text-decoration: none;
+      }
+    }
   }
 
   .card-text {
