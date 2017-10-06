@@ -8,9 +8,8 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 
 from lxml import etree
-from MyCapytain.common.constants import XPATH_NAMESPACES, RDF_NAMESPACES
+from MyCapytain.common.constants import RDF_NAMESPACES
 from MyCapytain.common.reference import URN
-from MyCapytain.common.utils import xmlparser
 from MyCapytain.resolvers.cts.api import HttpCtsResolver
 from MyCapytain.resources.collections.cts import XmlCtsTextInventoryMetadata
 from MyCapytain.retrievers.cts5 import HttpCtsRetriever
