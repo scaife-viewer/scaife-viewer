@@ -1,11 +1,9 @@
 from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.static import static
-
 from django.contrib import admin
 
-from .views import home, library, library_cts_resource, reader, profile
-
+from .views import home, library, library_cts_resource, profile, reader
 
 urlpatterns = [
     url(r"^$", home, name="home"),

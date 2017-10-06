@@ -1,7 +1,6 @@
 import collections
 import functools
 import operator
-
 from typing import Any, NamedTuple
 
 from django.conf import settings
@@ -13,7 +12,6 @@ from MyCapytain.common.reference import URN
 from MyCapytain.resolvers.cts.api import HttpCtsResolver
 from MyCapytain.resources.collections.cts import XmlCtsTextInventoryMetadata
 from MyCapytain.retrievers.cts5 import HttpCtsRetriever
-
 
 attrgetter = operator.attrgetter
 
@@ -68,7 +66,7 @@ class Text(NamedTuple):
             "grc": "Greek",
             "lat": "Latin",
             "heb": "Hebrew",
-            "fa":  "Farsi",
+            "fa": "Farsi",
             "eng": "English",
             "ger": "German",
             "fre": "French",

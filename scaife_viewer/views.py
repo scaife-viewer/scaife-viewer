@@ -1,11 +1,11 @@
-import mimeparse
-
 from http import HTTPStatus
 
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.views.decorators.vary import vary_on_headers
+
+import mimeparse
 
 from .cts import CTS
 

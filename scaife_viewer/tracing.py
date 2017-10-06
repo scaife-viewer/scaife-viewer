@@ -3,14 +3,13 @@ import collections
 import datetime
 import json
 import os
-import time
 import threading
-
-import opentracing.ext.tags as ext_tags
+import time
 
 from django.conf import settings
 from django.utils.deprecation import MiddlewareMixin
 
+import opentracing.ext.tags as ext_tags
 from basictracer import BasicTracer
 from basictracer.recorder import SpanRecorder
 from google.auth.transport.requests import AuthorizedSession
@@ -18,7 +17,7 @@ from google.oauth2 import service_account
 from opentracing import (
     Format,
     InvalidCarrierException,
-    SpanContextCorruptedException,
+    SpanContextCorruptedException
 )
 
 
