@@ -9,6 +9,7 @@ const store = new Vuex.Store({
     allTextGroups: null,
     works: [],
     allWorks: null,
+    versions: [],
   },
   mutations: {
     setTextGroups(state, textGroups) {
@@ -22,6 +23,9 @@ const store = new Vuex.Store({
         state.allWorks = [...works];
       }
       state.works = works;
+    },
+    setVersions(state, versions) {
+      state.versions = versions;
     },
   },
   actions: {
@@ -70,6 +74,15 @@ const store = new Vuex.Store({
     },
     resetWorks({ state, commit }) {
       commit('setWorks', [...state.allWorks]);
+    },
+    loadVersions({ commit }, url) {
+      const opts = { headers: { Accept: 'application/json' } };
+      return fetch(url, opts)
+        .then(res => res.json())
+        .then(data => data.object)
+        .then((versions) => {
+          commit('setVersions', versions);
+        });
     },
   },
 });

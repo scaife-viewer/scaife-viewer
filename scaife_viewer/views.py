@@ -79,6 +79,8 @@ def library_cts_resource(request, urn):
             for text in resource.texts():
                 texts.append(serialize_text(text))
             obj = texts
+        if resource.kind == "text":
+            obj = cts.toc(urn)
         return JsonResponse({"object": obj})
     if content_type == "text/html":
         ctx = {

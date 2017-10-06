@@ -1,9 +1,11 @@
 import collections
+import functools
 import operator
 
 from typing import Any, NamedTuple
 
 from django.conf import settings
+from django.core.urlresolvers import reverse
 
 from lxml import etree
 from MyCapytain.common.constants import XPATH_NAMESPACES, RDF_NAMESPACES
@@ -135,40 +137,65 @@ class CTS:
             self.cache[key] = resources
             return resources
 
-    def toc(self, urn, level=None, group_size=20):
+    def toc(self, urn, level=None, groupby=5):
         retriever = HttpCtsRetriever(settings.CTS_API_ENDPOINT)
         resolver = HttpCtsResolver(retriever)
         text = self.resource(urn)
-        c_len = len(text.resource.citation)
-        if level is None or level > c_len:
-            level = c_len
-        references = resolver.getReffs(urn, level=level)
-        _refs = collections.OrderedDict()
-        _refs2 = collections.OrderedDict()
-        for ref in references:
-            key = (text.resource.citation.name, ".".join(ref.split(".")[:level - 1]))
-            _refs.setdefault(key, []).append(ref)
-        for key, refs in _refs.items():
-            grouped = [
-                refs[i:i + group_size]
-                for i in range(0, len(refs), group_size)
-            ]
-            _refs2[key] = [
-                join_or_single(ref[0], ref[-1])
-                for ref in grouped
-            ]
-        return _refs2
+        # following was copied from scheme_grouper in Leipzig's CTS Nemo instance
+        # https://github.com/OpenGreekAndLatin/cts_leipzig_ui/blob/master/cts_leipzig_ui/__init__.py#L69
+        # @@@ consider how we might store the chunking config in the database
+        types = [citation.name for citation in text.resource.citation]
+        depth = len(text.resource.citation)
+        if level is None or level > depth:
+            level = depth
+        if "word" in types:
+            types = types[:types.index("word")]
+        if str(text.resource.id) == "urn:cts:latinLit:stoa0040.stoa062.opp-lat1":
+            level, groupby = 1, 2
+        elif types == ["book", "poem", "line"]:
+            level, groupby = 2, 1
+        elif types == ["book", "line"]:
+            level, groupby = 2, 30
+        elif types == ["book", "chapter"]:
+            level, groupby = 2, 1
+        elif types == ["book"]:
+            level, groupby = 1, 1
+        elif types == ["line"]:
+            level, groupby = 1, 30
+        elif types == ["chapter", "section"]:
+            level, groupby = 2, 2
+        elif types == ["chapter", "mishnah"]:
+            level, groupby = 2, 1
+        elif types == ["chapter", "verse"]:
+            level, groupby = 2, 1
+        elif "line" in types:
+            groupby = 30
+        groups = []
+        for num, rs in level_grouper(functools.partial(resolver.getReffs, urn), level, groupby).items():
+            ranges = []
+            group = {"num": num, "ranges": ranges}
+            for r in rs:
+                cr = {}
+                if "end" in r:
+                    read_urn = f'{urn}:{r["start"]}-{r["end"]}'
+                else:
+                    read_urn = f'{urn}:{r["start"]}'
+                cr["urn"] = read_urn
+                cr["url"] = reverse("reader", kwargs=dict(urn=read_urn))
+                cr.update(r)
+                ranges.append(cr)
+            groups.append(group)
+        return {
+            "group_name": types[0].title(),
+            "groups": groups,
+        }
 
     def first_urn(self, urn):
-        retriever = HttpCtsRetriever(settings.CTS_API_ENDPOINT)
-        resource = xmlparser(retriever.getFirstUrn(urn))
-        first_urn = resource.xpath(
-            "//ti:reply/ti:first/ti:urn/text()",
-            namespaces=XPATH_NAMESPACES,
-            magic_string=True,
-        )
-        if first_urn:
-            return str(first_urn[0])
+        toc = self.toc(urn)
+        try:
+            return toc["groups"][0]["ranges"][0]["urn"]
+        except (KeyError, IndexError):
+            return None
 
     def passage(self, urn):
         return Passage.load(urn)
@@ -231,5 +258,24 @@ class Passage:
         return self.cache[key]
 
 
+def level_grouper(getValidReff, level, groupby):
+    references = getValidReff(level=level)
+    _refs = collections.OrderedDict()
+    _refs2 = collections.OrderedDict()
+    for ref in references:
+        key = ".".join(ref.split(".")[:level - 1])
+        _refs.setdefault(key, []).append(ref)
+    for key, refs in _refs.items():
+        grouped = [
+            refs[i:i + groupby]
+            for i in range(0, len(refs), groupby)
+        ]
+        _refs2[key] = [
+            join_or_single(ref[0], ref[-1])
+            for ref in grouped
+        ]
+    return _refs2
+
+
 def join_or_single(start, end):
-    return start if start == end else f"{start}-{end}"
+    return {"start": start} if start == end else {"start": start, "end": end}

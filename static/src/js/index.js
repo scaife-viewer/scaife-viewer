@@ -10,12 +10,14 @@ const Vue = require('vue');
 const vueCustomElement = require('vue-custom-element');
 const CTSTextGroupList = require('./components/CTSTextGroupList.vue');
 const CTSWorkList = require('./components/CTSWorkList.vue');
+const CTSVersionList = require('./components/CTSVersionList.vue');
 const ajaxSendMethod = require('./ajax');
 
 Vue.use(vueCustomElement);
 
 Vue.customElement('sv-cts-textgroup-list', CTSTextGroupList);
 Vue.customElement('sv-cts-work-list', CTSWorkList);
+Vue.customElement('sv-cts-version-list', CTSVersionList);
 
 $(() => {
   $(document).ajaxSend(ajaxSendMethod);
