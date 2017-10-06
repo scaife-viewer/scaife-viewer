@@ -1,3 +1,4 @@
+import collections
 import operator
 
 from typing import Any, NamedTuple
@@ -134,6 +135,30 @@ class CTS:
             self.cache[key] = resources
             return resources
 
+    def toc(self, urn, level=None, group_size=20):
+        retriever = HttpCtsRetriever(settings.CTS_API_ENDPOINT)
+        resolver = HttpCtsResolver(retriever)
+        text = self.resource(urn)
+        c_len = len(text.resource.citation)
+        if level is None or level > c_len:
+            level = c_len
+        references = resolver.getReffs(urn, level=level)
+        _refs = collections.OrderedDict()
+        _refs2 = collections.OrderedDict()
+        for ref in references:
+            key = (text.resource.citation.name, ".".join(ref.split(".")[:level - 1]))
+            _refs.setdefault(key, []).append(ref)
+        for key, refs in _refs.items():
+            grouped = [
+                refs[i:i + group_size]
+                for i in range(0, len(refs), group_size)
+            ]
+            _refs2[key] = [
+                join_or_single(ref[0], ref[-1])
+                for ref in grouped
+            ]
+        return _refs2
+
     def first_urn(self, urn):
         retriever = HttpCtsRetriever(settings.CTS_API_ENDPOINT)
         resource = xmlparser(retriever.getFirstUrn(urn))
@@ -204,3 +229,7 @@ class Passage:
                 transform = etree.XSLT(etree.XML(f.read()))
             self.cache[key] = transform(tei)
         return self.cache[key]
+
+
+def join_or_single(start, end):
+    return start if start == end else f"{start}-{end}"
