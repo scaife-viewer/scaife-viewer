@@ -22,6 +22,7 @@ raven = "*"
 "google-auth" = "*"
 opentracing = {git="https://github.com/opentracing/opentracing-python.git", editable=true}
 basictracer = {git="https://github.com/opentracing/basictracer-python.git", editable=true}
+wrapt = "*"
 
 [dev-packages]
 
