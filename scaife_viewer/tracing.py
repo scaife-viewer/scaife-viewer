@@ -213,7 +213,11 @@ def span_in_context(span):
 
 
 def install_requests_patch(tracer):
-    import requests.adapters
+    try:
+        import requests.sessions
+        import requests.adapters
+    except ImportError:  # pragma: no cover
+        return
 
     @wrapt.decorator
     def trace(wrapped, instance, args, kwargs):
