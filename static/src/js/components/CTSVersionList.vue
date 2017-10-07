@@ -7,10 +7,7 @@
     </template>
     <div v-else>
       <div v-for="group in versions.groups">
-        <h2>{{ versions.group_name }} {{ group.num }}</h2>
-        <ul>
-          <li v-for="range in group.ranges"><a :href="range.url">{{ range.start }}<template v-if="range.end">&ndash;{{ range.end }}</template></a></li>
-        </ul>
+        <h2><a :href="group.ranges[0].url">{{ versions.group_name }} {{ group.num }}</a></h2>
       </div>
     </div>
   </div>
