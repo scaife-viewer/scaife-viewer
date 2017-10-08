@@ -35,9 +35,15 @@
         <div>{% if passage.ancestors %}Ancestors: {% for ancestor in passage.ancestors %}<a href="{% url 'reader' ancestor.urn %}">{{ ancestor.label }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}{% endif %}</div>
 
         <div class="overall"{% if passage.rtl %} dir="rtl"{% endif %}>
+          {% if passage.prev_urn %}
+            <div class="pg-left" class="active"><a href="{% url 'reader' passage.prev_urn %}"><span><i class="fa fa-chevron-left"></i></span></a></div>
+          {% endif %}
           <div class="text text-md">
             {{ passage.render|safe }}
           </div>
+          {% if passage.next_urn %}
+            <div class="pg-right" class="active"><a href="{% url 'reader' passage.next_urn %}"><span><i class="fa fa-chevron-right"></i></span></a></div>
+          {% endif %}
           {% comment %}
           <div class="left">...</div>
           {% endcomment %}
@@ -47,19 +53,6 @@
         </div>
       </div>
 
-      <div id="navtable">
-        {% if passage.prev_urn %}
-          <div id="left" class="active"><a href="{% url 'reader' passage.prev_urn %}"><span>&laquo;</span>&nbsp;prev</a></div>
-        {% else %}
-          <div id="left"></div>
-        {% endif %}
-        <div id="center"><span class="label">{{ passage.urn }}</span></div>
-        {% if passage.next_urn %}
-          <div id="right" class="active"><a href="{% url 'reader' passage.next_urn %}">next&nbsp;<span>&raquo;</span></a></div>
-        {% else %}
-          <div id="right"></div>
-        {% endif %}
-      </div>
     </section>
 
     <div class="sidebar collapsed" id="right-sidebar">

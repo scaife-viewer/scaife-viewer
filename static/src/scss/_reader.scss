@@ -1,7 +1,7 @@
 div.text {
 
   font-family: 'Noto Serif';
-  margin-bottom: 50px;
+  // margin-bottom: 50px;
 
   &.text-xs {
     max-width: 500px;
@@ -38,6 +38,33 @@ div.text {
   display: flex;
   justify-content: center;
 }
+.pg-left, .pg-right {
+  min-width: 40px;
+  flex-grow: 1;
+  a {
+    display: block;
+    color: transparent;
+    padding: 10px;
+    height: 100%;
+    font-size: 48px;
+    text-align: center;
+    &:hover {
+      color: #EEE;
+    }
+    span {
+      display: block;
+      position: -webkit-sticky;
+      position: sticky;
+      top: 50%;
+    }
+  }
+}
+.pg-left {
+  margin-right: 5px;
+}
+.pg-right {
+  margin-left: 5px;
+}
 
 .left, .right {
   padding: 0 2em;
@@ -52,6 +79,9 @@ div.text {
 
 #content_body {
   flex: 4;
+  .container {
+    padding: 0;
+  }
 }
 
 .sidebar {
