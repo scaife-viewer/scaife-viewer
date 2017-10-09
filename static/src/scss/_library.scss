@@ -1,6 +1,6 @@
 section.hero {
   background: $perseus-red;
-  color: #FFF;
+  color: $white;
   padding: 20px 0;
   margin-bottom: 20px;
 
@@ -83,7 +83,7 @@ section.hero {
 
   .text-subtype {
     margin: 0;
-    color: #778;
+    color: $gray-600;
     text-transform: uppercase;
     letter-spacing: 0.2em;
   }

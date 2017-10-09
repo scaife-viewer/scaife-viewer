@@ -48,7 +48,7 @@ div.text {
     height: 100%;
     text-align: center;
     &:hover {
-      color: #EEE;
+      color: $gray-200;
     }
     span {
       display: block;
@@ -73,7 +73,7 @@ div.text {
   padding: 0 2em;
 }
 .right {
-  border-left: 1px solid #DDD;
+  border-left: 1px solid $grey-300;
 }
 
 .wrapper {
@@ -94,11 +94,11 @@ div.text {
 
   &#left-sidebar {
     flex: 1;
-    border-right: 1px solid #DDD;
+    border-right: 1px solid $gray-300;
   }
   &#right-sidebar {
     flex: 2;
-    border-left: 1px solid #DDD;
+    border-left: 1px solid $gray-300;
   }
 
   &.collapsed {
@@ -111,7 +111,7 @@ div.text {
 .passage-heading {
   margin-bottom: 20px;
   font-family: 'Noto Serif';
-  color: #778;
+  color: $gray-600;
   h1 {
     margin: 0;
     font-size: 24px;
@@ -188,7 +188,7 @@ div.text {
     font-style: italic;
   }
   .placeName {
-    color: #778;
+    color: $gray-600;
   }
 }
 
@@ -196,7 +196,7 @@ div.text {
 .text-size-control {
   font-family: 'Noto Serif';
   cursor: pointer;
-  color: #AAA;
+  color: $gray-500;
 
   &.text-xs {
     font-size: 12px;

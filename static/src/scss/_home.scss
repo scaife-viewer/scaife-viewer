@@ -1,8 +1,8 @@
 section.home-hero {
   background-image: url(../images/perseus_running_man.png);
   background-repeat: no-repeat;
-  @extend .bg-dark;
-  color: #FFF;
+  background: $gray-800;
+  color: $white;
 
   margin-bottom: 20px;
 
