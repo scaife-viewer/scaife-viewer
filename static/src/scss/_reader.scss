@@ -41,12 +41,12 @@ div.text {
 .pg-left, .pg-right {
   min-width: 40px;
   flex-grow: 1;
+  min-height: calc(100vh - 250px);
   a {
     display: block;
     color: transparent;
     padding: 10px;
     height: 100%;
-    font-size: 48px;
     text-align: center;
     &:hover {
       color: #EEE;
@@ -55,7 +55,11 @@ div.text {
       display: block;
       position: -webkit-sticky;
       position: sticky;
-      top: 50%;
+      top: 38%;
+    }
+    font-size: 32px;
+    @include media-breakpoint-up(lg) {
+      font-size: 48px;
     }
   }
 }
