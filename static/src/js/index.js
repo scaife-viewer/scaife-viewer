@@ -36,10 +36,13 @@ $(() => {
     $('#accountLogOutForm').submit();
   });
 
-  $('.text-size-control').click(() => {
-    const textSize = $(this).data('size');
-    $(this).closest('.text').removeClass('text-xs text-sm text-md text-lg text-xl');
-    $(this).closest('.text').addClass(`text-${textSize}`);
+  $('.text-size-control').click((e) => {
+    const el = e.currentTarget;
+    const textSize = $(el).data('size');
+    $('.text').removeClass('text-xs text-sm text-md text-lg text-xl');
+    $('.text').addClass(`text-${textSize}`);
+    $('.text-size-control').removeClass('active');
+    $(el).addClass('active');
     localStorage.setItem('text-size', textSize);
   });
 
@@ -47,6 +50,7 @@ $(() => {
     localStorage.setItem('text-size', 'md');
   }
   $('.text').addClass(`text-${localStorage.getItem('text-size')}`);
+  $(`.text-size-control.text-${localStorage.getItem('text-size')}`).addClass('active');
 
   $(document).on('keyup', (e) => {
     if (e.key === 'ArrowLeft') {
