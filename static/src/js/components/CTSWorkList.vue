@@ -26,12 +26,10 @@
           <div class="version-card" v-for="text in work.texts" :key="text.url">
             <div class="card-body">
               <p class="text-subtype">{{ text.subtype }}</p>
-              <h4 class="card-title">{{ text.label }}</h4>
+              <h4 class="card-title"><a :href="text.browse_url">{{ text.label }}</a></h4>
               <p class="card-text">{{ text.description }}</p>
             </div>
             <div class="card-footer">
-              <a :href="text.browse_url">Browse</a>
-              |
               <a :href="text.read_url"><i class="fa fa-book"></i> Read ({{ text.human_lang }})</a>
             </div>
           </div>
@@ -68,7 +66,11 @@ export default {
       this.filter();
     },
   },
-  computed: mapState(['works']),
+  computed: {
+    ...mapState({
+      works: state => state.library.works,
+    }),
+  },
   methods: {
     clearQuery() {
       this.query = '';

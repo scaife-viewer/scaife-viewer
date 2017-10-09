@@ -1,28 +1,10 @@
-const Vue = require('vue');
-const Vuex = require('vuex');
-
-Vue.use(Vuex);
-
-const store = new Vuex.Store({
+module.exports = {
   state: {
     textGroups: [],
     allTextGroups: null,
     works: [],
     allWorks: null,
-  },
-  mutations: {
-    setTextGroups(state, textGroups) {
-      if (!state.allTextGroups) {
-        state.allTextGroups = [...textGroups];
-      }
-      state.textGroups = textGroups;
-    },
-    setWorks(state, works) {
-      if (!state.allWorks) {
-        state.allWorks = [...works];
-      }
-      state.works = works;
-    },
+    versions: [],
   },
   actions: {
     loadTextGroups({ commit }, url) {
@@ -71,7 +53,31 @@ const store = new Vuex.Store({
     resetWorks({ state, commit }) {
       commit('setWorks', [...state.allWorks]);
     },
+    loadVersions({ commit }, url) {
+      const opts = { headers: { Accept: 'application/json' } };
+      return fetch(url, opts)
+        .then(res => res.json())
+        .then(data => data.object)
+        .then((versions) => {
+          commit('setVersions', versions);
+        });
+    },
   },
-});
-
-export default store;
+  mutations: {
+    setTextGroups(state, textGroups) {
+      if (!state.allTextGroups) {
+        state.allTextGroups = [...textGroups];
+      }
+      state.textGroups = textGroups;
+    },
+    setWorks(state, works) {
+      if (!state.allWorks) {
+        state.allWorks = [...works];
+      }
+      state.works = works;
+    },
+    setVersions(state, versions) {
+      state.versions = versions;
+    },
+  },
+};

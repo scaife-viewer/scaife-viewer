@@ -42,12 +42,10 @@
           <div class="version-card">
             <div class="card-body">
               <p class="text-subtype">{{ text.resource.SUBTYPE }}</p>
-              <h4 class="card-title">{{ text.resource.get_label }}</h4>
+              <h4 class="card-title"><a href="{% url 'library_cts_resource' text.resource.urn %}">{{ text.resource.get_label }}</a></h4>
               <p class="card-text">{{ text.resource.get_description }}</p>
             </div>
             <div class="card-footer">
-              <a href="{% url 'library_cts_resource' text.resource.urn %}">Browse</a>
-              |
               <a href="{% url 'reader' text.resource.urn %}"><i class="fa fa-book"></i> Read ({{ text.human_lang }})</a>
             </div>
           </div>

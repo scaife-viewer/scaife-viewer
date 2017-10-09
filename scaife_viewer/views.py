@@ -1,11 +1,11 @@
-import mimeparse
-
 from http import HTTPStatus
 
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.views.decorators.vary import vary_on_headers
+
+import mimeparse
 
 from .cts import CTS
 
@@ -79,6 +79,8 @@ def library_cts_resource(request, urn):
             for text in resource.texts():
                 texts.append(serialize_text(text))
             obj = texts
+        if resource.kind == "text":
+            obj = cts.toc(urn)
         return JsonResponse({"object": obj})
     if content_type == "text/html":
         ctx = {
