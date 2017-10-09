@@ -1,5 +1,6 @@
 const Vue = require('vue');
 const Vuex = require('vuex');
+const createPersistedState = require('vuex-persistedstate');
 
 Vue.use(Vuex);
 
@@ -85,6 +86,12 @@ const store = new Vuex.Store({
         });
     },
   },
+  plugins: [
+    createPersistedState({
+      paths: ['a'],
+      storage: window.localStorage,
+    }),
+  ],
 });
 
 export default store;

@@ -58,6 +58,7 @@
     "vue-custom-element": "^1.3.0",
     "vueify": "^9.4.1",
     "vuex": "^2.4.1",
+    "vuex-persistedstate": "^2.0.0",
     "watchify": "^3.9.0"
   },
   "engines": {
