@@ -54,7 +54,11 @@ export default {
       this.filter();
     },
   },
-  computed: mapState(['textGroups']),
+  computed: {
+    ...mapState({
+      textGroups: state => state.library.textGroups,
+    }),
+  },
   methods: {
     clearQuery() {
       this.query = '';

@@ -66,7 +66,11 @@ export default {
       this.filter();
     },
   },
-  computed: mapState(['works']),
+  computed: {
+    ...mapState({
+      works: state => state.library.works,
+    }),
+  },
   methods: {
     clearQuery() {
       this.query = '';
