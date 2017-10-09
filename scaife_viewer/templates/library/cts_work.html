@@ -1,4 +1,4 @@
-{% extends "site_base.html" %}
+{% extends "library/base.html" %}
 
 {% load i18n %}
 
@@ -6,52 +6,44 @@
 
 {% block body_class %}cts_work{% endblock %}
 
-{% block body_base %}
+{% block hero %}
+  <h2>
+    <a href="{% url 'library' %}">Library &gt;</a>
+    {% for breadcrumb in parents %}
+      <a href="{% url 'library_cts_resource' breadcrumb.urn %}">{{ breadcrumb.get_label }}{% if not forloop.last %} &gt;{% endif %}</a>
+    {% endfor %}
+  </h2>
 
-  <section class="hero">
-    <div class="container">
-      <h2>
-        <a href="{% url 'library' %}">Library &gt;</a>
-        {% for breadcrumb in parents %}
-          <a href="{% url 'library_cts_resource' breadcrumb.urn %}">{{ breadcrumb.get_label }}{% if not forloop.last %} &gt;{% endif %}</a>
-        {% endfor %}
-      </h2>
-      <h1>{{ work.resource.get_label }}</h1>
-    </div>
-  </section>
+  <h1>{{ work.resource.get_label }}</h1>
+{% endblock %}
 
-  <section>
-    <div class="container">
+{% block content %}
+  <p class="dev-note lead">
+    <span>DEV NOTE:</span>
+    We wanted to provide a landing page for each work that would not merely
+    list the available editions and translations but provide data about the
+    work as a whole (both general and customized to the authenticated user
+    if appropriate). This is just a placeholder for now, so DOES just list
+    the available editions and translations, but during the development
+    process, it can evolve to include things like metadata, activity feeds,
+    visualisations, and actions that the user can take. Exactly how to
+    display versions is still to be established.
+  </p>
 
-      <p class="dev-note lead">
-        <span>DEV NOTE:</span>
-        We wanted to provide a landing page for each work that would not merely
-        list the available editions and translations but provide data about the
-        work as a whole (both general and customized to the authenticated user
-        if appropriate). This is just a placeholder for now, so DOES just list
-        the available editions and translations, but during the development
-        process, it can evolve to include things like metadata, activity feeds,
-        visualisations, and actions that the user can take. Exactly how to
-        display versions is still to be established.
-      </p>
+  <h2>Versions</h2>
 
-      <h2>Versions</h2>
-
-      <div class="card-deck">
-        {% for text in work.texts %}
-          <div class="version-card">
-            <div class="card-body">
-              <p class="text-subtype">{{ text.resource.SUBTYPE }}</p>
-              <h4 class="card-title"><a href="{% url 'library_cts_resource' text.resource.urn %}">{{ text.resource.get_label }}</a></h4>
-              <p class="card-text">{{ text.resource.get_description }}</p>
-            </div>
-            <div class="card-footer">
-              <a href="{% url 'reader' text.resource.urn %}"><i class="fa fa-book"></i> Read ({{ text.human_lang }})</a>
-            </div>
-          </div>
-        {% endfor %}
+  <div class="card-deck">
+    {% for text in work.texts %}
+      <div class="version-card">
+        <div class="card-body">
+          <p class="text-subtype">{{ text.resource.SUBTYPE }}</p>
+          <h4 class="card-title"><a href="{% url 'library_cts_resource' text.resource.urn %}">{{ text.resource.get_label }}</a></h4>
+          <p class="card-text">{{ text.resource.get_description }}</p>
+        </div>
+        <div class="card-footer">
+          <a href="{% url 'reader' text.resource.urn %}"><i class="fa fa-book"></i> Read ({{ text.human_lang }})</a>
+        </div>
       </div>
-
-    </div>
-  </section>
+    {% endfor %}
+  </div>
 {% endblock %}
