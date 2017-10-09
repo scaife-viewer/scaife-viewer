@@ -3,6 +3,8 @@
 // Font Awesome
 $fa-font-path: "//netdna.bootstrapcdn.com/font-awesome/4.7.0/fonts";
 
+$perseus-red: #B45141; // # C56352
+
 // Bootstrap v4
 // Reference: https://github.com/twbs/bootstrap/blob/v4-dev/scss/_variables.scss
 
@@ -32,7 +34,7 @@ $teal:    #20c997;
 $cyan:    #17a2b8;
 
 $theme-colors:(
-    primary: #C56352,
+    primary: $perseus-red,
     secondary: $gray-600,
     success: $blue,
     info: $cyan,
