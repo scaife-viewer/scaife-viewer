@@ -47,4 +47,18 @@ $(() => {
     localStorage.setItem('text-size', 'md');
   }
   $('.text').addClass(`text-${localStorage.getItem('text-size')}`);
+
+  $(document).on('keyup', (e) => {
+    if (e.key === 'ArrowLeft') {
+      const url = $('#pg-left').attr('href');
+      if (url) {
+        window.location = url;
+      }
+    } else if (e.key === 'ArrowRight') {
+      const url = $('#pg-right').attr('href');
+      if (url) {
+        window.location = url;
+      }
+    }
+  });
 });
