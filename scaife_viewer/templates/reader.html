@@ -37,7 +37,7 @@
         <div class="overall"{% if passage.rtl %} dir="rtl"{% endif %}>
           <div class="pg-left">
             {% if passage.prev_urn %}
-              <a href="{% url 'reader' passage.prev_urn %}"><span><i class="fa {% if passage.rtl %}fa-chevron-right{% else %}fa-chevron-left{% endif %}"></i></span></a>
+              <a id="{% if passage.rtl %}pg-right{% else %}pg-left{% endif %}" href="{% url 'reader' passage.prev_urn %}"><span><i class="fa {% if passage.rtl %}fa-chevron-right{% else %}fa-chevron-left{% endif %}"></i></span></a>
             {% endif %}
           </div>
           <div class="text text-md">
@@ -45,7 +45,7 @@
           </div>
           <div class="pg-right">
             {% if passage.next_urn %}
-              <a href="{% url 'reader' passage.next_urn %}"><span><i class="fa {% if passage.rtl %}fa-chevron-left{% else %}fa-chevron-right{% endif %}"></i></span></a>
+              <a id="{% if passage.rtl %}pg-left{% else %}pg-right{% endif %}" href="{% url 'reader' passage.next_urn %}"><span><i class="fa {% if passage.rtl %}fa-chevron-left{% else %}fa-chevron-right{% endif %}"></i></span></a>
             {% endif %}
           </div>
           {% comment %}
