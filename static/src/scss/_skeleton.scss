@@ -37,6 +37,8 @@
 }
 
 #content_body {
+  @extend .container;
+  padding-top: 35px;
   flex: 4;
   .container {
     padding: 0;
