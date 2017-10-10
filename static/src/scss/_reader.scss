@@ -1,35 +1,21 @@
-div.text {
-
+.passage-heading {
+  margin-bottom: 20px;
   font-family: 'Noto Serif';
-
-  &.text-xs {
-    max-width: 500px;
-    font-size: 12px;
-    line-height: 1.4;
-  }
-
-  &.text-sm {
-    max-width: 600px;
-    font-size: 14px;
-    line-height: 1.5;
-  }
-
-  &.text-md {
-    max-width: 700px;
-    font-size: 16px;
-    line-height: 1.6;
-  }
-
-  &.text-lg {
-    max-width: 800px;
-    font-size: 20px;
-    line-height: 1.7;
-  }
-
-  &.text-xl {
-    max-width: 900px;
+  color: $gray-600;
+  h1 {
+    margin: 0;
     font-size: 24px;
-    line-height: 1.8;
+    font-weight: normal;
+    a {
+      color: inherit;
+    }
+  }
+  h2 {
+    margin: 0;
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: normal;
+    font-style: italic;
   }
 }
 
@@ -37,6 +23,7 @@ div.text {
   display: flex;
   justify-content: center;
 }
+
 .pg-left, .pg-right {
   min-width: 40px;
   flex-grow: 1;
@@ -69,161 +56,9 @@ div.text {
   margin-left: 5px;
 }
 
-.left, .right {
-  padding: 0 2em;
-}
-.right {
-  border-left: 1px solid $gray-300;
-}
-
-.wrapper {
-  display: flex;
-}
-
-#content_body {
-  flex: 4;
-  .container {
-    padding: 0;
-  }
-}
-
-.sidebar {
-
-  max-width: 600px;
-  transition: max-width .2s;
-
-  &#left-sidebar {
-    flex: 1;
-    border-right: 1px solid $gray-300;
-  }
-  &#right-sidebar {
-    flex: 2;
-    border-left: 1px solid $gray-300;
-  }
-
-  &.collapsed {
-    flex: 1;
-    max-width: 0;
-    overflow: hidden;
-  }
-}
-
-.passage-heading {
-  margin-bottom: 20px;
-  font-family: 'Noto Serif';
-  color: $gray-600;
-  h1 {
-    margin: 0;
-    font-size: 24px;
-    font-weight: normal;
-    a {
-      color: inherit;
-    }
-  }
-  h2 {
-    margin: 0;
-    font-size: 16px;
-    line-height: 24px;
-    font-weight: normal;
-    font-style: italic;
-  }
-}
-
-// from Nemo
-div.text {
-  .pb {
-    font-size: 0.5em;
-    display: inline;
-    font-style: italic;
-    color: grey;
-  }
-
-  .ex, .supplied, .unclear {
-    color: rgb(80,80,80);
-  }
-
-  .unclear {
-    text-decoration: underline dotted;
-  }
-
-  .lang_heb, .lang_ara, .lang_far {
-    text-align: right;
-  }
-
-  .note > .note-content {
-    display: none;
-  }
-  .note:hover > .note-content {
-    display: inline;
-    font-style: italic;
-    color: grey;
-  }
-
-  ol > li {
-    display: list-item;
-
-    list-style: none;
-    &:hover {
-      list-style: decimal;
-    }
-    &:nth-child(5n) {
-      list-style: decimal;
-    }
-    &:nth-child(1) {
-      list-style: decimal;
-    }
-  }
-  ol.hidenum > li {
-    list-style: none;
-  }
-}
-
-// extras not from Nemo
-div.text {
-  .card {
-    border: none;
-  }
-  blockquote {
-    margin-left: 1em;
-    font-style: italic;
-  }
-  .placeName {
-    color: $gray-600;
-  }
-}
-
-
-.text-size-control {
-  font-family: 'Noto Serif';
-  cursor: pointer;
-  color: $gray-500;
-
-  &.text-xs {
-    font-size: 12px;
-  }
-
-  &.text-sm {
-    font-size: 14px;
-  }
-
-  &.text-md {
-    font-size: 16px;
-  }
-
-  &.text-lg {
-    font-size: 20px;
-  }
-
-  &.text-xl {
-    font-size: 24px;
-  }
-}
-
-.text-size-control.text-xs.active,
-.text-size-control.text-sm.active,
-.text-size-control.text-md.active,
-.text-size-control.text-lg.active,
-.text-size-control.text-xl.active,
-{
-  color: black;
-}
+// .left, .right {
+//   padding: 0 2em;
+// }
+// .right {
+//   border-left: 1px solid $gray-300;
+// }

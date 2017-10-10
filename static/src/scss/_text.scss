@@ -1,0 +1,67 @@
+div.text {
+  font-family: 'Noto Serif';
+}
+
+
+// from Nemo
+div.text {
+  .pb {
+    font-size: 0.5em;
+    display: inline;
+    font-style: italic;
+    color: grey;
+  }
+
+  .ex, .supplied, .unclear {
+    color: rgb(80,80,80);
+  }
+
+  .unclear {
+    text-decoration: underline dotted;
+  }
+
+  .lang_heb, .lang_ara, .lang_far {
+    text-align: right;
+  }
+
+  .note > .note-content {
+    display: none;
+  }
+  .note:hover > .note-content {
+    display: inline;
+    font-style: italic;
+    color: grey;
+  }
+
+  ol > li {
+    display: list-item;
+
+    list-style: none;
+    &:hover {
+      list-style: decimal;
+    }
+    &:nth-child(5n) {
+      list-style: decimal;
+    }
+    &:nth-child(1) {
+      list-style: decimal;
+    }
+  }
+  ol.hidenum > li {
+    list-style: none;
+  }
+}
+
+// extras not from Nemo
+div.text {
+  .card {
+    border: none;
+  }
+  blockquote {
+    margin-left: 1em;
+    font-style: italic;
+  }
+  .placeName {
+    color: $gray-600;
+  }
+}

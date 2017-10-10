@@ -65,4 +65,13 @@ $(() => {
       }
     }
   });
+
+  $('#left-sidebar-toggle').click(() => {
+    $('#left-sidebar').toggleClass('collapsed');
+    $('#left-sidebar-toggle').toggleClass('open');
+  });
+  $('#right-sidebar-toggle').click(() => {
+    $('#right-sidebar').toggleClass('collapsed');
+    $('#right-sidebar-toggle').toggleClass('open');
+  });
 });
