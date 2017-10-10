@@ -64,4 +64,11 @@ div.text {
   .placeName {
     color: $gray-600;
   }
+  .textpart {
+    padding-left: 4px;
+    border-left: 8px solid transparent;
+    &:hover {
+      border-left: 8px solid $gray-200;
+    }
+  }
 }

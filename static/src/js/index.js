@@ -105,4 +105,13 @@ $(() => {
       localStorage.setItem('right-sidebar-open', 'true');
     }
   });
+
+  $('.textpart').hover((e) => {
+    const el = e.currentTarget;
+    let n = String($(el).data('n'));
+    $(el).parents('.textpart').each((i, v) => {
+      n = String($(v).data('n')) + "." + n;
+    });
+    $("#ref").text(n);
+  });
 });

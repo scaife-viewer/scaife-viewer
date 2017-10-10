@@ -198,8 +198,11 @@
 
   <xsl:template match="t:div[@type = 'textpart']">
     <xsl:element name="div">
-      <xsl:attribute name="class">
+      <xsl:attribute name="class">textpart
         <xsl:value-of select="@subtype" />
+      </xsl:attribute>
+      <xsl:attribute name="data-n">
+        <xsl:value-of select="@n" />
       </xsl:attribute>
       <xsl:choose>
         <xsl:when test="child::t:l">
