@@ -66,12 +66,43 @@ $(() => {
     }
   });
 
+  if (localStorage.getItem('left-sidebar-open') === 'true') {
+    $('#left-sidebar').removeClass('collapsed');
+    $('#left-sidebar-toggle').addClass('open');
+  } else {
+    $('#left-sidebar').addClass('collapsed');
+    $('#left-sidebar-toggle').removeClass('open');
+  }
+
   $('#left-sidebar-toggle').click(() => {
-    $('#left-sidebar').toggleClass('collapsed');
-    $('#left-sidebar-toggle').toggleClass('open');
+    if (localStorage.getItem('left-sidebar-open') === 'true') {
+      $('#left-sidebar').addClass('collapsed');
+      $('#left-sidebar-toggle').removeClass('open');
+      localStorage.setItem('left-sidebar-open', 'false');
+    } else {
+      $('#left-sidebar').removeClass('collapsed');
+      $('#left-sidebar-toggle').addClass('open');
+      localStorage.setItem('left-sidebar-open', 'true');
+    }
   });
+
+  if (localStorage.getItem('right-sidebar-open') === 'true') {
+    $('#right-sidebar').removeClass('collapsed');
+    $('#right-sidebar-toggle').addClass('open');
+  } else {
+    $('#right-sidebar').addClass('collapsed');
+    $('#right-sidebar-toggle').removeClass('open');
+  }
+
   $('#right-sidebar-toggle').click(() => {
-    $('#right-sidebar').toggleClass('collapsed');
-    $('#right-sidebar-toggle').toggleClass('open');
+    if (localStorage.getItem('right-sidebar-open') === 'true') {
+      $('#right-sidebar').addClass('collapsed');
+      $('#right-sidebar-toggle').removeClass('open');
+      localStorage.setItem('right-sidebar-open', 'false');
+    } else {
+      $('#right-sidebar').removeClass('collapsed');
+      $('#right-sidebar-toggle').addClass('open');
+      localStorage.setItem('right-sidebar-open', 'true');
+    }
   });
 });
