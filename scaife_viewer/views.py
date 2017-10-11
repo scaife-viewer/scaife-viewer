@@ -80,7 +80,15 @@ def library_cts_resource(request, urn):
                 texts.append(serialize_text(text))
             obj = texts
         if resource.kind == "text":
-            obj = cts.toc(urn)
+            toc = cts.passage(urn).toc()
+            obj = [
+                {
+                    "label": ref_node.label.title(),
+                    "num": ref_node.num,
+                    "reader_url": reverse("reader", kwargs={"urn": next(toc.chunks(ref_node), None).urn}),
+                }
+                for ref_node in toc.num_resolver.glob(toc.root, "*")
+            ]
         return JsonResponse({"object": obj})
     if content_type == "text/html":
         ctx = {

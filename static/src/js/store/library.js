@@ -4,7 +4,7 @@ module.exports = {
     allTextGroups: null,
     works: [],
     allWorks: null,
-    versions: [],
+    toc: [],
   },
   actions: {
     loadTextGroups({ commit }, url) {
@@ -53,13 +53,13 @@ module.exports = {
     resetWorks({ state, commit }) {
       commit('setWorks', [...state.allWorks]);
     },
-    loadVersions({ commit }, url) {
+    loadToc({ commit }, url) {
       const opts = { headers: { Accept: 'application/json' } };
       return fetch(url, opts)
         .then(res => res.json())
         .then(data => data.object)
-        .then((versions) => {
-          commit('setVersions', versions);
+        .then((toc) => {
+          commit('setToc', toc);
         });
     },
   },
@@ -76,8 +76,8 @@ module.exports = {
       }
       state.works = works;
     },
-    setVersions(state, versions) {
-      state.versions = versions;
+    setToc(state, toc) {
+      state.toc = toc;
     },
   },
 };

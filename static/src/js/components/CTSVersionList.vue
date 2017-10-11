@@ -6,8 +6,8 @@
       </div>
     </template>
     <div v-else>
-      <div v-for="group in versions.groups">
-        <h2><a :href="group.ranges[0].url">{{ versions.group_name }} {{ group.num }}</a></h2>
+      <div v-for="entry in toc">
+        <h2><a :href="entry.reader_url">{{ entry.label }} {{ entry.num }}</a></h2>
       </div>
     </div>
   </div>
@@ -21,7 +21,7 @@ export default {
   store,
   created() {
     this.loading = true;
-    this.$store.dispatch('loadVersions', document.location.href).then(() => {
+    this.$store.dispatch('loadToc', document.location.href).then(() => {
       this.loading = false;
     });
   },
@@ -32,7 +32,7 @@ export default {
   },
   computed: {
     ...mapState({
-      versions: state => state.library.versions,
+      toc: state => state.library.toc,
     }),
   },
 };
