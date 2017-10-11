@@ -3,7 +3,7 @@
 
   <!-- this all comes from https://github.com/PerseusDL/perseus_nemo_ui/tree/master/perseus_nemo_ui/data/assets/static/xslt -->
 
-  <xsl:output xml:space="default"/>
+  <xsl:output xml:space="default" method="html"/>
 
   <!-- glyphs -->
   <!-- <xsl:include href="teig.xsl" /> -->
@@ -198,14 +198,16 @@
 
   <xsl:template match="t:div[@type = 'textpart']">
     <xsl:element name="div">
-      <xsl:attribute name="class">textpart
-        <xsl:value-of select="@subtype" />
-      </xsl:attribute>
-      <xsl:attribute name="data-n">
-        <xsl:value-of select="@n" />
-      </xsl:attribute>
+      <xsl:attribute name="class">textpart <xsl:value-of select="@subtype" /></xsl:attribute>
+      <xsl:if test="@n">
+        <xsl:attribute name="data-n">
+          <xsl:value-of select="@n" />
+        </xsl:attribute>
+      </xsl:if>
       <div class="a">
-        <div><xsl:value-of select="@n" /></div>
+        <xsl:if test="@n">
+          <div><xsl:value-of select="@n" /></div>
+        </xsl:if>
       </div>
       <div class="b">
         <xsl:choose>
