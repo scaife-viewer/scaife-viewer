@@ -100,4 +100,4 @@ def reader(request, urn):
         "passage": passage,
         "parents": list(reversed(passage.metadata.parents))[1:]
     }
-    return render(request, "reader.html", ctx)
+    return render(request, "reader/reader.html", ctx)

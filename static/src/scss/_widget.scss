@@ -1,0 +1,14 @@
+.widget {
+  padding: 5px 8px;
+  margin-bottom: 20px;
+  h2 {
+    font-size: 14px;
+    margin: 0;
+    color: $gray-600;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+  }
+  p {
+    margin: 0;
+  }
+}

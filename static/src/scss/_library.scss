@@ -1,0 +1,119 @@
+section.hero {
+  background: $perseus-red;
+  color: $white;
+  padding: 20px 0;
+  margin-bottom: 20px;
+
+  h1 {
+    font-family: 'Noto Serif';
+    font-size: 48px;
+    font-style: italic;
+  }
+
+  h2 {
+    font-family: 'Noto Serif';
+    font-size: 28px;
+    margin: 0;
+    a {
+      color: lighten($perseus-red, 30%);
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+.dev-note {
+  margin: 50px 0;
+  background: #FFFAEE;
+  padding: 10px 20px;
+  font-family: 'Noto Serif';
+  font-style: italic;
+  border: 1px solid lighten($perseus-red, 30%);
+
+  span {
+    font-weight: bold;
+    font-style: normal;
+    font-family: 'Noto Sans';
+    color: $perseus-red;
+  }
+
+  b {
+    font-weight: bold;
+  }
+}
+
+.work-list {
+  .form-group {
+    margin-bottom: 50px;
+  }
+  .work {
+    margin-top: 2em;
+    h2 {
+      font-family: 'Noto Serif';
+      font-weight: normal;
+      font-style: italic;
+    }
+  }
+  margin-bottom: 50px;
+}
+
+.card-deck {
+  .card {
+    @include media-breakpoint-up(sm) {
+      min-width: 330px;
+    }
+    @include media-breakpoint-up(md) {
+      flex-grow: 0;
+    }
+    @include media-breakpoint-up(lg) {
+      min-width: 450px;
+    }
+    @include media-breakpoint-up(xl) {
+      min-width: 350px;
+    }
+  }
+}
+
+.version-card {
+  @extend .card;
+
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+  .text-subtype {
+    margin: 0;
+    color: $gray-600;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+  }
+
+  .card-title {
+    font-size: 14pt;
+    font-weight: bold;
+
+    a {
+      color: black;
+      &:hover {
+        color: $link-color;
+        text-decoration: none;
+      }
+    }
+  }
+
+  .card-text {
+    font-family: 'Noto Serif';
+    font-style: italic;
+    @extend .text-muted;
+    font-size: 10pt;
+    line-height: 14pt;
+  }
+
+  .card-footer {
+    font-size: 11pt;
+    text-align: center;
+    a:hover {
+      text-decoration: none;
+    }
+  }
+}

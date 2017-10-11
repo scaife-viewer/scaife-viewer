@@ -7,7 +7,6 @@ import threading
 import time
 
 from django.conf import settings
-from django.utils.deprecation import MiddlewareMixin
 
 import opentracing
 import opentracing.ext.tags as ext_tags
@@ -25,6 +24,19 @@ from opentracing import (
 
 def to_timestamp(t):
     return datetime.datetime.utcfromtimestamp(t).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+
+
+class TracingState:
+
+    _config = threading.local()
+
+    @classmethod
+    def activated(cls):
+        return getattr(cls._config, "activated", False)
+
+    @classmethod
+    def set_config(cls, key, value):
+        setattr(cls._config, key, value)
 
 
 class Recorder(SpanRecorder):
@@ -128,11 +140,11 @@ class OpenTracingMiddleware:
     def __init__(self, get_response=None):
         self.tracer = GCPTracer()
         self.get_response = get_response
-        self.current_spans = {}
 
         install_requests_patch(self.tracer)
 
     def __call__(self, request):
+        TracingState.set_config("activated", True)
         headers = parse_http_headers(request)
         tags = {
             ext_tags.SPAN_KIND: ext_tags.SPAN_KIND_RPC_SERVER,
@@ -221,11 +233,14 @@ def install_requests_patch(tracer):
 
     @wrapt.decorator
     def trace(wrapped, instance, args, kwargs):
-        span = tracer.start_span(
-            operation_name="requests",
-            child_of=get_current_span(),
-        )
-        with span:
+        if TracingState.activated():
+            span = tracer.start_span(
+                operation_name="requests",
+                child_of=get_current_span(),
+            )
+            with span:
+                resp = wrapped(*args, **kwargs)
+        else:
             resp = wrapped(*args, **kwargs)
         return resp
 

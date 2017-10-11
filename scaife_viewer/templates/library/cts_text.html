@@ -1,4 +1,4 @@
-{% extends "site_base.html" %}
+{% extends "library/base.html" %}
 
 {% load i18n %}
 
@@ -6,30 +6,22 @@
 
 {% block body_class %}cts_text{% endblock %}
 
-{% block body_base %}
+{% block hero %}
+  <h2>
+    <a href="{% url 'library' %}">Library &gt;</a>
+    {% for breadcrumb in parents %}
+      <a href="{% url 'library_cts_resource' breadcrumb.urn %}">{{ breadcrumb.get_label }}{% if not forloop.last %} &gt;{% endif %}</a>
+    {% endfor %}
+  </h2>
 
-  <section class="hero">
-    <div class="container">
-      <h2>
-        <a href="{% url 'library' %}">Library &gt;</a>
-        {% for breadcrumb in parents %}
-          <a href="{% url 'library_cts_resource' breadcrumb.urn %}">{{ breadcrumb.get_label }}{% if not forloop.last %} &gt;{% endif %}</a>
-        {% endfor %}
-      </h2>
-      <h1>{{ text.resource.get_label }}</h1>
-    </div>
-  </section>
+  <h1>{{ text.resource.get_label }}</h1>
+{% endblock %}
 
-  <section>
-    <div class="container">
+{% block content %}
+  <p class="dev-note lead">
+    <span>DEV NOTE:</span>
+    We're still working on how best to chunk and display this.
+  </p>
 
-      <p class="dev-note lead">
-        <span>DEV NOTE:</span>
-        @@@
-      </p>
-
-      <sv-cts-version-list></sv-cts-version-list>
-
-    </div>
-  </section>
+  <sv-cts-version-list></sv-cts-version-list>
 {% endblock %}

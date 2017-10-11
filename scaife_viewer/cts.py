@@ -1,11 +1,13 @@
 import collections
 import functools
 import operator
+from itertools import zip_longest
 from typing import Any, NamedTuple
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
 
+from anytree import NodeMixin, Resolver
 from lxml import etree
 from MyCapytain.common.constants import RDF_NAMESPACES
 from MyCapytain.common.reference import URN
@@ -71,6 +73,67 @@ class Text(NamedTuple):
             "ger": "German",
             "fre": "French",
         }.get(lang, lang)
+
+
+class RefTree:
+
+    def __init__(self, urn, citations):
+        self.urn = urn
+        self.citations = citations
+        self.root = RefNode()
+        self.parent_cache = {}
+
+    def add(self, reff):
+        # zip together the citation labels with the reff:
+        #   citations = ["book", "line"]
+        #   reff = "1.2"
+        #   -> [[("book", "1"), ("line", "2")], ...]
+        mapped = list(zip_longest(
+            map(attrgetter("name"), self.citations),
+            reff.split("."),
+        ))
+        parents, leaf = mapped[:-1], mapped[-1]
+        # set up parents and get leaf parent
+        parent_cache = self.parent_cache
+        last_parent = self.root
+        for depth, (label, num) in enumerate(parents):
+            try:
+                parent = parent_cache[(depth, label, num)]
+            except KeyError:
+                parent = RefNode(label=label, num=num, parent=last_parent)
+                parent_cache[(depth, label, num)] = parent
+                last_parent = parent
+        # create leaf ref
+        RefNode(label=leaf[0], num=leaf[1], parent=parent)
+
+    def lookup(self, path):
+        if not path:
+            return self.root
+        return Resolver("num").get(self.root, path)
+
+
+class RefNode(NodeMixin):
+
+    separator = "."
+
+    def __init__(self, label=None, num=None, parent=None):
+        self.label = label
+        self.num = num
+        self.parent = parent
+
+    def __str__(self):
+        return f"{self.label} {self.num}"
+
+    def __repr__(self):
+        if self.label is None and self.num is None:
+            return f"<RefRootNode>"
+        else:
+            ancestors = self.ancestors[1:]
+            if ancestors:
+                path = f"{' / '.join(map(str, ancestors))} / {str(self)}"
+            else:
+                path = str(self)
+            return f"<RefNode {path}>"
 
 
 class CTS:
@@ -222,7 +285,15 @@ class Passage:
 
     @property
     def rtl(self):
-        return self.lang in {"heb"}
+        return self.lang in {"heb", "fa"}
+
+    def toc(self):
+        resolver = HttpCtsResolver(HttpCtsRetriever(settings.CTS_API_ENDPOINT))
+        depth = len(self.metadata.citation)
+        tree = RefTree(self.urn.upTo(URN.NO_PASSAGE), self.metadata.citation)
+        for reff in resolver.getReffs(self.urn, level=depth):
+            tree.add(reff)
+        return tree
 
     def next_urn(self):
         return f"{self.urn.upTo(URN.NO_PASSAGE)}:{self.textual_node.nextId}" if self.textual_node.nextId else None

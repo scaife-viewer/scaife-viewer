@@ -30,6 +30,10 @@ export default {
       loading: false,
     };
   },
-  computed: mapState(['versions']),
+  computed: {
+    ...mapState({
+      versions: state => state.library.versions,
+    }),
+  },
 };
 </script>

@@ -1,4 +1,4 @@
-{% extends "site_base.html" %}
+{% extends "library/base.html" %}
 
 {% load i18n %}
 
@@ -6,26 +6,20 @@
 
 {% block body_class %}library{% endblock %}
 
-{% block body_base %}
+{% block hero %}
+  <h1>Library</h1>
+{% endblock %}
 
-  <section class="hero">
-    <div class="container">
-      <h1>Library</h1>
-    </div>
-  </section>
+{% block content %}
+  <p class="dev-note lead">
+    <span>DEV NOTE:</span>
+    The page currently lists text groups and provides filtering to quickly
+    narrow down to what you want. What other information should be shown
+    for each text group other than label? Should we filter or even group by
+    other facets such as time period, language, geography? Should we show
+    most popular works in each text group and enable immediate jumping to that
+    work?
+  </p>
 
-  <section>
-    <div class="container">
-
-      <p class="dev-note lead">
-        <span>DEV NOTE:</span>
-        The page currently lists text groups and provides filtering to quickly
-        narrow down to what you want. What other information should be shown
-        for each text group other than label? Should we filter or even group by
-        other facets such as time period, language, geography?
-      </p>
-
-      <sv-cts-textgroup-list></sv-cts-textgroup-list>
-    </div>
-  </section>
+  <sv-cts-textgroup-list></sv-cts-textgroup-list>
 {% endblock %}

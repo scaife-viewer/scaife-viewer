@@ -1,32 +1,10 @@
-const Vue = require('vue');
-const Vuex = require('vuex');
-
-Vue.use(Vuex);
-
-const store = new Vuex.Store({
+module.exports = {
   state: {
     textGroups: [],
     allTextGroups: null,
     works: [],
     allWorks: null,
     versions: [],
-  },
-  mutations: {
-    setTextGroups(state, textGroups) {
-      if (!state.allTextGroups) {
-        state.allTextGroups = [...textGroups];
-      }
-      state.textGroups = textGroups;
-    },
-    setWorks(state, works) {
-      if (!state.allWorks) {
-        state.allWorks = [...works];
-      }
-      state.works = works;
-    },
-    setVersions(state, versions) {
-      state.versions = versions;
-    },
   },
   actions: {
     loadTextGroups({ commit }, url) {
@@ -85,6 +63,21 @@ const store = new Vuex.Store({
         });
     },
   },
-});
-
-export default store;
+  mutations: {
+    setTextGroups(state, textGroups) {
+      if (!state.allTextGroups) {
+        state.allTextGroups = [...textGroups];
+      }
+      state.textGroups = textGroups;
+    },
+    setWorks(state, works) {
+      if (!state.allWorks) {
+        state.allWorks = [...works];
+      }
+      state.works = works;
+    },
+    setVersions(state, versions) {
+      state.versions = versions;
+    },
+  },
+};

@@ -1,4 +1,4 @@
-{% extends "site_base.html" %}
+{% extends "library/base.html" %}
 
 {% load i18n %}
 
@@ -6,38 +6,31 @@
 
 {% block body_class %}cts_textgroup{% endblock %}
 
-{% block body_base %}
+{% block hero %}
+  <h2>
+    <a href="{% url 'library' %}">Library</a>
+    {% for breadcrumb in parents %}
+      <a href="{% url 'library_cts_resource' breadcrumb.urn %}">{{ breadcrumb.get_label }}{% if not forloop.last %} &gt;{% endif %}</a>
+    {% endfor %}
+  </h2>
 
-  <section class="hero">
-    <div class="container">
-      <h2>
-        <a href="{% url 'library' %}">Library</a>
-        {% for breadcrumb in parents %}
-          <a href="{% url 'library_cts_resource' breadcrumb.urn %}">{{ breadcrumb.get_label }}{% if not forloop.last %} &gt;{% endif %}</a>
-        {% endfor %}
-      </h2>
-      <h1>{{ textgroup.resource.get_label }}</h1>
-    </div>
-  </section>
+  <h1>{{ textgroup.resource.get_label }}</h1>
+{% endblock %}
 
-  <section>
-    <div class="container">
+{% block content %}
+  <p class="dev-note lead">
+    <span>DEV NOTE:</span>
+    We wanted to provide a landing page for each text group that would not
+    merely list the available works but provide data about the text group
+    as a whole (both general and customized to the authenticated user if
+    appropriate). This is just a placeholder for now, so DOES just list the
+    available works, but during the development process, it can evolve to
+    include things like metadata, activity feeds, visualisations, and
+    actions that the user can take. Exactly how to display works is still
+    to be established.
+  </p>
 
-      <p class="dev-note lead">
-        <span>DEV NOTE:</span>
-        We wanted to provide a landing page for each text group that would not
-        merely list the available works but provide data about the text group
-        as a whole (both general and customized to the authenticated user if
-        appropriate). This is just a placeholder for now, so DOES just list the
-        available works, but during the development process, it can evolve to
-        include things like metadata, activity feeds, visualisations, and
-        actions that the user can take. Exactly how to display works is still
-        to be established.
-      </p>
+  <h2>Works</h2>
 
-      <h2>Works</h2>
-
-      <sv-cts-work-list></sv-cts-work-list>
-    </div>
-  </section>
+  <sv-cts-work-list></sv-cts-work-list>
 {% endblock %}
