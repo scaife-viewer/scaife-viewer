@@ -204,14 +204,19 @@
       <xsl:attribute name="data-n">
         <xsl:value-of select="@n" />
       </xsl:attribute>
-      <xsl:choose>
-        <xsl:when test="child::t:l">
-          <ol><xsl:apply-templates /></ol>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:apply-templates/>
-        </xsl:otherwise>
-      </xsl:choose>
+      <div class="a">
+        <div><xsl:value-of select="@n" /></div>
+      </div>
+      <div class="b">
+        <xsl:choose>
+          <xsl:when test="child::t:l">
+            <ol><xsl:apply-templates /></ol>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </div>
     </xsl:element>
   </xsl:template>
 

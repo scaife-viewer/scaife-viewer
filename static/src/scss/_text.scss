@@ -65,10 +65,36 @@ div.text {
     color: $gray-600;
   }
   .textpart {
-    padding-left: 4px;
-    border-left: 8px solid transparent;
-    &:hover {
-      border-left: 8px solid $gray-200;
+    display: flex;
+    & > .a {
+      color: transparent;
+      div {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 20px;
+        text-align: center;
+        font-family: 'Noto Sans';
+        font-size: 12px;
+      }
+      min-width: 16px;
+      padding-top: 4px;
+    }
+    &:hover > .a {
+      background: $gray-100;
+      &:hover {
+        background: $gray-400;
+        cursor: pointer;
+      }
+    }
+    & > .b {
+      padding: 0px 4px;
+    }
+  }
+  &:hover {
+    .textpart {
+      > .a {
+        color: $gray-600;
+      }
     }
   }
 }
