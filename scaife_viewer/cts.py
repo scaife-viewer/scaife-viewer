@@ -339,12 +339,15 @@ class Passage:
         return self.lang in {"heb", "fa"}
 
     def toc(self):
-        resolver = HttpCtsResolver(HttpCtsRetriever(settings.CTS_API_ENDPOINT))
-        depth = len(self.metadata.citation)
-        tree = RefTree(self.urn.upTo(URN.NO_PASSAGE), self.metadata.citation)
-        for reff in resolver.getReffs(self.urn, level=depth):
-            tree.add(reff)
-        return tree
+        key = f"toc-{self.urn}"
+        if key not in self.cache:
+            resolver = HttpCtsResolver(HttpCtsRetriever(settings.CTS_API_ENDPOINT))
+            depth = len(self.metadata.citation)
+            tree = RefTree(self.urn.upTo(URN.NO_PASSAGE), self.metadata.citation)
+            for reff in resolver.getReffs(self.urn, level=depth):
+                tree.add(reff)
+            self.cache[key] = tree
+        return self.cache[key]
 
     @property
     def first_urn(self):
