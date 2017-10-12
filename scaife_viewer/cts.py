@@ -106,19 +106,22 @@ class RefTree:
             reff.split("."),
         ))
         ancestors, leaf = mapped[:-1], mapped[-1]
-        # set up parents and get leaf parent
-        ancestor_cache = self.ancestor_cache
-        prefix = ""
-        last_ancestor = self.root
-        for (label, num) in ancestors:
-            key = f"{prefix}.{num}"
-            try:
-                parent = ancestor_cache[key]
-            except KeyError:
-                parent = RefNode(label=label, num=num, parent=last_ancestor)
-                ancestor_cache[key] = parent
-            prefix += num
-            last_ancestor = parent
+        if ancestors:
+            # set up parents and get leaf parent
+            ancestor_cache = self.ancestor_cache
+            prefix = ""
+            last_ancestor = self.root
+            for (label, num) in ancestors:
+                key = f"{prefix}.{num}"
+                try:
+                    parent = ancestor_cache[key]
+                except KeyError:
+                    parent = RefNode(label=label, num=num, parent=last_ancestor)
+                    ancestor_cache[key] = parent
+                prefix += num
+                last_ancestor = parent
+        else:
+            parent = self.root
         # create leaf ref
         RefNode(label=leaf[0], num=leaf[1], parent=parent)
 
@@ -187,13 +190,15 @@ class RefNode(anytree.NodeMixin):
         return self.reference
 
     def __repr__(self):
-        if self.label is None and self.num is None:
+        if self.is_root:
             return f"<RefRootNode>"
         else:
             return f"<RefNode {self.reference}>"
 
     @property
     def reference(self):
+        if self.is_root:
+            return
         bits = []
         for ancestor in self.ancestors[1:]:
             bits.append(ancestor.num)
