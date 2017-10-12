@@ -109,3 +109,7 @@ def reader(request, urn):
         "parents": list(reversed(passage.metadata.parents))[1:]
     }
     return render(request, "reader/reader.html", ctx)
+
+
+def healthz(request):
+    return HttpResponse(content="ok")
