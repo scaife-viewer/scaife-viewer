@@ -80,7 +80,15 @@ def library_cts_resource(request, urn):
                 texts.append(serialize_text(text))
             obj = texts
         if resource.kind == "text":
-            obj = cts.toc(urn)
+            toc = cts.passage(urn).toc()
+            obj = [
+                {
+                    "label": ref_node.label.title(),
+                    "num": ref_node.num,
+                    "reader_url": reverse("reader", kwargs={"urn": next(toc.chunks(ref_node), None).urn}),
+                }
+                for ref_node in toc.num_resolver.glob(toc.root, "*")
+            ]
         return JsonResponse({"object": obj})
     if content_type == "text/html":
         ctx = {
@@ -93,11 +101,15 @@ def library_cts_resource(request, urn):
 
 def reader(request, urn):
     cts = CTS()
-    if cts.is_resource(urn):
-        return redirect("reader", urn=cts.first_urn(urn))
     passage = cts.passage(urn)
+    if cts.is_resource(urn):
+        return redirect("reader", urn=passage.first_urn)
     ctx = {
         "passage": passage,
         "parents": list(reversed(passage.metadata.parents))[1:]
     }
     return render(request, "reader/reader.html", ctx)
+
+
+def healthz(request):
+    return HttpResponse(content="ok")

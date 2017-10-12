@@ -1,19 +1,22 @@
 import collections
 import functools
-import operator
+import itertools
+import re
+from itertools import zip_longest
+from operator import attrgetter, methodcaller, itemgetter
 from typing import Any, NamedTuple
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
 
+import anytree
+import anytree.iterators
 from lxml import etree
 from MyCapytain.common.constants import RDF_NAMESPACES
 from MyCapytain.common.reference import URN
 from MyCapytain.resolvers.cts.api import HttpCtsResolver
 from MyCapytain.resources.collections.cts import XmlCtsTextInventoryMetadata
 from MyCapytain.retrievers.cts5 import HttpCtsRetriever
-
-attrgetter = operator.attrgetter
 
 
 class Resource(NamedTuple):
@@ -73,6 +76,172 @@ class Text(NamedTuple):
         }.get(lang, lang)
 
 
+class RefTreeDepthIter(anytree.iterators.PreOrderIter):
+
+    def __init__(self, node, depth=0):
+        super(RefTreeDepthIter, self).__init__(node, filter_=self.filter_func(depth + 1))
+
+    def filter_func(self, depth):
+        def f(node):
+            return node.depth == depth
+        return f
+
+
+class RefTree:
+
+    def __init__(self, urn, citations):
+        self.urn = urn
+        self.citations = citations
+        self.root = RefNode()
+        self.ancestor_cache = {}
+        self.num_resolver = anytree.Resolver("num")
+
+    def add(self, reff):
+        # zip together the citation labels with the reff:
+        #   citations = ["book", "line"]
+        #   reff = "1.2"
+        #   -> [[("book", "1"), ("line", "2")], ...]
+        mapped = list(zip_longest(
+            map(attrgetter("name"), self.citations),
+            reff.split("."),
+        ))
+        ancestors, leaf = mapped[:-1], mapped[-1]
+        if ancestors:
+            # set up parents and get leaf parent
+            ancestor_cache = self.ancestor_cache
+            prefix = ""
+            last_ancestor = self.root
+            for (label, num) in ancestors:
+                key = f"{prefix}.{num}"
+                try:
+                    parent = ancestor_cache[key]
+                except KeyError:
+                    parent = RefNode(label=label, num=num, parent=last_ancestor)
+                    ancestor_cache[key] = parent
+                prefix += num
+                last_ancestor = parent
+        else:
+            parent = self.root
+        # create leaf ref
+        RefNode(label=leaf[0], num=leaf[1], parent=parent)
+
+    def lookup(self, path):
+        return self.num_resolver.get(self.root, path)
+
+    def chunk_config(self):
+        # following was copied from scheme_grouper in Leipzig's CTS Nemo instance
+        # https://github.com/OpenGreekAndLatin/cts_leipzig_ui/blob/master/cts_leipzig_ui/__init__.py#L69
+        # @@@ consider how we might store the chunking config in the database
+        labels = [citation.name for citation in self.citations]
+        level = len(labels)
+        groupby = 5
+        if "word" in labels:
+            labels = labels[:labels.index("word")]
+        if str(self.urn) == "urn:cts:latinLit:stoa0040.stoa062.opp-lat1":
+            level, groupby = 1, 2
+        elif labels == ["book", "poem", "line"]:
+            level, groupby = 2, 1
+        elif labels == ["book", "line"]:
+            level, groupby = 2, 30
+        elif labels == ["book", "chapter"]:
+            level, groupby = 2, 1
+        elif labels == ["book"]:
+            level, groupby = 1, 1
+        elif labels == ["line"]:
+            level, groupby = 1, 30
+        elif labels == ["chapter", "section"]:
+            level, groupby = 2, 2
+        elif labels == ["chapter", "mishnah"]:
+            level, groupby = 2, 1
+        elif labels == ["chapter", "verse"]:
+            level, groupby = 2, 1
+        elif "line" in labels:
+            groupby = 30
+        return level, groupby
+
+    def chunks(self, node=None):
+        level, groupby = self.chunk_config()
+        sorted_level = sorted(self.depth_iter(level - 1, node=node), key=methodcaller("sort_key"))
+        grouped = itertools.groupby(sorted_level, key=methodcaller("sort_key", ancestors_only=True))
+        for group in map(itemgetter(1), grouped):
+            for chunk in chunker(group, groupby):
+                start, end = chunk[0], chunk[-1]
+                if start.num == end.num:
+                    yield RefChunk(self.urn, start=start)
+                else:
+                    yield RefChunk(self.urn, start=start, end=end)
+
+    def depth_iter(self, depth, node=None):
+        if node is None:
+            node = self.root
+        return RefTreeDepthIter(node, depth)
+
+
+class RefNode(anytree.NodeMixin):
+
+    separator = "."
+
+    def __init__(self, label=None, num=None, parent=None):
+        self.label = label
+        self.num = num
+        self.parent = parent
+
+    def __str__(self):
+        return self.reference
+
+    def __repr__(self):
+        if self.is_root:
+            return f"<RefRootNode>"
+        else:
+            return f"<RefNode {self.reference}>"
+
+    @property
+    def reference(self):
+        if self.is_root:
+            return ""
+        bits = []
+        for ancestor in self.ancestors[1:]:
+            bits.append(ancestor.num)
+        bits.append(self.num)
+        return ".".join(bits)
+
+    def sort_key(self, ancestors_only=False):
+        if ancestors_only:
+            return natural_keys(self.parent.reference)
+        else:
+            return natural_keys(self.reference)
+
+
+class RefChunk:
+
+    def __init__(self, urn, start, end=None):
+        self.passage_urn = urn
+        self.start, self.end = start, end
+
+    def __repr__(self):
+        return f"<RefChunk {self.urn}>"
+
+    @property
+    def urn(self):
+        if self.end is None:
+            return f"{self.passage_urn}:{self.start.reference}"
+        return f"{self.passage_urn}:{self.start.reference}-{self.end.reference}"
+
+
+def atoi(s):
+    return int(s) if s.isdigit() else s
+
+
+def natural_keys(s):
+    return tuple([atoi(c) for c in re.split(r"(\d+)", s)])
+
+
+def chunker(iterable, n):
+    args = [iter(iterable)] * n
+    for chunk in zip_longest(*args, fillvalue=None):
+        yield [item for item in chunk if item is not None]
+
+
 class CTS:
     """
     Thin-wrapper around calling into MyCapytain library. This class provides
@@ -123,7 +292,7 @@ class CTS:
             if urn:
                 ti = [x for x in [ti] + ti.descendants if x.id == str(urn)][0]
             resources = []
-            members = sorted(ti.members, key=operator.attrgetter("id"))
+            members = sorted(ti.members, key=attrgetter("id"))
             for o in members:
                 resource = Resource(
                     urn=o.id,
@@ -133,66 +302,6 @@ class CTS:
                 resources.append(resource)
             self.cache[key] = resources
             return resources
-
-    def toc(self, urn, level=None, groupby=5):
-        retriever = HttpCtsRetriever(settings.CTS_API_ENDPOINT)
-        resolver = HttpCtsResolver(retriever)
-        text = self.resource(urn)
-        # following was copied from scheme_grouper in Leipzig's CTS Nemo instance
-        # https://github.com/OpenGreekAndLatin/cts_leipzig_ui/blob/master/cts_leipzig_ui/__init__.py#L69
-        # @@@ consider how we might store the chunking config in the database
-        types = [citation.name for citation in text.resource.citation]
-        depth = len(text.resource.citation)
-        if level is None or level > depth:
-            level = depth
-        if "word" in types:
-            types = types[:types.index("word")]
-        if str(text.resource.id) == "urn:cts:latinLit:stoa0040.stoa062.opp-lat1":
-            level, groupby = 1, 2
-        elif types == ["book", "poem", "line"]:
-            level, groupby = 2, 1
-        elif types == ["book", "line"]:
-            level, groupby = 2, 30
-        elif types == ["book", "chapter"]:
-            level, groupby = 2, 1
-        elif types == ["book"]:
-            level, groupby = 1, 1
-        elif types == ["line"]:
-            level, groupby = 1, 30
-        elif types == ["chapter", "section"]:
-            level, groupby = 2, 2
-        elif types == ["chapter", "mishnah"]:
-            level, groupby = 2, 1
-        elif types == ["chapter", "verse"]:
-            level, groupby = 2, 1
-        elif "line" in types:
-            groupby = 30
-        groups = []
-        for num, rs in level_grouper(functools.partial(resolver.getReffs, urn), level, groupby).items():
-            ranges = []
-            group = {"num": num, "ranges": ranges}
-            for r in rs:
-                cr = {}
-                if "end" in r:
-                    read_urn = f'{urn}:{r["start"]}-{r["end"]}'
-                else:
-                    read_urn = f'{urn}:{r["start"]}'
-                cr["urn"] = read_urn
-                cr["url"] = reverse("reader", kwargs=dict(urn=read_urn))
-                cr.update(r)
-                ranges.append(cr)
-            groups.append(group)
-        return {
-            "group_name": types[0].title(),
-            "groups": groups,
-        }
-
-    def first_urn(self, urn):
-        toc = self.toc(urn)
-        try:
-            return toc["groups"][0]["ranges"][0]["urn"]
-        except (KeyError, IndexError):
-            return None
 
     def passage(self, urn):
         return Passage.load(urn)
@@ -208,13 +317,18 @@ class Passage:
         retriever = HttpCtsRetriever(settings.CTS_API_ENDPOINT)
         resolver = HttpCtsResolver(retriever)
         metadata = resolver.getMetadata(urn.upTo(URN.NO_PASSAGE))
-        textual_node = resolver.getTextualNode(urn)
-        return cls(urn, metadata, textual_node)
+        return cls(resolver, urn, metadata)
 
-    def __init__(self, urn, metadata, textual_node):
+    def __init__(self, resolver, urn, metadata):
+        self.resolver = resolver
         self.urn = urn
         self.metadata = metadata
-        self.textual_node = textual_node
+
+    @property
+    def textual_node(self):
+        if not hasattr(self, "_textual_node"):
+            self._textual_node = self.resolver.getTextualNode(self.urn)
+        return self._textual_node
 
     @property
     def lang(self):
@@ -223,6 +337,23 @@ class Passage:
     @property
     def rtl(self):
         return self.lang in {"heb", "fa"}
+
+    def toc(self):
+        key = f"toc-{self.urn}"
+        if key not in self.cache:
+            resolver = HttpCtsResolver(HttpCtsRetriever(settings.CTS_API_ENDPOINT))
+            depth = len(self.metadata.citation)
+            tree = RefTree(self.urn.upTo(URN.NO_PASSAGE), self.metadata.citation)
+            for reff in resolver.getReffs(self.urn, level=depth):
+                tree.add(reff)
+            self.cache[key] = tree
+        return self.cache[key]
+
+    @property
+    def first_urn(self):
+        chunk = next(self.toc().chunks(), None)
+        if chunk is not None:
+            return chunk.urn
 
     def next_urn(self):
         return f"{self.urn.upTo(URN.NO_PASSAGE)}:{self.textual_node.nextId}" if self.textual_node.nextId else None
@@ -253,26 +384,3 @@ class Passage:
                 transform = etree.XSLT(etree.XML(f.read()))
             self.cache[key] = transform(tei)
         return self.cache[key]
-
-
-def level_grouper(getValidReff, level, groupby):
-    references = getValidReff(level=level)
-    _refs = collections.OrderedDict()
-    _refs2 = collections.OrderedDict()
-    for ref in references:
-        key = ".".join(ref.split(".")[:level - 1])
-        _refs.setdefault(key, []).append(ref)
-    for key, refs in _refs.items():
-        grouped = [
-            refs[i:i + groupby]
-            for i in range(0, len(refs), groupby)
-        ]
-        _refs2[key] = [
-            join_or_single(ref[0], ref[-1])
-            for ref in grouped
-        ]
-    return _refs2
-
-
-def join_or_single(start, end):
-    return {"start": start} if start == end else {"start": start, "end": end}
