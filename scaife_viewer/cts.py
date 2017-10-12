@@ -198,7 +198,7 @@ class RefNode(anytree.NodeMixin):
     @property
     def reference(self):
         if self.is_root:
-            return
+            return ""
         bits = []
         for ancestor in self.ancestors[1:]:
             bits.append(ancestor.num)
