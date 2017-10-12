@@ -323,6 +323,7 @@ class Passage:
         self.resolver = resolver
         self.urn = urn
         self.metadata = metadata
+        self.base_urn = self.urn.upTo(URN.NO_PASSAGE)
 
     @property
     def textual_node(self):

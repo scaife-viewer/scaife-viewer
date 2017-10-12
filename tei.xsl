@@ -204,11 +204,20 @@
           <xsl:value-of select="@n" />
         </xsl:attribute>
       </xsl:if>
-      <div class="a">
+      <xsl:element name="div">
+        <xsl:attribute name="class">a</xsl:attribute>
+        <xsl:attribute name="data-ref">
+          <xsl:for-each select="ancestor::t:div[@type='textpart']/@n">
+            <xsl:value-of select="concat(., '.')" />
+          </xsl:for-each>
+          <xsl:value-of select="@n" />
+        </xsl:attribute>
         <xsl:if test="@n">
-          <div><xsl:value-of select="@n" /></div>
+          <div>
+            <xsl:value-of select="@n" />
+          </div>
         </xsl:if>
-      </div>
+      </xsl:element>
       <div class="b">
         <xsl:choose>
           <xsl:when test="child::t:l">

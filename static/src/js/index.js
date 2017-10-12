@@ -106,12 +106,17 @@ $(() => {
     }
   });
 
-  $('.textpart').hover((e) => {
+  function rsplit(s, sep, maxsplit) {
+    const split = s.split(sep);
+    return maxsplit ? [split.slice(0, -maxsplit).join(sep)].concat(split.slice(-maxsplit)) : split;
+  }
+
+  $('.textpart .a').click((e) => {
     const el = e.currentTarget;
-    let n = String($(el).data('n'));
-    $(el).parents('.textpart').each((i, v) => {
-      n = String($(v).data('n')) + "." + n;
-    });
-    $("#ref").text(n);
+    const baseUrn = $(el).closest('.text').data('base-urn');
+    const ref = $(el).data('ref');
+    const urn = `${baseUrn}:${ref}`;
+    const baseUrl = rsplit(document.location.pathname, '/', 2)[0];
+    window.location.href = `${baseUrl}/${urn}`;
   });
 });
