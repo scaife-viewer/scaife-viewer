@@ -101,9 +101,9 @@ def library_cts_resource(request, urn):
 
 def reader(request, urn):
     cts = CTS()
-    if cts.is_resource(urn):
-        return redirect("reader", urn=cts.first_urn(urn))
     passage = cts.passage(urn)
+    if cts.is_resource(urn):
+        return redirect("reader", urn=passage.first_urn)
     ctx = {
         "passage": passage,
         "parents": list(reversed(passage.metadata.parents))[1:]
