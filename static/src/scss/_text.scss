@@ -76,13 +76,14 @@ div.text {
         font-family: 'Noto Sans';
         font-size: 12px;
       }
-      min-width: 16px;
+      min-width: 24px;
       padding-top: 4px;
     }
     &:hover > .a {
       background: $gray-100;
       &:hover {
         background: $gray-400;
+        color: black;
         cursor: pointer;
       }
     }
