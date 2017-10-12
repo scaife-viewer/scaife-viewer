@@ -8,8 +8,6 @@
   <h2>{{ passage.metadata.get_label }}</h2>
 </div>
 
-<div>{% if passage.ancestors %}Ancestors: {% for ancestor in passage.ancestors %}<a href="{% url 'reader' ancestor.urn %}">{{ ancestor.label }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}{% endif %}</div>
-
 <div class="overall"{% if passage.rtl %} dir="rtl"{% endif %}>
   <div class="pg-left">
     {% if passage.prev_urn %}

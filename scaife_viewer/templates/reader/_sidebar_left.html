@@ -1,7 +1,9 @@
-<div class="widget">
-  <h2>Some Widget</h2>
-  <p>...</p>
-</div>
+{% if passage.ancestors %}
+  <div class="widget">
+    <h2>Ancestors</h2>
+    <p>{% for ancestor in passage.ancestors %}<a href="{% url 'reader' ancestor.urn %}">{{ ancestor.label }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+  </div>
+{% endif %}
 <div class="widget">
   <h2>Some Other Widget</h2>
   <p>...</p>
