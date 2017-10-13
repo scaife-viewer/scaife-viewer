@@ -247,6 +247,10 @@ class CTS:
 
     cache = {}
 
+    def __init__(self):
+        self.retriever = HttpCtsRetriever(settings.CTS_API_ENDPOINT)
+        self.resolver = HttpCtsResolver(self.retriever)
+
     def is_resource(self, urn):
         urn = URN(urn)
         if urn.upTo(URN.TEXTGROUP) == str(urn):
@@ -259,9 +263,7 @@ class CTS:
 
     def resource(self, urn):
         urn = URN(urn)
-        retriever = HttpCtsRetriever(settings.CTS_API_ENDPOINT)
-        resolver = HttpCtsResolver(retriever)
-        r = resolver.getMetadata(str(urn))
+        r = self.resolver.getMetadata(str(urn))
         if r.TYPE_URI == RDF_NAMESPACES.CTS.term("textgroup"):
             return Textgroup(resource=r)
         if r.TYPE_URI == RDF_NAMESPACES.CTS.term("work"):
@@ -279,8 +281,7 @@ class CTS:
             with open(settings.CTS_LOCAL_TEXT_INVENTORY, "r") as fp:
                 return fp.read()
         else:
-            retriever = HttpCtsRetriever(settings.CTS_API_ENDPOINT)
-            return retriever.getCapabilities()
+            return self.retriever.getCapabilities()
 
     def text_inventory(self):
         if self.cache.get("ti") is None:
@@ -310,26 +311,24 @@ class CTS:
             return resources
 
     def passage(self, urn):
-        return Passage.load(urn)
+        return Passage(urn)
 
 
 class Passage:
 
     cache = {}
 
-    @classmethod
-    def load(cls, urn):
-        urn = URN(urn)
-        retriever = HttpCtsRetriever(settings.CTS_API_ENDPOINT)
-        resolver = HttpCtsResolver(retriever)
-        metadata = resolver.getMetadata(urn.upTo(URN.NO_PASSAGE))
-        return cls(resolver, urn, metadata)
-
-    def __init__(self, resolver, urn, metadata):
-        self.resolver = resolver
-        self.urn = urn
-        self.metadata = metadata
+    def __init__(self, urn):
+        self.retriever = HttpCtsRetriever(settings.CTS_API_ENDPOINT)
+        self.resolver = HttpCtsResolver(self.retriever)
+        self.urn = URN(urn)
         self.base_urn = self.urn.upTo(URN.NO_PASSAGE)
+
+    @property
+    def metadata(self):
+        if not hasattr(self, "_metadata"):
+            self._metadata = self.resolver.getMetadata(self.urn.upTo(URN.NO_PASSAGE))
+        return self._metadata
 
     @property
     def textual_node(self):
@@ -348,10 +347,9 @@ class Passage:
     def toc(self):
         key = f"toc-{self.urn}"
         if key not in self.cache:
-            resolver = HttpCtsResolver(HttpCtsRetriever(settings.CTS_API_ENDPOINT))
             depth = len(self.metadata.citation)
             tree = RefTree(self.urn.upTo(URN.NO_PASSAGE), self.metadata.citation)
-            for reff in resolver.getReffs(self.urn, level=depth):
+            for reff in self.resolver.getReffs(self.urn, level=depth):
                 tree.add(reff)
             self.cache[key] = tree
         return self.cache[key]
