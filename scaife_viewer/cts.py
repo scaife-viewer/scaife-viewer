@@ -1,5 +1,3 @@
-import collections
-import functools
 import itertools
 import re
 from itertools import zip_longest
@@ -7,7 +5,6 @@ from operator import attrgetter, methodcaller, itemgetter
 from typing import Any, NamedTuple
 
 from django.conf import settings
-from django.core.urlresolvers import reverse
 
 import anytree
 import anytree.iterators
