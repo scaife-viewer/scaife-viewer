@@ -55,7 +55,9 @@ div.text {
 // extras not from Nemo
 div.text {
   .card {
+    /* reset bootstrap .card properties because of clash with class from xml */
     border: none;
+    flex-direction: row;
   }
   blockquote {
     margin-left: 1em;
