@@ -74,3 +74,24 @@ section.home-hero {
     }
   }
 }
+
+.changelog {
+  font-family: 'Noto Serif';
+  margin-top: 50px;
+  h2 {
+    color: $perseus-red;
+  }
+  h3 {
+    font-family: 'Noto Sans';
+    font-size: 14px;
+    margin: 1.5em 0 0;
+    color: $gray-600;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+  }
+  ul {
+    list-style-type: circle;
+    margin-top: 0.5em;
+    font-size: 14px;
+  }
+}
