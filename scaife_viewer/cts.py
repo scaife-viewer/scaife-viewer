@@ -321,19 +321,20 @@ class Passage:
     def __init__(self, urn):
         self.retriever = HttpCtsRetriever(settings.CTS_API_ENDPOINT)
         self.resolver = HttpCtsResolver(self.retriever)
-        self.urn = URN(urn)
-        self.base_urn = self.urn.upTo(URN.NO_PASSAGE)
+        self.full_urn = URN(urn)
+        self.urn = self.full_urn.upTo(URN.NO_PASSAGE)
+        self.reference = self.full_urn.reference
 
     @property
     def metadata(self):
         if not hasattr(self, "_metadata"):
-            self._metadata = self.resolver.getMetadata(self.urn.upTo(URN.NO_PASSAGE))
+            self._metadata = self.resolver.getMetadata(self.urn)
         return self._metadata
 
     @property
     def textual_node(self):
         if not hasattr(self, "_textual_node"):
-            self._textual_node = self.resolver.getTextualNode(self.urn)
+            self._textual_node = self.resolver.getTextualNode(self.full_urn)
         return self._textual_node
 
     @property
@@ -348,7 +349,7 @@ class Passage:
         key = f"toc-{self.urn}"
         if key not in self.cache:
             depth = len(self.metadata.citation)
-            tree = RefTree(self.urn.upTo(URN.NO_PASSAGE), self.metadata.citation)
+            tree = RefTree(self.urn, self.metadata.citation)
             for reff in self.resolver.getReffs(self.urn, level=depth):
                 tree.add(reff)
             self.cache[key] = tree
@@ -361,20 +362,20 @@ class Passage:
             return chunk.urn
 
     def next_urn(self):
-        return f"{self.urn.upTo(URN.NO_PASSAGE)}:{self.textual_node.nextId}" if self.textual_node.nextId else None
+        return f"{self.urn}:{self.textual_node.nextId}" if self.textual_node.nextId else None
 
     def prev_urn(self):
-        return f"{self.urn.upTo(URN.NO_PASSAGE)}:{self.textual_node.prevId}" if self.textual_node.prevId else None
+        return f"{self.urn}:{self.textual_node.prevId}" if self.textual_node.prevId else None
 
     def ancestors(self):
-        key = f"ancestor-{self.urn}"
+        key = f"ancestor-{self.full_urn}"
         if key not in self.cache:
             ancestors = []
-            ref = self.urn.reference
+            ref = self.reference
             parent = ref.parent
             while parent is not None:
                 ancestors.append({
-                    "urn": f"{self.urn.upTo(URN.NO_PASSAGE)}:{parent}",
+                    "urn": f"{self.urn}:{parent}",
                     "label": str(parent),
                 })
                 parent = parent.parent
@@ -382,7 +383,7 @@ class Passage:
         return self.cache[key]
 
     def render(self):
-        key = f"render-{self.urn}"
+        key = f"render-{self.full_urn}"
         if key not in self.cache:
             tei = self.textual_node.resource
             with open("tei.xsl") as f:
