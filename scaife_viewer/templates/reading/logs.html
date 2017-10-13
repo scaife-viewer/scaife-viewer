@@ -1,0 +1,23 @@
+{% extends "site_base.html" %}
+
+{% load i18n tz %}
+
+{% block head_title %}Reading Logs{% endblock %}
+
+{% block body_class %}reading-logs{% endblock %}
+
+{% block body %}
+  <h1>Reading Logs</h1>
+
+  {% timezone account.timezone|default:None %}
+    <table class="table table-striped table-sm">
+      {% for log in logs %}
+        <tr>
+          <td><a href="{% url 'reader' log.urn %}">{{ log.label }}</a></td>
+          <td>{{ log.timestamp }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% endtimezone %}
+
+{% endblock %}

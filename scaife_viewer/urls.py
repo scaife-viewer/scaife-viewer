@@ -14,6 +14,7 @@ urlpatterns = [
     url(r"^reader/(?P<urn>urn:[^/]+)/$", reader, name="reader"),
     url(r"^profile/$", profile, name="profile"),
     url(r"^healthz/$", healthz, name="healthz"),
+    url(r"^reading/", include("scaife_viewer.reading.urls")),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
