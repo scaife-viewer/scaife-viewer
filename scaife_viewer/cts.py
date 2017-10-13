@@ -263,7 +263,7 @@ class CTS:
 
     def resource(self, urn):
         urn = URN(urn)
-        r = self.resolver.getMetadata(str(urn))
+        r = self.text_inventory()[str(urn)]
         if r.TYPE_URI == RDF_NAMESPACES.CTS.term("textgroup"):
             return Textgroup(resource=r)
         if r.TYPE_URI == RDF_NAMESPACES.CTS.term("work"):
@@ -289,46 +289,45 @@ class CTS:
         return self.cache["ti"]
 
     def resources(self, urn=None):
-        key = urn
-        if key in self.cache:
-            return self.cache[key]
-        else:
-            if urn:
-                urn = URN(urn)
-            ti = self.text_inventory()
-            if urn:
-                ti = [x for x in [ti] + ti.descendants if x.id == str(urn)][0]
-            resources = []
-            members = sorted(ti.members, key=attrgetter("id"))
-            for o in members:
-                resource = Resource(
-                    urn=o.id,
-                    label=o.get_label(lang="eng"),
-                    readable=o.readable,
-                )
-                resources.append(resource)
-            self.cache[key] = resources
-            return resources
+        if urn:
+            urn = URN(urn)
+        ti = self.text_inventory()
+        if urn:
+            ti = ti[urn]
+        resources = []
+        members = sorted(ti.members, key=attrgetter("id"))
+        for o in members:
+            resource = Resource(
+                urn=o.id,
+                label=o.get_label(lang="eng"),
+                readable=o.readable,
+            )
+            resources.append(resource)
+        return resources
 
     def passage(self, urn):
-        return Passage(urn)
+        return Passage(urn, ti=self.text_inventory())
 
 
 class Passage:
 
     cache = {}
 
-    def __init__(self, urn):
+    def __init__(self, urn, ti=None):
         self.retriever = HttpCtsRetriever(settings.CTS_API_ENDPOINT)
         self.resolver = HttpCtsResolver(self.retriever)
         self.full_urn = URN(urn)
         self.urn = self.full_urn.upTo(URN.NO_PASSAGE)
         self.reference = self.full_urn.reference
+        self.ti = ti
 
     @property
     def metadata(self):
         if not hasattr(self, "_metadata"):
-            self._metadata = self.resolver.getMetadata(self.urn)
+            if self.ti is None:
+                self._metadata = self.resolver.getMetadata(self.urn)
+            else:
+                self._metadata = self.ti[self.urn]
         return self._metadata
 
     @property
