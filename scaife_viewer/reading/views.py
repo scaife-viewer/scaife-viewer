@@ -2,6 +2,8 @@ from django.shortcuts import render
 
 from account.decorators import login_required
 
+from .models import recent
+
 
 @login_required
 def logs(request):
@@ -9,4 +11,5 @@ def logs(request):
 
     return render(request, "reading/logs.html", {
         "logs": reading_logs,
+        "recent": recent(request.user),
     })

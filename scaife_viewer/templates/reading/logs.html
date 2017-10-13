@@ -10,6 +10,20 @@
   <h1>Reading Logs</h1>
 
   {% timezone account.timezone|default:None %}
+
+    <h2>Recent</h2>
+
+    <table class="table table-striped table-sm">
+      {% for log in recent %}
+        <tr>
+          <td><a href="{% url 'reader' log.urn %}">{{ log.label }}</a></td>
+          <td>{{ log.timestamp }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+
+    <h2>All</h2>
+
     <table class="table table-striped table-sm">
       {% for log in logs %}
         <tr>
@@ -18,6 +32,7 @@
         </tr>
       {% endfor %}
     </table>
+
   {% endtimezone %}
 
 {% endblock %}
