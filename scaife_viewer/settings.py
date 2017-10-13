@@ -198,6 +198,7 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SECURE_SSL_REDIRECT = bool(int(os.environ.get("SECURE_SSL_REDIRECT", "0")))
 
 CTS_API_ENDPOINT = os.environ.get("CTS_API_ENDPOINT", "https://perseus-cts.eu1.eldarioncloud.com/api/cts")
+CTS_LOCAL_TEXT_INVENTORY = "ti.xml" if DEBUG else None
 
 if "SENTRY_DSN" in os.environ:
     RAVEN_CONFIG = {

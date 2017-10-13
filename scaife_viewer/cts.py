@@ -277,6 +277,19 @@ class CTS:
             return Text(resource=r, subkind="commentary")
         raise Exception(f"not supported: {r.TYPE_URI}")
 
+    def fetch_text_inventory(self):
+        if getattr(settings, "CTS_LOCAL_TEXT_INVENTORY", None) is not None:
+            with open(settings.CTS_LOCAL_TEXT_INVENTORY, "r") as fp:
+                return fp.read()
+        else:
+            retriever = HttpCtsRetriever(settings.CTS_API_ENDPOINT)
+            return retriever.getCapabilities()
+
+    def text_inventory(self):
+        if self.cache.get("ti") is None:
+            self.cache["ti"] = XmlCtsTextInventoryMetadata.parse(self.fetch_text_inventory())
+        return self.cache["ti"]
+
     def resources(self, urn=None):
         key = urn
         if key in self.cache:
@@ -284,11 +297,7 @@ class CTS:
         else:
             if urn:
                 urn = URN(urn)
-            # The follow code is a super simple way of traversing a CTS API.
-            # This is effectively the same as resolver.getMetadata, but tweaked very slightly
-            # to allow displaying a the collection of text groups.
-            retriever = HttpCtsRetriever(settings.CTS_API_ENDPOINT)
-            ti = XmlCtsTextInventoryMetadata.parse(retriever.getCapabilities(urn=urn))
+            ti = self.text_inventory()
             if urn:
                 ti = [x for x in [ti] + ti.descendants if x.id == str(urn)][0]
             resources = []

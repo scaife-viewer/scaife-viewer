@@ -30,6 +30,12 @@ python manage.py migrate
 python manage.py loaddata sites
 ```
 
+Seed the text inventory to speed up local development:
+
+```
+curl -s "https://perseus-cts.eu1.eldarioncloud.com/api/cts?request=GetCapabilities" > ti.xml
+```
+
 You should now be set to run the development server:
 
 ```

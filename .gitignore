@@ -4,3 +4,4 @@ _build/
 dev.db
 site_media/
 static/dist/
+ti.xml
