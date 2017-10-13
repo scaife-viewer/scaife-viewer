@@ -1,5 +1,3 @@
-import collections
-import functools
 import itertools
 import re
 from itertools import zip_longest
@@ -7,7 +5,6 @@ from operator import attrgetter, methodcaller, itemgetter
 from typing import Any, NamedTuple
 
 from django.conf import settings
-from django.core.urlresolvers import reverse
 
 import anytree
 import anytree.iterators
@@ -250,6 +247,10 @@ class CTS:
 
     cache = {}
 
+    def __init__(self):
+        self.retriever = HttpCtsRetriever(settings.CTS_API_ENDPOINT)
+        self.resolver = HttpCtsResolver(self.retriever)
+
     def is_resource(self, urn):
         urn = URN(urn)
         if urn.upTo(URN.TEXTGROUP) == str(urn):
@@ -262,9 +263,7 @@ class CTS:
 
     def resource(self, urn):
         urn = URN(urn)
-        retriever = HttpCtsRetriever(settings.CTS_API_ENDPOINT)
-        resolver = HttpCtsResolver(retriever)
-        r = resolver.getMetadata(str(urn))
+        r = self.resolver.getMetadata(str(urn))
         if r.TYPE_URI == RDF_NAMESPACES.CTS.term("textgroup"):
             return Textgroup(resource=r)
         if r.TYPE_URI == RDF_NAMESPACES.CTS.term("work"):
@@ -282,8 +281,7 @@ class CTS:
             with open(settings.CTS_LOCAL_TEXT_INVENTORY, "r") as fp:
                 return fp.read()
         else:
-            retriever = HttpCtsRetriever(settings.CTS_API_ENDPOINT)
-            return retriever.getCapabilities()
+            return self.retriever.getCapabilities()
 
     def text_inventory(self):
         if self.cache.get("ti") is None:
@@ -313,31 +311,30 @@ class CTS:
             return resources
 
     def passage(self, urn):
-        return Passage.load(urn)
+        return Passage(urn)
 
 
 class Passage:
 
     cache = {}
 
-    @classmethod
-    def load(cls, urn):
-        urn = URN(urn)
-        retriever = HttpCtsRetriever(settings.CTS_API_ENDPOINT)
-        resolver = HttpCtsResolver(retriever)
-        metadata = resolver.getMetadata(urn.upTo(URN.NO_PASSAGE))
-        return cls(resolver, urn, metadata)
+    def __init__(self, urn):
+        self.retriever = HttpCtsRetriever(settings.CTS_API_ENDPOINT)
+        self.resolver = HttpCtsResolver(self.retriever)
+        self.full_urn = URN(urn)
+        self.urn = self.full_urn.upTo(URN.NO_PASSAGE)
+        self.reference = self.full_urn.reference
 
-    def __init__(self, resolver, urn, metadata):
-        self.resolver = resolver
-        self.urn = urn
-        self.metadata = metadata
-        self.base_urn = self.urn.upTo(URN.NO_PASSAGE)
+    @property
+    def metadata(self):
+        if not hasattr(self, "_metadata"):
+            self._metadata = self.resolver.getMetadata(self.urn)
+        return self._metadata
 
     @property
     def textual_node(self):
         if not hasattr(self, "_textual_node"):
-            self._textual_node = self.resolver.getTextualNode(self.urn)
+            self._textual_node = self.resolver.getTextualNode(self.full_urn)
         return self._textual_node
 
     @property
@@ -351,10 +348,9 @@ class Passage:
     def toc(self):
         key = f"toc-{self.urn}"
         if key not in self.cache:
-            resolver = HttpCtsResolver(HttpCtsRetriever(settings.CTS_API_ENDPOINT))
             depth = len(self.metadata.citation)
-            tree = RefTree(self.urn.upTo(URN.NO_PASSAGE), self.metadata.citation)
-            for reff in resolver.getReffs(self.urn, level=depth):
+            tree = RefTree(self.urn, self.metadata.citation)
+            for reff in self.resolver.getReffs(self.urn, level=depth):
                 tree.add(reff)
             self.cache[key] = tree
         return self.cache[key]
@@ -366,20 +362,20 @@ class Passage:
             return chunk.urn
 
     def next_urn(self):
-        return f"{self.urn.upTo(URN.NO_PASSAGE)}:{self.textual_node.nextId}" if self.textual_node.nextId else None
+        return f"{self.urn}:{self.textual_node.nextId}" if self.textual_node.nextId else None
 
     def prev_urn(self):
-        return f"{self.urn.upTo(URN.NO_PASSAGE)}:{self.textual_node.prevId}" if self.textual_node.prevId else None
+        return f"{self.urn}:{self.textual_node.prevId}" if self.textual_node.prevId else None
 
     def ancestors(self):
-        key = f"ancestor-{self.urn}"
+        key = f"ancestor-{self.full_urn}"
         if key not in self.cache:
             ancestors = []
-            ref = self.urn.reference
+            ref = self.reference
             parent = ref.parent
             while parent is not None:
                 ancestors.append({
-                    "urn": f"{self.urn.upTo(URN.NO_PASSAGE)}:{parent}",
+                    "urn": f"{self.urn}:{parent}",
                     "label": str(parent),
                 })
                 parent = parent.parent
@@ -387,7 +383,7 @@ class Passage:
         return self.cache[key]
 
     def render(self):
-        key = f"render-{self.urn}"
+        key = f"render-{self.full_urn}"
         if key not in self.cache:
             tei = self.textual_node.resource
             with open("tei.xsl") as f:

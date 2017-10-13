@@ -113,10 +113,10 @@ $(() => {
 
   $('.textpart .a').click((e) => {
     const el = e.currentTarget;
-    const baseUrn = $(el).closest('.text').data('base-urn');
+    const urn = $(el).closest('.text').data('urn');
     const ref = $(el).data('ref');
-    const urn = `${baseUrn}:${ref}`;
+    const fullUrn = `${urn}:${ref}`;
     const baseUrl = rsplit(document.location.pathname, '/', 2)[0];
-    window.location.href = `${baseUrl}/${urn}`;
+    window.location.href = `${baseUrl}/${fullUrn}`;
   });
 });
