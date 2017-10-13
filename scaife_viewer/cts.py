@@ -338,6 +338,15 @@ class Passage:
         return self._textual_node
 
     @property
+    def refs(self):
+        ref_range = {
+            "start": self.toc().lookup(str(self.reference.start)),
+        }
+        if self.reference.end:
+            ref_range["end"] = self.toc().lookup(str(self.reference.end))
+        return ref_range
+
+    @property
     def lang(self):
         return self.metadata.lang
 
