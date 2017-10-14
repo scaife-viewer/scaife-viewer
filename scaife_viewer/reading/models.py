@@ -24,7 +24,7 @@ def metadata(urn):
         "textgroup_label": str(parents[1].get_label()),
         "work_label": str(parents[0].get_label()),
         "version_label": str(passage.metadata.get_label()),
-        "reference": str(passage.reference),
+        "reference": str(passage.reference).replace("-", "–"),
         "lang": passage.lang,
     }
 
