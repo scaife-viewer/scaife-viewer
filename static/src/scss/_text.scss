@@ -101,3 +101,9 @@ div.text {
     }
   }
 }
+
+.spanned:hover {
+  cursor: pointer;
+  background: lighten($perseus-red, 30%);
+  text-decoration: underline;
+}

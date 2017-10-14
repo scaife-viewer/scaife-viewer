@@ -119,4 +119,13 @@ $(() => {
     const baseUrl = rsplit(document.location.pathname, '/', 2)[0];
     window.location.href = `${baseUrl}/${fullUrn}`;
   });
+
+  // $('.text li, .text p').each((i, item) => {
+  //   var words = $(item).text().split(' ');
+  //   $(item).empty();
+  //   $.each(words, (j, word) => {
+  //     $(item).append($('<span class="spanned">').text(word));
+  //     $(item).append(' ');
+  //   });
+  // })
 });

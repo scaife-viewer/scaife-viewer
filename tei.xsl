@@ -267,6 +267,22 @@
     </p>
   </xsl:template>
 
+  <xsl:template match="text()" name="wrapper">
+    <xsl:param name="text" select="." />
+    <xsl:variable name="new" select="normalize-space($text)" />
+    <xsl:choose>
+      <xsl:when test="contains($new, ' ')">
+        <span class="spanned"><xsl:value-of select="concat(substring-before($new, ' '), ' ')" /></span>
+        <xsl:call-template name="wrapper">
+          <xsl:with-param name="text" select="substring-after($new, ' ')" />
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <span><xsl:value-of select="$new" /></span>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
   <xsl:template match="t:name/t:reg"></xsl:template>
   <xsl:template match="t:name/t:placeName"><span class="placeName"><xsl:apply-templates/></span></xsl:template>
 
