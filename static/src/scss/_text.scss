@@ -6,10 +6,14 @@ div.text {
 // from Nemo
 div.text {
   .pb {
-    font-size: 0.5em;
-    display: inline;
+    font-size: 80%;  // 0.5em;
+    // display: inline;
     font-style: italic;
-    color: grey;
+    text-align: center;  // not originally in Nemo
+    color: $gray-500;  // grey;
+    &::before {
+      content: 'p.';
+    }
   }
 
   .ex, .supplied, .unclear {
