@@ -16,7 +16,12 @@
     <table class="table table-striped table-sm">
       {% for log in recent %}
         <tr>
-          <td><a href="{% url 'reader' log.urn %}">{{ log.label }}</a></td>
+          <td><a href="{% url 'reader' log.urn %}">
+            {{ log.metadata.textgroup_label }},
+            {{ log.metadata.work_label }}
+            {{ log.metadata.reference }}
+            ({{ log.metadata.lang }})
+          </a></td>
           <td>{{ log.timestamp }}</td>
         </tr>
       {% endfor %}
@@ -27,7 +32,12 @@
     <table class="table table-striped table-sm">
       {% for log in logs %}
         <tr>
-          <td><a href="{% url 'reader' log.urn %}">{{ log.label }}</a></td>
+          <td><a href="{% url 'reader' log.urn %}">
+            {{ log.metadata.textgroup_label }},
+            {{ log.metadata.work_label }}
+            {{ log.metadata.reference }}
+            ({{ log.metadata.lang }})
+          </a></td>
           <td>{{ log.timestamp }}</td>
         </tr>
       {% endfor %}

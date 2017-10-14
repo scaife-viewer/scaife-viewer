@@ -1,9 +1,38 @@
+{% load reading %}
+
+
 {% if passage.ancestors %}
   <div class="widget">
     <h2>Ancestors</h2>
     <p>{% for ancestor in passage.ancestors %}<a href="{% url 'reader' ancestor.urn %}">{{ ancestor.label }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</p>
   </div>
 {% endif %}
+
+{% if user.is_authenticated %}
+  {% recently_read_by user as recently_read %}
+  {% if recently_read %}
+    <div class="widget recently-read">
+      <h2>Recently Read</h2>
+      {% for log in recently_read %}
+        <div class="log">
+          <div class="label">
+            <a href="{% url 'reader' log.urn %}">
+              {{ log.metadata.textgroup_label }},
+              {{ log.metadata.work_label }}
+              {{ log.metadata.reference }}
+            </a>
+          </div>
+          <div class="meta">
+            <div>{{ log.metadata.lang }}</div>
+            <div>{{ log.timestamp|date }}</div>
+          </div>
+        </div>
+      {% endfor %}
+      <p class="all"><a href="{% url 'reading_logs' %}">all</a></p>
+    </div>
+  {% endif %}
+{% endif %}
+
 <div class="widget">
   <h2>Some Other Widget</h2>
   <p>...</p>

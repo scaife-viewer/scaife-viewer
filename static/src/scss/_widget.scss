@@ -12,3 +12,28 @@
     margin: 0;
   }
 }
+
+.widget.recently-read {
+  .log {
+    padding: 4px;
+    &:hover {
+      background: $gray-200;
+    }
+    .label {
+      font-family: 'Noto Serif';
+      font-size: 14px;
+      line-height: 16px;
+    }
+    .meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: $gray-600;
+    }
+  }
+  .all {
+    margin-top: 5px;
+    font-size: 12px;
+    text-align: center;
+  }
+}

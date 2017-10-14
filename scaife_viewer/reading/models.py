@@ -15,10 +15,6 @@ class ReadingLog(models.Model):
     def metadata(self):
         return metadata(self.urn)
 
-    @property
-    def label(self):
-        return label(self.urn)
-
 
 def metadata(urn):
     cts = CTS()
@@ -33,11 +29,6 @@ def metadata(urn):
     }
 
 
-def label(urn):
-    m = metadata(urn)
-    return f"{m['textgroup_label']}, {m['work_label']} {m['reference']} ({m['lang']})"
-
-
 def recent(user, limit=5):
     with connection.cursor() as cursor:
         sql = "SELECT urn, MAX(timestamp) AS timestamp FROM reading_readinglog WHERE user_id = %s GROUP BY urn ORDER BY timestamp DESC LIMIT %s"
@@ -45,7 +36,7 @@ def recent(user, limit=5):
 
         return [
             {
-                "label": label(row[0]),
+                "metadata": metadata(row[0]),
                 "urn": row[0],
                 "timestamp": row[1],
             }
