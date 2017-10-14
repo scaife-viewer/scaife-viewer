@@ -18,17 +18,11 @@
           <div class="label">
             <a href="{% url 'reader' log.urn %}">
               {{ log.metadata.textgroup_label }},
-              {{ log.metadata.work_label }}
-              {{ log.metadata.reference }}
+              {{ log.metadata.work_label }}&nbsp;{{ log.metadata.reference }}
             </a>
-          </div>
-          <div class="meta">
-            <div>{{ log.metadata.lang }}</div>
-            <div>{{ log.timestamp|date }}</div>
           </div>
         </div>
       {% endfor %}
-      <p class="all"><a href="{% url 'reading_logs' %}">all</a></p>
     </div>
   {% endif %}
 {% endif %}
