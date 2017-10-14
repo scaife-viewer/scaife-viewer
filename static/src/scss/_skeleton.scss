@@ -34,9 +34,11 @@
 
 .wrapper {
   display: flex;
+  height: 100vh;
 }
 
 #content_body {
+  overflow-y: scroll;
   @extend .container;
   padding-top: 35px;
   flex: 4;
@@ -47,6 +49,7 @@
 
 .sidebar {
 
+  overflow-y: scroll;
   max-width: 600px;
   transition: max-width .2s;
 
