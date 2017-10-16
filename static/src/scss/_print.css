@@ -1,0 +1,44 @@
+@media print {
+  header {
+    display: none;
+  }
+  .sidebar {
+    display: none;
+  }
+  .pg-right, .pg-left {
+    display: none;
+  }
+  #left-sidebar-toggle, #right-sidebar-toggle {
+    display: none;
+  }
+  .passage-heading > a {
+    display: none;
+  }
+  #content-body {
+    overflow: visible;
+  }
+  .wrapper {
+    height: auto;
+  }
+
+  section.hero {
+    background: white;
+    color: black;
+    h2 {
+      margin: 0;
+      a {
+        color: black;
+      }
+    }
+  }
+  .dev-note {
+    background: white;
+    span {
+      color: black;
+    }
+  }
+
+}
+@page {
+  margin: 1in;
+}
