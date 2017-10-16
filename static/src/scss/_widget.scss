@@ -12,3 +12,14 @@
     margin: 0;
   }
 }
+
+.widget.recently-read {
+  .log {
+    margin-top: 10px;
+    .label {
+      font-family: 'Noto Serif';
+      font-size: 14px;
+      line-height: 16px;
+    }
+  }
+}

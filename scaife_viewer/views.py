@@ -8,6 +8,7 @@ from django.views.decorators.vary import vary_on_headers
 import mimeparse
 
 from .cts import CTS
+from .reading.models import ReadingLog
 
 
 def home(request):
@@ -108,7 +109,10 @@ def reader(request, urn):
         "passage": passage,
         "parents": list(reversed(passage.metadata.parents))[1:]
     }
-    return render(request, "reader/reader.html", ctx)
+    response = render(request, "reader/reader.html", ctx)
+    if request.user.is_authenticated():
+        ReadingLog.objects.create(user=request.user, urn=urn)
+    return response
 
 
 def healthz(request):

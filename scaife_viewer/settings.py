@@ -145,6 +145,7 @@ INSTALLED_APPS = [
 
     # project
     "scaife_viewer",
+    "scaife_viewer.reading",
 ]
 
 # A sample logging configuration. The only tangible logging
