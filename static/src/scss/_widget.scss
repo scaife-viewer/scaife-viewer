@@ -23,3 +23,15 @@
     }
   }
 }
+
+.widget.children, .widget.ancestors {
+  p {
+    font-family: 'Noto Serif';
+    margin-top: 5px;
+    font-size: 14px;
+    line-height: 16px;
+    a {
+      padding-right: 0.2em;
+    }
+  }
+}

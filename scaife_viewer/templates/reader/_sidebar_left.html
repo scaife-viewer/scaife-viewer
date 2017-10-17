@@ -2,16 +2,16 @@
 
 
 {% if passage.ancestors %}
-  <div class="widget">
+  <div class="widget ancestors">
     <h2>Ancestors</h2>
-    <p>{% for ancestor in passage.ancestors %}<a href="{% url 'reader' ancestor.urn %}">{{ ancestor.label }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+    <p>{% for ancestor in passage.ancestors %}<a href="{% url 'reader' ancestor.urn %}">{{ ancestor.label }}</a>{% if not forloop.last %} &gt; {% endif %}{% endfor %}</p>
   </div>
 {% endif %}
 
 {% if passage.children %}
-<div class="widget">
+<div class="widget children">
   <h2>Children</h2>
-  <p>{% for child in passage.children %}<a href="{% url 'reader' child.urn %}">{{ child.label }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+  <p>{% for child in passage.children %}<a href="{% url 'reader' child.urn %}">{{ child.lsb }}</a> {% endfor %}</p>
 </div>
 {% endif %}
 
