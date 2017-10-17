@@ -20,7 +20,7 @@
     "dev": "npm run build && concurrently --kill-others --raw \"./manage.py runserver\" \"npm run watch\" \"npm run dev:browser-sync\"",
     "lint": "eslint static/src/**/**/*.js",
     "test": "mocha --recursive --compilers js:babel-register static/src/tests/index.js",
-    "compile": "NODE_ENV=production npm run clean && concurrently \"npm run copy:images\" \"npm run build:js\" \"npm run build:css\"",
+    "compile": "cross-env-shell NODE_ENV=production \"npm run clean && concurrently \\\"npm run copy:images\\\" \\\"npm run build:js\\\" \\\"npm run build:css\\\"\"",
     "heroku-postbuild": "npm run compile && npm run optimize"
   },
   "dependencies": {
@@ -35,6 +35,7 @@
     "browserify": "^14.4.0",
     "chai": "^4.1.2",
     "concurrently": "^3.5.0",
+    "cross-env": "^5.1.0",
     "cssnano": "^3.10.0",
     "cssnano-cli": "^1.0.5",
     "document-register-element": "^1.7.0",
