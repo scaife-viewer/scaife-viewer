@@ -6,7 +6,11 @@
     {% endfor %}
   </h1>
   <h2>{{ passage.metadata.get_label }}</h2>
+<<<<<<< HEAD
   <h3>{{ passage.refs.start.human_reference }}{% if passage.refs.end %} to {{ passage.refs.end.human_reference }}{% endif %} ({{ passage.refs.start.reference }}{% if passage.refs.end %} &ndash; {{ passage.refs.end.reference }}{% endif %})</h3>
+=======
+  <h3>{{ passage.refs.start.human_reference }}{% if passage.refs.end %} to {{ passage.refs.end.human_reference }}{% endif %}</h3>
+>>>>>>> tweaked passage ref styling in passage heading
 </div>
 
 <div class="overall"{% if passage.rtl %} dir="rtl"{% endif %}>
