@@ -2,24 +2,37 @@
   header {
     display: none;
   }
-  .sidebar {
-    display: none;
-  }
-  .pg-right, .pg-left {
+  .passage-heading > a {
     display: none;
   }
   #left-sidebar-toggle, #right-sidebar-toggle {
     display: none;
   }
-  .passage-heading > a {
+  .sidebar {
     display: none;
-  }
-  #content-body {
-    overflow: visible;
   }
   .wrapper {
     height: auto;
   }
+  .pg-left, .pg-right a {
+    color: transparent !important;
+  }
+  .textpart > .a {
+    color: $gray-600 !important;
+    background: transparent !important;
+  }
+  div.text ol > li {
+    &:hover {
+      list-style: none;
+    }
+    &:nth-child(5n) {
+      list-style: decimal;
+    }
+    &:nth-child(1) {
+      list-style: decimal;
+    }
+  }
+
 
   section.hero {
     background: white;
