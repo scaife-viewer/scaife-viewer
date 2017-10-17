@@ -376,18 +376,31 @@ class Passage:
         return f"{self.urn}:{self.textual_node.prevId}" if self.textual_node.prevId else None
 
     def ancestors(self):
-        key = f"ancestor-{self.full_urn}"
+        key = f"ancestor-{self.urn}:{self.reference.start}"
         if key not in self.cache:
             ancestors = []
-            ref = self.reference
-            parent = ref.parent
-            while parent is not None:
+            toc = self.toc()
+            toc_ref = toc.lookup(str(self.reference.start))
+            for ancestor in toc_ref.ancestors[1:]:
                 ancestors.append({
-                    "urn": f"{self.urn}:{parent}",
-                    "label": str(parent),
+                    "urn": f"{self.urn}:{ancestor.reference}",
+                    "label": ancestor.reference,
                 })
-                parent = parent.parent
             self.cache[key] = ancestors
+        return self.cache[key]
+
+    def children(self):
+        key = f"children-{self.urn}:{self.reference.start}"
+        if key not in self.cache:
+            children = []
+            toc = self.toc()
+            toc_ref = toc.lookup(str(self.reference.start))
+            for child in toc_ref.children:
+                children.append({
+                    "urn": f"{self.urn}:{child.reference}",
+                    "label": child.reference,
+                })
+            self.cache[key] = children
         return self.cache[key]
 
     def render(self):
