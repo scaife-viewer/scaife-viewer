@@ -6,6 +6,8 @@ window.jQuery = jQuery;
 window.$ = jQuery;
 const $ = jQuery;
 
+import 'document-register-element/build/document-register-element';
+
 const Vue = require('vue');
 const vueCustomElement = require('vue-custom-element');
 const CTSTextGroupList = require('./components/CTSTextGroupList.vue');

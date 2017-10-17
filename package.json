@@ -37,6 +37,7 @@
     "concurrently": "^3.5.0",
     "cssnano": "^3.10.0",
     "cssnano-cli": "^1.0.5",
+    "document-register-element": "^1.7.0",
     "envify": "^4.1.0",
     "eslint": "^4.7.2",
     "eslint-config-airbnb-base": "^12.0.1",
