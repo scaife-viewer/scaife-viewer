@@ -9,7 +9,7 @@
     "copy:images": "cp -r static/src/images/* static/dist/images/ 2>/dev/null || :",
     "optimize:js": "uglifyjs static/dist/js/site.js -m -c warnings=false -o static/dist/js/site.js",
     "optimize:css": "cssnano static/dist/css/app.css static/dist/css/app.css",
-    "optimize": "npm run optimize:js && npm run optimize:css",
+    "optimize": "cross-env-shell NODE_ENV=production \"npm run optimize:js && npm run optimize:css\"",
     "watch:test": "onchange static/src/js/**/*.js -- npm run test",
     "watch:lint": "onchange static/src/js/**/*.js -- npm run lint",
     "watch:js": "watchify -t [ babelify --presets [ env ] ] -t envify -t vueify static/src/js/index.js -o 'exorcist static/dist/js/site.js.map > static/dist/js/site.js' -dv",
