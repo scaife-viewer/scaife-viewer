@@ -202,6 +202,16 @@ class RefNode(anytree.NodeMixin):
         bits.append(self.num)
         return ".".join(bits)
 
+    @property
+    def human_reference(self):
+        if self.is_root:
+            return ""
+        bits = []
+        for ancestor in self.ancestors[1:]:
+            bits.append(f"{ancestor.label.title()} {ancestor.num}")
+        bits.append(f"{self.label.title()} {self.num}")
+        return " ".join(bits)
+
     def sort_key(self, ancestors_only=False):
         if ancestors_only:
             return natural_keys(self.parent.reference)
