@@ -1,7 +1,7 @@
-const Vue = require('vue');
-const Vuex = require('vuex');
-const createPersistedState = require('vuex-persistedstate');
-const library = require('./library');
+import Vue from 'vue';
+import Vuex from 'vuex';
+import createPersistedState from 'vuex-persistedstate';
+import library from '@/js/store/library';
 
 Vue.use(Vuex);
 
