@@ -127,4 +127,9 @@ $(() => {
       window.location.href = `${baseUrl}/${fullUrn}`;
     }
   });
+
+  $('#passage-jumper').on('click', (e) => {
+    const el = e.currentTarget;
+    el.select();
+  });
 });
