@@ -4,7 +4,9 @@ const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const utils = require('./utils');
 
-const env = {};
+const env = {
+  NODE_ENV: '"production"',
+};
 const extractCss = new ExtractTextPlugin('css/app.css');
 
 module.exports = merge(common, {
