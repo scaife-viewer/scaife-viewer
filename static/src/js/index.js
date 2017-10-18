@@ -1,17 +1,14 @@
-/* eslint-disable import/first */
+/* global $ */
 
-// crazy jQuery bindings
-const jQuery = require('jquery'); // eslint-disable-line import/newline-after-import
-window.jQuery = jQuery;
-window.$ = jQuery;
-const $ = jQuery;
-
-const Vue = require('vue');
-const vueCustomElement = require('vue-custom-element');
-const CTSTextGroupList = require('./components/CTSTextGroupList.vue');
-const CTSWorkList = require('./components/CTSWorkList.vue');
-const CTSVersionList = require('./components/CTSVersionList.vue');
-const ajaxSendMethod = require('./ajax');
+import Vue from 'vue';
+import vueCustomElement from 'vue-custom-element';
+import CTSTextGroupList from '@/js/components/CTSTextGroupList';
+import CTSWorkList from '@/js/components/CTSWorkList';
+import CTSVersionList from '@/js/components/CTSVersionList';
+import ajaxSendMethod from '@/js/ajax';
+import 'document-register-element/build/document-register-element';
+import '@/scss/index.scss';
+import '@/images/perseus_running_man.png';
 
 Vue.use(vueCustomElement);
 

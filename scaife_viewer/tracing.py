@@ -118,7 +118,7 @@ class GCPTracer(BasicTracer):
 
     def __init__(self):
         recorder = None
-        if settings.TRACING_ACTIVATED:
+        if settings.TRACING_ENABLED:
             recorder = Recorder()
         super(GCPTracer, self).__init__(recorder)
         self.register_required_propagators()

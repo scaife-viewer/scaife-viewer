@@ -409,6 +409,7 @@ class Passage:
                 children.append({
                     "urn": f"{self.urn}:{child.reference}",
                     "label": child.reference,
+                    "lsb": child.reference.split(".")[-1],
                 })
             self.cache[key] = children
         return self.cache[key]
