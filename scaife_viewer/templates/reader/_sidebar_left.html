@@ -34,13 +34,11 @@
   {% endif %}
 {% endif %}
 
-<div class="widget">
+<div class="widget passage-jumper">
   <h2>Passage Jumper</h2>
-  <div class="form-row">
-    <div class="col-md-6">
-      <input id="passage-jumper" type="text" class="form-control form-control-sm" value="{{ passage.refs.start.reference }}{% if passage.refs.end %}-{{ passage.refs.end.reference }}{% endif %}" data-urn="{{ passage.urn }}">
-    </div>
-  </div>
+  <p>
+    <input id="passage-jumper" type="text" class="form-control form-control-sm" value="{{ passage.refs.start.reference }}{% if passage.refs.end %}-{{ passage.refs.end.reference }}{% endif %}" data-urn="{{ passage.urn }}">
+  </p>
 </div>
 
 <div class="widget">
