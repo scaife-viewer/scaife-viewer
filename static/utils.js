@@ -1,5 +1,4 @@
 const path = require('path');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 function resolve(rest) {
   return path.join(__dirname, rest);
@@ -26,8 +25,8 @@ exports.cssLoaders = (options) => {
         }),
       });
     }
-    if (options.extract) {
-      return ExtractTextPlugin.extract({
+    if (options.extracter) {
+      return options.extracter.extract({
         use: loaders,
         fallback: 'style-loader',
       });
