@@ -35,6 +35,15 @@
 {% endif %}
 
 <div class="widget">
+  <h2>Passage Jumper</h2>
+  <div class="form-row">
+    <div class="col-md-6">
+      <input id="passage-jumper" type="text" class="form-control form-control-sm" value="{{ passage.refs.start.reference }}{% if passage.refs.end %}-{{ passage.refs.end.reference }}{% endif %}" data-urn="{{ passage.urn }}">
+    </div>
+  </div>
+</div>
+
+<div class="widget">
   <h2>Some Other Widget</h2>
   <p>...</p>
 </div>
