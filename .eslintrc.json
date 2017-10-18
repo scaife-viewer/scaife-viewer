@@ -1,4 +1,5 @@
 {
+  "root": true,
   "extends": "airbnb-base",
   "parser": "babel-eslint",
   "parserOptions": {
@@ -10,7 +11,15 @@
   "plugins": [
     "html"
   ],
+  "settings": {
+    "import/resolver": "webpack"
+  },
   "rules": {
-    "no-param-reassign": 0
+    "no-param-reassign": 0,
+    "generator-star-spacing": 0,
+    "import/extensions": ["error", "always", {
+      "js": "never",
+      "vue": "never"
+    }]
   }
 }
