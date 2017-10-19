@@ -125,6 +125,8 @@ $(() => {
       const fullUrn = `${urn}:${ref}`;
       const baseUrl = rsplit(document.location.pathname, '/', 2)[0];
       window.location.href = `${baseUrl}/${fullUrn}`;
+    } else {
+      e.stopPropagation();
     }
   });
 
