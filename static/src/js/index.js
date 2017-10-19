@@ -117,7 +117,7 @@ $(() => {
     window.location.href = `${baseUrl}/${fullUrn}`;
   });
 
-  $('#passage-jumper').keyup((e) => {
+  $('#passage-reference').keyup((e) => {
     if (e.keyCode === 13) {
       const el = e.currentTarget;
       const urn = $(el).data('urn');
@@ -130,7 +130,7 @@ $(() => {
     }
   });
 
-  $('#passage-jumper').on('click', (e) => {
+  $('#passage-reference').on('click', (e) => {
     const el = e.currentTarget;
     el.select();
   });
