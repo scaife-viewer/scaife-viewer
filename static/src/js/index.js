@@ -50,17 +50,15 @@ $(() => {
   $(`.text-size-control.text-${localStorage.getItem('text-size')}`).addClass('active');
 
   $(document).on('keyup', (e) => {
-    if (!focused) {
-      if (e.key === 'ArrowLeft') {
-        const url = $('#pg-left').attr('href');
-        if (url) {
-          window.location = url;
-        }
-      } else if (e.key === 'ArrowRight') {
-        const url = $('#pg-right').attr('href');
-        if (url) {
-          window.location = url;
-        }
+    if (e.key === 'ArrowLeft') {
+      const url = $('#pg-left').attr('href');
+      if (url) {
+        window.location = url;
+      }
+    } else if (e.key === 'ArrowRight') {
+      const url = $('#pg-right').attr('href');
+      if (url) {
+        window.location = url;
       }
     }
   });
@@ -127,18 +125,13 @@ $(() => {
       const fullUrn = `${urn}:${ref}`;
       const baseUrl = rsplit(document.location.pathname, '/', 2)[0];
       window.location.href = `${baseUrl}/${fullUrn}`;
+    } else {
+      e.stopPropagation();
     }
   });
 
   $('#passage-jumper').on('click', (e) => {
     const el = e.currentTarget;
     el.select();
-  });
-  var focused = false;
-  $('#passage-jumper').on('focus', (e) => {
-    focused = true;
-  });
-  $('#passage-jumper').on('blur', (e) => {
-    focused = false;
   });
 });
