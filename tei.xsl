@@ -231,6 +231,13 @@
     </xsl:element>
   </xsl:template>
 
+  <xsl:template match="t:w">
+    <xsl:element name="span">
+      <xsl:attribute name="class">w</xsl:attribute>
+      <xsl:apply-templates/>
+    </xsl:element>
+  </xsl:template>
+
   <xsl:template match="t:quote">
     <xsl:element name="blockquote">
       <xsl:choose>

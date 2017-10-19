@@ -28,6 +28,10 @@ div.text {
     text-align: right;
   }
 
+  .lang_heb span.w::before {
+    content:" ";
+  }
+
   .note > .note-content {
     display: none;
   }
