@@ -11,7 +11,7 @@ urlpatterns = [
     url(r"^account/", include("account.urls")),
     url(r"^library/$", library, name="library"),
     url(r"^library/(?P<urn>urn:[^/]+)/", library_cts_resource, name="library_cts_resource"),
-    url(r"^reader/(?P<urn>urn:[^/]+)/$", reader, name="reader"),
+    url(r"^reader/(?P<urns>urn:[^/]+)/$", reader, name="reader"),
     url(r"^profile/$", profile, name="profile"),
     url(r"^healthz/$", healthz, name="healthz"),
     url(r"^reading/", include("scaife_viewer.reading.urls")),

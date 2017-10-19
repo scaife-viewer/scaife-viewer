@@ -100,18 +100,26 @@ def library_cts_resource(request, urn):
     return HttpResponse(status=HTTPStatus.NOT_ACCEPTABLE)
 
 
-def reader(request, urn):
+def reader(request, urns):
+    urn_list = urns.split(" ") + [None]
+    if len(urn_list) > 3:
+        # @@@
+        raise Exception("too many")
+    left_urn, right_urn = urn_list[:2]
     cts = CTS()
-    passage = cts.passage(urn)
-    if cts.is_resource(urn):
-        return redirect("reader", urn=passage.first_urn)
+    left_passage = cts.passage(left_urn)
+    right_passage = cts.passage(right_urn) if right_urn else None
     ctx = {
-        "passage": passage,
-        "parents": list(reversed(passage.metadata.parents))[1:]
+        "left_passage": left_passage,
+        "right_passage": right_passage,
+        "left_parents": list(reversed(left_passage.metadata.parents))[1:],
+        "right_parents": list(reversed(right_passage.metadata.parents))[1:] if right_passage else [],
     }
     response = render(request, "reader/reader.html", ctx)
     if request.user.is_authenticated():
-        ReadingLog.objects.create(user=request.user, urn=urn)
+        ReadingLog.objects.create(user=request.user, urn=left_urn)
+        if right_urn:
+            ReadingLog.objects.create(user=request.user, urn=right_urn)
     return response
 
 
