@@ -326,7 +326,7 @@ class Passage:
     def __init__(self, urn, ti=None):
         self.retriever = HttpCtsRetriever(settings.CTS_API_ENDPOINT)
         self.resolver = HttpCtsResolver(self.retriever)
-        self.full_urn = URN(urn)
+        self.full_urn = URN(urn) if not isinstance(urn, URN) else urn
         self.urn = self.full_urn.upTo(URN.NO_PASSAGE)
         self.reference = self.full_urn.reference
         self.ti = ti
@@ -356,12 +356,44 @@ class Passage:
         return ref_range
 
     @property
+    def label(self):
+        return self.metadata.get_label(lang="eng")
+
+    @property
     def lang(self):
         return self.metadata.lang
 
     @property
+    def human_lang(self):
+        lang = self.metadata.lang
+        return {
+            "grc": "Greek",
+            "lat": "Latin",
+            "heb": "Hebrew",
+            "fa": "Farsi",
+            "eng": "English",
+            "ger": "German",
+            "fre": "French",
+        }.get(lang, lang)
+
+    @property
+    def version_type(self):
+        if self.metadata.TYPE_URI == RDF_NAMESPACES.CTS.term("edition"):
+            return "edition"
+        if self.metadata.TYPE_URI == RDF_NAMESPACES.CTS.term("translation"):
+            return "translation"
+        if self.metadata.TYPE_URI == RDF_NAMESPACES.CTS.term("commentary"):
+            return "commentary"
+
+    @property
     def rtl(self):
         return self.lang in {"heb", "fa"}
+
+    def versions(self):
+        for edition in self.metadata.editions():
+            yield Passage(f"{edition.urn}:{self.reference}")
+        for translation in self.metadata.translations():
+            yield Passage(f"{translation.urn}:{self.reference}")
 
     def toc(self):
         key = f"toc-{self.urn}"

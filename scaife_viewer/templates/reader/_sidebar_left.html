@@ -42,6 +42,8 @@
 </div>
 
 <div class="widget">
-  <h2>Some Other Widget</h2>
-  <p>...</p>
+  <h2>Versions</h2>
+  {% for version in passage.versions %}
+    <div>{{ version.version_type }} <a href="{% url 'reader' version.full_urn %}">{{ version.label }}</a> [{{ version.human_lang }}]</div>
+  {% endfor %}
 </div>
