@@ -53,9 +53,13 @@
         {% elif version.overall %}
           <i class="o"></i> <i class="x"></i> <i class="o"></i>
         {% else %}
-          <a href="{% url 'reader' version.passage.full_urn %}?right=XXX"><i class="o"></i></a>
+          {% if right_version %}
+            <a href="{% url 'reader' version.passage.full_urn %}?right={{ right_version }}"><i class="o"></i></a>
+          {% else %}
+            <a href="{% url 'reader' version.passage.full_urn %}?right={{ passage.full_urn.version }}"><i class="o"></i></a>
+          {% endif %}
           <a href="{% url 'reader' version.passage.full_urn %}"><i class="o"></i></a>
-          <a href="{% url 'reader' passage.full_urn %}?right=XXX"><i class="o"></i></a>
+          <a href="{% url 'reader' passage.full_urn %}?right={{ version.passage.full_urn.version }}"><i class="o"></i></a>
         {% endif %}
       </span>
       {{ version.passage.label }}
