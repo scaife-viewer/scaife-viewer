@@ -41,9 +41,17 @@
   </p>
 </div>
 
-<div class="widget">
+<div class="widget versions">
   <h2>Versions</h2>
   {% for version in versions %}
-    <div>{% if version.left %}L{% endif %}{% if version.right %}R{% endif %}{% if version.overall %}O{% endif %} {{ version.passage.version_type }} <a href="{% url 'reader' version.passage.full_urn %}">{{ version.passage.label }}</a> [{{ version.passage.human_lang }}]</div>
+    <div class="version">
+      <span class="side-selectors">
+        {% if version.left %}<i class="fa fa-square"></i> <i class="fa fa-square-o"></i>{% endif %}
+        {% if version.right %}<i class="fa fa-square-o"></i> <i class="fa fa-square"></i>{% endif %}
+        {% if version.overall %}<i class="fa fa-square"></i> <i class="fa fa-square"></i>{% endif %}
+      </span>
+      <a href="{% url 'reader' version.passage.full_urn %}">{{ version.passage.label }}</a>
+      <div class="metadata">{{ version.passage.human_lang }} {{ version.passage.version_type }}</div>
+    </div>
   {% endfor %}
 </div>

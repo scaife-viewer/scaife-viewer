@@ -41,3 +41,26 @@
     margin-top: 5px;
   }
 }
+
+.widget.versions {
+  .version {
+    margin-top: 2px;
+    &:first-of-type {
+      margin-top: 8px;
+    }
+    font-size: 12px;
+    line-height: 12px;
+    font-family: 'Noto Serif';
+    padding: 5px 0;
+    .side-selectors {
+      float: right;
+      color: $gray-600;
+      padding-left: 10px;
+    }
+    .metadata {
+      font-family: 'Noto Sans';
+      color: $gray-600;
+      font-style: italic;
+    }
+  }
+}
