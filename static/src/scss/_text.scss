@@ -60,60 +60,6 @@ div.text {
     list-style: none;
   }
 
-  // .lang_far li .seg {
-  //   display: inline-block;
-  //   padding-right: 1em;
-  //   text-indent: -1em;
-  //   &:not(:first-child) {
-  //     margin-right: 2em;
-  //   }
-  // }
-
-  // .lang_far ol {
-  //   display: table;
-  //   li {
-  //     display: table-row;
-  //     .seg {
-  //       display: table-cell;
-  //       &:first-child {
-  //         text-align: left;
-  //         padding-left: 2em;
-  //       }
-  //     }
-  //   }
-  // }
-
-  // .lang_far ol > li {
-  //   display: flex;
-  //   justify-content: center;
-  //   .seg {
-  //     background: $gray-200;
-  //   }
-  //   .seg:first-child {
-  //     background: $gray-400;
-  //     // text-align: left;
-  //     padding-left: 2em;
-  //   }
-  // }
-
-  // .lang_far ol > li {
-  //   text-align: center;
-  //   display: block;
-  //   .seg {
-  //     display: block;
-  //     &:nth-child(1) {
-  //       text-align: left;
-  //       float: right;
-  //       width: 45%;
-  //     }
-  //     &:nth-child(2) {
-  //       float: left;
-  //       text-align: right;
-  //       width: 45%;
-  //     }
-  //   }
-  // }
-
   .lang_far ol {
     display: block;
     > li {
