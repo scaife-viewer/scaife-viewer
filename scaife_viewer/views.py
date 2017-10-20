@@ -118,6 +118,15 @@ def reader(request, urn):
             "right_version": right_version,
             "right_passage": right_passage,
         })
+    versions = []
+    for version in passage.versions():
+        versions.append({
+            "passage": version,
+            "left": (version.urn == passage.urn) if right_version else False,
+            "right": (version.urn == right_passage.urn) if right_version else False,
+            "overall": version.urn == passage.urn and not right_version,
+        })
+    ctx["versions"] = versions
     response = render(request, "reader/reader.html", ctx)
     if request.user.is_authenticated():
         ReadingLog.objects.create(user=request.user, urn=urn)
