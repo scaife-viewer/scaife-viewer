@@ -1,17 +1,17 @@
 {% load reading %}
 
 
-{% if left_passage.ancestors %}
+{% if passage.ancestors %}
   <div class="widget ancestors">
     <h2>Ancestors</h2>
-    <p>{% for ancestor in left_passage.ancestors %}<a href="{% url 'reader' ancestor.urn %}">{{ ancestor.label }}</a>{% if not forloop.last %} &gt; {% endif %}{% endfor %}</p>
+    <p>{% for ancestor in passage.ancestors %}<a href="{% url 'reader' ancestor.urn %}{% if right_version %}?right={{ right_version }}{% endif %}">{{ ancestor.label }}</a>{% if not forloop.last %} &gt; {% endif %}{% endfor %}</p>
   </div>
 {% endif %}
 
-{% if left_passage.children %}
+{% if passage.children %}
 <div class="widget children">
   <h2>Children</h2>
-  <p>{% for child in left_passage.children %}<a href="{% url 'reader' child.urn %}">{{ child.lsb }}</a> {% endfor %}</p>
+  <p>{% for child in passage.children %}<a href="{% url 'reader' child.urn %}{% if right_version %}?right={{ right_version }}{% endif %}">{{ child.lsb }}</a> {% endfor %}</p>
 </div>
 {% endif %}
 
@@ -37,13 +37,13 @@
 <div class="widget passage-reference">
   <h2>Passage Reference</h2>
   <p>
-    <input id="passage-reference" type="text" class="form-control form-control-sm" value="{{ left_passage.refs.start.reference }}{% if left_passage.refs.end %}-{{ left_passage.refs.end.reference }}{% endif %}" data-urn="{{ left_passage.urn }}">
+    <input id="passage-reference" type="text" class="form-control form-control-sm" value="{{ passage.refs.start.reference }}{% if passage.refs.end %}-{{ passage.refs.end.reference }}{% endif %}" data-urn="{{ passage.urn }}">
   </p>
 </div>
 
 <div class="widget">
   <h2>Versions</h2>
-  {% for version in left_passage.versions %}
+  {% for version in passage.versions %}
     <div>{{ version.version_type }} <a href="{% url 'reader' version.full_urn %}">{{ version.label }}</a> [{{ version.human_lang }}]</div>
   {% endfor %}
 </div>

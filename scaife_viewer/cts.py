@@ -343,7 +343,7 @@ class Passage:
     @property
     def textual_node(self):
         if not hasattr(self, "_textual_node"):
-            self._textual_node = self.resolver.getTextualNode(self.full_urn)
+            self._textual_node = self.resolver.getTextualNode(self.urn, subreference=self.reference)
         return self._textual_node
 
     @property

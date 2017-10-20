@@ -6,6 +6,7 @@ from django.shortcuts import redirect, render
 from django.views.decorators.vary import vary_on_headers
 
 import mimeparse
+from MyCapytain.common.reference import URN
 
 from .cts import CTS
 from .reading.models import ReadingLog
@@ -100,25 +101,27 @@ def library_cts_resource(request, urn):
     return HttpResponse(status=HTTPStatus.NOT_ACCEPTABLE)
 
 
-def reader(request, urns):
-    urn_list = urns.split(" ") + [None]
-    if len(urn_list) > 3:
-        # @@@
-        raise Exception("too many")
-    left_urn, right_urn = urn_list[:2]
+def reader(request, urn):
+    right_version = request.GET.get("right")
     cts = CTS()
-    left_passage = cts.passage(left_urn)
-    right_passage = cts.passage(right_urn) if right_urn else None
+    passage = cts.passage(urn)
+    if cts.is_resource(urn):
+        return redirect("reader", urn=passage.first_urn)
     ctx = {
-        "left_passage": left_passage,
-        "right_passage": right_passage,
-        "left_parents": list(reversed(left_passage.metadata.parents))[1:],
-        "right_parents": list(reversed(right_passage.metadata.parents))[1:] if right_passage else [],
+        "passage": passage,
+        "parents": list(reversed(passage.metadata.parents))[1:]
     }
+    if right_version:
+        right_urn = f"{passage.full_urn.upTo(URN.WORK)}.{right_version}:{passage.reference}"
+        right_passage = cts.passage(right_urn)
+        ctx.update({
+            "right_version": right_version,
+            "right_passage": right_passage,
+        })
     response = render(request, "reader/reader.html", ctx)
     if request.user.is_authenticated():
-        ReadingLog.objects.create(user=request.user, urn=left_urn)
-        if right_urn:
+        ReadingLog.objects.create(user=request.user, urn=urn)
+        if right_version:
             ReadingLog.objects.create(user=request.user, urn=right_urn)
     return response
 

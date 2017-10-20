@@ -1,26 +1,39 @@
 <div class="passage-heading">
   <a href="{% url 'library' %}">Library &gt;</a>
   <h1>
-    {% for breadcrumb in left_parents %}
+    {% for breadcrumb in parents %}
       <a href="{% url 'library_cts_resource' breadcrumb.urn %}">{{ breadcrumb.get_label }}</a>{% if not forloop.last %}, {% endif %}
     {% endfor %}
   </h1>
-  <h2>{{ left_passage.metadata.get_label }}</h2>
-  <h3>{{ left_passage.refs.start.human_reference }}{% if left_passage.refs.end %} to {{ left_passage.refs.end.human_reference }}{% endif %} ({{ left_passage.refs.start.reference }}{% if left_passage.refs.end %} &ndash; {{ left_passage.refs.end.reference }}{% endif %})</h3>
+  <h2>{{ passage.metadata.get_label }}</h2>
+  <h3>{{ passage.refs.start.human_reference }}{% if passage.refs.end %} to {{ passage.refs.end.human_reference }}{% endif %} ({{ passage.refs.start.reference }}{% if passage.refs.end %} &ndash; {{ passage.refs.end.reference }}{% endif %})</h3>
 </div>
 
-<div class="overall"{% if left_passage.rtl %} dir="rtl"{% endif %}>
+<div id="overall" class="overall"{% if passage.rtl %} dir="rtl"{% endif %} data-urn="{{ passage.urn }}">
   <div class="pg-left">
-    {% if left_passage.prev_urn %}
-      <a id="{% if left_passage.rtl %}pg-right{% else %}pg-left{% endif %}" href="{% url 'reader' left_passage.prev_urn %}"><span><i class="fa {% if left_passage.rtl %}fa-chevron-right{% else %}fa-chevron-left{% endif %}"></i></span></a>
+    {% if passage.prev_urn %}
+      <a id="{% if passage.rtl %}pg-right{% else %}pg-left{% endif %}" href="{% url 'reader' passage.prev_urn %}{% if right_version %}?right={{ right_version }}{% endif %}"><span><i class="fa {% if passage.rtl %}fa-chevron-right{% else %}fa-chevron-left{% endif %}"></i></span></a>
     {% endif %}
   </div>
-  <div class="text" data-urn="{{ left_passage.urn }}">
-    {{ left_passage.render|safe }}
-  </div>
+  {% if right_passage %}
+    <div class="left">
+      <div class="text">
+        {{ passage.render|safe }}
+      </div>
+    </div>
+    <div class="right">
+      <div class="text">
+        {{ right_passage.render|safe }}
+      </div>
+    </div>
+  {% else %}
+    <div class="text">
+      {{ passage.render|safe }}
+    </div>
+  {% endif %}
   <div class="pg-right">
-    {% if left_passage.next_urn %}
-      <a id="{% if left_passage.rtl %}pg-left{% else %}pg-right{% endif %}" href="{% url 'reader' left_passage.next_urn %}"><span><i class="fa {% if left_passage.rtl %}fa-chevron-left{% else %}fa-chevron-right{% endif %}"></i></span></a>
+    {% if passage.next_urn %}
+      <a id="{% if passage.rtl %}pg-left{% else %}pg-right{% endif %}" href="{% url 'reader' passage.next_urn %}{% if right_version %}?right={{ right_version }}{% endif %}"><span><i class="fa {% if passage.rtl %}fa-chevron-left{% else %}fa-chevron-right{% endif %}"></i></span></a>
     {% endif %}
   </div>
 </div>
