@@ -54,9 +54,18 @@ div.text {
     &:nth-child(1) {
       list-style: decimal;
     }
+
   }
   ol.hidenum > li {
     list-style: none;
+  }
+  .lang_far li .seg {
+    display: inline-block;
+    padding-right: 1em;
+    text-indent: -1em;
+    &:not(:first-child) {
+      margin-right: 2em;
+    }
   }
 }
 
