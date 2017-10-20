@@ -134,4 +134,14 @@ $(() => {
     const el = e.currentTarget;
     el.select();
   });
+
+  $('#text-left').change((e) => {
+    window.location.href = $(e.currentTarget).val();
+  });
+  $('#text-right').change((e) => {
+    window.location.href = $(e.currentTarget).val();
+  });
+  $('.side-btn-url').click((e) => {
+    window.location.href = $(e.currentTarget).data('to-url');
+  });
 });

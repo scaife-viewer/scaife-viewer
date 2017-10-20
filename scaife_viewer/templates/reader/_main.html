@@ -17,16 +17,29 @@
   </div>
   {% if right_passage %}
     <div class="left">
+      <select id="text-left">
+        {% for version in versions %}
+          <option{% if version.left %} selected{% endif %} value="{% if right_version %}{% url 'reader' version.passage.full_urn %}?right={{ right_version }}{% else %}{% url 'reader' version.passage.full_urn %}?right={{ passage.full_urn.version }}{% endif %}">{{ version.passage.label }} {{ version.passage.lang }}</option>
+        {% endfor %}
+      </select>
+      <button class="side-delete side-btn-url" data-to-url="{% url 'reader' right_passage.full_urn %}">x</button>
       <div class="text">
         {{ passage.render|safe }}
       </div>
     </div>
     <div class="right">
+      <select id="text-right">
+        {% for version in versions %}
+          <option{% if version.right %} selected{% endif %} value="{% url 'reader' passage.full_urn %}?right={{ version.passage.full_urn.version }}">{{ version.passage.label }} {{ version.lang }}</option>
+        {% endfor %}
+      </select>
+      <button class="side-delete side-btn-url" data-to-url="{% url 'reader' passage.full_urn %}">x</button>
       <div class="text">
         {{ right_passage.render|safe }}
       </div>
     </div>
   {% else %}
+    <button class="side-add side-btn-url" data-to-url="{% url 'reader' passage.full_urn %}?right={{ passage.full_urn.version }}">+</button>
     <div class="text">
       {{ passage.render|safe }}
     </div>
