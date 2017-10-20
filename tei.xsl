@@ -231,6 +231,13 @@
     </xsl:element>
   </xsl:template>
 
+  <xsl:template match="t:w">
+    <xsl:element name="span">
+      <xsl:attribute name="class">w</xsl:attribute>
+      <xsl:apply-templates/>
+    </xsl:element>
+  </xsl:template>
+
   <xsl:template match="t:quote">
     <xsl:element name="blockquote">
       <xsl:choose>
@@ -248,6 +255,14 @@
 
   <xsl:template match="t:l">
     <xsl:element name="li">
+      <xsl:attribute name="value"><xsl:value-of select="@n"/></xsl:attribute>
+      <xsl:apply-templates/>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="t:seg">
+    <xsl:element name="span">
+      <xsl:attribute name="class">seg</xsl:attribute>
       <xsl:attribute name="value"><xsl:value-of select="@n"/></xsl:attribute>
       <xsl:apply-templates/>
     </xsl:element>

@@ -28,6 +28,10 @@ div.text {
     text-align: right;
   }
 
+  .lang_heb span.w::before {
+    content:" ";
+  }
+
   .note > .note-content {
     display: none;
   }
@@ -50,9 +54,46 @@ div.text {
     &:nth-child(1) {
       list-style: decimal;
     }
+
   }
   ol.hidenum > li {
     list-style: none;
+  }
+
+  .lang_far ol {
+    display: block;
+    > li {
+      display: block;
+      margin-bottom: 0.8em;
+      .seg {
+        display: block;
+        text-align: center;
+        &:nth-child(1) {
+        }
+        &:nth-child(2) {
+        }
+      }
+    }
+  }
+  @include media-breakpoint-up(lg) {
+    .lang_far ol {
+      display: table;
+      > li {
+        display: table-row;
+        .seg {
+          display: table-cell;
+          white-space: nowrap;
+          &:nth-child(1) {
+            padding-left: 1em;
+            text-align: left;
+          }
+          &:nth-child(2) {
+            padding-right: 1em;
+            text-align: right;
+          }
+        }
+      }
+    }
   }
 }
 
