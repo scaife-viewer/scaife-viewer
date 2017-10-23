@@ -10,6 +10,8 @@ import 'document-register-element/build/document-register-element';
 import '@/scss/index.scss';
 import '@/images/perseus_running_man.png';
 
+import 'bootstrap';
+
 Vue.use(vueCustomElement);
 
 Vue.customElement('sv-cts-textgroup-list', CTSTextGroupList);
