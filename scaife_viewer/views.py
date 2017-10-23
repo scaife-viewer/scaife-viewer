@@ -5,11 +5,10 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.views.decorators.vary import vary_on_headers
 
-import itertools
 import mimeparse
 from MyCapytain.common.reference import URN
 
-from .cts import CTS
+from .cts import CTS, natural_keys as nk
 from .reading.models import ReadingLog
 
 
@@ -119,15 +118,14 @@ def reader(request, urn):
         ctx["image_collection_link"] = image_collection_link_urns[str(passage.urn)]
     passage_urn_to_image = {
         "urn:cts:greekLit:tlg0553.tlg001.1st1K-grc1": [
-            (("", 1, ".", 18, ""), ("", 1, ".", 21, ""), "https://digital.slub-dresden.de/data/goobi/403855756/403855756_tif/jpegs/00000033.tif.large.jpg"),
-            (("", 1, ".", 21, ""), ("", 1, ".", 21, ""), "https://digital.slub-dresden.de/data/goobi/403855756/403855756_tif/jpegs/00000034.tif.large.jpg"),
-            (("", 1, ".", 22, ""), ("", 1, ".", 22, ""), "https://digital.slub-dresden.de/data/goobi/403855756/403855756_tif/jpegs/00000035.tif.large.jpg"),
-            (("", 1, ".", 22, ""), ("", 1, ".", 24, ""), "https://digital.slub-dresden.de/data/goobi/403855756/403855756_tif/jpegs/00000036.tif.large.jpg"),
+            (nk("1.18"), nk("1.21"), "https://digital.slub-dresden.de/data/goobi/403855756/403855756_tif/jpegs/00000033.tif.large.jpg"),
+            (nk("1.21"), nk("1.21"), "https://digital.slub-dresden.de/data/goobi/403855756/403855756_tif/jpegs/00000034.tif.large.jpg"),
+            (nk("1.22"), nk("1.22"), "https://digital.slub-dresden.de/data/goobi/403855756/403855756_tif/jpegs/00000035.tif.large.jpg"),
+            (nk("1.22"), nk("1.24"), "https://digital.slub-dresden.de/data/goobi/403855756/403855756_tif/jpegs/00000036.tif.large.jpg"),
         ]
     }
     images = []
     if passage.urn in passage_urn_to_image:
-        # a = filter(lambda x: x.sort_key() >= passage.refs["start"].sort_key() and x.sort_key() <= passage.refs["end"].sort_key(), passage.refs["start"].parent.children)
         passage_start = passage.refs["start"].sort_key()
         passage_end = passage.refs.get("end", passage.refs["start"]).sort_key()
         for (start, end, image) in passage_urn_to_image[passage.urn]:
