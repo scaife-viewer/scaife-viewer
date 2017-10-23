@@ -5,9 +5,17 @@
       <a href="{% url 'library_cts_resource' breadcrumb.urn %}">{{ breadcrumb.get_label }}</a>{% if not forloop.last %}, {% endif %}
     {% endfor %}
   </h1>
-  <h2>{{ passage.metadata.get_label }}</h2>
+  {% if not right_passage %}
+    <h2>
+      {{ passage.metadata.get_label }}
+    </h2>
+  {% endif %}
   <h3>{{ passage.refs.start.human_reference }}{% if passage.refs.end %} to {{ passage.refs.end.human_reference }}{% endif %} ({{ passage.refs.start.reference }}{% if passage.refs.end %} &ndash; {{ passage.refs.end.reference }}{% endif %})</h3>
 </div>
+
+{% if not right_passage and versions|length > 1 %}
+  <button class="btn btn-link btn-sm side-add side-btn-url" data-to-url="{% url 'reader' passage.full_urn %}?right={{ passage.full_urn.version }}"><i class="fa fa-columns"></i></button> ({{ versions|length }} versions)
+{% endif %}
 
 <div id="overall" class="overall"{% if passage.rtl %} dir="rtl"{% endif %} data-urn="{{ passage.urn }}">
   <div class="pg-left">
@@ -22,7 +30,23 @@
           <option{% if version.left %} selected{% endif %} value="{% if right_version %}{% url 'reader' version.passage.full_urn %}?right={{ right_version }}{% else %}{% url 'reader' version.passage.full_urn %}?right={{ passage.full_urn.version }}{% endif %}">{{ version.passage.label }} {{ version.passage.lang }}</option>
         {% endfor %}
       </select>
-      <button class="side-delete side-btn-url" data-to-url="{% url 'reader' right_passage.full_urn %}">x</button>
+      <button class="btn btn-sm btn-link side-delete side-btn-url" data-to-url="{% url 'reader' right_passage.full_urn %}"><i class="fa fa-close"></i></button>
+
+      <div class="dropdown">
+        <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {{ passage.label }}
+          <div class="metadata">{{ passage.human_lang }} {{ passage.version_type }}</div>
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          {% for version in versions %}
+            <a class="dropdown-item" href="#">
+              {{ version.passage.label }}
+              <div class="metadata">{{ version.passage.human_lang }} {{ version.passage.version_type }}</div>
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+
       <div class="text">
         {{ passage.render|safe }}
       </div>
@@ -30,16 +54,31 @@
     <div class="right">
       <select id="text-right">
         {% for version in versions %}
-          <option{% if version.right %} selected{% endif %} value="{% url 'reader' passage.full_urn %}?right={{ version.passage.full_urn.version }}">{{ version.passage.label }} {{ version.lang }}</option>
+          <option{% if version.right %} selected{% endif %} value="{% url 'reader' passage.full_urn %}?right={{ version.passage.full_urn.version }}">{{ version.passage.label }} {{ version.passage.lang }}</option>
         {% endfor %}
       </select>
-      <button class="side-delete side-btn-url" data-to-url="{% url 'reader' passage.full_urn %}">x</button>
+      <button class="btn btn-sm btn-link side-delete side-btn-url" data-to-url="{% url 'reader' passage.full_urn %}"><i class="fa fa-close"></i></button>
+
+      <div class="dropdown">
+        <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {{ right_passage.label }}
+          <div class="metadata">{{ right_passage.human_lang }} {{ right_passage.version_type }}</div>
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          {% for version in versions %}
+            <a class="dropdown-item" href="#">
+              {{ version.passage.label }}
+              <div class="metadata">{{ version.passage.human_lang }} {{ version.passage.version_type }}</div>
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+
       <div class="text">
         {{ right_passage.render|safe }}
       </div>
     </div>
   {% else %}
-    <button class="side-add side-btn-url" data-to-url="{% url 'reader' passage.full_urn %}?right={{ passage.full_urn.version }}">+</button>
     <div class="text">
       {{ passage.render|safe }}
     </div>
