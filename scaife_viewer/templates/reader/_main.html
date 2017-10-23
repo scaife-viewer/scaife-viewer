@@ -44,7 +44,7 @@
         </button>
         <div class="dropdown-menu">
           {% for version in versions %}
-            <a class="dropdown-item" href="#">
+            <a class="dropdown-item" href="{% if right_version %}{% url 'reader' version.passage.full_urn %}?right={{ right_version }}{% else %}{% url 'reader' version.passage.full_urn %}?right={{ passage.full_urn.version }}{% endif %}">
               {{ version.passage.label }}
               <div class="metadata">{{ version.passage.human_lang }} {{ version.passage.version_type }}</div>
             </a>
@@ -76,7 +76,7 @@
         </button>
         <div class="version-option dropdown-menu">
           {% for version in versions %}
-            <a class="dropdown-item" href="#">
+            <a class="dropdown-item" href="{% url 'reader' passage.full_urn %}?right={{ version.passage.full_urn.version }}">
               {{ version.passage.label }}
               <div class="metadata">{{ version.passage.human_lang }} {{ version.passage.version_type }}</div>
             </a>
