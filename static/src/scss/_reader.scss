@@ -71,3 +71,37 @@
 .side-delete {
   float: right;
 }
+button.version-select {
+  @extend .btn;
+  @extend .btn-light;
+  width: 100%;
+  text-align: left;
+  white-space: normal;
+  font-size: 14px;
+  line-height: 16px;
+  font-family: 'Noto Serif';
+  .metadata {
+    font-family: 'Noto Sans';
+    color: $gray-600;
+    font-style: italic;
+    font-size: 12px;
+    line-height: 12px;
+  }
+}
+.version-option {
+  a {
+    white-space: normal;
+    padding: 0.25rem 1rem;
+  }
+  font-size: 14px;
+  line-height: 16px;
+  font-family: 'Noto Serif';
+  .metadata {
+    font-family: 'Noto Sans';
+    color: $gray-600;
+    font-style: italic;
+    font-size: 12px;
+    line-height: 12px;
+  }
+
+}
