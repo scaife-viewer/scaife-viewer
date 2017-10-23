@@ -14,7 +14,23 @@
 </div>
 
 {% if not right_passage and versions|length > 1 %}
-  <button class="btn btn-link btn-sm side-add side-btn-url" data-to-url="{% url 'reader' passage.full_urn %}?right={{ passage.full_urn.version }}"><i class="fa fa-columns"></i></button> ({{ versions|length }} versions)
+  <div class="btn-group btn-group-left">
+    <button type="button" class="btn btn-light dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <span class="sr-only">Toggle Dropdown</span>
+    </button>
+    <div class="version-select">
+      <i class="fa fa-columns"></i>
+      add parallel version
+    </div>
+    <div class="version-option dropdown-menu">
+      {% for version in versions %}
+        <a class="dropdown-item" href="{% url 'reader' passage.full_urn %}?right={{ version.passage.full_urn.version }}">
+          {{ version.passage.label }}
+          <div class="metadata">{{ version.passage.human_lang }} {{ version.passage.version_type }}</div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
 {% endif %}
 
 <div id="overall" class="overall"{% if passage.rtl %} dir="rtl"{% endif %} data-urn="{{ passage.urn }}">
@@ -25,30 +41,23 @@
   </div>
   {% if right_passage %}
     <div class="left">
-      {% comment %}
-      <select id="text-left">
-        {% for version in versions %}
-          <option{% if version.left %} selected{% endif %} value="{% if right_version %}{% url 'reader' version.passage.full_urn %}?right={{ right_version }}{% else %}{% url 'reader' version.passage.full_urn %}?right={{ passage.full_urn.version }}{% endif %}">{{ version.passage.label }} {{ version.passage.lang }}</option>
-        {% endfor %}
-      </select>
-      {% endcomment %}
-      <button class="btn btn-sm btn-link side-delete side-btn-url" data-to-url="{% url 'reader' right_passage.full_urn %}"><i class="fa fa-close"></i></button>
-
-      <div class="btn-group">
-        <button type="button" class="version-select">
-          {{ passage.label }}
-          <div class="metadata">{{ passage.human_lang }} {{ passage.version_type }}</div>
-        </button>
+      <div class="btn-group btn-group-left">
         <button type="button" class="btn btn-light dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <span class="sr-only">Toggle Dropdown</span>
         </button>
-        <div class="dropdown-menu">
+        <div class="version-select">
+          {{ passage.label }}
+          <div class="metadata">{{ passage.human_lang }} {{ passage.version_type }}</div>
+        </div>
+        <div class="version-option dropdown-menu">
           {% for version in versions %}
             <a class="dropdown-item" href="{% if right_version %}{% url 'reader' version.passage.full_urn %}?right={{ right_version }}{% else %}{% url 'reader' version.passage.full_urn %}?right={{ passage.full_urn.version }}{% endif %}">
               {{ version.passage.label }}
               <div class="metadata">{{ version.passage.human_lang }} {{ version.passage.version_type }}</div>
             </a>
           {% endfor %}
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item remove" href="{% url 'reader' right_passage.full_urn %}">remove</a>
         </div>
       </div>
 
@@ -57,23 +66,14 @@
       </div>
     </div>
     <div class="right">
-      {% comment %}
-      <select id="text-right">
-        {% for version in versions %}
-          <option{% if version.right %} selected{% endif %} value="{% url 'reader' passage.full_urn %}?right={{ version.passage.full_urn.version }}">{{ version.passage.label }} {{ version.passage.lang }}</option>
-        {% endfor %}
-      </select>
-      {% endcomment %}
-      <button class="btn btn-sm btn-link side-delete side-btn-url" data-to-url="{% url 'reader' passage.full_urn %}"><i class="fa fa-close"></i></button>
-
-      <div class="btn-group">
-        <button type="button" class="version-select">
-          {{ right_passage.label }}
-          <div class="metadata">{{ right_passage.human_lang }} {{ right_passage.version_type }}</div>
-        </button>
+      <div class="btn-group btn-group-left">
         <button type="button" class="btn btn-light dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <span class="sr-only">Toggle Dropdown</span>
         </button>
+        <div class="version-select">
+          {{ right_passage.label }}
+          <div class="metadata">{{ right_passage.human_lang }} {{ right_passage.version_type }}</div>
+        </div>
         <div class="version-option dropdown-menu">
           {% for version in versions %}
             <a class="dropdown-item" href="{% url 'reader' passage.full_urn %}?right={{ version.passage.full_urn.version }}">
@@ -81,6 +81,8 @@
               <div class="metadata">{{ version.passage.human_lang }} {{ version.passage.version_type }}</div>
             </a>
           {% endfor %}
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item remove" href="{% url 'reader' passage.full_urn %}">remove</a>
         </div>
       </div>
 

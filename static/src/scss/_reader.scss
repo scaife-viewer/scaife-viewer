@@ -71,18 +71,34 @@
 .side-delete {
   float: right;
 }
-button.version-select {
-  @extend .btn;
-  @extend .btn-light;
-  width: 100%;
+
+.btn-group.btn-group-left {
+  margin-bottom: 10px;
+}
+.btn-group.btn-group-left .dropdown-toggle {
+  padding: 0.2rem 0.5rem 0.2rem 0.3rem !important;
+  color: $gray-600;
+  background: white;
+  border: none;
+  &:hover {
+    color: $black;
+  }
+  &:focus {
+    box-shadow: none;
+  }
+}
+
+.version-select {
+  padding: 0.5rem 0.75rem 0.5rem 0;
   text-align: left;
   white-space: normal;
   font-size: 14px;
   line-height: 16px;
+  color: $gray-600;
   font-family: 'Noto Serif';
   .metadata {
     font-family: 'Noto Sans';
-    color: $gray-600;
+    color: $gray-500;
     font-style: italic;
     font-size: 12px;
     line-height: 12px;
@@ -92,6 +108,17 @@ button.version-select {
   a {
     white-space: normal;
     padding: 0.25rem 1rem;
+    &:active {
+      .metadata {
+        color: lighten($perseus-red, 30%);
+      }
+    }
+    &.remove {
+      color: $red;
+      &:active {
+        color: white;
+      }
+    }
   }
   font-size: 14px;
   line-height: 16px;
@@ -103,5 +130,4 @@ button.version-select {
     font-size: 12px;
     line-height: 12px;
   }
-
 }
