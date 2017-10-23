@@ -17,13 +17,19 @@
 </div>
 
 {% if image_collection_link %}
-  <div class="widget">
+  <div class="widget images">
     <h2>Images</h2>
-    <p>
-      <a href="{{ image_collection_link }}" target="_blank">Click me!</a>
-      {% for image in images %}
+
+    <div>
+      <a href="{{ image_collection_link }}" target="_blank">External images of work available <i class="fa fa-external-link"></i></a>
+    </div>
+
+    {% for image in images %}
+      <div>
         <img src="{{ image }}" width="100%">
-      {% endfor %}
-    </p>
+      </div>
+    {% empty %}
+      <div>No individual inline images mapped yet.</div>
+    {% endfor %}
   </div>
 {% endif %}
