@@ -6,6 +6,7 @@ from django.shortcuts import redirect, render
 from django.views.decorators.vary import vary_on_headers
 
 import mimeparse
+from MyCapytain.common.reference import URN
 
 from .cts import CTS
 from .reading.models import ReadingLog
@@ -101,6 +102,7 @@ def library_cts_resource(request, urn):
 
 
 def reader(request, urn):
+    right_version = request.GET.get("right")
     cts = CTS()
     passage = cts.passage(urn)
     if cts.is_resource(urn):
@@ -109,9 +111,27 @@ def reader(request, urn):
         "passage": passage,
         "parents": list(reversed(passage.metadata.parents))[1:]
     }
+    if right_version:
+        right_urn = f"{passage.full_urn.upTo(URN.WORK)}.{right_version}:{passage.reference}"
+        right_passage = cts.passage(right_urn)
+        ctx.update({
+            "right_version": right_version,
+            "right_passage": right_passage,
+        })
+    versions = []
+    for version in passage.versions():
+        versions.append({
+            "passage": version,
+            "left": (version.urn == passage.urn) if right_version else False,
+            "right": (version.urn == right_passage.urn) if right_version else False,
+            "overall": version.urn == passage.urn and not right_version,
+        })
+    ctx["versions"] = versions
     response = render(request, "reader/reader.html", ctx)
     if request.user.is_authenticated():
         ReadingLog.objects.create(user=request.user, urn=urn)
+        if right_version:
+            ReadingLog.objects.create(user=request.user, urn=right_urn)
     return response
 
 
