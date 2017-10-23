@@ -111,6 +111,11 @@ def reader(request, urn):
         "passage": passage,
         "parents": list(reversed(passage.metadata.parents))[1:]
     }
+    image_collection_link_urns = {
+        "urn:cts:greekLit:tlg0553.tlg001.1st1K-grc1": "https://digital.slub-dresden.de/id403855756",
+    }
+    if str(passage.urn) in image_collection_link_urns:
+        ctx["image_collection_link"] = image_collection_link_urns[str(passage.urn)]
     if right_version:
         right_urn = f"{passage.full_urn.upTo(URN.WORK)}.{right_version}:{passage.reference}"
         right_passage = cts.passage(right_urn)

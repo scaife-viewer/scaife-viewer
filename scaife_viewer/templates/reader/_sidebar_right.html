@@ -16,7 +16,9 @@
   </p>
 </div>
 
-<div class="widget">
-  <h2>Yet Another Widget</h2>
-  <p>...</p>
-</div>
+{% if image_collection_link %}
+  <div class="widget">
+    <h2>Images</h2>
+    <p><a href="{{ image_collection_link }}" target="_blank">Click me!</a></p>
+  </div>
+{% endif %}
