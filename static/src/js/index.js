@@ -139,8 +139,4 @@ $(() => {
     const el = e.currentTarget;
     el.select();
   });
-
-  $('.side-btn-url').click((e) => {
-    window.location.href = $(e.currentTarget).data('to-url');
-  });
 });
