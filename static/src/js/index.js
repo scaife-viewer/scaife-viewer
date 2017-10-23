@@ -6,11 +6,14 @@ import CTSTextGroupList from '@/js/components/CTSTextGroupList';
 import CTSWorkList from '@/js/components/CTSWorkList';
 import CTSVersionList from '@/js/components/CTSVersionList';
 import ajaxSendMethod from '@/js/ajax';
+import Popper from 'popper.js';
 import 'document-register-element/build/document-register-element';
 import '@/scss/index.scss';
 import '@/images/perseus_running_man.png';
 
-import 'bootstrap';
+// for the bootstrap
+window.Popper = Popper;
+require('bootstrap');
 
 Vue.use(vueCustomElement);
 
