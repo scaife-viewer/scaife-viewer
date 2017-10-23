@@ -19,6 +19,11 @@
 {% if image_collection_link %}
   <div class="widget">
     <h2>Images</h2>
-    <p><a href="{{ image_collection_link }}" target="_blank">Click me!</a></p>
+    <p>
+      <a href="{{ image_collection_link }}" target="_blank">Click me!</a>
+      {% for image in images %}
+        <img src="{{ image }}" width="100%">
+      {% endfor %}
+    </p>
   </div>
 {% endif %}
