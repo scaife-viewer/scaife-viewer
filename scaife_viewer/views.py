@@ -1,9 +1,10 @@
 from http import HTTPStatus
 
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, Http404
 from django.shortcuts import redirect, render
 from django.views.decorators.vary import vary_on_headers
+from django.utils.safestring import mark_safe
 
 import mimeparse
 from MyCapytain.common.reference import URN
@@ -107,6 +108,8 @@ def reader(request, urn):
     passage = cts.passage(urn)
     if cts.is_resource(urn):
         return redirect("reader", urn=passage.first_urn)
+    if not passage.exists():
+        raise Http404()
     ctx = {
         "passage": passage,
         "parents": list(reversed(passage.metadata.parents))[1:]
@@ -139,10 +142,13 @@ def reader(request, urn):
     if right_version:
         right_urn = f"{passage.full_urn.upTo(URN.WORK)}.{right_version}:{passage.reference}"
         right_passage = cts.passage(right_urn)
-        ctx.update({
-            "right_version": right_version,
-            "right_passage": right_passage,
-        })
+        if right_passage.exists():
+            ctx.update({
+                "right_version": right_version,
+                "right_passage": right_passage,
+            })
+        else:
+            ctx["reader_error"] = mark_safe(f"Unable to load passage: <b>{right_urn}</b> was not found.")
     versions = []
     for version in passage.versions():
         versions.append({
