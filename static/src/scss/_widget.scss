@@ -41,3 +41,44 @@
     margin-top: 5px;
   }
 }
+
+.widget.versions {
+  .version {
+    margin-top: 2px;
+    &:first-of-type {
+      margin-top: 8px;
+    }
+    font-size: 12px;
+    line-height: 12px;
+    font-family: 'Noto Serif';
+    padding: 5px 0;
+    .side-selectors {
+      float: right;
+      color: $gray-800;
+      padding-left: 10px;
+      i {
+        @include icon(square);
+        &.o {
+          color: $gray-200;
+        }
+      }
+      a i.o {
+        color: $gray-500;
+      }
+      a:hover i.o {
+        color: $perseus-red;
+      }
+    }
+    .metadata {
+      font-family: 'Noto Sans';
+      color: $gray-600;
+      font-style: italic;
+    }
+  }
+}
+
+.widget.images {
+  div {
+    margin-top: 10px;
+  }
+}
