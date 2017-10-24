@@ -11,6 +11,7 @@ import anytree.iterators
 from lxml import etree
 from MyCapytain.common.constants import RDF_NAMESPACES
 from MyCapytain.common.reference import URN
+from MyCapytain.errors import UnknownObjectError, UnknownNamespace, UnknownCollection
 from MyCapytain.resolvers.cts.api import HttpCtsResolver
 from MyCapytain.resources.collections.cts import XmlCtsTextInventoryMetadata
 from MyCapytain.retrievers.cts5 import HttpCtsRetriever
@@ -354,6 +355,15 @@ class Passage:
         if self.reference.end:
             ref_range["end"] = self.toc().lookup(str(self.reference.end))
         return ref_range
+
+    def exists(self):
+        try:
+            self.metadata, self.refs
+        except (UnknownObjectError, UnknownNamespace, UnknownCollection):
+            return False
+        except anytree.ChildResolverError:
+            return False
+        return True
 
     @property
     def label(self):
