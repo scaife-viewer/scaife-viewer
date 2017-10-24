@@ -8,7 +8,7 @@ from django.views.decorators.vary import vary_on_headers
 import mimeparse
 from MyCapytain.common.reference import URN
 
-from .cts import CTS
+from .cts import CTS, natural_keys as nk
 from .reading.models import ReadingLog
 
 
@@ -111,6 +111,31 @@ def reader(request, urn):
         "passage": passage,
         "parents": list(reversed(passage.metadata.parents))[1:]
     }
+    image_collection_link_urns = {
+        "urn:cts:greekLit:tlg0553.tlg001.1st1K-grc1": "https://digital.slub-dresden.de/id403855756",
+    }
+    if str(passage.urn) in image_collection_link_urns:
+        ctx["image_collection_link"] = image_collection_link_urns[str(passage.urn)]
+    passage_urn_to_image = {
+        "urn:cts:greekLit:tlg0553.tlg001.1st1K-grc1": [
+            (nk("1.18"), nk("1.21"), "https://digital.slub-dresden.de/data/goobi/403855756/403855756_tif/jpegs/00000033.tif.large.jpg"),
+            (nk("1.21"), nk("1.21"), "https://digital.slub-dresden.de/data/goobi/403855756/403855756_tif/jpegs/00000034.tif.large.jpg"),
+            (nk("1.22"), nk("1.22"), "https://digital.slub-dresden.de/data/goobi/403855756/403855756_tif/jpegs/00000035.tif.large.jpg"),
+            (nk("1.22"), nk("1.24"), "https://digital.slub-dresden.de/data/goobi/403855756/403855756_tif/jpegs/00000036.tif.large.jpg"),
+        ]
+    }
+    images = []
+    if passage.urn in passage_urn_to_image:
+        passage_start = passage.refs["start"].sort_key()
+        passage_end = passage.refs.get("end", passage.refs["start"]).sort_key()
+        for (start, end, image) in passage_urn_to_image[passage.urn]:
+            if start < passage_start and end >= passage_start:
+                if image not in images:
+                    images.append(image)
+            if start >= passage_start and start <= passage_end:
+                if image not in images:
+                    images.append(image)
+    ctx["images"] = images
     if right_version:
         right_urn = f"{passage.full_urn.upTo(URN.WORK)}.{right_version}:{passage.reference}"
         right_passage = cts.passage(right_urn)
