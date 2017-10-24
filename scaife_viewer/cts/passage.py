@@ -81,3 +81,25 @@ class Passage:
         toc_ref = toc.lookup(str(self.reference.start))
         for child in toc_ref.children:
             yield Passage(self.text, child.reference)
+
+    def as_json(self) -> dict:
+        refs = {
+            "start": {
+                "reference": self.refs["start"].reference,
+                "human_reference": self.refs["start"].human_reference,
+            },
+        }
+        if "end" in self.refs:
+            refs["end"] = {
+                "reference": self.refs["end"].reference,
+                "human_reference": self.refs["end"].human_reference,
+            }
+        o = {
+            "urn": str(self.urn),
+            "text": {
+                "label": self.text.label,
+            },
+            "text_html": str(self.render()),
+            "refs": refs,
+        }
+        return o

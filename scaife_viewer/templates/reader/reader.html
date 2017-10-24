@@ -6,28 +6,6 @@
 
 {% block body_class %}reader{% endblock %}
 
-
 {% block body_base %}
-  <div class="wrapper">
-
-    <div class="sidebar collapsed" id="left-sidebar">
-      <div>
-        {% include "reader/_sidebar_left.html" %}
-      </div>
-    </div>
-
-    <section id="content_body">
-      <button id="left-sidebar-toggle"><i></i></button>
-      <button id="right-sidebar-toggle"><i></i></button>
-
-      {% include "reader/_main.html" %}
-
-    </section>
-
-    <div class="sidebar collapsed" id="right-sidebar">
-      <div>
-        {% include "reader/_sidebar_right.html" %}
-      </div>
-    </div>
-  </div>
+  <sv-reader urns="{{ passage.urn }}{% if right_passage %} {{ right_passage.urn }}{% endif %}"></sv-reader>
 {% endblock %}

@@ -98,6 +98,14 @@ def library_cts_resource(request, urn):
     return HttpResponse(status=HTTPStatus.NOT_ACCEPTABLE)
 
 
+def library_passage(request, urn):
+    try:
+        passage = cts.passage(urn)
+    except cts.PassageDoesNotExist:
+        raise Http404()
+    return JsonResponse(passage.as_json())
+
+
 def reader(request, urn):
     right_version = request.GET.get("right")
     try:

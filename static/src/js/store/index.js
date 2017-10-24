@@ -2,16 +2,22 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
 import library from '@/js/store/library';
+import reader from '@/js/store/reader';
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
   modules: {
     library,
+    reader,
   },
   plugins: [
     createPersistedState({
-      paths: ['a'],
+      paths: [
+        'reader.sidebarLeftOpened',
+        'reader.sidebarRightOpened',
+        'reader.textSize',
+      ],
       storage: window.localStorage,
     }),
   ],
