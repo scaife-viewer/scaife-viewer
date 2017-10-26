@@ -110,13 +110,13 @@ class RefTree:
             prefix = ""
             last_ancestor = self.root
             for (label, num) in ancestors:
-                key = f"{prefix}.{num}"
+                key = f"{prefix}{num}"
                 try:
                     parent = ancestor_cache[key]
                 except KeyError:
                     parent = RefNode(label=label, num=num, parent=last_ancestor)
                     ancestor_cache[key] = parent
-                prefix += num
+                prefix += f"{num}."
                 last_ancestor = parent
         else:
             parent = self.root
