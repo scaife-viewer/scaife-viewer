@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "343b645be3d3a92e0bdff88648966729f959ddde206a2ee6aa78e23af94e14b8"
+            "sha256": "3547cb32806f78498ac3dde6876ffd228606a2d917556093f5f53847862bdada"
         },
         "host-environment-markers": {
             "implementation_name": "cpython",
@@ -36,7 +36,8 @@
         },
         "basictracer": {
             "editable": true,
-            "git": "https://github.com/opentracing/basictracer-python.git"
+            "git": "https://github.com/opentracing/basictracer-python.git",
+            "ref": "7cd6fa73bb467a3b75db76fc3f23f07d745d1198"
         },
         "cachetools": {
             "hashes": [
@@ -175,10 +176,9 @@
             "version": "==4.1.0"
         },
         "mycapytain": {
-            "hashes": [
-                "sha256:6339a932416435d2ad20272ae6e14beee4ca457d66df96e1e68e34f9657a7f7b"
-            ],
-            "version": "==2.0.4"
+            "editable": true,
+            "git": "https://github.com/brosner/MyCapytain.git",
+            "ref": "scaife-viewer"
         },
         "opentracing": {
             "editable": true,
