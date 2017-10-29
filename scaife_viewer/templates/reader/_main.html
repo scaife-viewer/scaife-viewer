@@ -2,13 +2,13 @@
 <div class="passage-heading">
   <a href="{% url 'library' %}">Library &gt;</a>
   <h1>
-    {% for breadcrumb in parents %}
-      <a href="{% url 'library_cts_resource' breadcrumb.urn %}">{{ breadcrumb.get_label }}</a>{% if not forloop.last %}, {% endif %}
+    {% for breadcrumb in passage.text.ancestors %}
+      <a href="{% url 'library_cts_resource' breadcrumb.urn %}">{{ breadcrumb.label }}</a>{% if not forloop.last %}, {% endif %}
     {% endfor %}
   </h1>
   {% if not right_passage %}
     <h2>
-      {{ passage.metadata.get_label }}
+      {{ passage.label }}
     </h2>
   {% endif %}
   <h3>{{ passage.refs.start.human_reference }}{% if passage.refs.end %} to {{ passage.refs.end.human_reference }}{% endif %} ({{ passage.refs.start.reference }}{% if passage.refs.end %} &ndash; {{ passage.refs.end.reference }}{% endif %})</h3>
@@ -31,9 +31,9 @@
     </div>
     <div class="version-option dropdown-menu">
       {% for version in versions %}
-        <a class="dropdown-item" href="{% url 'reader' passage.full_urn %}?right={{ version.passage.full_urn.version }}">
-          {{ version.passage.label }}
-          <div class="metadata">{{ version.passage.human_lang }} {{ version.passage.version_type }}</div>
+        <a class="dropdown-item" href="{% url 'reader' passage.urn %}?right={{ version.text.urn.version }}">
+          {{ version.text.label }}
+          <div class="metadata">{{ version.text.human_lang }} {{ version.text.kind }}</div>
         </a>
       {% endfor %}
     </div>
@@ -42,8 +42,8 @@
 
 <div id="overall" class="overall"{% if passage.rtl %} dir="rtl"{% endif %} data-urn="{{ passage.urn }}">
   <div class="pg-left">
-    {% if passage.prev_urn %}
-      <a id="{% if passage.rtl %}pg-right{% else %}pg-left{% endif %}" href="{% url 'reader' passage.prev_urn %}{% if right_version %}?right={{ right_version }}{% endif %}"><span><i class="fa {% if passage.rtl %}fa-chevron-right{% else %}fa-chevron-left{% endif %}"></i></span></a>
+    {% if passage.prev %}
+      <a id="{% if passage.rtl %}pg-right{% else %}pg-left{% endif %}" href="{% url 'reader' passage.prev.urn %}{% if right_version %}?right={{ right_version }}{% endif %}"><span><i class="fa {% if passage.rtl %}fa-chevron-right{% else %}fa-chevron-left{% endif %}"></i></span></a>
     {% endif %}
   </div>
   {% if right_passage %}
@@ -53,18 +53,18 @@
           <span class="sr-only">Toggle Dropdown</span>
         </button>
         <div class="version-select">
-          {{ passage.label }}
-          <div class="metadata">{{ passage.human_lang }} {{ passage.version_type }}</div>
+          {{ passage.text.label }}
+          <div class="metadata">{{ passage.text.human_lang }} {{ passage.text.kind }}</div>
         </div>
         <div class="version-option dropdown-menu">
           {% for version in versions %}
-            <a class="dropdown-item" href="{% if right_version %}{% url 'reader' version.passage.full_urn %}?right={{ right_version }}{% else %}{% url 'reader' version.passage.full_urn %}?right={{ passage.full_urn.version }}{% endif %}">
-              {{ version.passage.label }}
-              <div class="metadata">{{ version.passage.human_lang }} {{ version.passage.version_type }}</div>
+            <a class="dropdown-item" href="{% if right_version %}{% url 'reader' version.text.urn %}?right={{ right_version }}{% else %}{% url 'reader' version.text.urn %}?right={{ passage.urn.version }}{% endif %}">
+              {{ version.text.label }}
+              <div class="metadata">{{ version.text.human_lang }} {{ version.text.kind }}</div>
             </a>
           {% endfor %}
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item remove" href="{% url 'reader' right_passage.full_urn %}">remove</a>
+          <a class="dropdown-item remove" href="{% url 'reader' right_passage.urn %}">remove</a>
         </div>
       </div>
 
@@ -78,18 +78,18 @@
           <span class="sr-only">Toggle Dropdown</span>
         </button>
         <div class="version-select">
-          {{ right_passage.label }}
-          <div class="metadata">{{ right_passage.human_lang }} {{ right_passage.version_type }}</div>
+          {{ right_passage.text.label }}
+          <div class="metadata">{{ right_passage.text.human_lang }} {{ right_passage.text.kind }}</div>
         </div>
         <div class="version-option dropdown-menu">
           {% for version in versions %}
-            <a class="dropdown-item" href="{% url 'reader' passage.full_urn %}?right={{ version.passage.full_urn.version }}">
-              {{ version.passage.label }}
-              <div class="metadata">{{ version.passage.human_lang }} {{ version.passage.version_type }}</div>
+            <a class="dropdown-item" href="{% url 'reader' passage.urn %}?right={{ version.text.urn.version }}">
+              {{ version.text.label }}
+              <div class="metadata">{{ version.text.human_lang }} {{ version.text.kind }}</div>
             </a>
           {% endfor %}
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item remove" href="{% url 'reader' passage.full_urn %}">remove</a>
+          <a class="dropdown-item remove" href="{% url 'reader' passage.urn %}">remove</a>
         </div>
       </div>
 
@@ -103,8 +103,8 @@
     </div>
   {% endif %}
   <div class="pg-right">
-    {% if passage.next_urn %}
-      <a id="{% if passage.rtl %}pg-left{% else %}pg-right{% endif %}" href="{% url 'reader' passage.next_urn %}{% if right_version %}?right={{ right_version }}{% endif %}"><span><i class="fa {% if passage.rtl %}fa-chevron-left{% else %}fa-chevron-right{% endif %}"></i></span></a>
+    {% if passage.next %}
+      <a id="{% if passage.rtl %}pg-left{% else %}pg-right{% endif %}" href="{% url 'reader' passage.next.urn %}{% if right_version %}?right={{ right_version }}{% endif %}"><span><i class="fa {% if passage.rtl %}fa-chevron-left{% else %}fa-chevron-right{% endif %}"></i></span></a>
     {% endif %}
   </div>
 </div>

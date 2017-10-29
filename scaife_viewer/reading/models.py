@@ -3,7 +3,7 @@ from django.utils import timezone
 
 from django.contrib.auth.models import User
 
-from ..cts import CTS
+from ..cts_old import CTS
 
 
 class ReadingLog(models.Model):

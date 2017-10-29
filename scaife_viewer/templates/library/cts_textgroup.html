@@ -2,19 +2,19 @@
 
 {% load i18n %}
 
-{% block head_title %}{{ textgroup.resource.get_label }}{% endblock %}
+{% block head_title %}{{ textgroup.label }}{% endblock %}
 
 {% block body_class %}cts_textgroup{% endblock %}
 
 {% block hero %}
   <h2>
     <a href="{% url 'library' %}">Library</a>
-    {% for breadcrumb in parents %}
-      <a href="{% url 'library_cts_resource' breadcrumb.urn %}">{{ breadcrumb.get_label }}{% if not forloop.last %} &gt;{% endif %}</a>
+    {% for breadcrumb in textgroup.ancestors %}
+      <a href="{% url 'library_cts_resource' breadcrumb.urn %}">{{ breadcrumb.label }}{% if not forloop.last %} &gt;{% endif %}</a>
     {% endfor %}
   </h2>
 
-  <h1>{{ textgroup.resource.get_label }}</h1>
+  <h1>{{ textgroup.label }}</h1>
 {% endblock %}
 
 {% block content %}

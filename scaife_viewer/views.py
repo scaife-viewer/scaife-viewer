@@ -7,9 +7,9 @@ from django.views.decorators.vary import vary_on_headers
 from django.utils.safestring import mark_safe
 
 import mimeparse
-from MyCapytain.common.reference import URN
 
-from .cts import CTS, natural_keys as nk
+from . import cts
+from .cts.utils import natural_keys as nk
 from .reading.models import ReadingLog
 
 
@@ -23,17 +23,16 @@ def profile(request):
 
 @vary_on_headers("Accept")
 def library(request):
-    cts = CTS()
     content_type = mimeparse.best_match(["application/json", "text/html"], request.META["HTTP_ACCEPT"])
     if content_type == "application/json":
-        resources = cts.resources()
+        text_groups = cts.text_inventory().text_groups()
         return JsonResponse({
             "object": [
                 {
-                    "label": r.label,
-                    "url": reverse("library_cts_resource", kwargs={"urn": r.urn})
+                    "label": text_group.label,
+                    "url": reverse("library_cts_resource", kwargs={"urn": text_group.urn})
                 }
-                for r in resources
+                for text_group in text_groups
             ]
         })
     if content_type == "text/html":
@@ -43,8 +42,8 @@ def library(request):
 
 def serialize_work(work):
     return {
-        "label": work.resource.get_label(lang="eng"),
-        "url": reverse("library_cts_resource", kwargs={"urn": work.resource.urn}),
+        "label": work.label,
+        "url": reverse("library_cts_resource", kwargs={"urn": work.urn}),
         "texts": [
             serialize_text(text)
             for text in work.texts()
@@ -54,36 +53,34 @@ def serialize_work(work):
 
 def serialize_text(text):
     return {
-        "label": text.resource.get_label(lang="eng"),
-        "description": text.resource.get_description(lang="eng"),
-        "subtype": text.resource.SUBTYPE,
-        "lang": text.resource.lang,
+        "label": text.label,
+        "description": text.description,
+        "subtype": text.kind,
+        "lang": text.lang,
         "human_lang": text.human_lang,
-        "browse_url": reverse("library_cts_resource", kwargs={"urn": text.resource.urn}),
-        "read_url": reverse("reader", kwargs={"urn": text.resource.urn}),
+        "browse_url": reverse("library_cts_resource", kwargs={"urn": text.urn}),
+        "read_url": reverse("reader", kwargs={"urn": text.first_passage().urn}),
     }
 
 
 @vary_on_headers("Accept")
 def library_cts_resource(request, urn):
-    cts = CTS()
-    if not cts.is_resource(urn):
-        raise Exception("not resource")
-    resource = cts.resource(urn)
+    collection = cts.collection(urn)
     content_type = mimeparse.best_match(["application/json", "text/html"], request.META["HTTP_ACCEPT"])
+    collection_name = collection.__class__.__name__.lower()
     if content_type == "application/json":
-        if resource.kind == "textgroup":
+        if isinstance(collection, cts.TextGroup):
             works = []
-            for work in resource.works():
+            for work in collection.works():
                 works.append(serialize_work(work))
             obj = works
-        if resource.kind == "work":
+        if isinstance(collection, cts.Work):
             texts = []
-            for text in resource.texts():
+            for text in collection.texts():
                 texts.append(serialize_text(text))
             obj = texts
-        if resource.kind == "text":
-            toc = cts.passage(urn).toc()
+        if isinstance(collection, cts.Text):
+            toc = collection.toc()
             obj = [
                 {
                     "label": ref_node.label.title(),
@@ -95,24 +92,20 @@ def library_cts_resource(request, urn):
         return JsonResponse({"object": obj})
     if content_type == "text/html":
         ctx = {
-            resource.kind: resource,
-            "parents": list(reversed(resource.resource.parents))[1:]
+            collection_name: collection,
+            # "parents": list(reversed(resource.resource.parents))[1:]
         }
-        return render(request, f"library/cts_{resource.kind}.html", ctx)
+        return render(request, f"library/cts_{collection_name}.html", ctx)
     return HttpResponse(status=HTTPStatus.NOT_ACCEPTABLE)
 
 
 def reader(request, urn):
     right_version = request.GET.get("right")
-    cts = CTS()
     passage = cts.passage(urn)
-    if cts.is_resource(urn):
-        return redirect("reader", urn=passage.first_urn)
-    if not passage.exists():
-        raise Http404()
+    # if not passage.exists():
+    #     raise Http404()
     ctx = {
         "passage": passage,
-        "parents": list(reversed(passage.metadata.parents))[1:]
     }
     image_collection_link_urns = {
         "urn:cts:greekLit:tlg0553.tlg001.1st1K-grc1": "https://digital.slub-dresden.de/id403855756",
@@ -128,7 +121,7 @@ def reader(request, urn):
         ]
     }
     images = []
-    if passage.urn in passage_urn_to_image:
+    if str(passage.urn.upTo(cts.URN.WORK)) in passage_urn_to_image:
         passage_start = passage.refs["start"].sort_key()
         passage_end = passage.refs.get("end", passage.refs["start"]).sort_key()
         for (start, end, image) in passage_urn_to_image[passage.urn]:
@@ -140,7 +133,7 @@ def reader(request, urn):
                     images.append(image)
     ctx["images"] = images
     if right_version:
-        right_urn = f"{passage.full_urn.upTo(URN.WORK)}.{right_version}:{passage.reference}"
+        right_urn = f"{passage.urn.upTo(cts.URN.WORK)}.{right_version}:{passage.reference}"
         right_passage = cts.passage(right_urn)
         if right_passage.exists():
             ctx.update({
@@ -150,9 +143,9 @@ def reader(request, urn):
         else:
             ctx["reader_error"] = mark_safe(f"Unable to load passage: <b>{right_urn}</b> was not found.")
     versions = []
-    for version in passage.versions():
+    for version in passage.text.versions():
         versions.append({
-            "passage": version,
+            "text": version,
             "left": (version.urn == passage.urn) if right_version else False,
             "right": (version.urn == right_passage.urn) if right_version else False,
             "overall": version.urn == passage.urn and not right_version,
