@@ -110,13 +110,13 @@ class RefTree:
             prefix = ""
             last_ancestor = self.root
             for (label, num) in ancestors:
-                key = f"{prefix}.{num}"
+                key = f"{prefix}{num}"
                 try:
                     parent = ancestor_cache[key]
                 except KeyError:
                     parent = RefNode(label=label, num=num, parent=last_ancestor)
                     ancestor_cache[key] = parent
-                prefix += num
+                prefix += f"{num}."
                 last_ancestor = parent
         else:
             parent = self.root
@@ -401,9 +401,9 @@ class Passage:
 
     def versions(self):
         for edition in self.metadata.editions():
-            yield Passage(f"{edition.urn}:{self.reference}")
+            yield Passage(f"{edition.urn}:{self.reference}", ti=self.ti)
         for translation in self.metadata.translations():
-            yield Passage(f"{translation.urn}:{self.reference}")
+            yield Passage(f"{translation.urn}:{self.reference}", ti=self.ti)
 
     def toc(self):
         key = f"toc-{self.urn}"
