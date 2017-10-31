@@ -1,17 +1,19 @@
-/* eslint-disable import/first */
+/* global $ */
 
-// crazy jQuery bindings
-const jQuery = require('jquery'); // eslint-disable-line import/newline-after-import
-window.jQuery = jQuery;
-window.$ = jQuery;
-const $ = jQuery;
+import Vue from 'vue';
+import vueCustomElement from 'vue-custom-element';
+import CTSTextGroupList from '@/js/components/CTSTextGroupList';
+import CTSWorkList from '@/js/components/CTSWorkList';
+import CTSVersionList from '@/js/components/CTSVersionList';
+import ajaxSendMethod from '@/js/ajax';
+import Popper from 'popper.js';
+import 'document-register-element/build/document-register-element';
+import '@/scss/index.scss';
+import '@/images/perseus_running_man.png';
 
-const Vue = require('vue');
-const vueCustomElement = require('vue-custom-element');
-const CTSTextGroupList = require('./components/CTSTextGroupList.vue');
-const CTSWorkList = require('./components/CTSWorkList.vue');
-const CTSVersionList = require('./components/CTSVersionList.vue');
-const ajaxSendMethod = require('./ajax');
+// for the bootstrap
+window.Popper = Popper;
+require('bootstrap');
 
 Vue.use(vueCustomElement);
 
@@ -113,11 +115,29 @@ $(() => {
 
   $('.textpart .a').click((e) => {
     const el = e.currentTarget;
-    const urn = $(el).closest('.text').data('urn');
+    const urn = $('#overall').data('urn');
     const ref = $(el).data('ref');
     const fullUrn = `${urn}:${ref}`;
     const baseUrl = rsplit(document.location.pathname, '/', 2)[0];
-    window.location.href = `${baseUrl}/${fullUrn}`;
+    window.location.href = `${baseUrl}/${fullUrn}${window.location.search}`;
+  });
+
+  $('#passage-reference').keyup((e) => {
+    if (e.keyCode === 13) {
+      const el = e.currentTarget;
+      const urn = $('#overall').data('urn');
+      const ref = $(el).val();
+      const fullUrn = `${urn}:${ref}`;
+      const baseUrl = rsplit(document.location.pathname, '/', 2)[0];
+      window.location.href = `${baseUrl}/${fullUrn}${window.location.search}`;
+    } else {
+      e.stopPropagation();
+    }
+  });
+
+  $('#passage-reference').on('click', (e) => {
+    const el = e.currentTarget;
+    el.select();
   });
 
   // $('.text li, .text p').each((i, item) => {

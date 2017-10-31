@@ -16,7 +16,20 @@
   </p>
 </div>
 
-<div class="widget">
-  <h2>Yet Another Widget</h2>
-  <p>...</p>
-</div>
+{% if image_collection_link %}
+  <div class="widget images">
+    <h2>Images</h2>
+
+    <div>
+      <a href="{{ image_collection_link }}" target="_blank">External images of work available <i class="fa fa-external-link"></i></a>
+    </div>
+
+    {% for image in images %}
+      <div>
+        <img src="{{ image }}" width="100%">
+      </div>
+    {% empty %}
+      <div>No individual inline images mapped yet.</div>
+    {% endfor %}
+  </div>
+{% endif %}

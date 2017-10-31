@@ -17,6 +17,11 @@
     font-weight: normal;
     font-style: italic;
   }
+  h3 {
+    font-size: 14px;
+    line-height: 18px;
+    color: $gray-500;
+  }
 }
 
 .overall {
@@ -56,9 +61,73 @@
   margin-left: 5px;
 }
 
-// .left, .right {
-//   padding: 0 2em;
-// }
-// .right {
-//   border-left: 1px solid $gray-300;
-// }
+.left, .right {
+  padding: 0 2em;
+}
+.right {
+  border-left: 1px solid $gray-300;
+}
+
+.side-delete {
+  float: right;
+}
+
+.btn-group.btn-group-left {
+  margin-bottom: 10px;
+}
+.btn-group.btn-group-left .dropdown-toggle {
+  padding: 0.2rem 0.5rem 0.2rem 0.3rem !important;
+  color: $gray-600;
+  background: white;
+  border: none;
+  &:hover {
+    color: $black;
+  }
+  &:focus {
+    box-shadow: none;
+  }
+}
+
+.version-select {
+  padding: 0.5rem 0.75rem 0.5rem 0;
+  text-align: left;
+  white-space: normal;
+  font-size: 14px;
+  line-height: 16px;
+  color: $gray-600;
+  font-family: 'Noto Serif';
+  .metadata {
+    font-family: 'Noto Sans';
+    color: $gray-500;
+    font-style: italic;
+    font-size: 12px;
+    line-height: 12px;
+  }
+}
+.version-option {
+  a {
+    white-space: normal;
+    padding: 0.25rem 1rem;
+    &:active {
+      .metadata {
+        color: lighten($perseus-red, 30%);
+      }
+    }
+    &.remove {
+      color: $red;
+      &:active {
+        color: white;
+      }
+    }
+  }
+  font-size: 14px;
+  line-height: 16px;
+  font-family: 'Noto Serif';
+  .metadata {
+    font-family: 'Noto Sans';
+    color: $gray-600;
+    font-style: italic;
+    font-size: 12px;
+    line-height: 12px;
+  }
+}

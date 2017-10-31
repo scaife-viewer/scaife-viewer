@@ -145,6 +145,7 @@ INSTALLED_APPS = [
 
     # project
     "scaife_viewer",
+    "scaife_viewer.reading",
 ]
 
 # A sample logging configuration. The only tangible logging
@@ -205,4 +206,4 @@ if "SENTRY_DSN" in os.environ:
         "dsn": os.environ["SENTRY_DSN"],
     }
 
-TRACING_ACTIVATED = not DEBUG
+TRACING_ENABLED = bool(int(os.environ.get("TRACING_ENABLED", not DEBUG)))

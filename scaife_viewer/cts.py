@@ -11,6 +11,7 @@ import anytree.iterators
 from lxml import etree
 from MyCapytain.common.constants import RDF_NAMESPACES
 from MyCapytain.common.reference import URN
+from MyCapytain.errors import UnknownObjectError, UnknownNamespace, UnknownCollection
 from MyCapytain.resolvers.cts.api import HttpCtsResolver
 from MyCapytain.resources.collections.cts import XmlCtsTextInventoryMetadata
 from MyCapytain.retrievers.cts5 import HttpCtsRetriever
@@ -109,13 +110,13 @@ class RefTree:
             prefix = ""
             last_ancestor = self.root
             for (label, num) in ancestors:
-                key = f"{prefix}.{num}"
+                key = f"{prefix}{num}"
                 try:
                     parent = ancestor_cache[key]
                 except KeyError:
                     parent = RefNode(label=label, num=num, parent=last_ancestor)
                     ancestor_cache[key] = parent
-                prefix += num
+                prefix += f"{num}."
                 last_ancestor = parent
         else:
             parent = self.root
@@ -201,6 +202,16 @@ class RefNode(anytree.NodeMixin):
             bits.append(ancestor.num)
         bits.append(self.num)
         return ".".join(bits)
+
+    @property
+    def human_reference(self):
+        if self.is_root:
+            return ""
+        bits = []
+        for ancestor in self.ancestors[1:]:
+            bits.append(f"{ancestor.label.title()} {ancestor.num}")
+        bits.append(f"{self.label.title()} {self.num}")
+        return " ".join(bits)
 
     def sort_key(self, ancestors_only=False):
         if ancestors_only:
@@ -316,7 +327,7 @@ class Passage:
     def __init__(self, urn, ti=None):
         self.retriever = HttpCtsRetriever(settings.CTS_API_ENDPOINT)
         self.resolver = HttpCtsResolver(self.retriever)
-        self.full_urn = URN(urn)
+        self.full_urn = URN(urn) if not isinstance(urn, URN) else urn
         self.urn = self.full_urn.upTo(URN.NO_PASSAGE)
         self.reference = self.full_urn.reference
         self.ti = ti
@@ -333,7 +344,7 @@ class Passage:
     @property
     def textual_node(self):
         if not hasattr(self, "_textual_node"):
-            self._textual_node = self.resolver.getTextualNode(self.full_urn)
+            self._textual_node = self.resolver.getTextualNode(self.urn, subreference=self.reference)
         return self._textual_node
 
     @property
@@ -345,13 +356,54 @@ class Passage:
             ref_range["end"] = self.toc().lookup(str(self.reference.end))
         return ref_range
 
+    def exists(self):
+        try:
+            self.metadata, self.refs
+        except (UnknownObjectError, UnknownNamespace, UnknownCollection):
+            return False
+        except anytree.ChildResolverError:
+            return False
+        return True
+
+    @property
+    def label(self):
+        return self.metadata.get_label(lang="eng")
+
     @property
     def lang(self):
         return self.metadata.lang
 
     @property
+    def human_lang(self):
+        lang = self.metadata.lang
+        return {
+            "grc": "Greek",
+            "lat": "Latin",
+            "heb": "Hebrew",
+            "fa": "Farsi",
+            "eng": "English",
+            "ger": "German",
+            "fre": "French",
+        }.get(lang, lang)
+
+    @property
+    def version_type(self):
+        if self.metadata.TYPE_URI == RDF_NAMESPACES.CTS.term("edition"):
+            return "edition"
+        if self.metadata.TYPE_URI == RDF_NAMESPACES.CTS.term("translation"):
+            return "translation"
+        if self.metadata.TYPE_URI == RDF_NAMESPACES.CTS.term("commentary"):
+            return "commentary"
+
+    @property
     def rtl(self):
         return self.lang in {"heb", "fa"}
+
+    def versions(self):
+        for edition in self.metadata.editions():
+            yield Passage(f"{edition.urn}:{self.reference}", ti=self.ti)
+        for translation in self.metadata.translations():
+            yield Passage(f"{translation.urn}:{self.reference}", ti=self.ti)
 
     def toc(self):
         key = f"toc-{self.urn}"
@@ -376,18 +428,32 @@ class Passage:
         return f"{self.urn}:{self.textual_node.prevId}" if self.textual_node.prevId else None
 
     def ancestors(self):
-        key = f"ancestor-{self.full_urn}"
+        key = f"ancestor-{self.urn}:{self.reference.start}"
         if key not in self.cache:
             ancestors = []
-            ref = self.reference
-            parent = ref.parent
-            while parent is not None:
+            toc = self.toc()
+            toc_ref = toc.lookup(str(self.reference.start))
+            for ancestor in toc_ref.ancestors[1:]:
                 ancestors.append({
-                    "urn": f"{self.urn}:{parent}",
-                    "label": str(parent),
+                    "urn": f"{self.urn}:{ancestor.reference}",
+                    "label": ancestor.reference,
                 })
-                parent = parent.parent
             self.cache[key] = ancestors
+        return self.cache[key]
+
+    def children(self):
+        key = f"children-{self.urn}:{self.reference.start}"
+        if key not in self.cache:
+            children = []
+            toc = self.toc()
+            toc_ref = toc.lookup(str(self.reference.start))
+            for child in toc_ref.children:
+                children.append({
+                    "urn": f"{self.urn}:{child.reference}",
+                    "label": child.reference,
+                    "lsb": child.reference.split(".")[-1],
+                })
+            self.cache[key] = children
         return self.cache[key]
 
     def render(self):

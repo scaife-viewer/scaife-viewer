@@ -1,10 +1,71 @@
+{% load reading %}
+
+
 {% if passage.ancestors %}
-  <div class="widget">
+  <div class="widget ancestors">
     <h2>Ancestors</h2>
-    <p>{% for ancestor in passage.ancestors %}<a href="{% url 'reader' ancestor.urn %}">{{ ancestor.label }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+    <p>{% for ancestor in passage.ancestors %}<a href="{% url 'reader' ancestor.urn %}{% if right_version %}?right={{ right_version }}{% endif %}">{{ ancestor.label }}</a>{% if not forloop.last %} &gt; {% endif %}{% endfor %}</p>
   </div>
 {% endif %}
-<div class="widget">
-  <h2>Some Other Widget</h2>
-  <p>...</p>
+
+{% if passage.children %}
+<div class="widget children">
+  <h2>Children</h2>
+  <p>{% for child in passage.children %}<a href="{% url 'reader' child.urn %}{% if right_version %}?right={{ right_version }}{% endif %}">{{ child.lsb }}</a> {% endfor %}</p>
 </div>
+{% endif %}
+
+{% if user.is_authenticated %}
+  {% recently_read_by user as recently_read %}
+  {% if recently_read %}
+    <div class="widget recently-read">
+      <h2>Recently Read</h2>
+      {% for log in recently_read %}
+        <div class="log">
+          <div class="label">
+            <a href="{% url 'reader' log.urn %}">
+              {{ log.metadata.textgroup_label }},
+              {{ log.metadata.work_label }}&nbsp;{{ log.metadata.reference }}
+            </a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endif %}
+
+<div class="widget passage-reference">
+  <h2>Passage Reference</h2>
+  <p>
+    <input id="passage-reference" type="text" class="form-control form-control-sm" value="{{ passage.refs.start.reference }}{% if passage.refs.end %}-{{ passage.refs.end.reference }}{% endif %}" data-urn="{{ passage.urn }}">
+  </p>
+</div>
+
+{% comment %}
+<div class="widget versions">
+  <h2>Versions</h2>
+  {% for version in versions %}
+    <div class="version">
+      <span class="side-selectors">
+        {% if version.left %}
+          <i class="x"></i> <a href="{% url 'reader' version.passage.full_urn %}"><i class="o"></i></a> <i class="o"></i>
+        {% elif version.right %}
+          <i class="o"></i> <a href="{% url 'reader' version.passage.full_urn %}"><i class="o"></i></a> <i class="x"></i>
+        {% elif version.overall %}
+          <i class="o"></i> <i class="x"></i> <i class="o"></i>
+        {% else %}
+          {% if right_version %}
+            <a href="{% url 'reader' version.passage.full_urn %}?right={{ right_version }}"><i class="o"></i></a>
+          {% else %}
+            <a href="{% url 'reader' version.passage.full_urn %}?right={{ passage.full_urn.version }}"><i class="o"></i></a>
+          {% endif %}
+          <a href="{% url 'reader' version.passage.full_urn %}"><i class="o"></i></a>
+          <a href="{% url 'reader' passage.full_urn %}?right={{ version.passage.full_urn.version }}"><i class="o"></i></a>
+        {% endif %}
+      </span>
+      {{ version.passage.label }}
+      <div class="metadata">{{ version.passage.human_lang }} {{ version.passage.version_type }}</div>
+    </div>
+  {% endfor %}
+</div>
+{% endcomment %}

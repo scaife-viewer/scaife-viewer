@@ -9,14 +9,20 @@ jobs:
     - deploy:
         name: Eldarion Cloud
         command: |
+          declare -A INSTANCES=( [master]=primary )
+          if [ ${INSTANCES[$CIRCLE_BRANCH]+_} ]; then
+            INSTANCE="${INSTANCES[$CIRCLE_BRANCH]}"
+          else
+            INSTANCE="$CIRCLE_BRANCH"
+          fi
           bin/ec/auth.sh
-          bin/ec/deploy.sh primary
-          bin/ec/slack-notify.sh primary
+          bin/ec/deploy.sh "$INSTANCE"
+          bin/ec/slack-notify.sh "$INSTANCE"
 workflows:
   version: 2
   deploy:
     jobs:
-      - deploy:
-          filters:
-            branches:
-              only: master
+    - deploy:
+        filters:
+          branches:
+            only: /(?:master|dev)/
