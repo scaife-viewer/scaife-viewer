@@ -103,7 +103,7 @@ def reader(request, urn):
     right_version = request.GET.get("right")
     try:
         passage = cts.passage(urn)
-    except cts.PassageNotFound:
+    except cts.PassageDoesNotExist:
         raise Http404()
     ctx = {
         "passage": passage,
@@ -134,12 +134,15 @@ def reader(request, urn):
                     images.append(image)
     ctx["images"] = images
     if right_version:
-        right_urn = f"{passage.urn.upTo(cts.URN.WORK)}.{right_version}:{passage.reference}"
+        right_urn = f"{passage.text.urn.upTo(cts.URN.WORK)}.{right_version}:{passage.reference}"
         try:
             right_passage = cts.passage(right_urn)
-        except cts.PassageDoesNotExist:
+        except cts.PassageDoesNotExist as e:
+            right_text = e.text
+            right_passage = None
             ctx["reader_error"] = mark_safe(f"Unable to load passage: <b>{right_urn}</b> was not found.")
         else:
+            right_text = right_passage.text
             ctx.update({
                 "right_version": right_version,
                 "right_passage": right_passage,
@@ -148,9 +151,9 @@ def reader(request, urn):
     for version in passage.text.versions():
         versions.append({
             "text": version,
-            "left": (version.urn == passage.urn) if right_version else False,
-            "right": (version.urn == right_passage.urn) if right_version else False,
-            "overall": version.urn == passage.urn and not right_version,
+            "left": (version.urn == passage.text.urn) if right_version else False,
+            "right": (version.urn == right_text.urn) if right_version else False,
+            "overall": version.urn == passage.text.urn and not right_version,
         })
     ctx["versions"] = versions
     response = render(request, "reader/reader.html", ctx)

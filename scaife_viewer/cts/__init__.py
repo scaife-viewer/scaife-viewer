@@ -17,7 +17,7 @@ def text_inventory() -> TextInventory:
 
 def collection(urn: str) -> Collection:
     metadata = TextInventory.load().metadata[urn]
-    return resolve_collection(metadata.TYPE_URI)(urn, metadata)
+    return resolve_collection(metadata.TYPE_URI)(URN(urn), metadata)
 
 
 def passage(urn: str) -> Passage:
@@ -29,5 +29,5 @@ def passage(urn: str) -> Passage:
     text = collection(urn)
     passage = Passage(text, reference)
     if not passage.exists():
-        raise PassageDoesNotExist(f"{reference} does not exist in {urn}")
+        raise PassageDoesNotExist(text, f"{reference} does not exist in {urn}")
     return passage

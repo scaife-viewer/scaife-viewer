@@ -1,5 +1,6 @@
 from functools import lru_cache
 
+import anytree
 from lxml import etree
 
 from .capitains import resolver
@@ -22,6 +23,14 @@ class Passage:
 
     def __hash__(self):
         return hash(self.urn)
+
+    def exists(self):
+        try:
+            # checks start and end for existence
+            self.refs
+        except anytree.ChildResolverError:
+            return False
+        return True
 
     @property
     def urn(self):
