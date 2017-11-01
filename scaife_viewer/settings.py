@@ -117,6 +117,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.SessionAuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "account.middleware.LocaleMiddleware",
 ]
 
 ROOT_URLCONF = "scaife_viewer.urls"
@@ -190,6 +191,12 @@ ACCOUNT_LOGIN_REDIRECT_URL = "home"
 ACCOUNT_LOGOUT_REDIRECT_URL = "home"
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 2
 ACCOUNT_USE_AUTH_AUTHENTICATE = True
+ACCOUNT_LANGUAGES = [
+    ("de", "Deutsch"),
+    ("en", "English"),
+    ("fr", "français"),
+    ("it", "italiano"),
+]
 
 AUTHENTICATION_BACKENDS = [
     "account.auth_backends.UsernameAuthenticationBackend",
