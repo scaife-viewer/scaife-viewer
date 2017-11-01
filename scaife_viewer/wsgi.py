@@ -11,6 +11,14 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "scaife_viewer.settings")
 
+def setup():
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "scaife_viewer.settings")
+    from .cts.text_inventory import TextInventory
+    # calling this will prime the cache in the master process. each fork
+    # will inherit it. to work call gunicorn with --preload
+    TextInventory.load()
+
+
+setup()
 application = get_wsgi_application()
