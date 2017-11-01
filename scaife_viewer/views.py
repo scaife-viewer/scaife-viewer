@@ -93,7 +93,6 @@ def library_cts_resource(request, urn):
     if content_type == "text/html":
         ctx = {
             collection_name: collection,
-            # "parents": list(reversed(resource.resource.parents))[1:]
         }
         return render(request, f"library/cts_{collection_name}.html", ctx)
     return HttpResponse(status=HTTPStatus.NOT_ACCEPTABLE)
