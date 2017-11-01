@@ -1,4 +1,5 @@
 from .text_inventory import TextInventory
+from .exceptions import PassageDoesNotExist
 from .collections import (  # noqa
     Collection,
     TextGroup,
@@ -26,4 +27,7 @@ def passage(urn: str) -> Passage:
     reference = urn.reference
     urn = urn.upTo(URN.NO_PASSAGE)
     text = collection(urn)
-    return Passage(text, reference)
+    passage = Passage(text, reference)
+    if not passage.exists():
+        raise PassageDoesNotExist(f"{reference} does not exist in {urn}")
+    return passage

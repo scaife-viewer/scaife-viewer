@@ -40,7 +40,7 @@
   </div>
 {% endif %}
 
-<div id="overall" class="overall"{% if passage.rtl %} dir="rtl"{% endif %} data-urn="{{ passage.urn }}">
+<div id="overall" class="overall"{% if passage.rtl %} dir="rtl"{% endif %} data-urn="{{ passage.text.urn }}">
   <div class="pg-left">
     {% if passage.prev %}
       <a id="{% if passage.rtl %}pg-right{% else %}pg-left{% endif %}" href="{% url 'reader' passage.prev.urn %}{% if right_version %}?right={{ right_version }}{% endif %}"><span><i class="fa {% if passage.rtl %}fa-chevron-right{% else %}fa-chevron-left{% endif %}"></i></span></a>

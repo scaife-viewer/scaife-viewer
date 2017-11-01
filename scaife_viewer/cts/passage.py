@@ -23,9 +23,6 @@ class Passage:
     def __hash__(self):
         return hash(self.urn)
 
-    def exists(self):
-        return True
-
     @property
     def urn(self):
         return URN(f"{self.text.urn}:{self.reference}")

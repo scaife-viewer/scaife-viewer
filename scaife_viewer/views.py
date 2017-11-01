@@ -101,9 +101,10 @@ def library_cts_resource(request, urn):
 
 def reader(request, urn):
     right_version = request.GET.get("right")
-    passage = cts.passage(urn)
-    # if not passage.exists():
-    #     raise Http404()
+    try:
+        passage = cts.passage(urn)
+    except cts.PassageNotFound:
+        raise Http404()
     ctx = {
         "passage": passage,
     }
@@ -134,14 +135,15 @@ def reader(request, urn):
     ctx["images"] = images
     if right_version:
         right_urn = f"{passage.urn.upTo(cts.URN.WORK)}.{right_version}:{passage.reference}"
-        right_passage = cts.passage(right_urn)
-        if right_passage.exists():
+        try:
+            right_passage = cts.passage(right_urn)
+        except cts.PassageDoesNotExist:
+            ctx["reader_error"] = mark_safe(f"Unable to load passage: <b>{right_urn}</b> was not found.")
+        else:
             ctx.update({
                 "right_version": right_version,
                 "right_passage": right_passage,
             })
-        else:
-            ctx["reader_error"] = mark_safe(f"Unable to load passage: <b>{right_urn}</b> was not found.")
     versions = []
     for version in passage.text.versions():
         versions.append({
