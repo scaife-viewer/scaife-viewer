@@ -3,7 +3,7 @@ from django.utils import timezone
 
 from django.contrib.auth.models import User
 
-from ..cts_old import CTS
+from .. import cts
 
 
 class ReadingLog(models.Model):
@@ -17,13 +17,12 @@ class ReadingLog(models.Model):
 
 
 def metadata(urn):
-    cts = CTS()
     passage = cts.passage(urn)
-    parents = passage.metadata.parents
+    parents = list(passage.ancestors())
     return {
-        "textgroup_label": str(parents[1].get_label()),
-        "work_label": str(parents[0].get_label()),
-        "version_label": str(passage.metadata.get_label()),
+        "textgroup_label": str(parents[1].label),
+        "work_label": str(parents[0].label),
+        "version_label": str(passage.label),
         "reference": str(passage.reference).replace("-", "–"),
         "lang": passage.lang,
     }
