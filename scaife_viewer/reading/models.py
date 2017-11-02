@@ -18,13 +18,13 @@ class ReadingLog(models.Model):
 
 def metadata(urn):
     passage = cts.passage(urn)
-    parents = list(passage.ancestors())
+    parents = list(passage.text.ancestors())
     return {
         "textgroup_label": str(parents[1].label),
         "work_label": str(parents[0].label),
-        "version_label": str(passage.label),
+        "version_label": str(passage.text.label),
         "reference": str(passage.reference).replace("-", "–"),
-        "lang": passage.lang,
+        "lang": passage.text.lang,
     }
 
 
