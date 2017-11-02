@@ -92,8 +92,10 @@ class RefTree:
 
     def chunks(self, node=None):
         level, groupby = self.chunk_config()
-        sorted_level = sorted(self.depth_iter(level - 1, node=node), key=methodcaller("sort_key"))
-        grouped = itertools.groupby(sorted_level, key=methodcaller("sort_key", ancestors_only=True))
+        grouped = itertools.groupby(
+            self.depth_iter(level - 1, node=node),
+            key=methodcaller("sort_key", ancestors_only=True),
+        )
         for group in map(itemgetter(1), grouped):
             for chunk in chunker(group, groupby):
                 start, end = chunk[0], chunk[-1]
