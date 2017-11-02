@@ -9,9 +9,9 @@
             "os_name": "posix",
             "platform_machine": "x86_64",
             "platform_python_implementation": "CPython",
-            "platform_release": "17.0.0",
+            "platform_release": "17.2.0",
             "platform_system": "Darwin",
-            "platform_version": "Darwin Kernel Version 17.0.0: Thu Aug 24 21:48:19 PDT 2017; root:xnu-4570.1.46~2/RELEASE_X86_64",
+            "platform_version": "Darwin Kernel Version 17.2.0: Fri Sep 29 18:27:05 PDT 2017; root:xnu-4570.20.62~3/RELEASE_X86_64",
             "python_full_version": "3.6.3",
             "python_version": "3.6",
             "sys_platform": "darwin"
@@ -68,10 +68,10 @@
         },
         "django": {
             "hashes": [
-                "sha256:7ab6a9c798a5f9f359ee6da3677211f883fb02ef32cebe9b29751eb7a871febf",
-                "sha256:c3b42ca1efa1c0a129a9e863134cc3fe705c651dea3a04a7998019e522af0c60"
+                "sha256:75ce405d60f092f6adf904058d023eeea0e6d380f8d9c36134bac73da736023d",
+                "sha256:8918e392530d8fc6965a56af6504229e7924c27265893f3949aa0529cd1d4b99"
             ],
-            "version": "==1.11.6"
+            "version": "==1.11.7"
         },
         "django-appconf": {
             "hashes": [
@@ -108,10 +108,10 @@
         },
         "google-auth": {
             "hashes": [
-                "sha256:434b66a162880527917c013a55346541ed374e1acece8d4a28442e19f7a98b7e",
-                "sha256:e00236a914906409367e96fdcf5c08aaca3ab5bd3aab0c5c5ea9255162640215"
+                "sha256:8d8e15e6a890a0b5c71ea9d9422b173a2e494b91ed8801be96a3bf9fdb0a5d89",
+                "sha256:ca0c13207fcd10fbf7f99ef4caef590f2974189d8af39f68e3495e6ca7d847af"
             ],
-            "version": "==1.1.1"
+            "version": "==1.2.0"
         },
         "gunicorn": {
             "hashes": [
