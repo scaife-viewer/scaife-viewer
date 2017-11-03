@@ -141,6 +141,10 @@ class Text(Collection):
             "lang": self.lang,
             "human_lang": self.human_lang,
             "first_passage": dict(urn=str(self.first_passage().urn)),
+            "ancestors": [
+                dict(urn=str(ancestor.urn))
+                for ancestor in self.ancestors()
+            ],
             "toc": [
                 {
                     "urn": next(toc.chunks(ref_node), None).urn,

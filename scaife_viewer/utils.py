@@ -32,6 +32,7 @@ def apify(collection):
         }
     if isinstance(collection, cts.Text):
         first_passage = remaining_collection.pop("first_passage")
+        ancestors = remaining_collection.pop("ancestors")
         toc = remaining_collection.pop("toc")
         rels = {
             "first_passage": {
@@ -39,6 +40,13 @@ def apify(collection):
                 "json_url": reverse("library_passage_json", kwargs={"urn": first_passage["urn"]}),
                 **first_passage
             },
+            "ancestors": [
+                {
+                    "url": reverse("library_collection", kwargs={"urn": ancestor["urn"]}),
+                    "json_url": reverse("library_collection_json", kwargs={"urn": ancestor["urn"]}),
+                }
+                for ancestor in ancestors
+            ],
             "toc": [
                 {
                     "url": reverse("reader", kwargs={"urn": entry["urn"]}),
