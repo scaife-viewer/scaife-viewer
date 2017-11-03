@@ -1,5 +1,7 @@
 import os
 
+from django.utils.translation import ugettext_lazy as _
+
 import dj_database_url
 
 
@@ -184,6 +186,16 @@ FIXTURE_DIRS = [
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, "locale"),
+]
+LANGUAGES = [
+    ("de", "Deutsch"),
+    ("en", "English"),
+    ("fr", "français"),
+    ("it", "italiano"),
+]
+
 ACCOUNT_OPEN_SIGNUP = True
 ACCOUNT_EMAIL_UNIQUE = True
 ACCOUNT_EMAIL_CONFIRMATION_REQUIRED = False
@@ -191,12 +203,7 @@ ACCOUNT_LOGIN_REDIRECT_URL = "home"
 ACCOUNT_LOGOUT_REDIRECT_URL = "home"
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 2
 ACCOUNT_USE_AUTH_AUTHENTICATE = True
-ACCOUNT_LANGUAGES = [
-    ("de", "Deutsch"),
-    ("en", "English"),
-    ("fr", "français"),
-    ("it", "italiano"),
-]
+ACCOUNT_LANGUAGES = LANGUAGES
 
 AUTHENTICATION_BACKENDS = [
     "account.auth_backends.UsernameAuthenticationBackend",

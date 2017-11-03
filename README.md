@@ -43,3 +43,16 @@ npm run dev
 ```
 
 Browse to http://localhost:3000/.
+
+## Translations
+
+Before you work with translations, you will need gettext installed.
+
+macOS:
+
+    brew install gettext
+    export PATH="$PATH:$(brew --prefix gettext)/bin"
+
+To prepare messages and compile them:
+
+    python manage.py makemessages
