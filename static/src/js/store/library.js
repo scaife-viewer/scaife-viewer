@@ -9,15 +9,12 @@ module.exports = {
     toc: [],
   },
   actions: {
-    loadTextGroups({ commit }) {
+    async loadTextGroupList({ commit }) {
       const url = '/library/json/';
       const opts = { headers: { Accept: 'application/json' } };
-      return fetch(url, opts)
-        .then(res => res.json())
-        .then(data => data.text_groups)
-        .then((textGroups) => {
-          commit('setTextGroups', textGroups);
-        });
+      const res = await fetch(url, opts);
+      const textInventory = await res.json();
+      commit('setTextGroups', textInventory.text_groups);
     },
     filterTextGroups({ state, commit }, query) {
       if (state.allTextGroups) {

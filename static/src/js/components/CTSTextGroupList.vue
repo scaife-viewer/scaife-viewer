@@ -37,7 +37,7 @@ export default {
   store,
   created() {
     this.loading = true;
-    this.$store.dispatch('loadTextGroups').then(() => {
+    this.$store.dispatch('loadTextGroupList').then(() => {
       this.$refs['filter-input'].focus();
       this.loading = false;
     });
