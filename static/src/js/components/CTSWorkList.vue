@@ -25,12 +25,12 @@
         <div class="card-deck">
           <div class="version-card" v-for="text in work.texts" :key="text.url">
             <div class="card-body">
-              <p class="text-subtype">{{ text.subtype }}</p>
-              <h4 class="card-title"><a :href="text.browse_url">{{ text.label }}</a></h4>
+              <p class="text-subtype">{{ text.kind }}</p>
+              <h4 class="card-title"><a :href="text.url">{{ text.label }}</a></h4>
               <p class="card-text">{{ text.description }}</p>
             </div>
             <div class="card-footer">
-              <a :href="text.read_url"><i class="fa fa-book"></i> Read ({{ text.human_lang }})</a>
+              <a :href="text.first_passage.url"><i class="fa fa-book"></i> Read ({{ text.human_lang }})</a>
             </div>
           </div>
         </div>
@@ -47,9 +47,10 @@ const debounce = require('lodash.debounce');
 
 export default {
   store,
+  props: ['textGroupUrl'],
   created() {
     this.loading = true;
-    this.$store.dispatch('loadWorks', document.location.href).then(() => {
+    this.$store.dispatch('loadWorkList', this.textGroupUrl).then(() => {
       this.$refs['filter-input'].focus();
       this.loading = false;
     });

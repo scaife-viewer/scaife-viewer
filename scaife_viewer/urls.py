@@ -3,15 +3,27 @@ from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
 
-from .views import home, library, library_cts_resource, library_passage, profile, reader, healthz
+from .views import (
+    LibraryCollectionVectorView,
+    LibraryCollectionView,
+    LibraryPassageView,
+    LibraryView,
+    healthz,
+    home,
+    profile,
+    reader
+)
 
 urlpatterns = [
     url(r"^$", home, name="home"),
     url(r"^admin/", include(admin.site.urls)),
     url(r"^account/", include("account.urls")),
-    url(r"^library/$", library, name="library"),
-    url(r"^library/passage/(?P<urn>urn:[^/]+)/", library_passage, name="library_passage"),
-    url(r"^library/(?P<urn>urn:[^/]+)/", library_cts_resource, name="library_cts_resource"),
+    url(r"^library/$", LibraryView.as_view(format="html"), name="library"),
+    url(r"^library/json/$", LibraryView.as_view(format="json"), name="library_json"),
+    url(r"^library/vector/(?P<urn>[^/]+)/$", LibraryCollectionVectorView.as_view(), name="library_collection_vector"),
+    url(r"^library/passage/(?P<urn>[^/]+)/json/", LibraryPassageView.as_view(), name="library_passage_json"),
+    url(r"^library/(?P<urn>[^/]+)/$", LibraryCollectionView.as_view(format="html"), name="library_collection"),
+    url(r"^library/(?P<urn>[^/]+)/json/$", LibraryCollectionView.as_view(format="json"), name="library_collection_json"),
     url(r"^reader/(?P<urn>urn:[^/]+)/$", reader, name="reader"),
     url(r"^profile/$", profile, name="profile"),
     url(r"^healthz/$", healthz, name="healthz"),

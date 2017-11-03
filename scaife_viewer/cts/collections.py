@@ -45,6 +45,16 @@ class TextGroup(Collection):
         for urn in sorted(children.keys()):
             yield Work(urn, children[urn])
 
+    def as_json(self) -> dict:
+        return {
+            "urn": str(self.urn),
+            "label": str(self.label),
+            "works": [
+                dict(urn=str(work.urn))
+                for work in self.works()
+            ],
+        }
+
 
 class Work(Collection):
 
@@ -56,6 +66,16 @@ class Work(Collection):
         for urn in sorted(children.keys()):
             metadata = children[urn]
             yield resolve_collection(metadata.TYPE_URI)(urn, metadata)
+
+    def as_json(self) -> dict:
+        return {
+            "urn": str(self.urn),
+            "label": str(self.label),
+            "texts": [
+                dict(urn=str(text.urn))
+                for text in self.texts()
+            ],
+        }
 
 
 class Text(Collection):
@@ -110,6 +130,26 @@ class Text(Collection):
         chunk = next(self.toc().chunks(), None)
         if chunk is not None:
             return Passage(self, URN(chunk.urn).reference)
+
+    def as_json(self) -> dict:
+        toc = self.toc()
+        return {
+            "urn": str(self.urn),
+            "label": str(self.label),
+            "description": str(self.description),
+            "kind": self.kind,
+            "lang": self.lang,
+            "human_lang": self.human_lang,
+            "first_passage": dict(urn=str(self.first_passage().urn)),
+            "toc": [
+                {
+                    "urn": next(toc.chunks(ref_node), None).urn,
+                    "label": ref_node.label.title(),
+                    "num": ref_node.num,
+                }
+                for ref_node in toc.num_resolver.glob(toc.root, "*")
+            ],
+        }
 
 
 def resolve_collection(type_uri):

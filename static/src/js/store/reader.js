@@ -10,7 +10,7 @@ module.exports = {
   actions: {
     async loadPassages({ commit }, urns) {
       await Promise.all(urns.map(async (urn) => {
-        const url = `http://localhost:3000/library/passage/${urn}/`;
+        const url = `/library/passage/${urn}/json/`;
         const resp = await fetch(url);
         const passage = await resp.json();
         commit('addPassage', passage);
