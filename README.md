@@ -53,6 +53,10 @@ macOS:
     brew install gettext
     export PATH="$PATH:$(brew --prefix gettext)/bin"
 
-To prepare messages and compile them:
+To prepare messages:
 
-    python manage.py makemessages
+    python manage.py makemessages --all
+
+If you need to add a language; add it to `LANGUAGES` in settings.py and run:
+
+    python manage.py makemessages --locale <lang>
