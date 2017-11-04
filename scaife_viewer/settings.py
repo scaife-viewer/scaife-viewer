@@ -198,8 +198,22 @@ AUTHENTICATION_BACKENDS = [
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SECURE_SSL_REDIRECT = bool(int(os.environ.get("SECURE_SSL_REDIRECT", "0")))
 
-CTS_API_ENDPOINT = os.environ.get("CTS_API_ENDPOINT", "https://perseus-cts.eu1.eldarioncloud.com/api/cts")
-CTS_LOCAL_TEXT_INVENTORY = "ti.xml" if DEBUG else None
+resolver = os.environ.get("CTS_RESOLVER", "api")
+if resolver == "api":
+    CTS_RESOLVER = {
+        "type": "api",
+        "kwargs": {
+            "endpoint": os.environ.get("CTS_API_ENDPOINT", "https://perseus-cts.eu1.eldarioncloud.com/api/cts"),
+        },
+    }
+    CTS_LOCAL_TEXT_INVENTORY = "ti.xml" if DEBUG else None
+elif resolver == "local":
+    CTS_RESOLVER = {
+        "type": "local",
+        "kwargs": {
+            "data_path": os.environ["CTS_LOCAL_DATA_PATH"],
+        },
+    }
 
 if "SENTRY_DSN" in os.environ:
     RAVEN_CONFIG = {

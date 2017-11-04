@@ -1,12 +1,48 @@
 from functools import lru_cache, partial
 
-from MyCapytain.common.constants import RDF_NAMESPACES
+from django.conf import settings
 
-from .capitains import resolver
+from MyCapytain.common.constants import RDF_NAMESPACES
+from MyCapytain.resources.collections.cts import XmlCtsTextInventoryMetadata
+from MyCapytain.resources.prototypes.cts import inventory as cts
+
+from .capitains import default_resolver
 from .passage import Passage
 from .reference import URN
 from .toc import RefTree
 from .typing import CtsCollectionMetadata
+
+
+@lru_cache(maxsize=1)
+def load_text_inventory_metadata() -> cts.CtsTextInventoryMetadata:
+    resolver_type = settings.CTS_RESOLVER["type"]
+    resolver = default_resolver()
+    if resolver_type == "api":
+        if getattr(settings, "CTS_LOCAL_TEXT_INVENTORY", None) is not None:
+            with open(settings.CTS_LOCAL_TEXT_INVENTORY, "r") as fp:
+                ti_xml = fp.read()
+        else:
+            ti_xml = resolver.endpoint.getCapabilities()
+        return XmlCtsTextInventoryMetadata.parse(ti_xml)
+    elif resolver_type == "local":
+        return resolver.getMetadata()["default"]
+
+
+class TextInventory:
+
+    @classmethod
+    def load(cls):
+        return cls(load_text_inventory_metadata())
+
+    def __init__(self, metadata: cts.CtsTextInventoryMetadata):
+        self.metadata = metadata
+
+    def __repr__(self):
+        return f"<cts.TextInventory at {hex(id(self))}>"
+
+    def text_groups(self):
+        for urn in sorted(self.metadata.textgroups.keys()):
+            yield TextGroup(urn, self.metadata.textgroups[urn])
 
 
 class Collection:
@@ -32,7 +68,12 @@ class Collection:
 
     def ancestors(self):
         for metadata in list(reversed(self.metadata.parents))[1:]:
-            yield resolve_collection(metadata.TYPE_URI)(metadata.urn, metadata)
+            cls = resolve_collection(metadata.TYPE_URI)
+            # the local resolver returns the text inventory from parents
+            # this is isn't a proper ancestor here so we'll ignore it.
+            if issubclass(cls, TextInventory):
+                continue
+            yield cls(metadata.urn, metadata)
 
 
 class TextGroup(Collection):
@@ -102,7 +143,7 @@ class Text(Collection):
     def toc(self):
         depth = len(self.metadata.citation)
         tree = RefTree(self.urn, self.metadata.citation)
-        for reff in resolver.getReffs(self.urn, level=depth):
+        for reff in default_resolver().getReffs(self.urn, level=depth):
             tree.add(reff)
         return tree
 
@@ -114,6 +155,7 @@ class Text(Collection):
 
 def resolve_collection(type_uri):
     return {
+        RDF_NAMESPACES.CTS.term("TextInventory"): TextInventory,
         RDF_NAMESPACES.CTS.term("textgroup"): TextGroup,
         RDF_NAMESPACES.CTS.term("work"): Work,
         RDF_NAMESPACES.CTS.term("edition"): partial(Text, "edition"),
