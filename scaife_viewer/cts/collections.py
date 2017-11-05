@@ -141,8 +141,9 @@ class Text(Collection):
 
     @lru_cache()
     def toc(self):
-        depth = len(self.metadata.citation)
-        tree = RefTree(self.urn, self.metadata.citation)
+        citation = self.metadata.citation
+        depth = len(citation)
+        tree = RefTree(self.urn, citation)
         for reff in default_resolver().getReffs(self.urn, level=depth):
             tree.add(reff)
         return tree
