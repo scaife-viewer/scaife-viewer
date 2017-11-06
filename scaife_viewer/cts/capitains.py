@@ -1,14 +1,17 @@
+import logging
 import os
 
 from django.conf import settings
 
 from MyCapytain.resolvers.cts.api import HttpCtsResolver
-from MyCapytain.resolvers.cts.local import CtsCapitainsLocalResolver
 from MyCapytain.resolvers.prototypes import Resolver
 from MyCapytain.retrievers.cts5 import HttpCtsRetriever
 
+from .resolvers import LocalResolver
+
 
 resolver = None
+logger = logging.getLogger(__name__)
 
 
 def api_resolver(endpoint) -> Resolver:
@@ -16,11 +19,12 @@ def api_resolver(endpoint) -> Resolver:
 
 
 def local_resolver(data_path: str) -> Resolver:
-    return CtsCapitainsLocalResolver([
+    resource = [
         os.path.join(data_path, entry)
         for entry in os.listdir(data_path)
         if os.path.isdir(os.path.join(data_path, entry))
-    ])
+    ]
+    return LocalResolver(resource, logger=logger)
 
 
 def default_resolver() -> Resolver:

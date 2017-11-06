@@ -174,6 +174,9 @@ LOGGING = {
             "level": "ERROR",
             "propagate": True,
         },
+        "scaife_viewer.cts": {
+            "level": "ERROR",
+        },
     }
 }
 

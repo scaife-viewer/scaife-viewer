@@ -42,7 +42,10 @@ class TextInventory:
 
     def text_groups(self):
         for urn in sorted(self.metadata.textgroups.keys()):
-            yield TextGroup(urn, self.metadata.textgroups[urn])
+            text_group = TextGroup(urn, self.metadata.textgroups[urn])
+            if next(text_group.works(), None) is None:
+                continue
+            yield text_group
 
 
 class Collection:
@@ -84,7 +87,10 @@ class TextGroup(Collection):
     def works(self):
         children = self.metadata.works
         for urn in sorted(children.keys()):
-            yield Work(urn, children[urn])
+            work = Work(urn, children[urn])
+            if next(work.texts(), None) is None:
+                continue
+            yield work
 
 
 class Work(Collection):
@@ -96,6 +102,8 @@ class Work(Collection):
         children = self.metadata.texts
         for urn in sorted(children.keys()):
             metadata = children[urn]
+            if metadata.citation is None:
+                continue
             yield resolve_collection(metadata.TYPE_URI)(urn, metadata)
 
 
