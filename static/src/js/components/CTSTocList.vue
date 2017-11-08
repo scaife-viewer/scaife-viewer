@@ -1,5 +1,5 @@
 <template>
-  <div class="version-list">
+  <div class="toc-list">
     <template v-if="loading">
       <div class="text-center">
         <i class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>

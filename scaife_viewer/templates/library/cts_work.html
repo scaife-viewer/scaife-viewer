@@ -2,19 +2,19 @@
 
 {% load i18n %}
 
-{% block head_title %}{{ work.resource.get_label }}{% endblock %}
+{% block head_title %}{{ work.label }}{% endblock %}
 
 {% block body_class %}cts_work{% endblock %}
 
 {% block hero %}
   <h2>
     <a href="{% url 'library' %}">Library &gt;</a>
-    {% for breadcrumb in parents %}
-      <a href="{% url 'library_cts_resource' breadcrumb.urn %}">{{ breadcrumb.get_label }}{% if not forloop.last %} &gt;{% endif %}</a>
+    {% for breadcrumb in work.ancestors %}
+      <a href="{% url 'library_cts_resource' breadcrumb.urn %}">{{ breadcrumb.label }}{% if not forloop.last %} &gt;{% endif %}</a>
     {% endfor %}
   </h2>
 
-  <h1>{{ work.resource.get_label }}</h1>
+  <h1>{{ work.label }}</h1>
 {% endblock %}
 
 {% block content %}
@@ -36,12 +36,12 @@
     {% for text in work.texts %}
       <div class="version-card">
         <div class="card-body">
-          <p class="text-subtype">{{ text.resource.SUBTYPE }}</p>
-          <h4 class="card-title"><a href="{% url 'library_cts_resource' text.resource.urn %}">{{ text.resource.get_label }}</a></h4>
-          <p class="card-text">{{ text.resource.get_description }}</p>
+          <p class="text-subtype">{{ text.kind }}</p>
+          <h4 class="card-title"><a href="{% url 'library_cts_resource' text.urn %}">{{ text.label }}</a></h4>
+          <p class="card-text">{{ text.description }}</p>
         </div>
         <div class="card-footer">
-          <a href="{% url 'reader' text.resource.urn %}"><i class="fa fa-book"></i> Read ({{ text.human_lang }})</a>
+          <a href="{% url 'reader' text.first_passage.urn %}"><i class="fa fa-book"></i> Read ({{ text.human_lang }})</a>
         </div>
       </div>
     {% endfor %}

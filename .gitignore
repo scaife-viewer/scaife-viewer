@@ -5,3 +5,5 @@ dev.db
 site_media/
 static/dist/
 ti.xml
+.vscode/
+service-accounts/

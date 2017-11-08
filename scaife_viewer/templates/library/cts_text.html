@@ -2,19 +2,19 @@
 
 {% load i18n %}
 
-{% block head_title %}{{ text.resource.get_label }}{% endblock %}
+{% block head_title %}{{ text.label }}{% endblock %}
 
 {% block body_class %}cts_text{% endblock %}
 
 {% block hero %}
   <h2>
     <a href="{% url 'library' %}">Library &gt;</a>
-    {% for breadcrumb in parents %}
-      <a href="{% url 'library_cts_resource' breadcrumb.urn %}">{{ breadcrumb.get_label }}{% if not forloop.last %} &gt;{% endif %}</a>
+    {% for breadcrumb in text.ancestors %}
+      <a href="{% url 'library_cts_resource' breadcrumb.urn %}">{{ breadcrumb.label }}{% if not forloop.last %} &gt;{% endif %}</a>
     {% endfor %}
   </h2>
 
-  <h1>{{ text.resource.get_label }}</h1>
+  <h1>{{ text.label }}</h1>
 {% endblock %}
 
 {% block content %}
@@ -23,5 +23,5 @@
     We're still working on how best to chunk and display this.
   </p>
 
-  <sv-cts-version-list></sv-cts-version-list>
+  <sv-cts-toc-list></sv-cts-toc-list>
 {% endblock %}
