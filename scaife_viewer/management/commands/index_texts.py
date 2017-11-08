@@ -2,11 +2,15 @@ import concurrent.futures
 import json
 import timeit
 from decimal import Decimal
+from functools import partial
 from itertools import zip_longest
+from operator import attrgetter
+from typing import Iterable
 
 from django.core.management.base import BaseCommand
 
 import requests
+from anytree.iterators import PreOrderIter
 
 from ... import cts
 
@@ -18,12 +22,19 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         cts.TextInventory.load()
         print("text inventory loaded")
-        chunks = chunker((str(text.urn) for text in self.texts()), 1)
         num_workers = None
+        dry_run = True
 
-        create_es_index()
+        if not dry_run:
+            create_es_index()
+
         with concurrent.futures.ProcessPoolExecutor(max_workers=num_workers) as executor:
-            for completed in executor.map(index_text_chunk, chunks):
+            tasks = executor.map(
+                partial(index_text_chunk, dry_run=dry_run),
+                chunker(self.urns(), 100),
+                chunksize=100,
+            )
+            for completed in tasks:
                 for urn, elapsed in completed:
                     duration = Decimal.from_float(elapsed).quantize(Decimal("0.00"))
                     print(f"indexed {urn} ({duration}s)")
@@ -34,6 +45,16 @@ class Command(BaseCommand):
             for work in text_group.works():
                 for text in work.texts():
                     yield text
+
+    def urns(self):
+        for text in self.texts():
+            try:
+                toc = text.toc()
+            except Exception as e:
+                print(f"{text.urn} toc error: {e}")
+                continue
+            for node in PreOrderIter(toc.root, filter_=attrgetter("is_leaf")):
+                yield f"{text.urn}:{node.reference}"
 
 
 def chunker(iterable, n):
@@ -81,7 +102,7 @@ def create_es_index():
     r.raise_for_status()
 
 
-def index_text_chunk(chunk):
+def index_text_chunk(chunk: Iterable[str], dry_run: bool):
     resolver = cts.default_resolver()
     urns = []
     index_name = "scaife-viewer"
@@ -89,25 +110,27 @@ def index_text_chunk(chunk):
 
     for urn in chunk:
         start_time = timeit.default_timer()
-        text = cts.collection(urn)
-        textual_node = resolver.getTextualNode(urn)
+        passage = cts.passage(urn)
+        # to avoid lru_cache
+        textual_node = resolver.getTextualNode(passage.text.urn, subreference=str(passage.reference))
         raw_text = textual_node.export(exclude=["tei:teiHeader"])
         doc = {
             "urn": urn,
-            "label": text.label,
-            "description": text.description,
+            "label": passage.text.label,
+            "description": passage.text.description,
             "text": raw_text,
         }
-        r = requests.put(
-            **es_req_kwargs(
-                f"/{index_name}/{doc_type}/{urn}",
-                data=json.dumps(doc).encode("utf-8"),
-                headers={
-                    "Content-Type": "application/json",
-                },
-            ),
-        )
-        r.raise_for_status()
+        if not dry_run:
+            r = requests.put(
+                **es_req_kwargs(
+                    f"/{index_name}/{doc_type}/{urn}",
+                    data=json.dumps(doc).encode("utf-8"),
+                    headers={
+                        "Content-Type": "application/json",
+                    },
+                ),
+            )
+            r.raise_for_status()
         elapsed = timeit.default_timer() - start_time
         urns.append((urn, elapsed))
 
