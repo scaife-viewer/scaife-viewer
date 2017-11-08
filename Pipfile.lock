@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "343b645be3d3a92e0bdff88648966729f959ddde206a2ee6aa78e23af94e14b8"
+            "sha256": "4a5146a74a75ab1d2d91204743632934a7e7900473321e9b0c7804e0c4790e39"
         },
         "host-environment-markers": {
             "implementation_name": "cpython",
@@ -36,7 +36,8 @@
         },
         "basictracer": {
             "editable": true,
-            "git": "https://github.com/opentracing/basictracer-python.git"
+            "git": "https://github.com/opentracing/basictracer-python.git",
+            "ref": "7cd6fa73bb467a3b75db76fc3f23f07d745d1198"
         },
         "cachetools": {
             "hashes": [
@@ -120,6 +121,13 @@
             ],
             "version": "==19.7.1"
         },
+        "honcho": {
+            "hashes": [
+                "sha256:af5806bf13e3b20acdcb9ff8c0beb91eee6fe07393c3448dfad89667e6ac7576",
+                "sha256:c189402ad2e337777283c6a12d0f4f61dc6dd20c254c9a3a4af5087fc66cea6e"
+            ],
+            "version": "==1.0.1"
+        },
         "idna": {
             "hashes": [
                 "sha256:8c7309c718f94b3a625cb648ace320157ad16ff131ae0af362c9f21b80ef6ec4",
@@ -182,7 +190,8 @@
         },
         "opentracing": {
             "editable": true,
-            "git": "https://github.com/opentracing/opentracing-python.git"
+            "git": "https://github.com/opentracing/opentracing-python.git",
+            "ref": "6bc47b1f5a7626c67e296c4c7f32dedce851ba71"
         },
         "pinax-eventlog": {
             "hashes": [
