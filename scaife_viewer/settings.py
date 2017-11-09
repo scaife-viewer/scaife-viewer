@@ -1,5 +1,7 @@
 import os
 
+from django.utils.translation import ugettext_lazy as _
+
 import dj_database_url
 
 
@@ -117,6 +119,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.SessionAuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "account.middleware.LocaleMiddleware",
 ]
 
 ROOT_URLCONF = "scaife_viewer.urls"
@@ -174,6 +177,9 @@ LOGGING = {
             "level": "ERROR",
             "propagate": True,
         },
+        "scaife_viewer.cts": {
+            "level": "ERROR",
+        },
     }
 }
 
@@ -183,6 +189,16 @@ FIXTURE_DIRS = [
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, "locale"),
+]
+LANGUAGES = [
+    ("de", "Deutsch"),
+    ("en", "English"),
+    ("fr", "français"),
+    ("it", "italiano"),
+]
+
 ACCOUNT_OPEN_SIGNUP = True
 ACCOUNT_EMAIL_UNIQUE = True
 ACCOUNT_EMAIL_CONFIRMATION_REQUIRED = False
@@ -190,6 +206,7 @@ ACCOUNT_LOGIN_REDIRECT_URL = "home"
 ACCOUNT_LOGOUT_REDIRECT_URL = "home"
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 2
 ACCOUNT_USE_AUTH_AUTHENTICATE = True
+ACCOUNT_LANGUAGES = LANGUAGES
 
 AUTHENTICATION_BACKENDS = [
     "account.auth_backends.UsernameAuthenticationBackend",
@@ -198,8 +215,22 @@ AUTHENTICATION_BACKENDS = [
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SECURE_SSL_REDIRECT = bool(int(os.environ.get("SECURE_SSL_REDIRECT", "0")))
 
-CTS_API_ENDPOINT = os.environ.get("CTS_API_ENDPOINT", "https://perseus-cts.eu1.eldarioncloud.com/api/cts")
-CTS_LOCAL_TEXT_INVENTORY = "ti.xml" if DEBUG else None
+resolver = os.environ.get("CTS_RESOLVER", "api")
+if resolver == "api":
+    CTS_RESOLVER = {
+        "type": "api",
+        "kwargs": {
+            "endpoint": os.environ.get("CTS_API_ENDPOINT", "https://perseus-cts.eu1.eldarioncloud.com/api/cts"),
+        },
+    }
+    CTS_LOCAL_TEXT_INVENTORY = "ti.xml" if DEBUG else None
+elif resolver == "local":
+    CTS_RESOLVER = {
+        "type": "local",
+        "kwargs": {
+            "data_path": os.environ["CTS_LOCAL_DATA_PATH"],
+        },
+    }
 
 if "SENTRY_DSN" in os.environ:
     RAVEN_CONFIG = {

@@ -1,6 +1,7 @@
-from .text_inventory import TextInventory
+from .capitains import default_resolver  # noqa
 from .exceptions import PassageDoesNotExist
 from .collections import (  # noqa
+    TextInventory,
     Collection,
     TextGroup,
     Work,

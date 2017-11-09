@@ -8,7 +8,6 @@ from .views import (
     LibraryCollectionView,
     LibraryPassageView,
     LibraryView,
-    healthz,
     home,
     profile,
     reader
@@ -26,7 +25,6 @@ urlpatterns = [
     url(r"^library/(?P<urn>[^/]+)/json/$", LibraryCollectionView.as_view(format="json"), name="library_collection_json"),
     url(r"^reader/(?P<urn>urn:[^/]+)/$", reader, name="reader"),
     url(r"^profile/$", profile, name="profile"),
-    url(r"^healthz/$", healthz, name="healthz"),
     url(r"^reading/", include("scaife_viewer.reading.urls")),
 ]
 

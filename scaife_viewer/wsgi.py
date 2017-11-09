@@ -14,11 +14,21 @@ from django.core.wsgi import get_wsgi_application
 
 def setup():
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "scaife_viewer.settings")
-    from .cts.text_inventory import TextInventory
+    from . import cts
     # calling this will prime the cache in the master process. each fork
-    # will inherit it. to work call gunicorn with --preload
-    TextInventory.load()
+    # will inherit it. gunicorn --preload is required for this to work.
+    cts.TextInventory.load()
+    print("Loaded text inventory")
+
+
+def healthz(app):
+    def healthz_wrapper(environ, start_response):
+        if environ.get("PATH_INFO") == "/healthz/":
+            start_response("200 OK", [("Content-Type", "text/plain")])
+            return [b"ok"]
+        return app(environ, start_response)
+    return healthz_wrapper
 
 
 setup()
-application = get_wsgi_application()
+application = healthz(get_wsgi_application())
