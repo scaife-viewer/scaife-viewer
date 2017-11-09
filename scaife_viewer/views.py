@@ -161,7 +161,3 @@ def reader(request, urn):
         if right_passage:
             ReadingLog.objects.create(user=request.user, urn=right_urn)
     return response
-
-
-def healthz(request):
-    return HttpResponse(content="ok")
