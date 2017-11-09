@@ -158,10 +158,6 @@ def reader(request, urn):
     response = render(request, "reader/reader.html", ctx)
     if request.user.is_authenticated():
         ReadingLog.objects.create(user=request.user, urn=urn)
-        if right_version:
+        if right_passage:
             ReadingLog.objects.create(user=request.user, urn=right_urn)
     return response
-
-
-def healthz(request):
-    return HttpResponse(content="ok")

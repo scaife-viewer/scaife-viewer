@@ -21,5 +21,14 @@ def setup():
     print("Loaded text inventory")
 
 
+def healthz(app):
+    def healthz_wrapper(environ, start_response):
+        if environ.get("PATH_INFO") == "/healthz/":
+            start_response("200 OK", [("Content-Type", "text/plain")])
+            return [b"ok"]
+        return app(environ, start_response)
+    return healthz_wrapper
+
+
 setup()
-application = get_wsgi_application()
+application = healthz(get_wsgi_application())
