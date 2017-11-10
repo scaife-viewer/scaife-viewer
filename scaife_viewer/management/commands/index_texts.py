@@ -1,7 +1,14 @@
 import concurrent.futures
+import contextlib
+import cProfile
 import json
+import os
+import pstats
+import time
+from collections import deque
+from decimal import Decimal
 from functools import partial
-from itertools import chain, zip_longest
+from itertools import chain, islice, zip_longest
 from operator import attrgetter
 from typing import Iterable
 
@@ -19,7 +26,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument(
-            "--workers",
+            "--max-workers",
             type=int,
             default=None,
         )
@@ -30,32 +37,40 @@ class Command(BaseCommand):
         )
         parser.add_argument("--urn-filter")
         parser.add_argument("--chunk-size", type=int, default=100)
+        parser.add_argument("--limit", type=int, default=None)
 
     def handle(self, *args, **options):
-        num_workers = options["workers"]
+        max_workers = options["max_workers"]
         dry_run = options["dry_run"]
         urn_filter = options["urn_filter"]
+        limit = options["limit"]
 
+        with CodeTimer() as timer:
+            self.index_texts(
+                max_workers,
+                dry_run,
+                urn_filter,
+                limit,
+                options["chunk_size"],
+            )
+        elapsed = timer.elapsed.quantize(Decimal("0.00"))
+        print(f"Finished in {elapsed}s")
+
+    def index_texts(self, num_workers, dry_run, urn_filter, limit, chunk_size):
         if not dry_run:
             create_es_index()
-
         cts.TextInventory.load()
         print("Text inventory loaded")
-
         with concurrent.futures.ProcessPoolExecutor(max_workers=num_workers) as executor:
             if urn_filter:
                 print(f"Applying URN filter: {urn_filter}")
-            urns = list(chain.from_iterable(executor.map(
-                passage_urns_from_text,
-                self.texts(urn_filter),
-                chunksize=100,
-            )))
+            urns = chain.from_iterable(executor.map(passage_urns_from_text, self.texts(urn_filter), chunksize=100))
+            if limit:
+                urns = islice(urns, limit)
+            urns = list(urns)
             print(f"Indexing {len(urns)} passages")
-            list(executor.map(
-                partial(index_text_chunk, dry_run=dry_run),
-                chunker(urns, options["chunk_size"]),
-                chunksize=1,
-            ))
+            indexer = partial(index_text_chunk, dry_run=dry_run)
+            consume(executor.map(indexer, chunker(urns, chunk_size)))
 
     def texts(self, urn_filter):
         ti = cts.text_inventory()
@@ -65,6 +80,10 @@ class Command(BaseCommand):
                     if urn_filter and not str(text.urn).startswith(urn_filter):
                         continue
                     yield text
+
+
+def consume(it):
+    deque(it, maxlen=0)
 
 
 def chunker(iterable, n):
@@ -126,6 +145,11 @@ def create_es_index():
         r.raise_for_status()
 
 
+def log(msg):
+    pid = os.getpid()
+    print(f"[pid={pid}] {msg}")
+
+
 def index_text_chunk(chunk: Iterable[str], dry_run: bool):
     index_name = "scaife-viewer"
     doc_type = "text"
@@ -171,9 +195,29 @@ def index_text_chunk(chunk: Iterable[str], dry_run: bool):
             print(r.json())
         r.raise_for_status()
 
-    # print(f"Indexed {len(docs)} passages")
+    log(f"Indexed {len(docs)} passages")
 
 
 def es_req_kwargs(path, **kwargs):
     kwargs["url"] = f"http://localhost:9200{path}"
     return kwargs
+
+
+class CodeTimer:
+
+    def __enter__(self):
+        self.start = time.perf_counter()
+        return self
+
+    def __exit__(self, typ, value, traceback):
+        self.elapsed = Decimal.from_float(time.perf_counter() - self.start)
+
+
+@contextlib.contextmanager
+def profile(*args, **kwargs):
+    profile = cProfile.Profile(*args, **kwargs)
+    profile.enable()
+    yield
+    profile.disable()
+    ps = pstats.Stats(profile)
+    ps.sort_stats("time", "cumulative").print_stats(.1)
