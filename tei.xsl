@@ -285,7 +285,9 @@
   <xsl:template match="t:name/t:reg"></xsl:template>
   <xsl:template match="t:name/t:placeName"><span class="placeName"><xsl:apply-templates/></span></xsl:template>
 
-  <xsl:template match="t:lb" />
+  <xsl:template match="t:lb">
+    <br/>
+  </xsl:template>
 
   <xsl:template match="t:ex">
   	<span class="ex">
@@ -314,6 +316,9 @@
   </xsl:template>
 
   <xsl:template match="t:head">
+    <div class="head">
+      <xsl:apply-templates/>
+    </div>
   </xsl:template>
 
   <xsl:template match="t:sp">
