@@ -1,7 +1,5 @@
 import concurrent.futures
 import json
-import timeit
-from decimal import Decimal
 from functools import partial
 from itertools import chain, zip_longest
 from operator import attrgetter
