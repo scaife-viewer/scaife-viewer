@@ -141,7 +141,7 @@ def index_text_chunk(chunk: Iterable[str], dry_run: bool):
                 "description": passage.text.description,
             },
             "reference": str(passage.reference),
-            "content": passage.textual_node().export(exclude=["tei:teiHeader"]),
+            "content": passage.content,
         }
         docs.append(doc)
 
