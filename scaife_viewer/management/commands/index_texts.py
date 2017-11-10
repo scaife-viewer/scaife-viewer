@@ -12,6 +12,7 @@ from itertools import chain, islice, zip_longest
 from operator import attrgetter
 from typing import Iterable
 
+from django.conf import settings
 from django.core.management.base import BaseCommand
 
 import requests
@@ -199,7 +200,7 @@ def index_text_chunk(chunk: Iterable[str], dry_run: bool):
 
 
 def es_req_kwargs(path, **kwargs):
-    kwargs["url"] = f"http://localhost:9200{path}"
+    kwargs["url"] = f"{settings.ELASTICSEARCH_URL}{path}"
     return kwargs
 
 

@@ -1,9 +1,10 @@
 import json
 from http import HTTPStatus
 
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, JsonResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from django.utils.safestring import mark_safe
 from django.views.decorators.vary import vary_on_headers
 
@@ -181,7 +182,7 @@ def search(request):
                 },
             },
         }
-        url = "http://localhost:9200/scaife-viewer/text/_search"
+        url = f"{settings.ELASTICSEARCH_URL}/scaife-viewer/text/_search"
         r = requests.post(url, data=json.dumps(payload))
         if r.ok:
             data = r.json()
