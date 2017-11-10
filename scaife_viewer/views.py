@@ -1,12 +1,14 @@
+import json
 from http import HTTPStatus
 
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, JsonResponse, Http404
+from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
-from django.views.decorators.vary import vary_on_headers
 from django.utils.safestring import mark_safe
+from django.views.decorators.vary import vary_on_headers
 
 import mimeparse
+import requests
 
 from . import cts
 from .cts.utils import natural_keys as nk
@@ -161,3 +163,41 @@ def reader(request, urn):
         if right_version and right_passage:
             ReadingLog.objects.create(user=request.user, urn=right_urn)
     return response
+
+
+def search(request):
+    q = request.GET.get("q", "")
+    results = []
+    error = ""
+    if q:
+        payload = {
+            "query": {
+                "bool": {
+                    "must": {
+                        "match": {
+                            "content": q,
+                        },
+                    },
+                },
+            },
+        }
+        url = "http://localhost:9200/scaife-viewer/text/_search"
+        r = requests.post(url, data=json.dumps(payload))
+        if r.ok:
+            data = r.json()
+            for hit in data["hits"]["hits"]:
+                results.append({
+                    "passage": cts.passage(hit["_id"]),
+                    "content": hit["_source"]["content"],
+                })
+        else:
+            error = {
+                "reason": f"HTTP {r.status_code} {r.reason}",
+                "response": json.dumps(r.json(), indent=2),
+            }
+    ctx = {
+        "q": q,
+        "results": results,
+        "error": error,
+    }
+    return render(request, "search.html", ctx)
