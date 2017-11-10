@@ -322,14 +322,21 @@
   </xsl:template>
 
   <xsl:template match="t:sp">
-    <section class="speak">
+    <div class="speak">
       <xsl:if test="./t:speaker">
         <em><xsl:value-of select="./t:speaker/text()" /></em>
       </xsl:if>
-      <ol>
-        <xsl:apply-templates select="./t:l"/>
-      </ol>
-    </section>
+      <xsl:choose>
+        <xsl:when test="./t:l">
+          <ol>
+            <xsl:apply-templates select="./t:l"/>
+          </ol>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </div>
   </xsl:template>
 
   <xsl:template match="t:supplied">
