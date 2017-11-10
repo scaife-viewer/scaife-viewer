@@ -23,7 +23,7 @@ from ... import cts
 
 class Command(BaseCommand):
 
-    help = "Indexes all texts in Elasticsearch"
+    help = "Indexes passages in Elasticsearch"
 
     def add_arguments(self, parser):
         parser.add_argument(
