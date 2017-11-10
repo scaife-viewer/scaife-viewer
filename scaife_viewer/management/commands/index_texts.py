@@ -36,36 +36,36 @@ class Command(BaseCommand):
             action="store_true",
             default=False,
         )
-        parser.add_argument("--urn-filter")
+        parser.add_argument("--urn-prefix")
         parser.add_argument("--chunk-size", type=int, default=100)
         parser.add_argument("--limit", type=int, default=None)
 
     def handle(self, *args, **options):
         max_workers = options["max_workers"]
         dry_run = options["dry_run"]
-        urn_filter = options["urn_filter"]
+        urn_prefix = options["urn_prefix"]
         limit = options["limit"]
 
         with CodeTimer() as timer:
             self.index_texts(
                 max_workers,
                 dry_run,
-                urn_filter,
+                urn_prefix,
                 limit,
                 options["chunk_size"],
             )
         elapsed = timer.elapsed.quantize(Decimal("0.00"))
         print(f"Finished in {elapsed}s")
 
-    def index_texts(self, num_workers, dry_run, urn_filter, limit, chunk_size):
+    def index_texts(self, num_workers, dry_run, urn_prefix, limit, chunk_size):
         if not dry_run:
             create_es_index()
         cts.TextInventory.load()
         print("Text inventory loaded")
         with concurrent.futures.ProcessPoolExecutor(max_workers=num_workers) as executor:
-            if urn_filter:
-                print(f"Applying URN filter: {urn_filter}")
-            urns = chain.from_iterable(executor.map(passage_urns_from_text, self.texts(urn_filter), chunksize=100))
+            if urn_prefix:
+                print(f"Applying URN prefix filter: {urn_prefix}")
+            urns = chain.from_iterable(executor.map(passage_urns_from_text, self.texts(urn_prefix), chunksize=100))
             if limit:
                 urns = islice(urns, limit)
             urns = list(urns)
@@ -73,12 +73,12 @@ class Command(BaseCommand):
             indexer = partial(index_text_chunk, dry_run=dry_run)
             consume(executor.map(indexer, chunker(urns, chunk_size)))
 
-    def texts(self, urn_filter):
+    def texts(self, urn_prefix):
         ti = cts.text_inventory()
         for text_group in ti.text_groups():
             for work in text_group.works():
                 for text in work.texts():
-                    if urn_filter and not str(text.urn).startswith(urn_filter):
+                    if urn_prefix and not str(text.urn).startswith(urn_prefix):
                         continue
                     yield text
 
