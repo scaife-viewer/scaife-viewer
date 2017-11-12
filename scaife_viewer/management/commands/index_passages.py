@@ -157,7 +157,14 @@ def index_text_chunk(chunk: Iterable[str], dry_run: bool):
     docs = []
 
     for urn in chunk:
-        passage = cts.passage(urn)
+        try:
+            passage = cts.passage(urn)
+        except cts.PassageDoesNotExist:
+            print(f"Passage {urn} does not exist")
+            continue
+        except Exception as e:
+            print(f"Error {e}")
+            continue
         doc = {
             "urn": urn,
             "text": {
@@ -196,7 +203,7 @@ def index_text_chunk(chunk: Iterable[str], dry_run: bool):
             print(r.json())
         r.raise_for_status()
 
-    log(f"Indexed {len(docs)} passages")
+    # log(f"Indexed {len(docs)} passages")
 
 
 def es_req_kwargs(path, **kwargs):
