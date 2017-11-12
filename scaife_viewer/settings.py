@@ -238,3 +238,4 @@ if "SENTRY_DSN" in os.environ:
     }
 
 TRACING_ENABLED = bool(int(os.environ.get("TRACING_ENABLED", not DEBUG)))
+ELASTICSEARCH_URL = os.environ.get("ELASTICSEARCH_URL", "http://localhost:9200")

@@ -1,0 +1,25 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Search" %}{% endblock %}
+
+{% block body_class %}search{% endblock %}
+
+{% block body %}
+  <form method="get" action="">
+    <div class="form-group">
+      <input type="text" class="form-control" placeholder="Search..." value="{{ q }}" name="q">
+    </div>
+  </form>
+  {% if error %}
+    <div class="alert alert-danger" role="alert">
+      DEV ERROR: {{ error.reason }}
+      <pre>{{ error.response }}</pre>
+    </div>
+  {% endif %}
+  {% for result in results %}
+    <h4><b>{{ result.passage.text.label }}</b> {{ result.passage.refs.start.human_reference }} ({{ result.passage.refs.start.reference }})</h4>
+    <p>{{ result.content }}</p>
+  {% endfor %}
+{% endblock %}
