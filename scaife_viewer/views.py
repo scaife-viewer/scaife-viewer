@@ -175,8 +175,10 @@ def search(request):
             "query": {
                 "bool": {
                     "must": {
-                        "match": {
-                            "content": q,
+                        "simple_query_string": {
+                            "query": q,
+                            "fields": ["content"],
+                            "default_operator": "and",
                         },
                     },
                 },
