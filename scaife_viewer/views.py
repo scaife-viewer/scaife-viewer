@@ -183,7 +183,10 @@ def search(request):
             },
         }
         url = f"{settings.ELASTICSEARCH_URL}/scaife-viewer/text/_search"
-        r = requests.post(url, data=json.dumps(payload))
+        headers = {
+            "Content-Type": "application/json",
+        }
+        r = requests.post(url, data=json.dumps(payload), headers=headers)
         if r.ok:
             data = r.json()
             for hit in data["hits"]["hits"]:
