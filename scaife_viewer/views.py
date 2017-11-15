@@ -1,7 +1,6 @@
-import json
 from http import HTTPStatus
 
-from django.conf import settings
+from django.core.paginator import Paginator
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import render
@@ -9,11 +8,11 @@ from django.utils.safestring import mark_safe
 from django.views.decorators.vary import vary_on_headers
 
 import mimeparse
-import requests
 
 from . import cts
 from .cts.utils import natural_keys as nk
 from .reading.models import ReadingLog
+from .search import SearchQuery
 
 
 def home(request):
@@ -168,45 +167,19 @@ def reader(request, urn):
 
 def search(request):
     q = request.GET.get("q", "")
+    try:
+        page_num = int(request.GET.get("p", 1))
+    except ValueError:
+        page_num = 1
     results = []
-    error = ""
-    if q:
-        payload = {
-            "query": {
-                "simple_query_string": {
-                    "query": q,
-                    "fields": ["content"],
-                    "default_operator": "and",
-                },
-            },
-            "highlight": {
-                "fields": {
-                    "content": {
-                        "type": "fvh",
-                    },
-                },
-            },
-        }
-        url = f"{settings.ELASTICSEARCH_URL}/scaife-viewer/text/_search"
-        headers = {
-            "Content-Type": "application/json",
-        }
-        r = requests.post(url, data=json.dumps(payload), headers=headers)
-        if r.ok:
-            data = r.json()
-            for hit in data["hits"]["hits"]:
-                results.append({
-                    "passage": cts.passage(hit["_id"]),
-                    "content": mark_safe("\n".join(f"<p>{c}</p>" for c in hit["highlight"]["content"])),
-                })
-        else:
-            error = {
-                "reason": f"HTTP {r.status_code} {r.reason}",
-                "response": json.dumps(r.json(), indent=2),
-            }
     ctx = {
         "q": q,
         "results": results,
-        "error": error,
     }
+    if q:
+        paginator = Paginator(SearchQuery(q), 10)
+        ctx.update({
+            "paginator": paginator,
+            "page": paginator.page(page_num),
+        })
     return render(request, "search.html", ctx)

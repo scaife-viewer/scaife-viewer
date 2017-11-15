@@ -18,8 +18,30 @@
       <pre>{{ error.response }}</pre>
     </div>
   {% endif %}
-  {% for result in results %}
-    <h4><b>{{ result.passage.text.label }}</b> {{ result.passage.refs.start.human_reference }} ({{ result.passage.refs.start.reference }})</h4>
-    <p>{{ result.content }}</p>
-  {% endfor %}
+  {% if paginator.count %}
+    <div>Showing <b>{{ page.start_index }}</b>&ndash;<b>{{ page.end_index }}</b> of <b>{{ paginator.count }}</b>; page {{ page.number }} of {{ paginator.num_pages }}</div>
+
+    <ul class="pagination justify-content-center">
+      <li class="page-item{% if not page.has_previous %} disabled{% endif %}">
+        <a class="page-link" href="{% if page.has_previous %}?q={{ q }}&amp;p={{ page.previous_page_number }}{% else %}#{% endif %}" tabindex="-1">Previous</a>
+      </li>
+      <li class="page-item{% if not page.has_next %} disabled{% endif %}">
+        <a class="page-link" href="{% if page.has_next %}?q={{ q }}&amp;p={{ page.next_page_number }}{% else %}#{% endif %}">Next</a>
+      </li>
+    </ul>
+
+    {% for result in page.object_list %}
+      <h4><a href="{{ result.link }}"><b>{{ result.passage.text.label }}</b> {{ result.passage.refs.start.human_reference }} ({{ result.passage.refs.start.reference }})</a></h4>
+      <p>{{ result.content }}</p>
+    {% endfor %}
+
+    <ul class="pagination justify-content-center">
+      <li class="page-item{% if not page.has_previous %} disabled{% endif %}">
+        <a class="page-link" href="{% if page.has_previous %}?q={{ q }}&amp;p={{ page.previous_page_number }}{% else %}#{% endif %}" tabindex="-1">Previous</a>
+      </li>
+      <li class="page-item{% if not page.has_next %} disabled{% endif %}">
+        <a class="page-link" href="{% if page.has_next %}?q={{ q }}&amp;p={{ page.next_page_number }}{% else %}#{% endif %}">Next</a>
+      </li>
+    </ul>
+  {% endif %}
 {% endblock %}
