@@ -179,6 +179,13 @@ def search(request):
                     "default_operator": "and",
                 },
             },
+            "highlight": {
+                "fields": {
+                    "content": {
+                        "type": "fvh",
+                    },
+                },
+            },
         }
         url = f"{settings.ELASTICSEARCH_URL}/scaife-viewer/text/_search"
         headers = {
@@ -190,7 +197,7 @@ def search(request):
             for hit in data["hits"]["hits"]:
                 results.append({
                     "passage": cts.passage(hit["_id"]),
-                    "content": hit["_source"]["content"],
+                    "content": mark_safe("\n".join(f"<p>{c}</p>" for c in hit["highlight"]["content"])),
                 })
         else:
             error = {
