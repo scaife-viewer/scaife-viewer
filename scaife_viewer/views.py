@@ -173,14 +173,10 @@ def search(request):
     if q:
         payload = {
             "query": {
-                "bool": {
-                    "must": {
-                        "simple_query_string": {
-                            "query": q,
-                            "fields": ["content"],
-                            "default_operator": "and",
-                        },
-                    },
+                "simple_query_string": {
+                    "query": q,
+                    "fields": ["content"],
+                    "default_operator": "and",
                 },
             },
         }

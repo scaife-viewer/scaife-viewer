@@ -225,10 +225,11 @@ if resolver == "api":
     }
     CTS_LOCAL_TEXT_INVENTORY = "ti.xml" if DEBUG else None
 elif resolver == "local":
+    CTS_LOCAL_DATA_PATH = os.environ["CTS_LOCAL_DATA_PATH"]
     CTS_RESOLVER = {
         "type": "local",
         "kwargs": {
-            "data_path": os.environ["CTS_LOCAL_DATA_PATH"],
+            "data_path": CTS_LOCAL_DATA_PATH,
         },
     }
 

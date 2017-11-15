@@ -133,7 +133,10 @@ def create_es_index():
                     "analyzer": {
                         "fulltext_analyzer": {
                             "type": "custom",
-                            "tokenizer": "standard",  # https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-standard-tokenizer.html
+                            "tokenizer": "icu_tokenizer",
+                            "filter": [
+                                "icu_folding",
+                            ],
                         },
                     },
                 },
@@ -142,7 +145,10 @@ def create_es_index():
         r = requests.put(**es_req_kwargs(
             f"/{index_name}",
             data=json.dumps(payload),
+            headers={"Content-Type": "application/json"},
         ))
+        if r.status_code >= 400 and r.status_code < 500:
+            raise Exception(r.json())
         r.raise_for_status()
 
 
@@ -190,6 +196,7 @@ def index_text_chunk(chunk: Iterable[str], dry_run: bool):
                 }),
                 json.dumps(doc),
             ])
+        lines.append("")
         r = requests.post(
             **es_req_kwargs(
                 "/_bulk",
