@@ -39,12 +39,14 @@ class Command(BaseCommand):
         parser.add_argument("--urn-prefix")
         parser.add_argument("--chunk-size", type=int, default=100)
         parser.add_argument("--limit", type=int, default=None)
+        parser.add_argument("--delete-index", action="store_true", default=False)
 
     def handle(self, *args, **options):
         max_workers = options["max_workers"]
         dry_run = options["dry_run"]
         urn_prefix = options["urn_prefix"]
         limit = options["limit"]
+        delete_index = options["delete_index"]
 
         with CodeTimer() as timer:
             self.index_texts(
@@ -53,12 +55,15 @@ class Command(BaseCommand):
                 urn_prefix,
                 limit,
                 options["chunk_size"],
+                delete_index,
             )
         elapsed = timer.elapsed.quantize(Decimal("0.00"))
         print(f"Finished in {elapsed}s")
 
-    def index_texts(self, num_workers, dry_run, urn_prefix, limit, chunk_size):
+    def index_texts(self, num_workers, dry_run, urn_prefix, limit, chunk_size, delete_index):
         if not dry_run:
+            if delete_index:
+                delete_es_index()
             create_es_index()
         cts.TextInventory.load()
         print("Text inventory loaded")
@@ -105,12 +110,23 @@ def passage_urns_from_text(text):
     return urns
 
 
+def es_index_exists():
+    index_name = "scaife-viewer"
+    r = requests.get(**es_req_kwargs(f"/{index_name}"))
+    return r.ok
+
+
+def delete_es_index():
+    index_name = "scaife-viewer"
+    if es_index_exists():
+        requests.delete(**es_req_kwargs(f"/{index_name}"))
+
+
 def create_es_index():
     index_name = "scaife-viewer"
     doc_type = "text"
 
-    r = requests.get(**es_req_kwargs(f"/{index_name}"))
-    if r.status_code == 404:
+    if not es_index_exists():
         payload = {
             "mappings": {
                 doc_type: {
