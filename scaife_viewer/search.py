@@ -1,6 +1,7 @@
+from operator import itemgetter
+
 from django.conf import settings
 from django.core.urlresolvers import reverse
-from django.utils.safestring import mark_safe
 
 from elasticsearch import Elasticsearch
 
@@ -42,6 +43,13 @@ class SearchQuery:
                     },
                 },
                 "query": self.query(),
+                "aggs": {
+                    "filtered_text_groups": {
+                        "terms": {
+                            "field": "text_group",
+                        },
+                    },
+                },
             },
             "size": size,
             "from_": offset,
@@ -49,18 +57,7 @@ class SearchQuery:
         }
 
     def search_window(self, size, offset):
-        response = es.search(**self.search_kwargs(size, offset))
-        for hit in response["hits"]["hits"]:
-            yield self.result(hit)
-
-    def result(self, hit):
-        passage = cts.passage(hit["_id"])
-        link_urn = passage.urn  # @@@ consider dynamically chunking and giving a better passage URN
-        return {
-            "passage": passage,
-            "content": hit["highlight"]["content"],
-            "link": reverse("reader", kwargs={"urn": link_urn}),
-        }
+        return SearchResultSet(es.search(**self.search_kwargs(size, offset)))
 
     def count(self):
         if self.total_count is None:
@@ -73,5 +70,33 @@ class SearchQuery:
     def __getitem__(self, key):
         if isinstance(key, slice):
             size = len(range(*key.indices(self.total_count)))
-            return list(self.search_window(size, key.start))
+            return self.search_window(size, key.start)
         raise NotImplementedError()
+
+
+class SearchResultSet:
+
+    def __init__(self, response):
+        self.response = response
+
+    def __iter__(self):
+        for hit in self.response["hits"]["hits"]:
+            yield self.result(hit)
+
+    def result(self, hit):
+        passage = cts.passage(hit["_id"])
+        link_urn = passage.urn  # @@@ consider dynamically chunking and giving a better passage URN
+        return {
+            "passage": passage,
+            "content": hit["highlight"]["content"],
+            "link": reverse("reader", kwargs={"urn": link_urn}),
+        }
+
+    def filtered_text_groups(self):
+        buckets = []
+        for bucket in self.response["aggregations"]["filtered_text_groups"]["buckets"]:
+            buckets.append({
+                "text_group": cts.collection(bucket["key"]),
+                "count": bucket["doc_count"],
+            })
+        return sorted(buckets, key=itemgetter("count"), reverse=True)
