@@ -1,4 +1,25 @@
 body.search {
+
+  .search-guide {
+    h3 {
+      font-family: 'Noto Sans';
+      font-size: 14px;
+      margin: 0 0 0.5em;
+      color: $gray-600;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+    }
+    margin: 50px 0;
+    background: $gray-100;
+    padding: 15px 20px;
+    font-size: 14px;
+    line-height: 24px;
+    color: $gray-700;
+    kbd {
+      background: $gray-800;
+    }
+  }
+
   .passage-heading {
     font-family: 'Noto Serif';
     h2 {
