@@ -8,6 +8,7 @@
 
 {% block site_brand %}{% endblock %}
 {% block navbar-toggler %}{% endblock %}
+{% block search_nav %}{% endblock %}
 
 {% block body_base %}
 
@@ -18,6 +19,7 @@
 
     <p>
       <a class="btn btn-primary" href="{% url 'library' %}">Browse Library</a>
+      <a class="btn btn-secondary" href="{% url 'search' %}">Search</a>
     </p>
   </section>
 
