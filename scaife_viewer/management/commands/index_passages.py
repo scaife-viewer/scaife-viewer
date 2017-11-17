@@ -131,6 +131,15 @@ def create_es_index():
             "mappings": {
                 doc_type: {
                     "properties": {
+                        "urn": {
+                            "type": "keyword",
+                        },
+                        "text_group": {
+                            "type": "keyword",
+                        },
+                        "work": {
+                            "type": "keyword",
+                        },
                         "content": {
                             "type": "text",
                             "term_vector": "with_positions_offsets",
@@ -189,6 +198,8 @@ def index_text_chunk(chunk: Iterable[str], dry_run: bool):
             continue
         doc = {
             "urn": urn,
+            "text_group": str(passage.text.urn.upTo(cts.URN.TEXTGROUP)),
+            "work": str(passage.text.urn.upTo(cts.URN.WORK)),
             "text": {
                 "urn": str(passage.text.urn),
                 "label": passage.text.label,
