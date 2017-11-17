@@ -1,3 +1,28 @@
-.search em {
-  background-color: yellow;
+body.search {
+  .passage-heading {
+    font-family: 'Noto Serif';
+    h2 {
+      margin: 0 0 0.5rem;
+      font-size: 16px;
+      line-height: 24px;
+      font-weight: normal;
+    }
+  }
+  em {
+    background-color: lighten(yellow, 20%);
+    font-style: normal;
+  }
+  div.result {
+    margin-bottom: 1rem;
+  }
+  div.result:not(:last-of-type) {
+    border-bottom: 1px solid $gray-400;
+  }
+  div.content {
+    p {
+      font-family: 'Noto Serif';
+      font-size: 20px;
+      line-height: 1.8;
+    }
+  }
 }

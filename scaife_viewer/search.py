@@ -58,7 +58,7 @@ class SearchQuery:
         link_urn = passage.urn  # @@@ consider dynamically chunking and giving a better passage URN
         return {
             "passage": passage,
-            "content": mark_safe("\n".join(f"<p>{c}</p>" for c in hit["highlight"]["content"])),
+            "content": hit["highlight"]["content"],
             "link": reverse("reader", kwargs={"urn": link_urn}),
         }
 
