@@ -285,7 +285,9 @@
   <xsl:template match="t:name/t:reg"></xsl:template>
   <xsl:template match="t:name/t:placeName"><span class="placeName"><xsl:apply-templates/></span></xsl:template>
 
-  <xsl:template match="t:lb" />
+  <xsl:template match="t:lb">
+    <br/>
+  </xsl:template>
 
   <xsl:template match="t:ex">
   	<span class="ex">
@@ -314,17 +316,27 @@
   </xsl:template>
 
   <xsl:template match="t:head">
+    <div class="head">
+      <xsl:apply-templates/>
+    </div>
   </xsl:template>
 
   <xsl:template match="t:sp">
-    <section class="speak">
+    <div class="speak">
       <xsl:if test="./t:speaker">
         <em><xsl:value-of select="./t:speaker/text()" /></em>
       </xsl:if>
-      <ol>
-        <xsl:apply-templates select="./t:l"/>
-      </ol>
-    </section>
+      <xsl:choose>
+        <xsl:when test="./t:l">
+          <ol>
+            <xsl:apply-templates select="./t:l"/>
+          </ol>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </div>
   </xsl:template>
 
   <xsl:template match="t:supplied">

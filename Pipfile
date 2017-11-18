@@ -1,29 +1,36 @@
 [[source]]
+
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 
+
 [requires]
+
 python_version = "3.6"
+
 
 [packages]
 
-"django-user-accounts" = "*"
-"pinax-webanalytics" = "*"
-"pinax-eventlog" = "*"
+django-user-accounts = "*"
+pinax-webanalytics = "*"
+pinax-eventlog = "*"
 django = "*"
-"pinax-theme-bootstrap" = "*"
+pinax-theme-bootstrap = "*"
 mycapytain = "*"
 gunicorn = "*"
 whitenoise = "*"
 "psycopg2" = "*"
-"dj-database-url" = "*"
+dj-database-url = "*"
 raven = "*"
-"python-mimeparse" = "*"
-"google-auth" = "*"
+python-mimeparse = "*"
+google-auth = "*"
 opentracing = {git="https://github.com/opentracing/opentracing-python.git", editable=true}
 basictracer = {git="https://github.com/opentracing/basictracer-python.git", editable=true}
 wrapt = "*"
 anytree = "*"
+honcho = "*"
+elasticsearch = ">=6.0.0"
+
 
 [dev-packages]
 

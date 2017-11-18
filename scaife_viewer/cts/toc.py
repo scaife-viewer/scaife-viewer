@@ -33,7 +33,8 @@ class RefTree:
         #   reff = "1.2"
         #   -> [[("book", "1"), ("line", "2")], ...]
         mapped = list(zip_longest(
-            map(attrgetter("name"), self.citations),
+            # MyCapytain bugish: citation name could be None (should always be a string)
+            map(str, map(attrgetter("name"), self.citations)),
             reff.split("."),
         ))
         ancestors, leaf = mapped[:-1], mapped[-1]

@@ -2,8 +2,9 @@ from functools import lru_cache
 
 import anytree
 from lxml import etree
+from MyCapytain.common.constants import Mimetypes
 
-from .capitains import resolver
+from .capitains import default_resolver
 from .reference import URN
 
 
@@ -42,7 +43,8 @@ class Passage:
 
     @lru_cache()
     def textual_node(self):
-        return resolver.getTextualNode(self.text.urn, subreference=self.reference)
+        # MyCapytain bug: local resolver getTextualNode can't take a Reference
+        return default_resolver().getTextualNode(self.text.urn, subreference=str(self.reference))
 
     @property
     def refs(self):
@@ -52,6 +54,10 @@ class Passage:
         if self.reference.end:
             ref_range["end"] = self.text.toc().lookup(str(self.reference.end))
         return ref_range
+
+    @property
+    def content(self):
+        return self.textual_node().export(Mimetypes.PLAINTEXT)
 
     def next(self):
         reference = self.textual_node().nextId

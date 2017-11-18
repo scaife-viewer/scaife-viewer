@@ -1,16 +1,18 @@
 from http import HTTPStatus
 
+from django.core.paginator import Paginator
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, JsonResponse, Http404
-from django.shortcuts import redirect, render
-from django.views.decorators.vary import vary_on_headers
+from django.http import Http404, HttpResponse, JsonResponse
+from django.shortcuts import render
 from django.utils.safestring import mark_safe
+from django.views.decorators.vary import vary_on_headers
 
 import mimeparse
 
 from . import cts
 from .cts.utils import natural_keys as nk
 from .reading.models import ReadingLog
+from .search import SearchQuery
 
 
 def home(request):
@@ -161,3 +163,23 @@ def reader(request, urn):
         if right_version and right_passage:
             ReadingLog.objects.create(user=request.user, urn=right_urn)
     return response
+
+
+def search(request):
+    q = request.GET.get("q", "")
+    try:
+        page_num = int(request.GET.get("p", 1))
+    except ValueError:
+        page_num = 1
+    results = []
+    ctx = {
+        "q": q,
+        "results": results,
+    }
+    if q:
+        paginator = Paginator(SearchQuery(q), 10)
+        ctx.update({
+            "paginator": paginator,
+            "page": paginator.page(page_num),
+        })
+    return render(request, "search.html", ctx)
