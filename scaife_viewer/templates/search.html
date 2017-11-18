@@ -41,15 +41,17 @@
   </form>
   <div class="row">
     <div class="col-sm-3">
-      <h5>Text Groups</h5>
-      <ul class="list-group">
-        {% for ftg in page.object_list.filtered_text_groups %}
-          <li class="list-group-item d-flex justify-content-between align-items-center">
-            {{ ftg.text_group.label }}
-            <span class="badge badge-primary badge-pill">{{ ftg.count }}</span>
-          </li>
-        {% endfor %}
-      </ul>
+      {% if page.object_list.filtered_text_groups %}
+        <h5>Text Groups</h5>
+        <ul class="list-group">
+          {% for ftg in page.object_list.filtered_text_groups %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              {{ ftg.text_group.label }}
+              <span class="badge badge-primary badge-pill">{{ ftg.count }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
     </div>
     <div class="col-sm-9">
       {% if error %}
