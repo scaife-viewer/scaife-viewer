@@ -1,9 +1,10 @@
 import json
 import os
-import re
 import subprocess
 import sys
+from urllib.parse import urlparse
 
+from django.conf import settings
 from django.core.management.base import BaseCommand
 
 import requests
@@ -21,31 +22,22 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        repos = {
-            "PerseusDL/canonical-latinLit": "master",
-            "PerseusDL/canonical-greekLit": "master",
-            "OpenGreekAndLatin/csel-dev": "master",
-            "PerseusDL/canonical-farsiLit": "master",
-            "PerseusDL/canonical-pdlpsci": "master",
-            "PerseusDL/canonical-pdlrefwk": "master",
-            "OpenGreekAndLatin/First1KGreek": "master",
-            "lascivaroma/priapeia": "master",
-            "hlapin/ancJewLitCTS": "master",
-        }
-        resolved = {}
+        repos = load_repo_list()
         root_dir = options["path"]
-        for repo, ref in repos.items():
-            sha = resolve_commit(repo, ref)
+        for repo, sha in repos.items():
             load_repo(
                 f"https://api.github.com/repos/{repo}/tarball/{sha}",
                 os.path.join(root_dir, "data"),
             )
-            resolved[repo] = sha
-            print(f"Loaded {repo} at {ref} to {sha}")
+            print(f"Loaded {repo} to {sha}")
             sys.stdout.flush()
 
-        with open(os.path.join(root_dir, "repos.json"), "w") as f:
-            f.write(json.dumps(resolved))
+
+def load_repo_list():
+    parsed = urlparse(settings.CTS_API_ENDPOINT)
+    r = requests.get(f"{parsed.scheme}://{parsed.netloc}/repos")
+    r.raise_for_status()
+    return r.json()
 
 
 def load_repo(tarball_url, dest):
@@ -62,25 +54,3 @@ def load_repo(tarball_url, dest):
     os.close(w)
 
     proc.wait()
-
-
-def resolve_commit(repo, ref):
-    if re.match(r"^[a-f0-9]{40}$", ref):
-        return ref
-    ref_url = f"https://api.github.com/repos/{repo}/git/refs/heads/{ref}"
-    headers = {
-        "Accept": "application/vnd.github.v3+json",
-    }
-    resp = requests.get(ref_url, headers=headers)
-    if resp.status_code == 404:
-        tag_url = f"https://api.github.com/repos/{repo}/git/tags/{ref}"
-        resp = requests.get(tag_url, headers=headers)
-        if resp.status_code == 404:
-            raise Exception(f"{repo}: ref ({ref}) not found")
-        else:
-            resp.raise_for_status()
-            ref_obj = resp.json()["object"]
-    else:
-        resp.raise_for_status()
-        ref_obj = resp.json()["object"]
-    return ref_obj["sha"]
