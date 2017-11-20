@@ -7,15 +7,14 @@ RUN npm run build:prod
 
 FROM python:3.6-alpine3.6 AS build
 WORKDIR /opt/scaife-viewer/src/
+RUN pip --no-cache-dir --disable-pip-version-check install pipenv
 ENV PATH="/opt/scaife-viewer/bin:${PATH}" VIRTUAL_ENV="/opt/scaife-viewer"
-RUN pip --no-cache-dir --disable-pip-version-check install --upgrade pip setuptools wheel pipenv
 COPY Pipfile Pipfile.lock /opt/scaife-viewer/src/
 RUN set -x \
-    && python -m venv /opt/scaife-viewer \
+    && virtualenv /opt/scaife-viewer \
     && apk --no-cache add \
         build-base curl git libxml2-dev libxslt-dev postgresql-dev linux-headers \
-    && pipenv lock --requirements > requirements.txt \
-    && pip install -r requirements.txt
+    && pipenv install --deploy
 
 FROM python:3.6-alpine3.6
 ENV PYTHONUNBUFFERED 1
