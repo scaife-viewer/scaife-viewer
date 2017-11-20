@@ -7,8 +7,8 @@ RUN npm run build:prod
 
 FROM python:3.6-alpine3.6 AS build
 WORKDIR /opt/scaife-viewer/src/
-ENV PATH="/opt/scaife-viewer/bin:${PATH}" VIRTUAL_ENV="/opt/scaife-viewer"
 RUN pip --no-cache-dir --disable-pip-version-check install --upgrade pip setuptools wheel pipenv
+ENV PATH="/opt/scaife-viewer/bin:${PATH}" VIRTUAL_ENV="/opt/scaife-viewer"
 COPY Pipfile Pipfile.lock /opt/scaife-viewer/src/
 RUN set -x \
     && python -m venv /opt/scaife-viewer \
