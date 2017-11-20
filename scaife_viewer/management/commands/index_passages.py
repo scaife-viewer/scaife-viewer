@@ -12,11 +12,11 @@ from itertools import chain, islice, zip_longest
 from operator import attrgetter
 from typing import Iterable
 
-from django.conf import settings
-from django.core.management.base import BaseCommand
-
+import google.cloud.pubsub
 import requests
 from anytree.iterators import PreOrderIter
+from django.conf import settings
+from django.core.management.base import BaseCommand
 
 from ... import cts
 
@@ -40,6 +40,7 @@ class Command(BaseCommand):
         parser.add_argument("--chunk-size", type=int, default=100)
         parser.add_argument("--limit", type=int, default=None)
         parser.add_argument("--delete-index", action="store_true", default=False)
+        parser.add_argument("--pusher", type=str, default="elasticsearch")
 
     def handle(self, *args, **options):
         max_workers = options["max_workers"]
@@ -47,6 +48,11 @@ class Command(BaseCommand):
         urn_prefix = options["urn_prefix"]
         limit = options["limit"]
         delete_index = options["delete_index"]
+
+        if options["pusher"] == "elasticsearch":
+            pusher = ElasticsearchPushMode()
+        if options["pusher"] == "pubsub":
+            pusher = GooglePubSubPushMode()
 
         with CodeTimer() as timer:
             self.index_texts(
@@ -56,15 +62,16 @@ class Command(BaseCommand):
                 limit,
                 options["chunk_size"],
                 delete_index,
+                pusher,
             )
         elapsed = timer.elapsed.quantize(Decimal("0.00"))
         print(f"Finished in {elapsed}s")
 
-    def index_texts(self, num_workers, dry_run, urn_prefix, limit, chunk_size, delete_index):
-        if not dry_run:
-            if delete_index:
-                delete_es_index()
-            create_es_index()
+    def index_texts(self, num_workers, dry_run, urn_prefix, limit, chunk_size, delete_index, pusher):
+        # if not dry_run:
+        #     if delete_index:
+        #         delete_es_index()
+        #     create_es_index()
         cts.TextInventory.load()
         print("Text inventory loaded")
         with concurrent.futures.ProcessPoolExecutor(max_workers=num_workers) as executor:
@@ -75,7 +82,7 @@ class Command(BaseCommand):
                 urns = islice(urns, limit)
             urns = list(urns)
             print(f"Indexing {len(urns)} passages")
-            indexer = partial(index_text_chunk, dry_run=dry_run)
+            indexer = partial(index_text_chunk, dry_run=dry_run, pusher=pusher)
             consume(executor.map(indexer, chunker(urns, chunk_size)))
 
     def texts(self, urn_prefix):
@@ -182,11 +189,37 @@ def log(msg):
     print(f"[pid={pid}] {msg}")
 
 
-def index_text_chunk(chunk: Iterable[str], dry_run: bool):
-    index_name = "scaife-viewer"
-    doc_type = "text"
-    docs = []
+class ElasticsearchPushMode:
 
+    def __init__(self):
+        pass
+
+    def push(self):
+        pass
+
+
+class GooglePubSubPushMode:
+
+    def __init__(self):
+        self.topic_path = f"projects/ec-perseus/topics/indexer-dev-documents"
+
+    @property
+    def publisher(self):
+        if not hasattr(self, "_publisher"):
+            self._publisher = google.cloud.pubsub.PublisherClient()
+        return self._publisher
+
+    def push(self, doc):
+        self.publisher.publish(self.topic_path, json.dumps(doc).encode("utf-8"))
+
+    def __getstate__(self):
+        s = self.__dict__.copy()
+        if "_publisher" in s:
+            del s["_publisher"]
+        return s
+
+
+def index_text_chunk(chunk: Iterable[str], dry_run: bool, pusher):
     for urn in chunk:
         try:
             passage = cts.passage(urn)
@@ -206,38 +239,10 @@ def index_text_chunk(chunk: Iterable[str], dry_run: bool):
                 "description": passage.text.description,
             },
             "reference": str(passage.reference),
-            "content": passage.content,
+            "content": passage.content,  # CPU intensive
         }
-        docs.append(doc)
-
-    if not dry_run:
-        lines = []
-        for doc in docs:
-            lines.extend([
-                json.dumps({
-                    "index": {
-                        "_index": index_name,
-                        "_type": doc_type,
-                        "_id": doc["urn"],
-                    },
-                }),
-                json.dumps(doc),
-            ])
-        lines.append("")
-        r = requests.post(
-            **es_req_kwargs(
-                "/_bulk",
-                data="\n".join(lines).encode("utf-8"),
-                headers={
-                    "Content-Type": "application/x-ndjson",
-                },
-            ),
-        )
-        if r.status_code == 400:
-            print(r.json())
-        r.raise_for_status()
-
-    # log(f"Indexed {len(docs)} passages")
+        if not dry_run:
+            pusher.push(doc)
 
 
 def es_req_kwargs(path, **kwargs):

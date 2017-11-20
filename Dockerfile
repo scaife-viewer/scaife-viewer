@@ -13,7 +13,7 @@ COPY Pipfile Pipfile.lock /opt/scaife-viewer/src/
 RUN set -x \
     && python -m venv /opt/scaife-viewer \
     && apk --no-cache add \
-        build-base curl git libxml2-dev libxslt-dev postgresql-dev \
+        build-base curl git libxml2-dev libxslt-dev postgresql-dev linux-headers \
     && pipenv install --deploy
 
 FROM python:3.6-alpine3.6
