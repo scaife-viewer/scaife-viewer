@@ -19,13 +19,15 @@ class Command(BaseCommand):
         parser.add_argument("--limit", type=int, default=None)
         parser.add_argument("--delete-index", action="store_true", default=False)
         parser.add_argument("--pusher", type=str, default="direct")
+        parser.add_argument("--pubsub-project")
+        parser.add_argument("--pubsub-topic")
 
     def handle(self, *args, **options):
         executor = concurrent.futures.ProcessPoolExecutor(max_workers=options["max_workers"])
         if options["pusher"] == "direct":
             pusher = DirectPusher()
         elif options["pusher"] == "pubsub":
-            pusher = PubSubPusher()
+            pusher = PubSubPusher(options["pubsub_project"], options["pubsub_topic"])
         indexer = Indexer(
             executor, pusher,
             urn_prefix=options["urn_prefix"],
