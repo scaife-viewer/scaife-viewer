@@ -2,6 +2,12 @@
 
 set -ex
 
+# seed data
+export CTS_RESOLVER=api CTS_API_ENDPOINT=https://perseus-cts-dev.eu1.eldarioncloud.com/api/cts
+python manage.py load_text_repos
+
+export CTS_RESOLVER=local
+mkdir -p "$CTS_LOCAL_DATA_PATH"
 python manage.py indexer \
     --pusher=pubsub \
     --pubsub-project=ec-perseus \
