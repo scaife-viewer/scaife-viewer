@@ -3,7 +3,7 @@
 set -ex
 
 # seed data
-export CTS_RESOLVER=api CTS_API_ENDPOINT=https://perseus-cts-dev.eu1.eldarioncloud.com/api/cts
+export CTS_RESOLVER=api
 python manage.py load_text_repos
 
 export CTS_RESOLVER=local
