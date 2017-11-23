@@ -104,6 +104,13 @@ class Passage:
             "urn": str(self.urn),
             "text": {
                 "label": self.text.label,
+                "ancestors": [
+                    {
+                        "urn": str(ancestor.urn),
+                        "label": ancestor.label,
+                    }
+                    for ancestor in self.text.ancestors()
+                ]
             },
             "text_html": str(self.render()),
             "refs": refs,

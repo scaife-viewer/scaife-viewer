@@ -9,13 +9,8 @@
       <button id="right-sidebar-toggle" :class="[{ open: sidebarRightOpened }]" @click="toggleSidebar('right')"><i></i></button>
       <div class="passage-heading">
         <a href="/">Library &gt;</a>
-        <h3>
-          {{ primaryPassage.refs.start.human_reference }}
-          <template v-if="primaryPassage.refs.end">
-            to {{ primaryPassage.refs.end.human_reference }}
-          </template>
-          ({{ primaryPassage.refs.start.reference }}<template v-if="primaryPassage.refs.end">&ndash; {{ primaryPassage.refs.end.reference }}</template>)
-        </h3>
+        <h1><a v-for="breadcrumb in primaryPassage.text.ancestors" :key="breadcrumb.urn" href="#">{{ breadcrumb.label }}</a></h1>
+        <h3><passage-human-reference :passage="primaryPassage"></passage-human-reference></h3>
         <div id="overall" class="overall">
           <div class="text" v-html="primaryPassage.text_html"></div>
         </div>
@@ -37,6 +32,7 @@
 <script>
 import { mapState } from 'vuex';
 import store from '../store';
+import PassageHumanReference from './PassageHumanReference';
 
 export default {
   store,
@@ -81,6 +77,9 @@ export default {
         default:
       }
     },
+  },
+  components: {
+    PassageHumanReference,
   },
 };
 </script>

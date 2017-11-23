@@ -10,6 +10,9 @@ body.reader {
       a {
         color: inherit;
       }
+      a:not(:last-child):after {
+        content: ", ";
+      }
     }
     h2 {
       margin: 0;
