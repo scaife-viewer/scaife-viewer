@@ -217,18 +217,20 @@ SECURE_SSL_REDIRECT = bool(int(os.environ.get("SECURE_SSL_REDIRECT", "0")))
 
 resolver = os.environ.get("CTS_RESOLVER", "api")
 if resolver == "api":
+    CTS_API_ENDPOINT = os.environ.get("CTS_API_ENDPOINT", "https://perseus-cts.eu1.eldarioncloud.com/api/cts")
     CTS_RESOLVER = {
         "type": "api",
         "kwargs": {
-            "endpoint": os.environ.get("CTS_API_ENDPOINT", "https://perseus-cts.eu1.eldarioncloud.com/api/cts"),
+            "endpoint": CTS_API_ENDPOINT,
         },
     }
     CTS_LOCAL_TEXT_INVENTORY = "ti.xml" if DEBUG else None
 elif resolver == "local":
+    CTS_LOCAL_DATA_PATH = os.environ["CTS_LOCAL_DATA_PATH"]
     CTS_RESOLVER = {
         "type": "local",
         "kwargs": {
-            "data_path": os.environ["CTS_LOCAL_DATA_PATH"],
+            "data_path": CTS_LOCAL_DATA_PATH,
         },
     }
 
@@ -238,3 +240,4 @@ if "SENTRY_DSN" in os.environ:
     }
 
 TRACING_ENABLED = bool(int(os.environ.get("TRACING_ENABLED", not DEBUG)))
+ELASTICSEARCH_URL = os.environ.get("ELASTICSEARCH_URL", "http://localhost:9200")

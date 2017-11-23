@@ -1,4 +1,5 @@
-from django.http import Http404, HttpResponse, JsonResponse
+from django.core.paginator import Paginator
+from django.http import Http404, JsonResponse
 from django.shortcuts import render
 from django.utils.safestring import mark_safe
 from django.views import View
@@ -6,6 +7,7 @@ from django.views import View
 from . import cts
 from .cts.utils import natural_keys as nk
 from .reading.models import ReadingLog
+from .search import SearchQuery
 from .utils import apify
 
 
@@ -152,6 +154,26 @@ def reader(request, urn):
     response = render(request, "reader/reader.html", ctx)
     if request.user.is_authenticated():
         ReadingLog.objects.create(user=request.user, urn=urn)
-        if right_passage:
+        if right_version and right_passage:
             ReadingLog.objects.create(user=request.user, urn=right_urn)
     return response
+
+
+def search(request):
+    q = request.GET.get("q", "")
+    try:
+        page_num = int(request.GET.get("p", 1))
+    except ValueError:
+        page_num = 1
+    results = []
+    ctx = {
+        "q": q,
+        "results": results,
+    }
+    if q:
+        paginator = Paginator(SearchQuery(q), 10)
+        ctx.update({
+            "paginator": paginator,
+            "page": paginator.page(page_num),
+        })
+    return render(request, "search.html", ctx)

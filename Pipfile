@@ -29,6 +29,7 @@ basictracer = {git="https://github.com/opentracing/basictracer-python.git", edit
 wrapt = "*"
 anytree = "*"
 honcho = "*"
+elasticsearch = ">=6.0.0"
 
 
 [dev-packages]

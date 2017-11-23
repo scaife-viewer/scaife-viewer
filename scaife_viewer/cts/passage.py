@@ -2,6 +2,7 @@ from functools import lru_cache
 
 import anytree
 from lxml import etree
+from MyCapytain.common.constants import Mimetypes
 
 from .capitains import default_resolver
 from .reference import URN
@@ -53,6 +54,10 @@ class Passage:
         if self.reference.end:
             ref_range["end"] = self.text.toc().lookup(str(self.reference.end))
         return ref_range
+
+    @property
+    def content(self):
+        return self.textual_node().export(Mimetypes.PLAINTEXT)
 
     def next(self):
         reference = self.textual_node().nextId

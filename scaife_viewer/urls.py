@@ -10,7 +10,8 @@ from .views import (
     LibraryView,
     home,
     profile,
-    reader
+    reader,
+    search
 )
 
 urlpatterns = [
@@ -25,6 +26,7 @@ urlpatterns = [
     url(r"^library/(?P<urn>[^/]+)/json/$", LibraryCollectionView.as_view(format="json"), name="library_collection_json"),
     url(r"^reader/(?P<urn>urn:[^/]+)/$", reader, name="reader"),
     url(r"^profile/$", profile, name="profile"),
+    url(r"^search/$", search, name="search"),
     url(r"^reading/", include("scaife_viewer.reading.urls")),
 ]
 

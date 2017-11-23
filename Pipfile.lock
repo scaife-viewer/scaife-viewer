@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "4a5146a74a75ab1d2d91204743632934a7e7900473321e9b0c7804e0c4790e39"
+            "sha256": "3141e262444276e33fd165c35bd55199f268f690cd9f13ae505a07f2324a4563"
         },
         "host-environment-markers": {
             "implementation_name": "cpython",
@@ -36,8 +36,7 @@
         },
         "basictracer": {
             "editable": true,
-            "git": "https://github.com/opentracing/basictracer-python.git",
-            "ref": "7cd6fa73bb467a3b75db76fc3f23f07d745d1198"
+            "git": "https://github.com/opentracing/basictracer-python.git"
         },
         "cachetools": {
             "hashes": [
@@ -94,25 +93,25 @@
             ],
             "version": "==2.0.3"
         },
+        "elasticsearch": {
+            "hashes": [
+                "sha256:f8b9910ac0e336422c3c488ff53f21ba4c39f46e76b9cf1f81257d02052667c9",
+                "sha256:9fd6fe01d5f992666674f6089ff2ec4917ec64ed7dcd7e109cdf95f406303809"
+            ],
+            "version": "==6.0.0"
+        },
         "future": {
             "hashes": [
                 "sha256:e39ced1ab767b5936646cedba8bcce582398233d6a627067d4c6a454c90cfedb"
             ],
             "version": "==0.16.0"
         },
-        "futures": {
-            "hashes": [
-                "sha256:c4884a65654a7c45435063e14ae85280eb1f111d94e542396717ba9828c4337f",
-                "sha256:51ecb45f0add83c806c68e4b06106f90db260585b25ef2abfcda0bd95c0132fd"
-            ],
-            "version": "==3.1.1"
-        },
         "google-auth": {
             "hashes": [
-                "sha256:8d8e15e6a890a0b5c71ea9d9422b173a2e494b91ed8801be96a3bf9fdb0a5d89",
-                "sha256:ca0c13207fcd10fbf7f99ef4caef590f2974189d8af39f68e3495e6ca7d847af"
+                "sha256:bb2518ee45fa184678e0d6424215c67b5c2ea46e5093ecc05b063b9f4a894b99",
+                "sha256:7170435cf6aa451be7e96120b9e37e8dbc59d3e8f3bab5b57a8fabbb29bf3810"
             ],
-            "version": "==1.2.0"
+            "version": "==1.2.1"
         },
         "gunicorn": {
             "hashes": [
@@ -190,8 +189,7 @@
         },
         "opentracing": {
             "editable": true,
-            "git": "https://github.com/opentracing/opentracing-python.git",
-            "ref": "6bc47b1f5a7626c67e296c4c7f32dedce851ba71"
+            "git": "https://github.com/opentracing/opentracing-python.git"
         },
         "pinax-eventlog": {
             "hashes": [
