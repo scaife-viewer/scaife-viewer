@@ -103,6 +103,7 @@ class Passage:
         o = {
             "urn": str(self.urn),
             "text": {
+                "urn": str(self.text.urn),
                 "label": self.text.label,
                 "ancestors": [
                     {

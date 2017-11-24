@@ -9,7 +9,7 @@
       <button id="right-sidebar-toggle" :class="[{ open: sidebarRightOpened }]" @click="toggleSidebar('right')"><i></i></button>
       <div class="passage-heading">
         <a href="/">Library &gt;</a>
-        <h1><a v-for="breadcrumb in primaryPassage.text.ancestors" :key="breadcrumb.urn" href="#">{{ breadcrumb.label }}</a></h1>
+        <h1><a v-for="breadcrumb in primaryPassage.text.ancestors" :key="breadcrumb.urn" :href="breadcrumb.url">{{ breadcrumb.label }}</a></h1>
         <h3><passage-human-reference :passage="primaryPassage"></passage-human-reference></h3>
         <div id="overall" class="overall">
           <div class="text" v-html="primaryPassage.text_html"></div>

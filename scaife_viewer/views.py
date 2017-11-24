@@ -91,7 +91,7 @@ class LibraryPassageView(View):
             passage = cts.passage(urn)
         except cts.PassageDoesNotExist:
             raise Http404()
-        return JsonResponse(passage.as_json())
+        return JsonResponse(apify(passage))
 
 
 def reader(request, urn):

@@ -3,62 +3,57 @@ from django.core.urlresolvers import reverse
 from . import cts
 
 
-def apify(collection):
-    remaining_collection = collection.as_json()
+def link_collection(urn) -> dict:
+    return {
+        "url": reverse("library_collection", kwargs={"urn": urn}),
+        "json_url": reverse("library_collection_json", kwargs={"urn": urn})
+    }
+
+
+def link_passage(urn) -> dict:
+    return {
+        "url": reverse("reader", kwargs={"urn": urn}),
+        "json_url": reverse("library_passage_json", kwargs={"urn": urn}),
+    }
+
+
+def apify(obj):
+    remaining = obj.as_json()
     rels = {}
-    if isinstance(collection, cts.TextGroup):
-        works = remaining_collection.pop("works")
+    if isinstance(obj, cts.TextGroup):
+        works = remaining.pop("works")
         rels = {
-            "works": [
-                {
-                    "url": reverse("library_collection", kwargs={"urn": work["urn"]}),
-                    "json_url": reverse("library_collection_json", kwargs={"urn": work["urn"]}),
-                    **work
-                }
-                for work in works
-            ],
+            "works": [{**link_collection(work["urn"]), **work} for work in works],
         }
-    if isinstance(collection, cts.Work):
-        texts = remaining_collection.pop("texts")
+    if isinstance(obj, cts.Work):
+        texts = remaining.pop("texts")
         rels = {
-            "texts": [
-                {
-                    "url": reverse("library_collection", kwargs={"urn": text["urn"]}),
-                    "json_url": reverse("library_collection_json", kwargs={"urn": text["urn"]}),
-                    **text
-                }
-                for text in texts
-            ],
+            "texts": [{**link_collection(text["urn"]), **text} for text in texts],
         }
-    if isinstance(collection, cts.Text):
-        first_passage = remaining_collection.pop("first_passage")
-        ancestors = remaining_collection.pop("ancestors")
-        toc = remaining_collection.pop("toc")
+    if isinstance(obj, cts.Text):
+        first_passage = remaining.pop("first_passage")
+        ancestors = remaining.pop("ancestors")
+        toc = remaining.pop("toc")
         rels = {
-            "first_passage": {
-                "url": reverse("reader", kwargs={"urn": first_passage["urn"]}),
-                "json_url": reverse("library_passage_json", kwargs={"urn": first_passage["urn"]}),
-                **first_passage
-            },
-            "ancestors": [
-                {
-                    "url": reverse("library_collection", kwargs={"urn": ancestor["urn"]}),
-                    "json_url": reverse("library_collection_json", kwargs={"urn": ancestor["urn"]}),
-                }
-                for ancestor in ancestors
-            ],
-            "toc": [
-                {
-                    "url": reverse("reader", kwargs={"urn": entry["urn"]}),
-                    "json_url": reverse("library_passage_json", kwargs={"urn": entry["urn"]}),
-                    **entry
-                }
-                for entry in toc
-            ],
+            "first_passage": {**link_passage(first_passage["urn"]), **first_passage},
+            "ancestors": [link_collection(ancestor["urn"]) for ancestor in ancestors],
+            "toc": [{**link_passage(entry["urn"]), **entry} for entry in toc],
+        }
+    if isinstance(obj, cts.Collection):
+        links = link_collection(str(obj.urn))
+    if isinstance(obj, cts.Passage):
+        links = link_passage(str(obj.urn))
+        text = remaining.pop("text")
+        text_ancestors = text.pop("ancestors")
+        rels = {
+            "text": {
+                **link_collection(text["urn"]),
+                "ancestors": [{**link_collection(ancestor["urn"]), **ancestor} for ancestor in text_ancestors],
+                **text
+            }
         }
     return {
-        "url": reverse("library_collection", kwargs={"urn": str(collection.urn)}),
-        "json_url": reverse("library_collection_json", kwargs={"urn": str(collection.urn)}),
+        **links,
         **rels,
-        **remaining_collection
+        **remaining
     }
