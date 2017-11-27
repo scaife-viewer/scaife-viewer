@@ -10,6 +10,7 @@ import Popper from 'popper.js';
 import 'document-register-element/build/document-register-element';
 import '@/scss/index.scss';
 import '@/images/perseus_running_man.png';
+import '@/images/perseus_running_man_small.png';
 
 // for the bootstrap
 window.Popper = Popper;
