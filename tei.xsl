@@ -339,6 +339,21 @@
     </div>
   </xsl:template>
 
+  <xsl:template match="t:said">
+    <div class="said">
+      <xsl:choose>
+        <xsl:when test="./t:l">
+          <ol>
+            <xsl:apply-templates select="./t:l"/>
+          </ol>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </div>
+  </xsl:template>
+
   <xsl:template match="t:supplied">
     <span>
       <xsl:attribute name="class">supplied supplied_<xsl:value-of select='@cert' /></xsl:attribute>
