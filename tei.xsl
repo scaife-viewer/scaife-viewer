@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" xmlns:t="http://www.tei-c.org/ns/1.0" exclude-result-prefixes="t">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" xmlns:t="http://www.tei-c.org/ns/1.0" exclude-result-prefixes="t" xmlns:v-on="aurl">
 
   <!-- this all comes from https://github.com/PerseusDL/perseus_nemo_ui/tree/master/perseus_nemo_ui/data/assets/static/xslt -->
 
@@ -205,12 +205,7 @@
         </xsl:attribute>
         <xsl:element name="div">
           <xsl:attribute name="class">a</xsl:attribute>
-          <xsl:attribute name="data-ref">
-            <xsl:for-each select="ancestor::t:div[@type='textpart']/@n">
-              <xsl:value-of select="concat(., '.')" />
-            </xsl:for-each>
-            <xsl:value-of select="@n" />
-          </xsl:attribute>
+          <xsl:attribute name="v-on:click">pref('<xsl:for-each select="ancestor::t:div[@type='textpart']/@n"><xsl:value-of select="concat(., '.')" /></xsl:for-each><xsl:value-of select="@n" />')</xsl:attribute>
           <xsl:if test="@n">
             <div>
               <xsl:value-of select="@n" />

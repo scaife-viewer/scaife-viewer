@@ -16,7 +16,9 @@
         <div class="pg-left">
           <a v-if="passage.prev" href="#" @click.prevent="setPassage(passage.prev.urn)"><span><i :class="['fa', {'fa-chevron-left': !passage.rtl, 'fa-chevron-right': passage.rtl}]"></i></span></a>
         </div>
-        <div :class="['text', `text-${textSize}`]" v-html="passage.text_html"></div>
+        <div :class="['text', `text-${textSize}`]">
+          <component :is="passage.textComponent"></component>
+        </div>
         <div class="pg-right">
           <a v-if="passage.next" href="#" @click.prevent="setPassage(passage.next.urn)"><span><i :class="['fa', {'fa-chevron-left': passage.rtl, 'fa-chevron-right': !passage.rtl}]"></i></span></a>
         </div>
@@ -77,7 +79,6 @@ export default {
       }
     },
     setPassage(urn) {
-      window.history.pushState({}, urn, `/reader/${urn}/`);
       return this.$store.dispatch('setPassage', urn);
     },
   },

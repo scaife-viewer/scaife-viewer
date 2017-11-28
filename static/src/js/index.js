@@ -45,15 +45,6 @@ $(() => {
     return maxsplit ? [split.slice(0, -maxsplit).join(sep)].concat(split.slice(-maxsplit)) : split;
   }
 
-  $('.textpart .a').click((e) => {
-    const el = e.currentTarget;
-    const urn = $('#overall').data('urn');
-    const ref = $(el).data('ref');
-    const fullUrn = `${urn}:${ref}`;
-    const baseUrl = rsplit(document.location.pathname, '/', 2)[0];
-    window.location.href = `${baseUrl}/${fullUrn}${window.location.search}`;
-  });
-
   $('#passage-reference').keyup((e) => {
     if (e.keyCode === 13) {
       const el = e.currentTarget;
