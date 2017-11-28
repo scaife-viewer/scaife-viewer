@@ -30,6 +30,9 @@ module.exports = {
     setPassage(state, passage) {
       state.passage = passage;
     },
+    setTextSize(state, size) {
+      state.textSize = size;
+    },
     toggleSidebarLeft(state) {
       state.sidebarLeftOpened = !state.sidebarLeftOpened;
     },

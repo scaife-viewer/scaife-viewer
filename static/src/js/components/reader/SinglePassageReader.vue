@@ -11,20 +11,21 @@
         <a href="/">Library &gt;</a>
         <h1><a v-for="breadcrumb in passage.text.ancestors" :key="breadcrumb.urn" :href="breadcrumb.url">{{ breadcrumb.label }}</a></h1>
         <h3><passage-human-reference :passage="passage"></passage-human-reference></h3>
-        <div id="overall" class="overall" :dir="passage.rtl ? 'rtl' : 'ltr'">
-          <div class="pg-left">
-            <a v-if="passage.prev" href="#" @click.prevent="setPassage(passage.prev.urn)"><span><i :class="['fa', {'fa-chevron-left': !passage.rtl, 'fa-chevron-right': passage.rtl}]"></i></span></a>
-          </div>
-          <div class="text" v-html="passage.text_html"></div>
-          <div class="pg-right">
-            <a v-if="passage.next" href="#" @click.prevent="setPassage(passage.next.urn)"><span><i :class="['fa', {'fa-chevron-left': passage.rtl, 'fa-chevron-right': !passage.rtl}]"></i></span></a>
-          </div>
+      </div>
+      <div id="overall" class="overall" :dir="passage.rtl ? 'rtl' : 'ltr'">
+        <div class="pg-left">
+          <a v-if="passage.prev" href="#" @click.prevent="setPassage(passage.prev.urn)"><span><i :class="['fa', {'fa-chevron-left': !passage.rtl, 'fa-chevron-right': passage.rtl}]"></i></span></a>
+        </div>
+        <div :class="['text', `text-${textSize}`]" v-html="passage.text_html"></div>
+        <div class="pg-right">
+          <a v-if="passage.next" href="#" @click.prevent="setPassage(passage.next.urn)"><span><i :class="['fa', {'fa-chevron-left': passage.rtl, 'fa-chevron-right': !passage.rtl}]"></i></span></a>
         </div>
       </div>
     </section>
     <div :class="['sidebar', { collapsed: sidebarRightOpened }]" id="right-sidebar">
       <div>
         <passage-links-widget></passage-links-widget>
+        <text-size-widget></text-size-widget>
       </div>
     </div>
   </div>
@@ -35,6 +36,7 @@ import { mapState } from 'vuex';
 import store from '../../store';
 import PassageHumanReference from './PassageHumanReference';
 import PassageLinksWidget from './widgets/PassageLinksWidget';
+import TextSizeWidget from './widgets/TextSizeWidget';
 
 export default {
   store,
@@ -57,6 +59,7 @@ export default {
   computed: {
     ...mapState({
       passage: state => state.reader.passage,
+      textSize: state => state.reader.textSize,
       sidebarLeftOpened: state => state.reader.sidebarLeftOpened,
       sidebarRightOpened: state => state.reader.sidebarRightOpened,
     }),
@@ -81,6 +84,7 @@ export default {
   components: {
     PassageHumanReference,
     PassageLinksWidget,
+    TextSizeWidget,
   },
 };
 </script>
