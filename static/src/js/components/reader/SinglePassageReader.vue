@@ -24,7 +24,7 @@
     </section>
     <div :class="['sidebar', { collapsed: sidebarRightOpened }]" id="right-sidebar">
       <div>
-        <PassageLinksWidget></PassageLinksWidget>
+        <passage-links-widget></passage-links-widget>
       </div>
     </div>
   </div>
