@@ -9,21 +9,22 @@
       <button id="right-sidebar-toggle" :class="[{ open: sidebarRightOpened }]" @click="toggleSidebar('right')"><i></i></button>
       <div class="passage-heading">
         <a href="/">Library &gt;</a>
-        <h1><a v-for="breadcrumb in primaryPassage.text.ancestors" :key="breadcrumb.urn" :href="breadcrumb.url">{{ breadcrumb.label }}</a></h1>
-        <h3><passage-human-reference :passage="primaryPassage"></passage-human-reference></h3>
-        <div id="overall" class="overall">
-          <div class="text" v-html="primaryPassage.text_html"></div>
+        <h1><a v-for="breadcrumb in passage.text.ancestors" :key="breadcrumb.urn" :href="breadcrumb.url">{{ breadcrumb.label }}</a></h1>
+        <h3><passage-human-reference :passage="passage"></passage-human-reference></h3>
+        <div id="overall" class="overall" :dir="passage.rtl ? 'rtl' : 'ltr'">
+          <div class="pg-left">
+            <a v-if="passage.prev" href="#" @click.prevent="setPassage(passage.prev.urn)"><span><i :class="['fa', {'fa-chevron-left': !passage.rtl, 'fa-chevron-right': passage.rtl}]"></i></span></a>
+          </div>
+          <div class="text" v-html="passage.text_html"></div>
+          <div class="pg-right">
+            <a v-if="passage.next" href="#" @click.prevent="setPassage(passage.next.urn)"><span><i :class="['fa', {'fa-chevron-left': passage.rtl, 'fa-chevron-right': !passage.rtl}]"></i></span></a>
+          </div>
         </div>
       </div>
     </section>
     <div :class="['sidebar', { collapsed: sidebarRightOpened }]" id="right-sidebar">
       <div>
-        <div class="widget">
-          <h2>CTS URN</h2>
-          <p>
-            <tt><a :href="`https://perseus-cts.eu1.eldarioncloud.com/api/cts?request=GetPassage&amp;urn=${primaryPassage.urn}`">{{ primaryPassage.urn }}</a></tt>
-          </p>
-        </div>
+        <PassageLinksWidget></PassageLinksWidget>
       </div>
     </div>
   </div>
@@ -31,19 +32,20 @@
 
 <script>
 import { mapState } from 'vuex';
-import store from '../store';
+import store from '../../store';
 import PassageHumanReference from './PassageHumanReference';
+import PassageLinksWidget from './widgets/PassageLinksWidget';
 
 export default {
   store,
   props: {
-    urns: {
+    urn: {
       type: String,
       required: true,
     },
   },
   mounted() {
-    this.$store.dispatch('loadPassages', this.urnList).then(() => {
+    this.setPassage(this.urn).then(() => {
       this.loaded = true;
     });
   },
@@ -54,16 +56,10 @@ export default {
   },
   computed: {
     ...mapState({
-      passages: state => state.reader.passages,
+      passage: state => state.reader.passage,
       sidebarLeftOpened: state => state.reader.sidebarLeftOpened,
       sidebarRightOpened: state => state.reader.sidebarRightOpened,
     }),
-    urnList() {
-      return this.urns.split(' ');
-    },
-    primaryPassage() {
-      return this.passages.get(this.urnList[0]);
-    },
   },
   methods: {
     toggleSidebar(side) {
@@ -77,9 +73,14 @@ export default {
         default:
       }
     },
+    setPassage(urn) {
+      window.history.pushState({}, urn, `/reader/${urn}/`);
+      return this.$store.dispatch('setPassage', urn);
+    },
   },
   components: {
     PassageHumanReference,
+    PassageLinksWidget,
   },
 };
 </script>

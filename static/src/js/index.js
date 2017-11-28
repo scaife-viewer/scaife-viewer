@@ -5,7 +5,7 @@ import vueCustomElement from 'vue-custom-element';
 import CTSTextGroupList from '@/js/components/CTSTextGroupList';
 import CTSWorkList from '@/js/components/CTSWorkList';
 import CTSTocList from '@/js/components/CTSTocList';
-import Reader from '@/js/components/Reader';
+import SinglePassageReader from '@/js/components/reader/SinglePassageReader';
 import ajaxSendMethod from '@/js/ajax';
 import Popper from 'popper.js';
 import 'document-register-element/build/document-register-element';
@@ -21,7 +21,7 @@ Vue.use(vueCustomElement);
 Vue.customElement('sv-cts-textgroup-list', CTSTextGroupList);
 Vue.customElement('sv-cts-work-list', CTSWorkList);
 Vue.customElement('sv-cts-toc-list', CTSTocList);
-Vue.customElement('sv-reader', Reader);
+Vue.customElement('sv-single-passage-reader', SinglePassageReader);
 
 $(() => {
   $(document).ajaxSend(ajaxSendMethod);

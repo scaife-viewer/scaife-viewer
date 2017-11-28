@@ -189,6 +189,7 @@ class Text(Collection):
             "description": str(self.description),
             "kind": self.kind,
             "lang": self.lang,
+            "rtl": self.rtl,
             "human_lang": self.human_lang,
             "first_passage": dict(urn=str(self.first_passage().urn)),
             "ancestors": [

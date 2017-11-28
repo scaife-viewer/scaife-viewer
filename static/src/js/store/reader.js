@@ -1,3 +1,4 @@
+import parseLinkHeader from 'parse-link-header';
 
 
 module.exports = {
@@ -5,21 +6,29 @@ module.exports = {
     textSize: 'md',
     sidebarLeftOpened: true,
     sidebarRightOpened: true,
-    passages: new Map(),
+    passage: null,
   },
   actions: {
-    async loadPassages({ commit }, urns) {
-      await Promise.all(urns.map(async (urn) => {
-        const url = `/library/passage/${urn}/json/`;
-        const resp = await fetch(url);
-        const passage = await resp.json();
-        commit('addPassage', passage);
-      }));
+    async setPassage({ commit }, urn) {
+      const pagination = {};
+      const url = `/library/passage/${urn}/json/`;
+      const resp = await fetch(url);
+      if (resp.headers.has('link')) {
+        const links = parseLinkHeader(resp.headers.get('link'));
+        if (links.prev) {
+          pagination.prev = { url: links.prev.url, urn: links.prev.urn };
+        }
+        if (links.next) {
+          pagination.next = { url: links.next.url, urn: links.next.urn };
+        }
+      }
+      const passage = await resp.json();
+      commit('setPassage', { ...passage, ...pagination });
     },
   },
   mutations: {
-    addPassage(state, passage) {
-      state.passages.set(passage.urn, passage);
+    setPassage(state, passage) {
+      state.passage = passage;
     },
     toggleSidebarLeft(state) {
       state.sidebarLeftOpened = !state.sidebarLeftOpened;

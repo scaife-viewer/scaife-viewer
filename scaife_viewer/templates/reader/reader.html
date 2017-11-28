@@ -7,5 +7,5 @@
 {% block body_class %}reader{% endblock %}
 
 {% block body_base %}
-  <sv-reader urns="{{ passage.urn }}{% if right_passage %} {{ right_passage.urn }}{% endif %}"></sv-reader>
+  <sv-single-passage-reader urn="{{ passage.urn }}"></sv-single-passage-reader>
 {% endblock %}

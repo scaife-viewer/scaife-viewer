@@ -8,7 +8,7 @@ from . import cts
 from .cts.utils import natural_keys as nk
 from .reading.models import ReadingLog
 from .search import SearchQuery
-from .utils import apify
+from .utils import apify, link_passage, encode_link_header
 
 
 def home(request):
@@ -91,7 +91,21 @@ class LibraryPassageView(View):
             passage = cts.passage(urn)
         except cts.PassageDoesNotExist:
             raise Http404()
-        return JsonResponse(apify(passage))
+        lo = {}
+        prev, nxt = passage.prev(), passage.next()
+        if prev:
+            lo["prev"] = {
+                "target": link_passage(str(prev.urn))["url"],
+                "urn": str(prev.urn),
+            }
+        if nxt:
+            lo["next"] = {
+                "target": link_passage(str(nxt.urn))["url"],
+                "urn": str(nxt.urn),
+            }
+        response = JsonResponse(apify(passage))
+        response["Link"] = encode_link_header(lo)
+        return response
 
 
 def reader(request, urn):
