@@ -16,9 +16,7 @@
         <div class="pg-left">
           <a v-if="passage.prev" href="#" @click.prevent="setPassage(passage.prev.urn)"><span><i :class="['fa', {'fa-chevron-left': !passage.rtl, 'fa-chevron-right': passage.rtl}]"></i></span></a>
         </div>
-        <div :class="['text', `text-${textSize}`]">
-          <component :is="passage.textComponent"></component>
-        </div>
+        <passage-render-text :passage="passage"></passage-render-text>
         <div class="pg-right">
           <a v-if="passage.next" href="#" @click.prevent="setPassage(passage.next.urn)"><span><i :class="['fa', {'fa-chevron-left': passage.rtl, 'fa-chevron-right': !passage.rtl}]"></i></span></a>
         </div>
@@ -36,6 +34,7 @@
 <script>
 import { mapState } from 'vuex';
 import store from '../../store';
+import PassageRenderText from './PassageRenderText';
 import PassageHumanReference from './PassageHumanReference';
 import PassageLinksWidget from './widgets/PassageLinksWidget';
 import TextSizeWidget from './widgets/TextSizeWidget';
@@ -61,7 +60,6 @@ export default {
   computed: {
     ...mapState({
       passage: state => state.reader.passage,
-      textSize: state => state.reader.textSize,
       sidebarLeftOpened: state => state.reader.sidebarLeftOpened,
       sidebarRightOpened: state => state.reader.sidebarRightOpened,
     }),
@@ -83,6 +81,7 @@ export default {
     },
   },
   components: {
+    PassageRenderText,
     PassageHumanReference,
     PassageLinksWidget,
     TextSizeWidget,

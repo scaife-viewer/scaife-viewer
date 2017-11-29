@@ -9,7 +9,7 @@ module.exports = {
     passage: null,
   },
   actions: {
-    async setPassage({ dispatch, commit }, urn) {
+    async setPassage({ commit }, urn) {
       const pagination = {};
       const url = `/library/passage/${urn}/json/`;
       const resp = await fetch(url);
@@ -23,16 +23,11 @@ module.exports = {
         }
       }
       const passage = await resp.json();
-      const textComponent = {
-        template: passage.text_html,
-        methods: {
-          pref(ref) {
-            dispatch('setPassage', `${passage.text.urn}:${ref}`);
-          },
-        },
-      };
       window.history.pushState({}, urn, `/reader/${urn}/`);
-      commit('setPassage', { ...passage, ...pagination, textComponent });
+      commit('setPassage', { ...passage, ...pagination });
+    },
+    async setRef({ dispatch, state }, reference) {
+      return dispatch('setPassage', `${state.passage.text.urn}:${reference}`);
     },
   },
   mutations: {
