@@ -39,27 +39,4 @@ $(() => {
     e.preventDefault();
     $('#accountLogOutForm').submit();
   });
-
-  function rsplit(s, sep, maxsplit) {
-    const split = s.split(sep);
-    return maxsplit ? [split.slice(0, -maxsplit).join(sep)].concat(split.slice(-maxsplit)) : split;
-  }
-
-  $('#passage-reference').keyup((e) => {
-    if (e.keyCode === 13) {
-      const el = e.currentTarget;
-      const urn = $('#overall').data('urn');
-      const ref = $(el).val();
-      const fullUrn = `${urn}:${ref}`;
-      const baseUrl = rsplit(document.location.pathname, '/', 2)[0];
-      window.location.href = `${baseUrl}/${fullUrn}${window.location.search}`;
-    } else {
-      e.stopPropagation();
-    }
-  });
-
-  $('#passage-reference').on('click', (e) => {
-    const el = e.currentTarget;
-    el.select();
-  });
 });

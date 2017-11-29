@@ -115,5 +115,18 @@ class Passage:
             },
             "text_html": str(self.render()),
             "refs": refs,
+            "ancestors": [
+                {
+                    "reference": ancestor.reference,
+                }
+                for ancestor in self.ancestors()
+            ],
+            "children": [
+                {
+                    "reference": child.reference,
+                    "lsb": child.lsb,
+                }
+                for child in self.children()
+            ],
         }
         return o

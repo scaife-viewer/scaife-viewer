@@ -2,6 +2,9 @@
   <div class="wrapper" v-if="loaded">
     <div :class="['sidebar', { collapsed: sidebarLeftOpened }]" id="left-sidebar">
       <div>
+        <passage-ancestor-widget></passage-ancestor-widget>
+        <passage-children-widget></passage-children-widget>
+        <passage-reference-widget></passage-reference-widget>
       </div>
     </div>
     <section id="content_body">
@@ -36,6 +39,9 @@ import { mapState } from 'vuex';
 import store from '../../store';
 import PassageRenderText from './PassageRenderText';
 import PassageHumanReference from './PassageHumanReference';
+import PassageAncestorWidget from './widgets/PassageAncestorWidget';
+import PassageChildrenWidget from './widgets/PassageChildrenWidget';
+import PassageReferenceWidget from './widgets/PassageReferenceWidget';
 import PassageLinksWidget from './widgets/PassageLinksWidget';
 import TextSizeWidget from './widgets/TextSizeWidget';
 
@@ -83,6 +89,9 @@ export default {
   components: {
     PassageRenderText,
     PassageHumanReference,
+    PassageAncestorWidget,
+    PassageChildrenWidget,
+    PassageReferenceWidget,
     PassageLinksWidget,
     TextSizeWidget,
   },
