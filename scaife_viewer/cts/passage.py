@@ -111,7 +111,9 @@ class Passage:
                         "label": ancestor.label,
                     }
                     for ancestor in self.text.ancestors()
-                ]
+                ],
+                "human_lang": self.text.human_lang,
+                "kind": self.text.kind,
             },
             "text_html": str(self.render()),
             "refs": refs,
