@@ -18,17 +18,15 @@ import { mapState } from 'vuex';
 
 export default {
   created() {
-    const buf = [];
-    buf.push(this.passage.refs.start.reference);
-    if (this.passage.refs.end) {
-      buf.push(`-${this.passage.refs.end.reference}`);
-    }
-    this.reference = buf.join('');
+    this.setInputRef();
   },
   data() {
     return {
       reference: '',
     };
+  },
+  watch: {
+    passage: 'setInputRef',
   },
   computed: {
     ...mapState({
@@ -36,6 +34,14 @@ export default {
     }),
   },
   methods: {
+    setInputRef() {
+      const buf = [];
+      buf.push(this.passage.refs.start.reference);
+      if (this.passage.refs.end) {
+        buf.push(`-${this.passage.refs.end.reference}`);
+      }
+      this.reference = buf.join('');
+    },
     handleKeyUp(e) {
       if (e.keyCode === 13) {
         this.$store.dispatch('setRef', this.reference);
