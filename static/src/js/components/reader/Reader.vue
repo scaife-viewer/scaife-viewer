@@ -79,6 +79,7 @@ export default {
     },
   },
   mounted() {
+    window.addEventListener('keyup', this.handleKeyUp);
     const pending = [];
     pending.push(this.setPassage(this.urn));
     if (this.rightUrn) {
@@ -88,6 +89,9 @@ export default {
       this.loaded = true;
       this.setHistory();
     });
+  },
+  beforeDestroy() {
+    window.removeEventListener('keyup', this.handleKeyUp);
   },
   data() {
     return {
@@ -104,6 +108,17 @@ export default {
     }),
   },
   methods: {
+    handleKeyUp(e) {
+      if (e.key === 'ArrowLeft') {
+        if (this.passage.prev) {
+          this.setRefAndHistory(this.passage.prev.ref);
+        }
+      } else if (e.key === 'ArrowRight') {
+        if (this.passage.next) {
+          this.setRefAndHistory(this.passage.next.ref);
+        }
+      }
+    },
     toggleSidebar(side) {
       switch (side) {
         case 'left':
