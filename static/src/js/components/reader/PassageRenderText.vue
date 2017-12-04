@@ -1,5 +1,5 @@
 <template>
-  <div :class="['text', `text-${textSize}`]">
+  <div :class="['text', `text-${textSize}`, {'text-loading': loading, 'text-loaded': !loading}]">
     <component :is="renderedText"></component>
   </div>
 </template>
@@ -11,7 +11,7 @@ import TextPart from './TextPart';
 
 export default {
   store,
-  props: ['passage'],
+  props: ['passage', 'loading'],
   computed: {
     ...mapState({
       textSize: state => state.reader.textSize,

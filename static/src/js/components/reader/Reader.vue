@@ -29,17 +29,17 @@
               {{ passage.text.label }}
               <div class="metadata">{{ passage.text.human_lang }} {{ passage.text.kind }}</div>
             </version-selector>
-            <passage-render-text :passage="passage"></passage-render-text>
+            <passage-render-text :passage="passage" :loading="passageLoading"></passage-render-text>
           </div>
           <div class="right">
             <version-selector :versions="versions" :handler="setRightPassageAndHistory" :removal="removeRight">
               {{ rightPassage.text.label }}
               <div class="metadata">{{ rightPassage.text.human_lang }} {{ rightPassage.text.kind }}</div>
             </version-selector>
-            <passage-render-text :passage="rightPassage"></passage-render-text>
+            <passage-render-text :passage="rightPassage" :loading="rightPassageLoading"></passage-render-text>
           </div>
         </template>
-        <passage-render-text v-else :passage="passage"></passage-render-text>
+        <passage-render-text v-else :passage="passage" :loading="passageLoading"></passage-render-text>
         <div class="pg-right">
           <a v-if="passage.next" href="#" @click.prevent="setRefAndHistory(passage.next.ref)"><span><i :class="['fa', {'fa-chevron-left': passage.rtl, 'fa-chevron-right': !passage.rtl}]"></i></span></a>
         </div>
@@ -102,6 +102,8 @@ export default {
     ...mapState({
       passage: state => state.reader.passage,
       rightPassage: state => state.reader.rightPassage,
+      passageLoading: state => state.reader.passageLoading,
+      rightPassageLoading: state => state.reader.rightPassageLoading,
       versions: state => state.reader.versions,
       sidebarLeftOpened: state => state.reader.sidebarLeftOpened,
       sidebarRightOpened: state => state.reader.sidebarRightOpened,

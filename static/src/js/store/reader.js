@@ -16,6 +16,8 @@ module.exports = {
     sidebarRightOpened: true,
     passage: null,
     rightPassage: null,
+    passageLoading: false,
+    rightPassageLoading: false,
     versions: null,
   },
   actions: {
@@ -59,6 +61,7 @@ module.exports = {
       commit('setVersions', texts);
     },
     async setPassage({ state, dispatch, commit }, urn) {
+      commit('setPassageLoading', true);
       const p = parseURN(urn);
       if (!p.reference && state.passage) {
         const { reference: existingReference } = parseURN(state.passage.urn);
@@ -67,12 +70,14 @@ module.exports = {
       await dispatch('loadVersions', `urn:${p.urnNamespace}:${p.ctsNamespace}:${p.textGroup}.${p.work}`);
       const passage = await dispatch('loadPassage', urn);
       commit('setPassage', passage);
+      commit('setPassageLoading', false);
     },
     async setPassageAndHistory({ dispatch }, urn) {
       await dispatch('setPassage', urn);
       dispatch('setHistory');
     },
     async setRightPassage({ state, dispatch, commit }, urn) {
+      commit('setRightPassageLoading', true);
       if (urn) {
         const p = parseURN(urn);
         if (!p.reference && state.passage) {
@@ -83,6 +88,7 @@ module.exports = {
       } else {
         commit('setRightPassage', null);
       }
+      commit('setRightPassageLoading', false);
     },
     async setRightPassageAndHistory({ dispatch }, urn) {
       await dispatch('setRightPassage', urn);
@@ -117,6 +123,12 @@ module.exports = {
     },
     setRightPassage(state, passage) {
       state.rightPassage = passage;
+    },
+    setPassageLoading(state, loading) {
+      state.passageLoading = loading;
+    },
+    setRightPassageLoading(state, loading) {
+      state.rightPassageLoading = loading;
     },
     setVersions(state, versions) {
       state.versions = versions;
