@@ -24,7 +24,6 @@ module.exports = {
   },
   toRemoveLeft() {
     const { state } = store;
-    console.log({ name: 'reader', params: { urn: state.reader.rightPassage.urn } });
     return { name: 'reader', params: { urn: state.reader.rightPassage.urn } };
   },
   toRemoveRight() {
