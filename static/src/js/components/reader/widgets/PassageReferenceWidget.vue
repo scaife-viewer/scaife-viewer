@@ -46,6 +46,8 @@ export default {
     handleKeyUp(e) {
       if (e.keyCode === 13) {
         this.$router.push(toRef(this.reference));
+      } else {
+        e.stopPropagation();
       }
     },
     handleClick(e) {
