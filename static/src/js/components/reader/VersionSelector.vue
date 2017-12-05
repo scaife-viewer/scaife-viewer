@@ -7,13 +7,13 @@
       <slot></slot>
     </div>
     <div :class="['version-option', 'dropdown-menu', { show }]">
-      <a v-for="version in versions" :key="version.urn" class="dropdown-item" href="#" @click.prevent="handleItemClick(version.urn)">
+      <router-link v-for="version in versions" :key="version.urn" class="dropdown-item" :to="to(version.urn)" @click.native="handleItemClick">
         {{ version.label }}
         <div class="metadata">{{ version.human_lang }} {{ version.kind }}</div>
-      </a>
-      <template v-if="removal">
+      </router-link>
+      <template v-if="remove">
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item remove" href="#" @click.prevent="handleRemoveClick">remove</a>
+        <router-link class="dropdown-item remove" :to="remove" @click.native="handleRemoveClick">remove</router-link>
       </template>
     </div>
   </div>
@@ -21,7 +21,7 @@
 
 <script>
 export default {
-  props: ['versions', 'handler', 'removal'],
+  props: ['versions', 'to', 'remove'],
   data() {
     return {
       show: false,
@@ -31,13 +31,11 @@ export default {
     toggleMenu() {
       this.show = !this.show;
     },
-    handleItemClick(urn) {
+    handleItemClick() {
       this.show = false;
-      this.handler(urn);
     },
     handleRemoveClick() {
       this.show = false;
-      this.removal();
     },
   },
 };

@@ -15,24 +15,24 @@
         <h1><a v-for="breadcrumb in passage.text.ancestors" :key="breadcrumb.urn" :href="breadcrumb.url">{{ breadcrumb.label }}</a></h1>
         <h3><passage-human-reference :passage="passage"></passage-human-reference></h3>
       </div>
-      <version-selector v-if="!rightPassage && versions.length > 1" :versions="versions" :handler="setRightPassageAndHistory">
+      <version-selector v-if="!rightPassage && versions.length > 1" :versions="versions" :to="toRightPassage">
         <i class="fa fa-columns"></i>
         add parallel version
       </version-selector>
       <div id="overall" class="overall" :dir="passage.rtl ? 'rtl' : 'ltr'">
         <div class="pg-left">
-          <a v-if="passage.prev" href="#" @click.prevent="setRefAndHistory(passage.prev.ref)"><span><i :class="['fa', {'fa-chevron-left': !passage.rtl, 'fa-chevron-right': passage.rtl}]"></i></span></a>
+          <router-link v-if="passage.prev" :to="toRef(passage.prev.ref)"><span><i :class="['fa', {'fa-chevron-left': !passage.rtl, 'fa-chevron-right': passage.rtl}]"></i></span></router-link>
         </div>
         <template v-if="rightPassage">
           <div class="left">
-            <version-selector :versions="versions" :handler="setPassageAndHistory" :removal="removeLeft">
+            <version-selector :versions="versions" :to="toPassage" :remove="toRemoveLeft">
               {{ passage.text.label }}
               <div class="metadata">{{ passage.text.human_lang }} {{ passage.text.kind }}</div>
             </version-selector>
             <passage-render-text :passage="passage" :loading="passageLoading"></passage-render-text>
           </div>
           <div class="right">
-            <version-selector :versions="versions" :handler="setRightPassageAndHistory" :removal="removeRight">
+            <version-selector :versions="versions" :to="toRightPassage" :remove="toRemoveRight">
               {{ rightPassage.text.label }}
               <div class="metadata">{{ rightPassage.text.human_lang }} {{ rightPassage.text.kind }}</div>
             </version-selector>
@@ -41,7 +41,7 @@
         </template>
         <passage-render-text v-else :passage="passage" :loading="passageLoading"></passage-render-text>
         <div class="pg-right">
-          <a v-if="passage.next" href="#" @click.prevent="setRefAndHistory(passage.next.ref)"><span><i :class="['fa', {'fa-chevron-left': passage.rtl, 'fa-chevron-right': !passage.rtl}]"></i></span></a>
+          <router-link v-if="passage.next" :to="toRef(passage.next.ref)"><span><i :class="['fa', {'fa-chevron-left': passage.rtl, 'fa-chevron-right': !passage.rtl}]"></i></span></router-link>
         </div>
       </div>
     </section>
@@ -55,8 +55,9 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapState } from 'vuex';
 import store from '../../store';
+import parseURN from '../../urn';
 import PassageRenderText from './PassageRenderText';
 import PassageHumanReference from './PassageHumanReference';
 import VersionSelector from './VersionSelector';
@@ -80,15 +81,7 @@ export default {
   },
   mounted() {
     window.addEventListener('keyup', this.handleKeyUp);
-    const pending = [];
-    pending.push(this.setPassage(this.urn));
-    if (this.rightUrn) {
-      pending.push(this.setRightPassage(this.rightUrn));
-    }
-    Promise.all(pending).then(() => {
-      this.loaded = true;
-      this.setHistory();
-    });
+    this.loadData();
   },
   beforeDestroy() {
     window.removeEventListener('keyup', this.handleKeyUp);
@@ -109,15 +102,30 @@ export default {
       sidebarRightOpened: state => state.reader.sidebarRightOpened,
     }),
   },
+  watch: {
+    $route: 'loadData',
+  },
   methods: {
+    loadData() {
+      const pending = [];
+      if (!this.passage || this.urn !== this.passage.urn) {
+        pending.push(this.$store.dispatch('setPassage', this.urn));
+      }
+      if (this.rightUrn && (!this.rightPassage || this.rightUrn !== this.rightPassage.urn)) {
+        pending.push(this.$store.dispatch('setRightPassage', this.rightUrn));
+      }
+      Promise.all(pending).then(() => {
+        this.loaded = true;
+      });
+    },
     handleKeyUp(e) {
       if (e.key === 'ArrowLeft') {
         if (this.passage.prev) {
-          this.setRefAndHistory(this.passage.prev.ref);
+          this.$router.push(this.toRef(this.passage.prev.ref));
         }
       } else if (e.key === 'ArrowRight') {
         if (this.passage.next) {
-          this.setRefAndHistory(this.passage.next.ref);
+          this.$router.push(this.toRef(this.passage.next.ref));
         }
       }
     },
@@ -132,28 +140,29 @@ export default {
         default:
       }
     },
-    removeLeft() {
-      const rightUrn = this.rightPassage.urn;
-      this.$store.dispatch('setRightPassage', null).then(() => {
-        this.$store.dispatch('setPassage', rightUrn).then(() => {
-          this.setHistory();
-        });
-      });
+    toPassage(urn) {
+      const p = parseURN(urn);
+      if (!p.reference && this.passage) {
+        const { reference: existingReference } = parseURN(this.passage.urn);
+        urn += `:${existingReference}`;
+      }
+      return { name: 'reader', params: { urn }, query: this.$route.query };
     },
-    removeRight() {
-      this.$store.dispatch('setRightPassage', null).then(() => {
-        this.setHistory();
-      });
+    toRightPassage(urn) {
+      const p = parseURN(urn);
+      return { name: 'reader', params: this.$route.params, query: { right: p.version } };
     },
-    ...mapActions([
-      'setPassage',
-      'setRightPassage',
-      'setRef',
-      'setPassageAndHistory',
-      'setRightPassageAndHistory',
-      'setRefAndHistory',
-      'setHistory',
-    ]),
+    toRef(reference) {
+      const p = parseURN(this.urn);
+      const urn = `urn:${p.urnNamespace}:${p.ctsNamespace}:${p.textGroup}.${p.work}.${p.version}:${reference}`;
+      return { name: 'reader', params: { urn }, query: this.$route.query };
+    },
+    toRemoveLeft() {
+      return { name: 'reader', params: { urn: this.rightPassage.urn } };
+    },
+    toRemoveRight() {
+      return { name: 'reader', params: { urn: this.passage.urn } };
+    },
   },
   components: {
     PassageRenderText,

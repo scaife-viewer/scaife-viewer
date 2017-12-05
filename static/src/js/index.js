@@ -1,11 +1,12 @@
 /* global $ */
 
 import Vue from 'vue';
+import VueRouter from 'vue-router';
 import vueCustomElement from 'vue-custom-element';
 import CTSTextGroupList from '@/js/components/CTSTextGroupList';
 import CTSWorkList from '@/js/components/CTSWorkList';
 import CTSTocList from '@/js/components/CTSTocList';
-import Reader from '@/js/components/reader/Reader';
+import ReaderEntry from '@/js/components/reader/ReaderEntry';
 import ajaxSendMethod from '@/js/ajax';
 import Popper from 'popper.js';
 import 'document-register-element/build/document-register-element';
@@ -16,12 +17,13 @@ import '@/images/perseus_running_man.png';
 window.Popper = Popper;
 require('bootstrap');
 
+Vue.use(VueRouter);
 Vue.use(vueCustomElement);
 
 Vue.customElement('sv-cts-textgroup-list', CTSTextGroupList);
 Vue.customElement('sv-cts-work-list', CTSWorkList);
 Vue.customElement('sv-cts-toc-list', CTSTocList);
-Vue.customElement('sv-reader', Reader);
+Vue.customElement('sv-reader', ReaderEntry);
 
 $(() => {
   $(document).ajaxSend(ajaxSendMethod);

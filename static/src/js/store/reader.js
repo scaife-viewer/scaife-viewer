@@ -8,7 +8,6 @@ function rsplit(s, sep, maxsplit) {
   return maxsplit ? [split.slice(0, -maxsplit).join(sep)].concat(split.slice(-maxsplit)) : split;
 }
 
-
 module.exports = {
   state: {
     textSize: 'md',
@@ -60,39 +59,22 @@ module.exports = {
       const texts = Object.values(vector.collections);
       commit('setVersions', texts);
     },
-    async setPassage({ state, dispatch, commit }, urn) {
+    async setPassage({ dispatch, commit }, urn) {
       commit('setPassageLoading', true);
       const p = parseURN(urn);
-      if (!p.reference && state.passage) {
-        const { reference: existingReference } = parseURN(state.passage.urn);
-        urn = `${urn}:${existingReference}`;
-      }
       await dispatch('loadVersions', `urn:${p.urnNamespace}:${p.ctsNamespace}:${p.textGroup}.${p.work}`);
       const passage = await dispatch('loadPassage', urn);
       commit('setPassage', passage);
       commit('setPassageLoading', false);
     },
-    async setPassageAndHistory({ dispatch }, urn) {
-      await dispatch('setPassage', urn);
-      dispatch('setHistory');
-    },
-    async setRightPassage({ state, dispatch, commit }, urn) {
+    async setRightPassage({ dispatch, commit }, urn) {
       commit('setRightPassageLoading', true);
       if (urn) {
-        const p = parseURN(urn);
-        if (!p.reference && state.passage) {
-          const { reference: existingReference } = parseURN(state.passage.urn);
-          urn = `${urn}:${existingReference}`;
-        }
         commit('setRightPassage', await dispatch('loadPassage', urn));
       } else {
         commit('setRightPassage', null);
       }
       commit('setRightPassageLoading', false);
-    },
-    async setRightPassageAndHistory({ dispatch }, urn) {
-      await dispatch('setRightPassage', urn);
-      dispatch('setHistory');
     },
     async setRef({ dispatch, state }, reference) {
       const pending = [];
@@ -101,20 +83,6 @@ module.exports = {
         pending.push(dispatch('setRightPassage', `${state.rightPassage.text.urn}:${reference}`));
       }
       return Promise.all(pending);
-    },
-    async setRefAndHistory({ dispatch }, urn) {
-      await dispatch('setRef', urn);
-      dispatch('setHistory');
-    },
-    setHistory({ state }) {
-      const urns = [state.passage.urn];
-      let location = `/reader/${state.passage.urn}/`;
-      if (state.rightPassage) {
-        urns.push(state.rightPassage.urn);
-        const parsed = parseURN(state.rightPassage.urn);
-        location += `?right=${parsed.version}`;
-      }
-      window.history.pushState({}, urns.join('+'), location);
     },
   },
   mutations: {
