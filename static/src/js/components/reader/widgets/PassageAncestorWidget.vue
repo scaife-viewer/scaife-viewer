@@ -2,13 +2,14 @@
   <div class="widget ancestors" v-if="passage.ancestors && passage.ancestors.length > 0">
     <h2>Ancestors</h2>
     <p>
-      <a v-for="ancestor in passage.ancestors" :key="`pa-${ancestor.urn}`" href="#" @click.prevent="setRef(ancestor.reference)">{{ ancestor.reference }}</a>
+      <router-link v-for="ancestor in passage.ancestors" :key="`pa-${ancestor.urn}`" :to="toRef(ancestor.reference)">{{ ancestor.reference }}</router-link>
     </p>
   </div>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapState } from 'vuex';
+import { toRef } from '../utils';
 
 export default {
   computed: {
@@ -17,7 +18,7 @@ export default {
     }),
   },
   methods: {
-    ...mapActions(['setRef']),
+    toRef,
   },
 };
 </script>

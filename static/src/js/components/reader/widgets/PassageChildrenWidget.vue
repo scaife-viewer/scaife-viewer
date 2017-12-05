@@ -2,13 +2,14 @@
   <div class="widget children" v-if="passage.children && passage.children.length > 0">
     <h2>Children</h2>
     <p>
-      <a v-for="child in passage.children" :key="`pc-${child.urn}`" href="#" @click.prevent="setRef(child.reference)">{{ child.lsb }}</a>
+      <router-link v-for="child in passage.children" :key="`pc-${child.urn}`" :to="toRef(child.reference)">{{ child.lsb }}</router-link>
     </p>
   </div>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapState } from 'vuex';
+import { toRef } from '../utils';
 
 export default {
   computed: {
@@ -17,7 +18,7 @@ export default {
     }),
   },
   methods: {
-    ...mapActions(['setRef']),
+    toRef,
   },
 };
 </script>

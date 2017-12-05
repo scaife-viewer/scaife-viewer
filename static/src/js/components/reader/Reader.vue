@@ -57,7 +57,6 @@
 <script>
 import { mapState } from 'vuex';
 import store from '../../store';
-import parseURN from '../../urn';
 import PassageRenderText from './PassageRenderText';
 import PassageHumanReference from './PassageHumanReference';
 import VersionSelector from './VersionSelector';
@@ -66,6 +65,7 @@ import PassageChildrenWidget from './widgets/PassageChildrenWidget';
 import PassageReferenceWidget from './widgets/PassageReferenceWidget';
 import PassageLinksWidget from './widgets/PassageLinksWidget';
 import TextSizeWidget from './widgets/TextSizeWidget';
+import { toPassage, toRightPassage, toRef, toRemoveLeft, toRemoveRight } from './utils';
 
 export default {
   store,
@@ -140,29 +140,11 @@ export default {
         default:
       }
     },
-    toPassage(urn) {
-      const p = parseURN(urn);
-      if (!p.reference && this.passage) {
-        const { reference: existingReference } = parseURN(this.passage.urn);
-        urn += `:${existingReference}`;
-      }
-      return { name: 'reader', params: { urn }, query: this.$route.query };
-    },
-    toRightPassage(urn) {
-      const p = parseURN(urn);
-      return { name: 'reader', params: this.$route.params, query: { right: p.version } };
-    },
-    toRef(reference) {
-      const p = parseURN(this.urn);
-      const urn = `urn:${p.urnNamespace}:${p.ctsNamespace}:${p.textGroup}.${p.work}.${p.version}:${reference}`;
-      return { name: 'reader', params: { urn }, query: this.$route.query };
-    },
-    toRemoveLeft() {
-      return { name: 'reader', params: { urn: this.rightPassage.urn } };
-    },
-    toRemoveRight() {
-      return { name: 'reader', params: { urn: this.passage.urn } };
-    },
+    toPassage,
+    toRightPassage,
+    toRef,
+    toRemoveLeft,
+    toRemoveRight,
   },
   components: {
     PassageRenderText,

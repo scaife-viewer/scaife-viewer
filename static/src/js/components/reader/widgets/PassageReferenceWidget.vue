@@ -15,6 +15,7 @@
 
 <script>
 import { mapState } from 'vuex';
+import { toRef } from '../utils';
 
 export default {
   created() {
@@ -44,7 +45,7 @@ export default {
     },
     handleKeyUp(e) {
       if (e.keyCode === 13) {
-        this.$store.dispatch('setRef', this.reference);
+        this.$router.push(toRef(this.reference));
       }
     },
     handleClick(e) {

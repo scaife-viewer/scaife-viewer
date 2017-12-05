@@ -53,6 +53,7 @@
     "vue-template-compiler": "^2.4.4",
     "vuex": "^2.4.1",
     "vuex-persistedstate": "^2.0.0",
+    "vuex-router-sync": "^5.0.0",
     "webpack": "^3.6.0",
     "webpack-bundle-analyzer": "^2.9.0",
     "webpack-dev-server": "^2.9.1",

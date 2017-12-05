@@ -1,7 +1,9 @@
 import VueRouter from 'vue-router';
+import { sync } from 'vuex-router-sync';
 import ReaderRouter from './ReaderRouter';
+import store from '../../store';
 
-export default new VueRouter({
+const router = new VueRouter({
   mode: 'history',
   routes: [
     {
@@ -11,3 +13,7 @@ export default new VueRouter({
     },
   ],
 });
+
+sync(store, router);
+
+export default router;
