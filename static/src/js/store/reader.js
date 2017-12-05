@@ -17,6 +17,8 @@ module.exports = {
     rightPassage: null,
     passageLoading: false,
     rightPassageLoading: false,
+    passageError: null,
+    rightPassageError: null,
     versions: null,
   },
   actions: {
@@ -24,24 +26,31 @@ module.exports = {
       const pagination = {};
       const url = `/library/passage/${urn}/json/`;
       const resp = await fetch(url);
-      if (resp.headers.has('link')) {
-        const links = parseLinkHeader(resp.headers.get('link'));
-        if (links.prev) {
-          pagination.prev = {
-            url: links.prev.url,
-            urn: links.prev.urn,
-            ref: rsplit(links.prev.urn, ':', 2).slice(-1)[0],
-          };
+      let passage;
+      if (resp.status >= 200 && resp.status < 300) {
+        if (resp.headers.has('link')) {
+          const links = parseLinkHeader(resp.headers.get('link'));
+          if (links.prev) {
+            pagination.prev = {
+              url: links.prev.url,
+              urn: links.prev.urn,
+              ref: rsplit(links.prev.urn, ':', 2).slice(-1)[0],
+            };
+          }
+          if (links.next) {
+            pagination.next = {
+              url: links.next.url,
+              urn: links.next.urn,
+              ref: rsplit(links.next.urn, ':', 2).slice(-1)[0],
+            };
+          }
         }
-        if (links.next) {
-          pagination.next = {
-            url: links.next.url,
-            urn: links.next.urn,
-            ref: rsplit(links.next.urn, ':', 2).slice(-1)[0],
-          };
-        }
+        passage = await resp.json();
+      } else {
+        const error = new Error(resp.statusText || resp.status);
+        error.response = resp;
+        throw error;
       }
-      const passage = await resp.json();
       return { ...passage, ...pagination };
     },
     async loadVersions({ commit }, urn) {
@@ -63,18 +72,28 @@ module.exports = {
       commit('setPassageLoading', true);
       const p = parseURN(urn);
       await dispatch('loadVersions', `urn:${p.urnNamespace}:${p.ctsNamespace}:${p.textGroup}.${p.work}`);
-      const passage = await dispatch('loadPassage', urn);
-      commit('setPassage', passage);
-      commit('setPassageLoading', false);
+      try {
+        const passage = await dispatch('loadPassage', urn);
+        commit('setPassage', passage);
+      } catch (e) {
+        commit('setPassageError', 'WHAT');
+      } finally {
+        commit('setPassageLoading', false);
+      }
     },
     async setRightPassage({ dispatch, commit }, urn) {
       commit('setRightPassageLoading', true);
-      if (urn) {
-        commit('setRightPassage', await dispatch('loadPassage', urn));
-      } else {
-        commit('setRightPassage', null);
+      try {
+        if (urn) {
+          commit('setRightPassage', await dispatch('loadPassage', urn));
+        } else {
+          commit('setRightPassage', null);
+        }
+      } catch (e) {
+        commit('setRightPassageError', e.toString());
+      } finally {
+        commit('setRightPassageLoading', false);
       }
-      commit('setRightPassageLoading', false);
     },
     async setRef({ dispatch, state }, reference) {
       const pending = [];
@@ -97,6 +116,12 @@ module.exports = {
     },
     setRightPassageLoading(state, loading) {
       state.rightPassageLoading = loading;
+    },
+    setPassageError(state, error) {
+      state.passageError = error;
+    },
+    setRightPassageError(state, error) {
+      state.rightPassageError = error;
     },
     setVersions(state, versions) {
       state.versions = versions;

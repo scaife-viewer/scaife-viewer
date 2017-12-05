@@ -15,7 +15,7 @@
         <h1><a v-for="breadcrumb in passage.text.ancestors" :key="breadcrumb.urn" :href="breadcrumb.url">{{ breadcrumb.label }}</a></h1>
         <h3><passage-human-reference :passage="passage"></passage-human-reference></h3>
       </div>
-      <version-selector v-if="!rightPassage && versions.length > 1" :versions="versions" :to="toRightPassage">
+      <version-selector v-if="!rightUrn && versions.length > 1" :versions="versions" :to="toRightPassage">
         <i class="fa fa-columns"></i>
         add parallel version
       </version-selector>
@@ -23,23 +23,40 @@
         <div class="pg-left">
           <router-link v-if="passage.prev" :to="toRef(passage.prev.ref)"><span><i :class="['fa', {'fa-chevron-left': !passage.rtl, 'fa-chevron-right': passage.rtl}]"></i></span></router-link>
         </div>
-        <template v-if="rightPassage">
+        <template v-if="rightUrn">
           <div class="left">
-            <version-selector :versions="versions" :to="toPassage" :remove="toRemoveLeft">
-              {{ passage.text.label }}
-              <div class="metadata">{{ passage.text.human_lang }} {{ passage.text.kind }}</div>
-            </version-selector>
-            <passage-render-text :passage="passage" :loading="passageLoading"></passage-render-text>
+            <div v-if="passageError" class="alert alert-danger" role="alert">
+              Failed to load <b>{{ urn }}</b>: {{ passageError }}
+            </div>
+            <template v-else>
+              <version-selector :versions="versions" :to="toPassage" :remove="toRemoveLeft">
+                {{ passage.text.label }}
+                <div class="metadata">{{ passage.text.human_lang }} {{ passage.text.kind }}</div>
+              </version-selector>
+              <passage-render-text :passage="passage" :loading="passageLoading"></passage-render-text>
+            </template>
           </div>
           <div class="right">
-            <version-selector :versions="versions" :to="toRightPassage" :remove="toRemoveRight">
-              {{ rightPassage.text.label }}
-              <div class="metadata">{{ rightPassage.text.human_lang }} {{ rightPassage.text.kind }}</div>
-            </version-selector>
-            <passage-render-text :passage="rightPassage" :loading="rightPassageLoading"></passage-render-text>
+            <div v-if="rightPassageError" class="alert alert-danger" role="alert">
+              Failed to load <b>{{ rightUrn }}</b>: {{ rightPassageError }}
+            </div>
+            <template v-else>
+              <version-selector :versions="versions" :to="toRightPassage" :remove="toRemoveRight">
+                {{ rightPassage.text.label }}
+                <div class="metadata">{{ rightPassage.text.human_lang }} {{ rightPassage.text.kind }}</div>
+              </version-selector>
+              <passage-render-text :passage="rightPassage" :loading="rightPassageLoading"></passage-render-text>
+            </template>
           </div>
         </template>
-        <passage-render-text v-else :passage="passage" :loading="passageLoading"></passage-render-text>
+        <template v-else>
+          <div v-if="passageError" class="alert alert-danger" role="alert">
+            Failed to load <b>{{ urn }}</b>: {{ passageError }}
+          </div>
+          <template v-else>
+            <passage-render-text :passage="passage" :loading="passageLoading"></passage-render-text>
+          </template>
+        </template>
         <div class="pg-right">
           <router-link v-if="passage.next" :to="toRef(passage.next.ref)"><span><i :class="['fa', {'fa-chevron-left': passage.rtl, 'fa-chevron-right': !passage.rtl}]"></i></span></router-link>
         </div>
@@ -97,6 +114,8 @@ export default {
       rightPassage: state => state.reader.rightPassage,
       passageLoading: state => state.reader.passageLoading,
       rightPassageLoading: state => state.reader.rightPassageLoading,
+      passageError: state => state.reader.passageError,
+      rightPassageError: state => state.reader.rightPassageError,
       versions: state => state.reader.versions,
       sidebarLeftOpened: state => state.reader.sidebarLeftOpened,
       sidebarRightOpened: state => state.reader.sidebarRightOpened,

@@ -24,10 +24,15 @@ module.exports = {
   },
   toRemoveLeft() {
     const { state } = store;
-    return { name: 'reader', params: { urn: state.reader.rightPassage.urn } };
+    const p = parseURN(state.route.params.urn);
+    let urn = `urn:${p.urnNamespace}:${p.ctsNamespace}:${p.textGroup}.${p.work}.${state.route.query.right}`;
+    if (p.reference) {
+      urn += `:${p.reference}`;
+    }
+    return { name: 'reader', params: { urn } };
   },
   toRemoveRight() {
     const { state } = store;
-    return { name: 'reader', params: { urn: state.reader.passage.urn } };
+    return { name: 'reader', params: { urn: state.route.params.urn } };
   },
 };
