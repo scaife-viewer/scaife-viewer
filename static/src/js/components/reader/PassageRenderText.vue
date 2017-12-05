@@ -1,6 +1,7 @@
 <template>
-  <div :class="['text', `text-${textSize}`, {'text-loading': loading, 'text-loaded': !loading}]">
-    <component :is="renderedText"></component>
+  <div :class="['text', `text-${textSize}`]">
+    <text-loading v-if="loading"></text-loading>
+    <component :class="{'text-loading': loading, 'text-loaded': !loading}" :is="renderedText"></component>
   </div>
 </template>
 
@@ -8,6 +9,7 @@
 import { mapState } from 'vuex';
 import store from '../../store';
 import TextPart from './TextPart';
+import TextLoading from './TextLoading';
 
 export default {
   store,
@@ -25,6 +27,9 @@ export default {
         },
       };
     },
+  },
+  components: {
+    TextLoading,
   },
 };
 </script>
