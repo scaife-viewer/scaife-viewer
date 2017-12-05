@@ -76,7 +76,7 @@ module.exports = {
         const passage = await dispatch('loadPassage', urn);
         commit('setPassage', passage);
       } catch (e) {
-        commit('setPassageError', 'WHAT');
+        commit('setPassageError', e.toString());
       } finally {
         commit('setPassageLoading', false);
       }
