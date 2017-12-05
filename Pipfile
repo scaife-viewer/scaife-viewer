@@ -30,6 +30,7 @@ wrapt = "*"
 anytree = "*"
 honcho = "*"
 elasticsearch = ">=6.0.0"
+google-cloud-pubsub = "*"
 
 
 [dev-packages]
