@@ -1,6 +1,6 @@
 <template>
   <div :class="['textpart']">
-    <div v-if="reference" class="a" @click="setRef"><div>{{ n }}</div></div>
+    <router-link v-if="reference" class="a" :to="toRef(this.reference)"><div>{{ n }}</div></router-link>
     <div class="b">
       <slot></slot>
     </div>
@@ -9,6 +9,7 @@
 
 <script>
 import store from '../../store';
+import { toRef } from './utils';
 
 export default {
   name: 'text-part',
@@ -20,9 +21,7 @@ export default {
     },
   },
   methods: {
-    setRef() {
-      this.$store.dispatch('setRef', this.reference);
-    },
+    toRef,
   },
 };
 </script>

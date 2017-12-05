@@ -119,6 +119,10 @@ div.text {
   .textpart {
     display: flex;
     & > .a {
+      &:hover {
+        text-decoration: none;
+      }
+      display: block;
       color: transparent;
       div {
         position: -webkit-sticky;
