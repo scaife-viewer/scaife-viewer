@@ -13,7 +13,7 @@
       </router-link>
       <template v-if="remove">
         <div class="dropdown-divider"></div>
-        <router-link class="dropdown-item remove" :to="remove" @click.native="handleRemoveClick">remove</router-link>
+        <router-link class="dropdown-item remove" :to="remove()" @click.native="handleRemoveClick">remove</router-link>
       </template>
     </div>
   </div>

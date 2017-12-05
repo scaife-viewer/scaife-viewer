@@ -113,6 +113,8 @@ export default {
       }
       if (this.rightUrn && (!this.rightPassage || this.rightUrn !== this.rightPassage.urn)) {
         pending.push(this.$store.dispatch('setRightPassage', this.rightUrn));
+      } else {
+        pending.push(this.$store.dispatch('setRightPassage', null));
       }
       Promise.all(pending).then(() => {
         this.loaded = true;
