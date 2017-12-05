@@ -197,37 +197,24 @@
   </xsl:template>
 
   <xsl:template match="t:div[@type = 'textpart']">
-    <xsl:element name="div">
-      <xsl:attribute name="class">textpart <xsl:value-of select="@subtype" /></xsl:attribute>
+    <xsl:element name="text-part">
+      <xsl:attribute name="class"><xsl:value-of select="@subtype" /></xsl:attribute>
       <xsl:if test="@n">
-        <xsl:attribute name="data-n">
+        <xsl:attribute name="reference">
+          <xsl:for-each select="ancestor::t:div[@type='textpart']/@n">
+            <xsl:value-of select="concat(., '.')" />
+          </xsl:for-each>
           <xsl:value-of select="@n" />
         </xsl:attribute>
-        <xsl:element name="div">
-          <xsl:attribute name="class">a</xsl:attribute>
-          <xsl:attribute name="data-ref">
-            <xsl:for-each select="ancestor::t:div[@type='textpart']/@n">
-              <xsl:value-of select="concat(., '.')" />
-            </xsl:for-each>
-            <xsl:value-of select="@n" />
-          </xsl:attribute>
-          <xsl:if test="@n">
-            <div>
-              <xsl:value-of select="@n" />
-            </div>
-          </xsl:if>
-        </xsl:element>
       </xsl:if>
-      <div class="b">
-        <xsl:choose>
-          <xsl:when test="child::t:l">
-            <ol><xsl:apply-templates /></ol>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:apply-templates/>
-          </xsl:otherwise>
-        </xsl:choose>
-      </div>
+      <xsl:choose>
+        <xsl:when test="child::t:l">
+          <ol><xsl:apply-templates /></ol>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates/>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:element>
   </xsl:template>
 

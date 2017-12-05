@@ -1,18 +1,14 @@
-from http import HTTPStatus
-
 from django.core.paginator import Paginator
-from django.core.urlresolvers import reverse
-from django.http import Http404, HttpResponse, JsonResponse
+from django.http import Http404, JsonResponse
 from django.shortcuts import render
 from django.utils.safestring import mark_safe
-from django.views.decorators.vary import vary_on_headers
-
-import mimeparse
+from django.views import View
 
 from . import cts
 from .cts.utils import natural_keys as nk
 from .reading.models import ReadingLog
 from .search import SearchQuery
+from .utils import apify, link_passage, encode_link_header
 
 
 def home(request):
@@ -23,81 +19,93 @@ def profile(request):
     return render(request, "profile.html", {})
 
 
-@vary_on_headers("Accept")
-def library(request):
-    content_type = mimeparse.best_match(["application/json", "text/html"], request.META["HTTP_ACCEPT"])
-    if content_type == "application/json":
-        text_groups = cts.text_inventory().text_groups()
-        return JsonResponse({
-            "object": [
-                {
-                    "label": text_group.label,
-                    "url": reverse("library_cts_resource", kwargs={"urn": text_group.urn})
-                }
-                for text_group in text_groups
-            ]
-        })
-    if content_type == "text/html":
-        ctx = {}
-        return render(request, "library/index.html", ctx)
+class BaseLibraryView(View):
+
+    format = "html"
+
+    def get(self, request, **kwargs):
+        to_response = {
+            "html": self.as_html,
+            "json": self.as_json,
+        }.get(self.format, "html")
+        return to_response()
 
 
-def serialize_work(work):
-    return {
-        "label": work.label,
-        "url": reverse("library_cts_resource", kwargs={"urn": work.urn}),
-        "texts": [
-            serialize_text(text)
-            for text in work.texts()
-        ]
-    }
+class LibraryView(BaseLibraryView):
+
+    def get_text_groups(self):
+        return cts.text_inventory().text_groups()
+
+    def as_html(self):
+        return render(self.request, "library/index.html", {})
+
+    def as_json(self):
+        text_groups = self.get_text_groups()
+        payload = {
+            "text_groups": [apify(text_group) for text_group in text_groups],
+        }
+        return JsonResponse(payload)
 
 
-def serialize_text(text):
-    return {
-        "label": text.label,
-        "description": text.description,
-        "subtype": text.kind,
-        "lang": text.lang,
-        "human_lang": text.human_lang,
-        "browse_url": reverse("library_cts_resource", kwargs={"urn": text.urn}),
-        "read_url": reverse("reader", kwargs={"urn": text.first_passage().urn}),
-    }
+class LibraryCollectionView(BaseLibraryView):
 
+    def validate_urn(self):
+        if not self.kwargs["urn"].startswith("urn:"):
+            raise Http404()
 
-@vary_on_headers("Accept")
-def library_cts_resource(request, urn):
-    collection = cts.collection(urn)
-    content_type = mimeparse.best_match(["application/json", "text/html"], request.META["HTTP_ACCEPT"])
-    collection_name = collection.__class__.__name__.lower()
-    if content_type == "application/json":
-        if isinstance(collection, cts.TextGroup):
-            works = []
-            for work in collection.works():
-                works.append(serialize_work(work))
-            obj = works
-        if isinstance(collection, cts.Work):
-            texts = []
-            for text in collection.texts():
-                texts.append(serialize_text(text))
-            obj = texts
-        if isinstance(collection, cts.Text):
-            toc = collection.toc()
-            obj = [
-                {
-                    "label": ref_node.label.title(),
-                    "num": ref_node.num,
-                    "reader_url": reverse("reader", kwargs={"urn": next(toc.chunks(ref_node), None).urn}),
-                }
-                for ref_node in toc.num_resolver.glob(toc.root, "*")
-            ]
-        return JsonResponse({"object": obj})
-    if content_type == "text/html":
+    def get_collection(self):
+        self.validate_urn()
+        return cts.collection(self.kwargs["urn"])
+
+    def as_html(self):
+        collection = self.get_collection()
+        collection_name = collection.__class__.__name__.lower()
         ctx = {
             collection_name: collection,
         }
-        return render(request, f"library/cts_{collection_name}.html", ctx)
-    return HttpResponse(status=HTTPStatus.NOT_ACCEPTABLE)
+        return render(self.request, f"library/cts_{collection_name}.html", ctx)
+
+    def as_json(self):
+        collection = self.get_collection()
+        return JsonResponse(apify(collection))
+
+
+class LibraryCollectionVectorView(View):
+
+    def get(self, request, urn):
+        entries = request.GET.getlist("e")
+        collections = {}
+        for entry in entries:
+            collection = cts.collection(f"{urn}.{entry}")
+            collections[str(collection.urn)] = apify(collection)
+        payload = {
+            "collections": collections,
+        }
+        return JsonResponse(payload)
+
+
+class LibraryPassageView(View):
+
+    def get(self, request, urn):
+        try:
+            passage = cts.passage(urn)
+        except cts.PassageDoesNotExist:
+            raise Http404()
+        lo = {}
+        prev, nxt = passage.prev(), passage.next()
+        if prev:
+            lo["prev"] = {
+                "target": link_passage(str(prev.urn))["url"],
+                "urn": str(prev.urn),
+            }
+        if nxt:
+            lo["next"] = {
+                "target": link_passage(str(nxt.urn))["url"],
+                "urn": str(nxt.urn),
+            }
+        response = JsonResponse(apify(passage))
+        response["Link"] = encode_link_header(lo)
+        return response
 
 
 def reader(request, urn):

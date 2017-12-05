@@ -10,6 +10,9 @@ body.reader {
       a {
         color: inherit;
       }
+      a:not(:last-child):after {
+        content: ", ";
+      }
     }
     h2 {
       margin: 0;
@@ -131,5 +134,15 @@ body.reader {
       font-size: 12px;
       line-height: 12px;
     }
+  }
+  .text-loading {
+    transform: translate3d(0, 0, 0);  // to avoid flicker
+    opacity: 0;
+    transition-duration: 0.2s;
+  }
+  .text-loaded {
+    transform: translate3d(0, 0, 0);  // to avoid flicker
+    opacity: 1;
+    transition-duration: 0.2s;
   }
 }

@@ -1,3 +1,5 @@
+import qs from 'query-string';
+
 module.exports = {
   state: {
     textGroups: [],
@@ -7,14 +9,12 @@ module.exports = {
     toc: [],
   },
   actions: {
-    loadTextGroups({ commit }, url) {
+    async loadTextGroupList({ commit }) {
+      const url = '/library/json/';
       const opts = { headers: { Accept: 'application/json' } };
-      return fetch(url, opts)
-        .then(res => res.json())
-        .then(data => data.object)
-        .then((textGroups) => {
-          commit('setTextGroups', textGroups);
-        });
+      const res = await fetch(url, opts);
+      const textInventory = await res.json();
+      commit('setTextGroups', textInventory.text_groups);
     },
     filterTextGroups({ state, commit }, query) {
       if (state.allTextGroups) {
@@ -30,14 +30,52 @@ module.exports = {
     resetTextGroups({ state, commit }) {
       commit('setTextGroups', [...state.allTextGroups]);
     },
-    loadWorks({ commit }, url) {
+    async loadWorkList({ commit }, textGroupUrl) {
+      let params;
+      let res;
+      let vector;
+
       const opts = { headers: { Accept: 'application/json' } };
-      return fetch(url, opts)
-        .then(res => res.json())
-        .then(data => data.object)
-        .then((works) => {
-          commit('setWorks', works);
+      res = await fetch(textGroupUrl, opts);
+      const textGroup = await res.json();
+
+      // To reduce the load on the API, we prepare two vector calls against works
+      // and texts.
+
+      // vector for works
+      params = qs.stringify({
+        e: textGroup.works.map(work => work.urn.replace(`${textGroup.urn}.`, '')),
+      });
+      const workVectorUrl = `/library/vector/${textGroup.urn}/?${params}`;
+      res = await fetch(workVectorUrl);
+      vector = await res.json();
+      const workMap = vector.collections;
+
+      // vector for texts
+      const e = [];
+      textGroup.works.forEach(({ urn: workUrn }) => {
+        const work = workMap[workUrn];
+        work.texts.forEach(({ urn: textUrn }) => {
+          e.push(textUrn.replace(`${textGroup.urn}.`, ''));
         });
+      });
+      params = qs.stringify({ e });
+      const textVectorUrl = `/library/vector/${textGroup.urn}/?${params}`;
+      res = await fetch(textVectorUrl);
+      vector = await res.json();
+      const textMap = vector.collections;
+
+      // finally prepare the works object to store
+      const works = [];
+      textGroup.works.forEach(({ urn: workUrn }) => {
+        const work = workMap[workUrn];
+        works.push({
+          ...work,
+          texts: work.texts.map(({ urn: textUrn }) => textMap[textUrn]),
+        });
+      });
+
+      commit('setWorks', works);
     },
     filterWorks({ state, commit }, query) {
       if (state.allWorks) {
@@ -53,14 +91,11 @@ module.exports = {
     resetWorks({ state, commit }) {
       commit('setWorks', [...state.allWorks]);
     },
-    loadToc({ commit }, url) {
+    async loadTocList({ commit }, textUrl) {
       const opts = { headers: { Accept: 'application/json' } };
-      return fetch(url, opts)
-        .then(res => res.json())
-        .then(data => data.object)
-        .then((toc) => {
-          commit('setToc', toc);
-        });
+      const res = await fetch(textUrl, opts);
+      const text = await res.json();
+      commit('setToc', text.toc);
     },
   },
   mutations: {
