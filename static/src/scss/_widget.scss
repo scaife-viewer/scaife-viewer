@@ -36,6 +36,14 @@
   }
 }
 
+.widget.children {
+  p {
+    a:not(:last-child):after {
+      content: ' ';
+    }
+  }
+}
+
 .widget.passage-reference {
   p {
     margin-top: 5px;

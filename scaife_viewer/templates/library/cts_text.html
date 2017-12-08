@@ -10,7 +10,7 @@
   <h2>
     <a href="{% url 'library' %}">Library &gt;</a>
     {% for breadcrumb in text.ancestors %}
-      <a href="{% url 'library_cts_resource' breadcrumb.urn %}">{{ breadcrumb.label }}{% if not forloop.last %} &gt;{% endif %}</a>
+      <a href="{% url 'library_collection' breadcrumb.urn %}">{{ breadcrumb.label }}{% if not forloop.last %} &gt;{% endif %}</a>
     {% endfor %}
   </h2>
 
@@ -23,5 +23,5 @@
     We're still working on how best to chunk and display this.
   </p>
 
-  <sv-cts-toc-list></sv-cts-toc-list>
+  <sv-cts-toc-list text-url="{% url 'library_collection_json' text.urn %}"></sv-cts-toc-list>
 {% endblock %}

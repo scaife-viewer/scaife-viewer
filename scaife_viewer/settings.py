@@ -217,10 +217,11 @@ SECURE_SSL_REDIRECT = bool(int(os.environ.get("SECURE_SSL_REDIRECT", "0")))
 
 resolver = os.environ.get("CTS_RESOLVER", "api")
 if resolver == "api":
+    CTS_API_ENDPOINT = os.environ.get("CTS_API_ENDPOINT", "https://perseus-cts.eu1.eldarioncloud.com/api/cts")
     CTS_RESOLVER = {
         "type": "api",
         "kwargs": {
-            "endpoint": os.environ.get("CTS_API_ENDPOINT", "https://perseus-cts.eu1.eldarioncloud.com/api/cts"),
+            "endpoint": CTS_API_ENDPOINT,
         },
     }
     CTS_LOCAL_TEXT_INVENTORY = "ti.xml" if DEBUG else None
