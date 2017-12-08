@@ -189,12 +189,34 @@ export default {
     },
     handleKeyUp(e) {
       if (e.key === 'ArrowLeft') {
-        if (this.passage.metadata.prev) {
-          this.$router.push(this.toRef(this.passage.metadata.prev.ref));
+        let ref;
+        if (this.text.metadata.rtl) {
+          if (this.passage.metadata.next) {
+            ref = this.passage.metadata.next.ref; // eslint-disable-line prefer-destructuring
+          }
+        }
+        if (!this.text.metadata.rtl) {
+          if (this.passage.metadata.prev) {
+            ref = this.passage.metadata.prev.ref; // eslint-disable-line prefer-destructuring
+          }
+        }
+        if (ref) {
+          this.$router.push(this.toRef(ref));
         }
       } else if (e.key === 'ArrowRight') {
-        if (this.passage.metadata.next) {
-          this.$router.push(this.toRef(this.passage.metadata.next.ref));
+        let ref;
+        if (this.text.metadata.rtl) {
+          if (this.passage.metadata.prev) {
+            ref = this.passage.metadata.prev.ref; // eslint-disable-line prefer-destructuring
+          }
+        }
+        if (!this.text.metadata.rtl) {
+          if (this.passage.metadata.next) {
+            ref = this.passage.metadata.next.ref; // eslint-disable-line prefer-destructuring
+          }
+        }
+        if (ref) {
+          this.$router.push(this.toRef(ref));
         }
       }
     },
