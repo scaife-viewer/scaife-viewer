@@ -1,16 +1,12 @@
 import VueRouter from 'vue-router';
 import { sync } from 'vuex-router-sync';
-import ReaderRouter from './ReaderRouter';
-import store from '../../store';
+import store from './store';
+import reader from './reader/routes';
 
 const router = new VueRouter({
   mode: 'history',
   routes: [
-    {
-      path: '/reader/:urn',
-      component: ReaderRouter,
-      name: 'reader',
-    },
+    ...reader,
   ],
 });
 

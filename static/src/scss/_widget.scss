@@ -36,14 +36,6 @@
   }
 }
 
-.widget.ancestors {
-  p {
-    a:not(:last-child):after {
-      content: ' > ';
-    }
-  }
-}
-
 .widget.children {
   p {
     a:not(:last-child):after {

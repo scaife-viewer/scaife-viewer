@@ -8,20 +8,18 @@
 </template>
 
 <script>
-import store from '../../store';
-import { toRef } from './utils';
+import ReaderNavigationMixin from './reader-navigation-mixin';
 
 export default {
-  name: 'text-part',
-  store,
+  name: 'TextPart',
+  mixins: [
+    ReaderNavigationMixin,
+  ],
   props: ['reference'],
   computed: {
     n() {
       return this.reference.split('.').pop();
     },
-  },
-  methods: {
-    toRef,
   },
 };
 </script>

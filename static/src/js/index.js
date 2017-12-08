@@ -6,7 +6,7 @@ import vueCustomElement from 'vue-custom-element';
 import CTSTextGroupList from '@/js/components/CTSTextGroupList';
 import CTSWorkList from '@/js/components/CTSWorkList';
 import CTSTocList from '@/js/components/CTSTocList';
-import ReaderEntry from '@/js/components/reader/ReaderEntry';
+import router from '@/js/router';
 import ajaxSendMethod from '@/js/ajax';
 import Popper from 'popper.js';
 import 'document-register-element/build/document-register-element';
@@ -24,7 +24,10 @@ Vue.use(vueCustomElement);
 Vue.customElement('sv-cts-textgroup-list', CTSTextGroupList);
 Vue.customElement('sv-cts-work-list', CTSWorkList);
 Vue.customElement('sv-cts-toc-list', CTSTocList);
-Vue.customElement('sv-reader', ReaderEntry);
+Vue.customElement('sv-reader', {
+  router, // tied to sv-reader until we vueify the whole site
+  template: '<router-view />',
+});
 
 $(() => {
   $(document).ajaxSend(ajaxSendMethod);

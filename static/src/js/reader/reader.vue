@@ -1,0 +1,218 @@
+<template>
+  <div class="wrapper">
+    <template v-if="!ready">
+      <reader-loader v-show="showLoader" />
+    </template>
+    <div v-else-if="error" :style="{ margin: 'auto' }">
+      <div class="alert alert-danger" role="alert">
+        <b>Error</b>: {{ error }}
+      </div>
+    </div>
+    <template v-else>
+      <div :class="['sidebar', { collapsed: sidebarLeftOpened }]" id="left-sidebar">
+        <div>
+          <widget-passage-ancestors />
+          <widget-passage-children />
+          <widget-passage-reference />
+        </div>
+      </div>
+      <section id="content_body">
+        <button id="left-sidebar-toggle" :class="[{ open: !sidebarLeftOpened }]" @click="toggleSidebar('left')"><i></i></button>
+        <button id="right-sidebar-toggle" :class="[{ open: !sidebarRightOpened }]" @click="toggleSidebar('right')"><i></i></button>
+        <div class="passage-heading">
+          <a href="/">Library &gt;</a>
+          <h1>
+            <template v-for="(breadcrumb, idx) in text.metadata.ancestors">
+              <a :key="breadcrumb.urn" :href="breadcrumb.url">{{ breadcrumb.label }}</a><template v-if="idx != text.metadata.ancestors.length - 1">, </template>
+            </template>
+          </h1>
+          <h3 v-if="!rightPassage"><passage-human-reference :metadata="leftPassage.metadata" /></h3>
+        </div>
+        <version-selector v-if="!rightPassage && versions.length > 1" :versions="versions" :to="toRightPassage">
+          <i class="fa fa-columns"></i>
+          add parallel version
+        </version-selector>
+        <div id="overall" class="overall" :dir="text.metadata.rtl ? 'rtl' : 'ltr'">
+          <div class="pg-left">
+            <router-link v-if="passage.metadata.prev" :to="toRef(passage.metadata.prev.ref)">
+              <span>
+                <i :class="['fa', {'fa-chevron-left': !text.metadata.rtl, 'fa-chevron-right': text.metadata.rtl}]"></i>
+              </span>
+            </router-link>
+          </div>
+          <template v-if="rightUrn">
+            <div class="left">
+              <div v-if="leftPassage.error" class="alert alert-danger" role="alert">
+                Failed to load <b>{{ leftPassage.urn }}</b>: {{ leftPassage.error }}
+              </div>
+              <template v-else>
+                <version-selector :versions="versions" :to="toPassage" :remove="toRemoveLeft">
+                  {{ leftText.metadata.label }}
+                  <div class="metadata">{{ leftText.metadata.human_lang }} {{ leftText.metadata.kind }}</div>
+                </version-selector>
+                <passage-render-text :passage="leftPassage" />
+              </template>
+            </div>
+            <div class="right">
+              <div v-if="rightPassage.error" class="alert alert-danger" role="alert">
+                Failed to load <b>{{ rightPassage.urn }}</b>: {{ rightPassage.error }}
+              </div>
+              <template v-else>
+                <version-selector :versions="versions" :to="toRightPassage" :remove="toRemoveRight">
+                  {{ rightText.metadata.label }}
+                  <div class="metadata">{{ rightText.metadata.human_lang }} {{ rightText.metadata.kind }}</div>
+                </version-selector>
+                <passage-render-text :passage="rightPassage" />
+              </template>
+            </div>
+          </template>
+          <template v-else>
+            <div v-if="leftPassage.error" class="alert alert-danger" role="alert">
+              Failed to load <b>{{ leftPassage.urn }}</b>: {{ leftPassage.error }}
+            </div>
+            <passage-render-text v-else :passage="leftPassage" />
+          </template>
+          <div class="pg-right">
+            <router-link v-if="passage.metadata.next" :to="toRef(passage.metadata.next.ref)">
+              <span>
+                <i :class="['fa', {'fa-chevron-left': text.metadata.rtl, 'fa-chevron-right': !text.metadata.rtl}]"></i>
+              </span>
+            </router-link>
+          </div>
+        </div>
+      </section>
+      <div :class="['sidebar', { collapsed: sidebarRightOpened }]" id="right-sidebar">
+        <div>
+          <widget-passage-links />
+          <widget-text-size />
+        </div>
+      </div>
+    </template>
+  </div>
+</template>
+
+<script>
+import store from '../store';
+import PassageHumanReference from './passage-human-reference';
+import PassageRenderText from './passage-render-text';
+import ReaderLoader from './reader-loader';
+import ReaderNavigationMixin from './reader-navigation-mixin';
+import VersionSelector from './version-selector';
+import WidgetPassageAncestors from './widgets/passage-ancestors';
+import WidgetPassageChildren from './widgets/passage-children';
+import WidgetPassageReference from './widgets/passage-reference';
+import WidgetPassageLinks from './widgets/passage-links';
+import WidgetTextSize from './widgets/text-size';
+
+const widgets = {
+  WidgetPassageAncestors,
+  WidgetPassageChildren,
+  WidgetPassageReference,
+  WidgetPassageLinks,
+  WidgetTextSize,
+};
+
+export default {
+  name: 'Reader',
+  store,
+  components: {
+    PassageHumanReference,
+    PassageRenderText,
+    ReaderLoader,
+    VersionSelector,
+    ...widgets,
+  },
+  mixins: [
+    ReaderNavigationMixin,
+  ],
+  props: {
+    leftUrn: {
+      required: true,
+    },
+    rightUrn: {
+      required: false,
+    },
+  },
+  data() {
+    return {
+      ready: false,
+      showLoader: false,
+    };
+  },
+  computed: {
+    error() {
+      return this.$store.state.reader.error;
+    },
+    sidebarLeftOpened() {
+      return this.$store.state.reader.sidebarLeftOpened;
+    },
+    sidebarRightOpened() {
+      return this.$store.state.reader.sidebarRightOpened;
+    },
+    versions() {
+      return this.$store.state.reader.versions;
+    },
+    text() {
+      return this.$store.getters['reader/text'];
+    },
+    leftText() {
+      return this.$store.state.reader.leftText;
+    },
+    rightText() {
+      return this.$store.state.reader.rightText;
+    },
+    passage() {
+      return this.$store.getters['reader/passage'];
+    },
+    leftPassage() {
+      return this.$store.state.reader.leftPassage;
+    },
+    rightPassage() {
+      return this.$store.state.reader.rightPassage;
+    },
+  },
+  watch: {
+    $route: 'sync',
+  },
+  mounted() {
+    setTimeout(() => { this.showLoader = true; }, 50);
+    this.sync().then(() => {
+      this.ready = true;
+      window.addEventListener('keyup', this.handleKeyUp);
+    });
+  },
+  beforeDestroy() {
+    window.removeEventListener('keyup', this.handleKeyUp);
+  },
+  methods: {
+    sync() {
+      return this.$store.dispatch('reader/load', {
+        leftUrn: this.leftUrn,
+        rightUrn: this.rightUrn,
+      });
+    },
+    handleKeyUp(e) {
+      if (e.key === 'ArrowLeft') {
+        if (this.passage.metadata.prev) {
+          this.$router.push(this.toRef(this.passage.metadata.prev.ref));
+        }
+      } else if (e.key === 'ArrowRight') {
+        if (this.passage.metadata.next) {
+          this.$router.push(this.toRef(this.passage.metadata.next.ref));
+        }
+      }
+    },
+    toggleSidebar(side) {
+      switch (side) {
+        case 'left':
+          this.$store.commit('reader/toggleSidebarLeft');
+          break;
+        case 'right':
+          this.$store.commit('reader/toggleSidebarRight');
+          break;
+        default:
+      }
+    },
+  },
+};
+</script>

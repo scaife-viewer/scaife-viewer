@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
 import library from '@/js/store/library';
-import reader from '@/js/store/reader';
+import reader from '@/js/reader/store';
 
 Vue.use(Vuex);
 
