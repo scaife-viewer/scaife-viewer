@@ -1,8 +1,8 @@
 <template>
   <div v-show="show" :style="{ 'text-align': 'center' }">
-    <div class="v-pulse v-pulse1" v-bind:style="[ spinnerStyle, spinnerDelay1 ]"></div>
-    <div class="v-pulse v-pulse2" v-bind:style="[ spinnerStyle, spinnerDelay2 ]"></div>
-    <div class="v-pulse v-pulse3" v-bind:style="[ spinnerStyle, spinnerDelay3 ]"></div>
+    <div :style="[ spinnerStyle, spinnerDelay1 ]"></div>
+    <div :style="[ spinnerStyle, spinnerDelay2 ]"></div>
+    <div :style="[ spinnerStyle, spinnerDelay3 ]"></div>
   </div>
 </template>
 
@@ -41,10 +41,10 @@ export default {
         margin: this.margin,
         borderRadius: this.radius,
         display: 'inline-block',
-        animationName: 'v-pulseStretchDelay',
+        animationName: 'v-pulse-stretch-delay',
         animationDuration: '0.75s',
         animationIterationCount: 'infinite',
-        animationTimingFunction: 'cubic-bezier(.2,.68,.18,1.08)',
+        animationTimingFunction: 'cubic-bezier(.2, .68, .18, 1.08)',
         animationFillMode: 'both',
       },
       spinnerDelay1: {
@@ -61,32 +61,14 @@ export default {
 };
 </script>
 
-<style>
-@-webkit-keyframes v-pulseStretchDelay {
+<style lang="scss">
+@keyframes v-pulse-stretch-delay {
   0%, 80% {
-    -webkit-transform: scale(1);
     transform: scale(1);
-    -webkit-opacity: 1;
     opacity: 1;
   }
   45% {
-    -webkit-transform: scale(0.1);
     transform: scale(0.1);
-    -webkit-opacity: 0.7;
-    opacity: 0.7;
-    }
-}
-@keyframes v-pulseStretchDelay {
-  0%, 80% {
-    -webkit-transform: scale(1);
-    transform: scale(1);
-    -webkit-opacity: 1;
-    opacity: 1;
-  }
-  45% {
-    -webkit-transform: scale(0.1);
-    transform: scale(0.1);
-    -webkit-opacity: 0.7;
     opacity: 0.7;
   }
 }

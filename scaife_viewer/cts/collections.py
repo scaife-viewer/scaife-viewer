@@ -193,7 +193,10 @@ class Text(Collection):
             "human_lang": self.human_lang,
             "first_passage": dict(urn=str(self.first_passage().urn)),
             "ancestors": [
-                dict(urn=str(ancestor.urn))
+                {
+                    "urn": str(ancestor.urn),
+                    "label": ancestor.label,
+                }
                 for ancestor in self.ancestors()
             ],
             "toc": [

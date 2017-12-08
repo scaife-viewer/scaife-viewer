@@ -36,7 +36,7 @@ def apify(obj):
         toc = remaining.pop("toc")
         rels = {
             "first_passage": {**link_passage(first_passage["urn"]), **first_passage},
-            "ancestors": [link_collection(ancestor["urn"]) for ancestor in ancestors],
+            "ancestors": [{**link_collection(ancestor["urn"]), **ancestor} for ancestor in ancestors],
             "toc": [{**link_passage(entry["urn"]), **entry} for entry in toc],
         }
     if isinstance(obj, cts.Collection):

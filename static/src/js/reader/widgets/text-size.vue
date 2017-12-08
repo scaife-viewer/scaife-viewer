@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import store from '../../../store';
+import store from '../../store';
 
 export default {
   store,
@@ -23,7 +23,7 @@ export default {
   },
   methods: {
     changeTextSize(size) {
-      this.$store.commit('setTextSize', size);
+      this.$store.commit('reader/setTextSize', { size });
     },
   },
 };

@@ -14,38 +14,37 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import { toRef } from '../utils';
+import store from '../../store';
+import ReaderNavigationMixin from '../reader-navigation-mixin';
 
 export default {
+  store,
+  mixins: [
+    ReaderNavigationMixin,
+  ],
+  watch: {
+    passage: 'setInputRef',
+  },
   created() {
     this.setInputRef();
+  },
+  computed: {
+    passage() {
+      return this.$store.getters['reader/passage'];
+    },
   },
   data() {
     return {
       reference: '',
     };
   },
-  watch: {
-    passage: 'setInputRef',
-  },
-  computed: {
-    ...mapState({
-      passage: state => state.reader.passage,
-    }),
-  },
   methods: {
     setInputRef() {
-      const buf = [];
-      buf.push(this.passage.refs.start.reference);
-      if (this.passage.refs.end) {
-        buf.push(`-${this.passage.refs.end.reference}`);
-      }
-      this.reference = buf.join('');
+      this.reference = this.passage.urn.reference;
     },
     handleKeyUp(e) {
       if (e.keyCode === 13) {
-        this.$router.push(toRef(this.reference));
+        this.$router.push(this.toRef(this.reference));
       } else {
         e.stopPropagation();
       }
