@@ -42,33 +42,29 @@
           </div>
           <template v-if="rightUrn">
             <div class="left">
+              <version-selector :versions="versions" :to="toPassage" :remove="toRemoveLeft">
+                {{ leftText.metadata.label }}
+                <div class="metadata">{{ leftText.metadata.human_lang }} {{ leftText.metadata.kind }}</div>
+              </version-selector>
               <div v-if="leftPassage.error" class="alert alert-danger" role="alert">
-                Failed to load <b>{{ leftPassage.urn }}</b>: {{ leftPassage.error }}
+                Failed to load <b>{{ leftPassage.urn.toString() }}</b>: {{ leftPassage.error }}
               </div>
-              <template v-else>
-                <version-selector :versions="versions" :to="toPassage" :remove="toRemoveLeft">
-                  {{ leftText.metadata.label }}
-                  <div class="metadata">{{ leftText.metadata.human_lang }} {{ leftText.metadata.kind }}</div>
-                </version-selector>
-                <passage-render-text :passage="leftPassage" />
-              </template>
+              <passage-render-text v-else :passage="leftPassage" />
             </div>
             <div class="right">
+              <version-selector :versions="versions" :to="toRightPassage" :remove="toRemoveRight">
+                {{ rightText.metadata.label }}
+                <div class="metadata">{{ rightText.metadata.human_lang }} {{ rightText.metadata.kind }}</div>
+              </version-selector>
               <div v-if="rightPassage.error" class="alert alert-danger" role="alert">
-                Failed to load <b>{{ rightPassage.urn }}</b>: {{ rightPassage.error }}
+                Failed to load <b>{{ rightPassage.urn.toString() }}</b>: {{ rightPassage.error }}
               </div>
-              <template v-else>
-                <version-selector :versions="versions" :to="toRightPassage" :remove="toRemoveRight">
-                  {{ rightText.metadata.label }}
-                  <div class="metadata">{{ rightText.metadata.human_lang }} {{ rightText.metadata.kind }}</div>
-                </version-selector>
-                <passage-render-text :passage="rightPassage" />
-              </template>
+              <passage-render-text v-else :passage="rightPassage" />
             </div>
           </template>
           <template v-else>
             <div v-if="leftPassage.error" class="alert alert-danger" role="alert">
-              Failed to load <b>{{ leftPassage.urn }}</b>: {{ leftPassage.error }}
+              Failed to load <b>{{ leftPassage.urn.toString() }}</b>: {{ leftPassage.error }}
             </div>
             <passage-render-text v-else :passage="leftPassage" />
           </template>

@@ -114,6 +114,9 @@ module.exports = {
   },
   actions: {
     load({ state, commit }, { leftUrn, rightUrn }) {
+      if (state.error) {
+        commit('setError', { error: '' });
+      }
       const ps = [];
       if (state.versions === null) {
         ps.push(sv.fetchCollection(leftUrn.upTo('work')).then(async (work) => {
@@ -132,10 +135,14 @@ module.exports = {
         }));
       }
       if (!state.leftPassage || state.leftPassage.urn.toString() !== leftUrn.toString()) {
-        commit('setLeftPassage', { urn: leftUrn, ready: false });
-        ps.push(sv.fetchPassage(leftUrn).then((passage) => {
-          commit('setLeftPassage', { metadata: passage, ready: true });
-        }));
+        commit('setLeftPassage', { urn: leftUrn, ready: false, error: '' });
+        ps.push(sv.fetchPassage(leftUrn)
+          .then((passage) => {
+            commit('setLeftPassage', { metadata: passage, ready: true });
+          })
+          .catch((err) => {
+            commit('setLeftPassage', { error: err.toString() });
+          }));
       }
       if (rightUrn) {
         const rightTextUrn = rightUrn.upTo('version');
@@ -145,10 +152,14 @@ module.exports = {
           }));
         }
         if (!state.rightPassage || state.rightPassage.urn.toString() !== rightUrn.toString()) {
-          commit('setRightPassage', { urn: rightUrn, ready: false });
-          ps.push(sv.fetchPassage(rightUrn).then((passage) => {
-            commit('setRightPassage', { metadata: passage, ready: true });
-          }));
+          commit('setRightPassage', { urn: rightUrn, ready: false, error: '' });
+          ps.push(sv.fetchPassage(rightUrn)
+            .then((passage) => {
+              commit('setRightPassage', { metadata: passage, ready: true });
+            })
+            .catch((err) => {
+              commit('setRightPassage', { error: err.toString() });
+            }));
         }
       } else {
         commit('setRightPassage', null);
