@@ -104,7 +104,8 @@ class LibraryPassageView(View):
                 "urn": str(nxt.urn),
             }
         response = JsonResponse(apify(passage))
-        response["Link"] = encode_link_header(lo)
+        if lo:
+            response["Link"] = encode_link_header(lo)
         return response
 
 
