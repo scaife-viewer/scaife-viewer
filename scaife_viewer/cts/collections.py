@@ -1,4 +1,5 @@
 from functools import lru_cache, partial
+from operator import attrgetter
 
 from django.conf import settings
 
@@ -110,11 +111,13 @@ class Work(Collection):
 
     def texts(self):
         children = self.metadata.texts
-        for urn in sorted(children.keys()):
+        texts = []
+        for urn in children.keys():
             metadata = children[urn]
             if metadata.citation is None:
                 continue
-            yield resolve_collection(metadata.TYPE_URI)(urn, metadata)
+            texts.append(resolve_collection(metadata.TYPE_URI)(urn, metadata))
+        yield from sorted(texts, key=attrgetter("kind", "label"))
 
     def as_json(self) -> dict:
         return {

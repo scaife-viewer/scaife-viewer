@@ -47,6 +47,7 @@ class SearchQuery:
                     "filtered_text_groups": {
                         "terms": {
                             "field": "text_group",
+                            "size": 300,
                         },
                     },
                 },

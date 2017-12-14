@@ -26,7 +26,10 @@
               <a :key="breadcrumb.urn" :href="breadcrumb.url">{{ breadcrumb.label }}</a><template v-if="idx != text.metadata.ancestors.length - 1">, </template>
             </template>
           </h1>
-          <h3 v-if="!rightPassage"><passage-human-reference :metadata="leftPassage.metadata" /></h3>
+          <template v-if="!rightPassage">
+            <h2>{{ leftText.metadata.label }}</h2>
+            <h3><passage-human-reference :metadata="leftPassage.metadata" /></h3>
+          </template>
         </div>
         <version-selector v-if="!rightPassage && versions.length > 1" :versions="versions" :to="toRightPassage">
           <i class="fa fa-columns"></i>
