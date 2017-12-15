@@ -12,7 +12,11 @@
     "html"
   ],
   "settings": {
-    "import/resolver": "webpack"
+    "import/resolver": {
+      "webpack": {
+        "config": "static/webpack.common.js"
+      }
+    }
   },
   "rules": {
     "no-param-reassign": 0,
