@@ -1,9 +1,8 @@
 <template>
-  <div class="widget">
+  <div class="widget word-list">
     <h2>Word List</h2>
     <div v-for="word in wordList" :key="word.text">
-      <b>{{ word.text }}</b><br />
-      <small>{{ word.shortdef }}</small>
+      <small><span class="w">{{ word.text }}</span> {{ word.shortdef }}</small>
     </div>
   </div>
 </template>
