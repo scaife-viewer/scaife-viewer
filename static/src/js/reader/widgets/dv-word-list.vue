@@ -1,9 +1,9 @@
 <template>
   <div class="widget word-list">
     <h2>Word List</h2>
-    <div v-for="word in wordList" :key="word.text">
-      <small><span class="w">{{ word.text }}</span> {{ word.shortdef }}</small>
-    </div>
+    <p v-for="word in wordList" :key="word.text">
+      <span class="w">{{ word.text }}</span> <span class="df">{{ word.shortdef }}</span>
+    </p>
   </div>
 </template>
 
@@ -32,7 +32,7 @@ export default {
     async fetchWordList() {
       const server = 'https://gu658.us1.eldarioncloud.com';
       const { urn } = this.passage;
-      const res = await fetch(`${server}/word-list/${urn}/json/?page=all`);
+      const res = await fetch(`${server}/word-list/${urn}/json/?page=all&amp;o=3`);
       if (!res.ok) {
         throw new Error(res.status);
       }
