@@ -1,5 +1,5 @@
 <template>
-  <div class="widget word-list">
+  <div class="widget word-list" v-if="show">
     <h2>Word List</h2>
     <p v-for="word in wordList" :key="word.text">
       <span class="w">{{ word.text }}</span> <span class="df">{{ word.shortdef }}</span>
@@ -19,6 +19,7 @@ export default {
   },
   data() {
     return {
+      show: false,
       wordList: [],
     };
   },
@@ -34,7 +35,14 @@ export default {
       const { urn } = this.passage;
       const res = await fetch(`${server}/word-list/${urn}/json/?page=all&amp;o=3`);
       if (!res.ok) {
-        throw new Error(res.status);
+        if (res.status === 404) {
+          this.show = false;
+        } else {
+          throw new Error(res.status);
+        }
+      }
+      if (this.show === false) {
+        this.show = true;
       }
       const data = await res.json();
       this.wordList = data.lemmas.map(lemma => ({
