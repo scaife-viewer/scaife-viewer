@@ -33,7 +33,7 @@ export default {
     async fetchWordList() {
       const server = 'https://gu658.us1.eldarioncloud.com';
       const { urn } = this.passage;
-      const res = await fetch(`${server}/word-list/${urn}/json/?page=all&amp;o=3`);
+      const res = await fetch(`${server}/word-list/${urn}/json/?page=all&amp;o=1`);
       if (!res.ok) {
         if (res.status === 404) {
           this.show = false;
