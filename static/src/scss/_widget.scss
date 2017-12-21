@@ -36,6 +36,14 @@
   }
 }
 
+.widget.children {
+  p {
+    a:not(:last-child):after {
+      content: ' ';
+    }
+  }
+}
+
 .widget.passage-reference {
   p {
     margin-top: 5px;
@@ -80,5 +88,22 @@
 .widget.images {
   div {
     margin-top: 10px;
+  }
+}
+
+.widget.word-list {
+  h2 {
+    margin-bottom: 0.5em;
+  }
+  p {
+    font-size: 12px;
+    font-family: 'Noto Serif';
+    color: $gray-700;
+  }
+  span.w {
+    font-weight: bold;
+  }
+  span.df {
+    color: $gray-600;
   }
 }

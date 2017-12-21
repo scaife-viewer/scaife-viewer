@@ -14,7 +14,7 @@ python_version = "3.6"
 django-user-accounts = "*"
 pinax-webanalytics = "*"
 pinax-eventlog = "*"
-django = "*"
+django = "<2.0"
 pinax-theme-bootstrap = "*"
 mycapytain = "*"
 gunicorn = "*"
@@ -29,6 +29,8 @@ basictracer = {git="https://github.com/opentracing/basictracer-python.git", edit
 wrapt = "*"
 anytree = "*"
 honcho = "*"
+elasticsearch = ">=6.0.0"
+google-cloud-pubsub = "*"
 
 
 [dev-packages]

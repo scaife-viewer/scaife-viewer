@@ -6,8 +6,8 @@
       </div>
     </template>
     <div v-else>
-      <div v-for="entry in toc">
-        <h2><a :href="entry.reader_url">{{ entry.label }} {{ entry.num }}</a></h2>
+      <div v-for="entry in toc" :key="entry.urn">
+        <h2><a :href="entry.url">{{ entry.label }} {{ entry.num }}</a></h2>
       </div>
     </div>
   </div>
@@ -19,9 +19,10 @@ import store from '../store';
 
 export default {
   store,
+  props: ['textUrl'],
   created() {
     this.loading = true;
-    this.$store.dispatch('loadToc', document.location.href).then(() => {
+    this.$store.dispatch('loadTocList', this.textUrl).then(() => {
       this.loading = false;
     });
   },

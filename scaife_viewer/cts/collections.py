@@ -1,4 +1,5 @@
 from functools import lru_cache, partial
+from operator import attrgetter
 
 from django.conf import settings
 
@@ -92,6 +93,16 @@ class TextGroup(Collection):
                 continue
             yield work
 
+    def as_json(self) -> dict:
+        return {
+            "urn": str(self.urn),
+            "label": str(self.label),
+            "works": [
+                dict(urn=str(work.urn))
+                for work in self.works()
+            ],
+        }
+
 
 class Work(Collection):
 
@@ -100,11 +111,23 @@ class Work(Collection):
 
     def texts(self):
         children = self.metadata.texts
-        for urn in sorted(children.keys()):
+        texts = []
+        for urn in children.keys():
             metadata = children[urn]
             if metadata.citation is None:
                 continue
-            yield resolve_collection(metadata.TYPE_URI)(urn, metadata)
+            texts.append(resolve_collection(metadata.TYPE_URI)(urn, metadata))
+        yield from sorted(texts, key=attrgetter("kind", "label"))
+
+    def as_json(self) -> dict:
+        return {
+            "urn": str(self.urn),
+            "label": str(self.label),
+            "texts": [
+                dict(urn=str(text.urn))
+                for text in self.texts()
+            ],
+        }
 
 
 class Text(Collection):
@@ -160,6 +183,34 @@ class Text(Collection):
         chunk = next(self.toc().chunks(), None)
         if chunk is not None:
             return Passage(self, URN(chunk.urn).reference)
+
+    def as_json(self) -> dict:
+        toc = self.toc()
+        return {
+            "urn": str(self.urn),
+            "label": str(self.label),
+            "description": str(self.description),
+            "kind": self.kind,
+            "lang": self.lang,
+            "rtl": self.rtl,
+            "human_lang": self.human_lang,
+            "first_passage": dict(urn=str(self.first_passage().urn)),
+            "ancestors": [
+                {
+                    "urn": str(ancestor.urn),
+                    "label": ancestor.label,
+                }
+                for ancestor in self.ancestors()
+            ],
+            "toc": [
+                {
+                    "urn": next(toc.chunks(ref_node), None).urn,
+                    "label": ref_node.label.title(),
+                    "num": ref_node.num,
+                }
+                for ref_node in toc.num_resolver.glob(toc.root, "*")
+            ],
+        }
 
 
 def resolve_collection(type_uri):

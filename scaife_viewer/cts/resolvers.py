@@ -1,10 +1,17 @@
 import glob
 import os
+from functools import lru_cache
 
-from MyCapytain.errors import UndispatchedTextError
+from MyCapytain.common.reference import URN
+from MyCapytain.errors import (
+    InvalidURN,
+    UndispatchedTextError,
+    UnknownObjectError
+)
 from MyCapytain.resolvers.cts.local import CtsCapitainsLocalResolver
 from MyCapytain.resources.collections.cts import (
     XmlCtsCitation,
+    XmlCtsEditionMetadata,
     XmlCtsTextgroupMetadata,
     XmlCtsWorkMetadata
 )
@@ -34,6 +41,12 @@ class LocalResolver(CtsCapitainsLocalResolver):
             self.inventory[work_urn].update(metadata)
         return metadata
 
+    @lru_cache()
+    def load_text(self, path):
+        with open(path) as f:
+            text = self.TEXT_CLASS(resource=self.xmlparse(f))
+        return text
+
     def process_text(self, urn, base_path, to_remove=None):
         if to_remove is None:
             to_remove = []
@@ -44,8 +57,7 @@ class LocalResolver(CtsCapitainsLocalResolver):
             version=metadata.urn.version,
         ))
         try:
-            with open(metadata.path) as f:
-                text = self.TEXT_CLASS(resource=self.xmlparse(f))
+            text = self.load_text(metadata.path)
             cites = []
             for cite in reversed(text.citation):
                 ckwargs = {
@@ -97,3 +109,14 @@ class LocalResolver(CtsCapitainsLocalResolver):
         for urn in to_remove:
             if urn in self.inventory:
                 del self.inventory[urn]
+
+    def __getText__(self, urn):
+        if not isinstance(urn, URN):
+            urn = URN(urn)
+        if len(urn) != 5:
+            # this is different from MyCapytain in that we don't need to look
+            # the first passage. let's always assume we get the right thing.
+            raise InvalidURN()
+        metadata = self.inventory[str(urn)]
+        text = self.load_text(metadata.path)
+        return text, metadata

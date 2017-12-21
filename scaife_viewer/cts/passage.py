@@ -2,6 +2,7 @@ from functools import lru_cache
 
 import anytree
 from lxml import etree
+from MyCapytain.common.constants import Mimetypes
 
 from .capitains import default_resolver
 from .reference import URN
@@ -54,6 +55,10 @@ class Passage:
             ref_range["end"] = self.text.toc().lookup(str(self.reference.end))
         return ref_range
 
+    @property
+    def content(self):
+        return self.textual_node().export(Mimetypes.PLAINTEXT)
+
     def next(self):
         reference = self.textual_node().nextId
         if reference:
@@ -82,3 +87,48 @@ class Passage:
         toc_ref = toc.lookup(str(self.reference.start))
         for child in toc_ref.children:
             yield Passage(self.text, child.reference)
+
+    def as_json(self) -> dict:
+        refs = {
+            "start": {
+                "reference": self.refs["start"].reference,
+                "human_reference": self.refs["start"].human_reference,
+            },
+        }
+        if "end" in self.refs:
+            refs["end"] = {
+                "reference": self.refs["end"].reference,
+                "human_reference": self.refs["end"].human_reference,
+            }
+        o = {
+            "urn": str(self.urn),
+            "text": {
+                "urn": str(self.text.urn),
+                "label": self.text.label,
+                "ancestors": [
+                    {
+                        "urn": str(ancestor.urn),
+                        "label": ancestor.label,
+                    }
+                    for ancestor in self.text.ancestors()
+                ],
+                "human_lang": self.text.human_lang,
+                "kind": self.text.kind,
+            },
+            "text_html": str(self.render()),
+            "refs": refs,
+            "ancestors": [
+                {
+                    "reference": ancestor.reference,
+                }
+                for ancestor in self.ancestors()
+            ],
+            "children": [
+                {
+                    "reference": child.reference,
+                    "lsb": child.lsb,
+                }
+                for child in self.children()
+            ],
+        }
+        return o

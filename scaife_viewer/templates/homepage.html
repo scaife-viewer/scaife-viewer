@@ -8,6 +8,7 @@
 
 {% block site_brand %}{% endblock %}
 {% block navbar-toggler %}{% endblock %}
+{% block search_nav %}{% endblock %}
 
 {% block body_base %}
 
@@ -18,6 +19,7 @@
 
     <p>
       <a class="btn btn-primary" href="{% url 'library' %}">Browse Library</a>
+      <a class="btn btn-secondary" href="{% url 'search' %}">Search</a>
     </p>
   </section>
 
@@ -58,24 +60,25 @@
           <div class="changelog">
             <h2>Recent Changes</h2>
 
-            <h3>week of November 6th</h3>
+            <h3>week of December 18th</h3>
             <ul>
-              <li>added initial i18n support for Deutsch, English, français, italiano
-              <li>fixed labels on many pages to consistently be English (until we can localize them)
-              <li>improved error handling in reader for left-side citation hierarchy
-              <li>fixed site messages not displaying correctly
+              <li>added word list widget populated from Greek vocabulary tool
             </ul>
 
-
-            <h3>week of October 30th</h3>
+            <h3>week of December 11th</h3>
             <ul>
-              <li>fixed transient mojibake issues
+              <li>expanded number of text groups shown in search results
+              <li>added missing version label to reader when showing a single passage
+              <li>sort editions before translation in library
             </ul>
 
-            <h3>week of October 23rd</h3>
+            <h3>week of December 4th</h3>
             <ul>
-              <li>parallel version reading side-by-side
+              <li>rebuilt the reader in Vue for a much improved UX and as foundation for upcoming features
+              <li>rewrote indexing code to handle all texts in all associated repositories
+              <li>fixed said element including those with lines
             </ul>
+
         </div>
       </div>
     </div>
