@@ -85,6 +85,7 @@
           <widget-passage-links />
           <widget-text-size />
           <widget-dv-word-list />
+          <widget-token-list />
         </div>
       </div>
     </template>
@@ -104,6 +105,7 @@ import WidgetPassageReference from './widgets/passage-reference';
 import WidgetPassageLinks from './widgets/passage-links';
 import WidgetTextSize from './widgets/text-size';
 import WidgetDvWordList from './widgets/dv-word-list';
+import WidgetTokenList from './widgets/dm-token-list';
 
 const widgets = {
   WidgetPassageAncestors,
@@ -112,6 +114,7 @@ const widgets = {
   WidgetPassageLinks,
   WidgetTextSize,
   WidgetDvWordList,
+  WidgetTokenList,
 };
 
 export default {
