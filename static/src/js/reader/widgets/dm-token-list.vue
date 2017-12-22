@@ -1,15 +1,17 @@
 <template>
   <div class="widget token-list" v-if="show">
     <h2>Token List</h2>
-    <table class="table table-sm table-striped">
-      <template v-for="token in tokenList">
-        <tr v-for="(analysis, idx) in token.analyses">
-          <th><template v-if="idx === 0">{{ token.text }}</template></th>
-          <td>{{ analysis.parse }}</td>
-          <td>{{ analysis.lemma }}</td>
-        </tr>
-      </template>
-    </table>
+    <p>
+      <table>
+        <template v-for="token in tokenList">
+          <tr v-for="(analysis, idx) in token.analyses">
+            <th class="text"><template v-if="idx === 0">{{ token.text }}</template></th>
+            <td class="parse">{{ analysis.parse }}</td>
+            <td class="text">{{ analysis.lemma }}</td>
+          </tr>
+        </template>
+      </table>
+    </p>
   </div>
 </template>
 
