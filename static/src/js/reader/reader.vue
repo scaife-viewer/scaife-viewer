@@ -85,8 +85,8 @@
           <widget-passage-links />
           <widget-text-size />
           <widget-selected-word />
-          <widget-dv-word-list />
           <widget-token-list />
+          <widget-dv-word-list />
         </div>
       </div>
     </template>
