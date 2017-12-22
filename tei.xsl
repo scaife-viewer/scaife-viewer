@@ -283,10 +283,17 @@
 
   <xsl:template match="text()">
     <xsl:for-each select="py:tokens(.)">
-      <xsl:element name="w">
-        <xsl:attribute name="t"><xsl:value-of select="py:token_type(.)" /></xsl:attribute>
-        <xsl:value-of select="." />
-      </xsl:element>
+      <xsl:choose>
+        <xsl:when test="py:token_type(.) = 'w'">
+          <w t="w"><xsl:value-of select="."/></w>
+        </xsl:when>
+        <xsl:when test="py:token_type(.) = 'p'">
+          <w t="p"><xsl:value-of select="."/></w>
+        </xsl:when>
+        <xsl:when test="py:token_type(.) = 's'">
+          <xsl:text> </xsl:text>
+        </xsl:when>
+      </xsl:choose>
     </xsl:for-each>
   </xsl:template>
 
