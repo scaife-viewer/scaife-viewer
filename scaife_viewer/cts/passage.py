@@ -1,4 +1,5 @@
 from functools import lru_cache
+import regex
 
 import anytree
 from lxml import etree
@@ -74,7 +75,12 @@ class Passage:
         tei = self.textual_node().resource
         with open("tei.xsl") as f:
             transform = etree.XSLT(etree.XML(f.read()))
-            return transform(tei)
+            try:
+                return transform(tei)
+            except Exception:
+                for error in transform.error_log:
+                    print(error.message, error.line)
+                raise
 
     def ancestors(self):
         toc = self.text.toc()
@@ -132,3 +138,33 @@ class Passage:
             ],
         }
         return o
+
+
+ns = etree.FunctionNamespace("urn:python-funcs")
+ns.prefix = "py"
+w = r"\w[-\w]*"
+p = r"[\p{P}\p{C}]+"
+ws = r"\p{Z}"
+token_re = regex.compile(fr"{w}|{p}|{ws}")
+w_re = regex.compile(w)
+p_re = regex.compile(p)
+ws_re = regex.compile(ws)
+
+
+@ns
+def tokens(context, s):
+    ts = []
+    for token in token_re.findall("".join(s)):
+        ts.append(token)
+    return ts
+
+
+@ns
+def token_type(context, value):
+    v = "".join(value)
+    if w_re.match(v):
+        return "w"
+    if p_re.match(v):
+        return "p"
+    if ws_re.match(v):
+        return "s"

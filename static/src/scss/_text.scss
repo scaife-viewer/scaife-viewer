@@ -116,6 +116,12 @@ div.text {
   .placeName {
     color: $gray-600;
   }
+  span.s {
+    padding-right: 0.4em;
+  }
+  span.w:hover {
+    cursor: pointer;
+  }
   .textpart {
     display: flex;
     & > .a {
@@ -154,10 +160,4 @@ div.text {
       }
     }
   }
-}
-
-.spanned:hover {
-  cursor: pointer;
-  background: lighten($perseus-red, 30%);
-  text-decoration: underline;
 }

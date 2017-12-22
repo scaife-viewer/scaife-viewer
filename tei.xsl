@@ -1,5 +1,10 @@
 <?xml version="1.0"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" xmlns:t="http://www.tei-c.org/ns/1.0" exclude-result-prefixes="t">
+<xsl:stylesheet
+  version="1.0"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:t="http://www.tei-c.org/ns/1.0"
+  xmlns:py="urn:python-funcs"
+  exclude-result-prefixes="t py">
 
   <!-- this all comes from https://github.com/PerseusDL/perseus_nemo_ui/tree/master/perseus_nemo_ui/data/assets/static/xslt -->
 
@@ -269,20 +274,20 @@
     </p>
   </xsl:template>
 
-  <xsl:template match="text()" name="wrapper">
-    <xsl:param name="text" select="." />
-    <xsl:variable name="new" select="normalize-space($text)" />
-    <xsl:choose>
-      <xsl:when test="contains($new, ' ')">
-        <span class="spanned"><xsl:value-of select="concat(substring-before($new, ' '), ' ')" /></span>
-        <xsl:call-template name="wrapper">
-          <xsl:with-param name="text" select="substring-after($new, ' ')" />
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:otherwise>
-        <span><xsl:value-of select="$new" /></span>
-      </xsl:otherwise>
-    </xsl:choose>
+  <!-- <xsl:function name="fs:tokens" as="xs:string*">
+    <xsl:param name="string" />
+    <xsl:analyze-string select="$string" regex="{'\w[-\w]*|[\p{P}\p{C}]+|\p{Z}+'}">
+      <xsl:matching-substring><xsl:sequence select="." /></xsl:matching-substring>
+    </xsl:analyze-string>
+  </xsl:function> -->
+
+  <xsl:template match="text()">
+    <xsl:for-each select="py:tokens(.)">
+      <xsl:element name="w">
+        <xsl:attribute name="t"><xsl:value-of select="py:token_type(.)" /></xsl:attribute>
+        <xsl:value-of select="." />
+      </xsl:element>
+    </xsl:for-each>
   </xsl:template>
 
   <xsl:template match="t:name/t:reg"></xsl:template>

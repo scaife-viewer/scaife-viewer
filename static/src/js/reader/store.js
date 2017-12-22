@@ -57,6 +57,7 @@ module.exports = {
     rightText: null,
     leftPassage: null,
     rightPassage: null,
+    selectedWord: null,
     error: '',
   },
   getters: {
@@ -107,6 +108,9 @@ module.exports = {
       } else {
         state.rightPassage = copyPassage(state.rightPassage, payload);
       }
+    },
+    setSelectedWord(state, { word }) {
+      state.selectedWord = word;
     },
     setError(state, { error }) {
       state.error = error;
