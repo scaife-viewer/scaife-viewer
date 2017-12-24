@@ -1,8 +1,11 @@
 <template>
   <div class="widget word-list" v-if="show">
     <h2>Word List</h2>
+    <p class="legend">Number in parentheses is frequency per 10k in this work.</p>
     <p v-for="word in wordList" :key="word.text">
-      <span class="w">{{ word.text }}</span> <span class="df">{{ word.shortdef }}</span>
+      <span class="w">{{ word.text }}</span>
+      <span class="df">{{ word.shortdef }}</span>
+      <span class="fr">({{ word.frequency }})</span>
     </p>
   </div>
 </template>
@@ -48,6 +51,7 @@ export default {
       this.wordList = data.lemmas.map(lemma => ({
         text: lemma.lemma_text,
         shortdef: lemma.shortdef,
+        frequency: lemma.work_frequency.toFixed(2),
       }));
     },
   },
