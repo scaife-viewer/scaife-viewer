@@ -95,6 +95,12 @@
   h2 {
     margin-bottom: 0.5em;
   }
+  p.legend {
+    font-style: italic;
+    line-height: 12px;
+    color: $gray-600;
+    margin: 1em 0;
+  }
   p {
     font-size: 12px;
     font-family: 'Noto Serif';
