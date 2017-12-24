@@ -49,10 +49,10 @@ class Passage:
     @property
     def refs(self):
         ref_range = {
-            "start": self.text.toc().lookup(str(self.reference.start)),
+            "start": self.text.toc().lookup(".".join(self.reference.start.list)),
         }
         if self.reference.end:
-            ref_range["end"] = self.text.toc().lookup(str(self.reference.end))
+            ref_range["end"] = self.text.toc().lookup(".".join(self.reference.end.list))
         return ref_range
 
     @property
