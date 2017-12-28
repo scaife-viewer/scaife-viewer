@@ -110,7 +110,11 @@ module.exports = {
       }
     },
     setSelectedWord(state, payload) {
-      state.selectedWord = { ...payload };
+      if (payload === null) {
+        state.selectedWord = null;
+      } else {
+        state.selectedWord = { ...payload };
+      }
     },
     setError(state, { error }) {
       state.error = error;
@@ -177,8 +181,12 @@ module.exports = {
       if (state.selectedWord !== null) {
         state.selectedWord.toggle();
       }
-      commit('setSelectedWord', { word, toggle });
-      toggle();
+      if (word !== null) {
+        commit('setSelectedWord', { word, toggle });
+        toggle();
+      } else {
+        commit('setSelectedWord', null);
+      }
     },
   },
 };
