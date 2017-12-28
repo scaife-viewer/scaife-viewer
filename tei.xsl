@@ -288,6 +288,7 @@
           <xsl:element name="t">
             <xsl:attribute name="t">w</xsl:attribute>
             <xsl:attribute name="w"><xsl:value-of select="." /></xsl:attribute>
+            <xsl:attribute name="i"><xsl:value-of select="py:token_index(.)" /></xsl:attribute>
             <xsl:value-of select="." />
           </xsl:element>
         </xsl:when>
@@ -295,6 +296,7 @@
           <xsl:element name="t">
             <xsl:attribute name="t">p</xsl:attribute>
             <xsl:attribute name="w"><xsl:value-of select="." /></xsl:attribute>
+            <xsl:attribute name="i"><xsl:value-of select="py:token_index(.)" /></xsl:attribute>
             <xsl:value-of select="." />
           </xsl:element>
         </xsl:when>

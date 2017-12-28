@@ -1,7 +1,7 @@
 <template>
   <div class="widget selected-word" v-if="word">
     <h2>Selected Word</h2>
-    <p>{{ word }}</p>
+    <p>{{ word.w }}[{{ word.i }}]</p>
   </div>
 </template>
 

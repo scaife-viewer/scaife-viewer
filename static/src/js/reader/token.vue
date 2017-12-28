@@ -14,6 +14,10 @@ export default {
       type: String,
       required: true,
     },
+    i: {
+      type: String,
+      required: true,
+    },
   },
   data() {
     return {
@@ -26,7 +30,8 @@ export default {
     },
     handleClick(e) {
       if (this.t === 'w') {
-        this.$store.dispatch('reader/selectWord', { word: this.w, toggle: this.toggle });
+        const word = { t: this.t, w: this.w, i: this.i };
+        this.$store.dispatch('reader/selectWord', { word, toggle: this.toggle });
       }
       e.stopPropagation();
     },
