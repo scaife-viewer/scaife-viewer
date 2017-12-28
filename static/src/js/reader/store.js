@@ -109,8 +109,8 @@ module.exports = {
         state.rightPassage = copyPassage(state.rightPassage, payload);
       }
     },
-    setSelectedWord(state, { word }) {
-      state.selectedWord = word;
+    setSelectedWord(state, payload) {
+      state.selectedWord = { ...payload };
     },
     setError(state, { error }) {
       state.error = error;
@@ -172,6 +172,13 @@ module.exports = {
         .catch((err) => {
           commit('setError', { error: `failed to load reader: ${err}` });
         });
+    },
+    selectWord({ state, commit }, { word, toggle }) {
+      if (state.selectedWord !== null) {
+        state.selectedWord.toggle();
+      }
+      commit('setSelectedWord', { word, toggle });
+      toggle();
     },
   },
 };

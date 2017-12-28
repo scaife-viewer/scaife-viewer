@@ -12,7 +12,12 @@ export default {
   store,
   computed: {
     word() {
-      return this.$store.state.reader.selectedWord;
+      let word = null;
+      const { selectedWord } = this.$store.state.reader;
+      if (selectedWord) {
+        word = selectedWord.word; // eslint-disable-line prefer-destructuring
+      }
+      return word;
     },
   },
 };

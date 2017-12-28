@@ -122,6 +122,9 @@ div.text {
   span.w:hover {
     cursor: pointer;
   }
+  span.w.selected {
+    background-color: yellow;
+  }
   .textpart {
     display: flex;
     & > .a {

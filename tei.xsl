@@ -285,10 +285,18 @@
     <xsl:for-each select="py:tokens(.)">
       <xsl:choose>
         <xsl:when test="py:token_type(.) = 'w'">
-          <w t="w"><xsl:value-of select="."/></w>
+          <xsl:element name="t">
+            <xsl:attribute name="t">w</xsl:attribute>
+            <xsl:attribute name="w"><xsl:value-of select="." /></xsl:attribute>
+            <xsl:value-of select="." />
+          </xsl:element>
         </xsl:when>
         <xsl:when test="py:token_type(.) = 'p'">
-          <w t="p"><xsl:value-of select="."/></w>
+          <xsl:element name="t">
+            <xsl:attribute name="t">p</xsl:attribute>
+            <xsl:attribute name="w"><xsl:value-of select="." /></xsl:attribute>
+            <xsl:value-of select="." />
+          </xsl:element>
         </xsl:when>
         <xsl:when test="py:token_type(.) = 's'">
           <xsl:text> </xsl:text>

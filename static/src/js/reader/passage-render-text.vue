@@ -1,5 +1,5 @@
 <template>
-  <div :class="['text', `text-${textSize}`]" @click="handleClick">
+  <div :class="['text', `text-${textSize}`]">
     <text-loader v-if="!passage.ready" />
     <component v-if="passage.metadata" :class="{'text-loading': !passage.ready, 'text-loaded': passage.ready}" :is="renderedText"></component>
   </div>
@@ -24,21 +24,13 @@ export default {
         template: this.passage.metadata.text_html,
         components: {
           TextPart,
-          w: Token,
+          t: Token,
         },
       };
     },
   },
   components: {
     TextLoader,
-  },
-  methods: {
-    handleClick(e) {
-      if (e.target !== e.currentTarget && e.target.className === 'w') {
-        this.$store.commit('reader/setSelectedWord', { word: e.target.textContent });
-      }
-      e.stopPropagation();
-    },
   },
 };
 </script>
