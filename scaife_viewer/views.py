@@ -186,7 +186,11 @@ def search(request):
         "results": results,
     }
     if q:
-        paginator = Paginator(SearchQuery(q), 10)
+        scope = {}
+        text_group_urn = request.GET.get("tg")
+        if text_group_urn:
+            scope["text_group"] = text_group_urn
+        paginator = Paginator(SearchQuery(q, scope=scope), 10)
         ctx.update({
             "paginator": paginator,
             "page": paginator.page(page_num),
