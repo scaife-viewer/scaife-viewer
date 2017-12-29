@@ -1,6 +1,17 @@
 import parseLinkHeader from 'parse-link-header';
 import qs from 'query-string';
 
+
+class Reference {
+  constructor(value) {
+    this.value = value;
+    this.parse();
+  }
+  parse() {
+    this.value.split('-');
+  }
+}
+
 class URN {
   constructor(value) {
     this.value = value;
@@ -70,6 +81,7 @@ class URN {
 }
 
 module.exports = {
+  Reference,
   URN,
   async fetchCollection(urn) {
     const url = `/library/${urn}/json/`;

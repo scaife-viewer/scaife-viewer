@@ -19,25 +19,47 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {
-      selected: false,
-    };
+  computed: {
+    selected() {
+      const { selectedWord } = this.$store.state.reader;
+      if (selectedWord) {
+        const { w: aw, i: ai } = this.$store.state.reader.selectedWord;
+        const { w: bw, i: bi } = this;
+        return aw === bw && ai === bi;
+      }
+      return false;
+    },
   },
   methods: {
-    toggle() {
-      this.selected = !this.selected;
-    },
     handleClick(e) {
       if (this.t === 'w') {
-        const word = { t: this.t, w: this.w, i: this.i };
-        this.$store.dispatch('reader/selectWord', { word, toggle: this.toggle });
+        const word = { w: this.w, i: this.i };
+        this.$store.dispatch('reader/selectWord', { word });
+        const passage = this.$store.getters['reader/passage'];
+        this.$router.push({
+          name: 'reader',
+          params: {
+            leftUrn: passage.urn.toString(),
+          },
+          query: {
+            ...this.$store.state.route.query,
+            highlight: `@${this.w}[${this.i}]`,
+          },
+        });
       }
       e.stopPropagation();
     },
     handleMetaClick(e) {
       if (this.selected) {
-        this.$store.dispatch('reader/selectWord', { word: null, toggle: this.toggle });
+        this.$store.dispatch('reader/selectWord', { word: null });
+        const passage = this.$store.getters['reader/passage'];
+        this.$router.push({
+          name: 'reader',
+          params: {
+            leftUrn: passage.urn.toString(),
+          },
+          query: { ...this.$store.state.route.query },
+        });
       }
       e.stopPropagation();
     },

@@ -15,7 +15,7 @@ export default {
       let word = null;
       const { selectedWord } = this.$store.state.reader;
       if (selectedWord) {
-        word = selectedWord.word; // eslint-disable-line prefer-destructuring
+        word = selectedWord; // eslint-disable-line prefer-destructuring
       }
       return word;
     },

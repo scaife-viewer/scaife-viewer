@@ -113,7 +113,8 @@ module.exports = {
       if (payload === null) {
         state.selectedWord = null;
       } else {
-        state.selectedWord = { ...payload };
+        const { word } = payload;
+        state.selectedWord = { ...word };
       }
     },
     setError(state, { error }) {
@@ -177,13 +178,9 @@ module.exports = {
           commit('setError', { error: `failed to load reader: ${err}` });
         });
     },
-    selectWord({ state, commit }, { word, toggle }) {
-      if (state.selectedWord !== null) {
-        state.selectedWord.toggle();
-      }
+    selectWord({ commit }, { word }) {
       if (word !== null) {
-        commit('setSelectedWord', { word, toggle });
-        toggle();
+        commit('setSelectedWord', { word });
       } else {
         commit('setSelectedWord', null);
       }
