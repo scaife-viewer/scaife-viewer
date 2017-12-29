@@ -53,12 +53,13 @@ export default {
       if (this.selected) {
         this.$store.dispatch('reader/selectWord', { word: null });
         const passage = this.$store.getters['reader/passage'];
+        const { query } = this.$store.state.route;
         this.$router.push({
           name: 'reader',
           params: {
             leftUrn: passage.urn.toString(),
           },
-          query: { ...this.$store.state.route.query },
+          query: (({ highlight: deleted, ...o }) => o)(query),
         });
       }
       e.stopPropagation();
