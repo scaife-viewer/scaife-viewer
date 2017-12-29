@@ -4,6 +4,8 @@ from itertools import chain, islice, zip_longest
 from operator import attrgetter
 from typing import Iterable
 
+import elasticsearch
+import elasticsearch.helpers
 from anytree.iterators import PreOrderIter
 
 from . import cts
@@ -107,7 +109,46 @@ def chunker(iterable, n):
 
 
 class DirectPusher:
-    pass
+
+    def __init__(self, chunk_size=500):
+        self.chunk_size = chunk_size
+        self.index_name = "scaife-viewer"
+        self.es.indices.create(index=self.index_name, ignore=400)
+
+    @property
+    def es(self):
+        if not hasattr(self, "_es"):
+            self._es = elasticsearch.Elasticsearch()
+        return self._es
+
+    @property
+    def docs(self):
+        if not hasattr(self, "_docs"):
+            self._docs = deque(maxlen=self.chunk_size)
+        return self._docs
+
+    def push(self, doc):
+        self.docs.append(doc)
+        if len(self.docs) == self.chunk_size:
+            self.commit_docs()
+
+    def commit_docs(self):
+        metadata = {
+            "_op_type": "index",
+            "_index": self.index_name,
+            "_type": "text",
+        }
+        docs = ({"_id": doc["urn"], **metadata, **doc} for doc in self.docs)
+        elasticsearch.helpers.bulk(self.es, docs)
+        self.docs.clear()
+
+    def __getstate__(self):
+        s = self.__dict__.copy()
+        if "_es" in s:
+            del s["_es"]
+        if "_docs" in s:
+            del s["_docs"]
+        return s
 
 
 class PubSubPusher:
