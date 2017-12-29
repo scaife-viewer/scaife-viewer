@@ -13,8 +13,9 @@ es = Elasticsearch(hosts=[settings.ELASTICSEARCH_URL])
 
 class SearchQuery:
 
-    def __init__(self, q):
+    def __init__(self, q, scope=None):
         self.q = q
+        self.scope = {} if scope is None else scope
         self.total_count = None
 
     def query_index(self):
@@ -24,13 +25,24 @@ class SearchQuery:
         }
 
     def query(self):
-        return {
+        q = {}
+        sq = {
             "simple_query_string": {
                 "query": self.q,
                 "fields": ["content"],
                 "default_operator": "and",
-            },
+            }
         }
+        if self.scope:
+            q = {
+                "bool": {
+                    "must": sq,
+                    "filter": {"term": self.scope},
+                },
+            }
+        else:
+            q = {**sq}
+        return q
 
     def search_kwargs(self, size=10, offset=0):
         return {
