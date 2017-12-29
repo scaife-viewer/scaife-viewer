@@ -274,13 +274,6 @@
     </p>
   </xsl:template>
 
-  <!-- <xsl:function name="fs:tokens" as="xs:string*">
-    <xsl:param name="string" />
-    <xsl:analyze-string select="$string" regex="{'\w[-\w]*|[\p{P}\p{C}]+|\p{Z}+'}">
-      <xsl:matching-substring><xsl:sequence select="." /></xsl:matching-substring>
-    </xsl:analyze-string>
-  </xsl:function> -->
-
   <xsl:template match="text()">
     <xsl:for-each select="py:tokens(.)">
       <xsl:choose>
