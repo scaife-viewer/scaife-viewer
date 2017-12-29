@@ -50,6 +50,15 @@
   }
 }
 
+.widget.selected-word {
+  p {
+    margin-top: 5px;
+    font-family: 'Noto Serif';
+    font-size: 18px;
+    font-weight: bold;
+  }
+}
+
 .widget.versions {
   .version {
     margin-top: 2px;
@@ -93,7 +102,7 @@
 
 .widget.word-list {
   h2 {
-    margin-bottom: 0.5em;
+    margin-bottom: 5px;
   }
   p.legend {
     font-style: italic;
@@ -111,5 +120,23 @@
   }
   span.df {
     color: $gray-600;
+  }
+}
+
+.widget.token-list {
+  p {
+    margin-top: 5px;
+    color: $gray-700;
+    font-size: 12px;
+    td {
+      padding-left: 1em;
+    }
+    .text {
+      font-family: 'Noto Serif';
+    }
+    .parse {
+      font-family: monospace;
+      color: $gray-600;
+    }
   }
 }

@@ -9,6 +9,7 @@
 import store from '../store';
 import TextPart from './text-part';
 import TextLoader from './text-loader';
+import Token from './token';
 
 export default {
   store,
@@ -23,6 +24,7 @@ export default {
         template: this.passage.metadata.text_html,
         components: {
           TextPart,
+          t: Token,
         },
       };
     },

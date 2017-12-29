@@ -1,6 +1,8 @@
+from collections import defaultdict
 from functools import lru_cache
 
 import anytree
+import regex
 from lxml import etree
 from MyCapytain.common.constants import Mimetypes
 
@@ -8,11 +10,21 @@ from .capitains import default_resolver
 from .reference import URN
 
 
+w = r"\w[-\w]*"
+p = r"[\p{P}\p{C}]+"
+ws = r"\p{Z}"
+token_re = regex.compile(fr"{w}|{p}|{ws}")
+w_re = regex.compile(w)
+p_re = regex.compile(p)
+ws_re = regex.compile(ws)
+
+
 class Passage:
 
     def __init__(self, text, reference):
         self.text = text
         self.reference = reference
+        self.token_indexes = defaultdict(int)
 
     def __repr__(self):
         return f"<cts.Passage {self.urn} at {hex(id(self))}>"
@@ -73,8 +85,40 @@ class Passage:
     def render(self):
         tei = self.textual_node().resource
         with open("tei.xsl") as f:
-            transform = etree.XSLT(etree.XML(f.read()))
-            return transform(tei)
+            transform = etree.XSLT(
+                etree.XML(f.read()),
+                extensions={
+                    ("urn:python-funcs", "tokens"): self.tokens,
+                    ("urn:python-funcs", "token_type"): self.token_type,
+                    ("urn:python-funcs", "token_index"): self.token_index,
+                }
+            )
+            try:
+                return transform(tei)
+            except Exception:
+                for error in transform.error_log:
+                    print(error.message, error.line)
+                raise
+
+    def tokens(self, context, s):
+        ts = []
+        for token in token_re.findall("".join(s)):
+            ts.append(token)
+        return ts
+
+    def token_type(self, context, value):
+        v = "".join(value)
+        if w_re.match(v):
+            return "w"
+        if p_re.match(v):
+            return "p"
+        if ws_re.match(v):
+            return "s"
+
+    def token_index(self, context, value):
+        key = "".join(value)
+        self.token_indexes[key] += 1
+        return self.token_indexes[key]
 
     def ancestors(self):
         toc = self.text.toc()

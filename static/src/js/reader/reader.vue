@@ -84,8 +84,9 @@
         <div>
           <widget-passage-links />
           <widget-text-size />
-          <widget-dv-word-list />
+          <widget-selected-word />
           <widget-token-list />
+          <widget-dv-word-list />
         </div>
       </div>
     </template>
@@ -106,6 +107,7 @@ import WidgetPassageLinks from './widgets/passage-links';
 import WidgetTextSize from './widgets/text-size';
 import WidgetDvWordList from './widgets/dv-word-list';
 import WidgetTokenList from './widgets/dm-token-list';
+import WidgetSelectedWord from './widgets/selected-word';
 
 const widgets = {
   WidgetPassageAncestors,
@@ -113,6 +115,7 @@ const widgets = {
   WidgetPassageReference,
   WidgetPassageLinks,
   WidgetTextSize,
+  WidgetSelectedWord,
   WidgetDvWordList,
   WidgetTokenList,
 };
@@ -184,6 +187,7 @@ export default {
     this.sync().then(() => {
       this.ready = true;
       window.addEventListener('keyup', this.handleKeyUp);
+      this.selectWord();
     });
   },
   beforeDestroy() {
@@ -228,6 +232,10 @@ export default {
           this.$router.push(this.toRef(ref));
         }
       }
+    },
+    selectWord() {
+      const [, w, i] = /^@([^[]+)(?:\[(\d+)\])?$/.exec(this.$route.query.highlight);
+      this.$store.dispatch('reader/selectWord', { word: { w, i } });
     },
     toggleSidebar(side) {
       switch (side) {
