@@ -57,6 +57,7 @@ module.exports = {
     rightText: null,
     leftPassage: null,
     rightPassage: null,
+    selectedWord: null,
     error: '',
   },
   getters: {
@@ -106,6 +107,14 @@ module.exports = {
         state.rightPassage = null;
       } else {
         state.rightPassage = copyPassage(state.rightPassage, payload);
+      }
+    },
+    setSelectedWord(state, payload) {
+      if (payload === null) {
+        state.selectedWord = null;
+      } else {
+        const { word } = payload;
+        state.selectedWord = { ...word };
       }
     },
     setError(state, { error }) {
@@ -168,6 +177,13 @@ module.exports = {
         .catch((err) => {
           commit('setError', { error: `failed to load reader: ${err}` });
         });
+    },
+    selectWord({ commit }, { word }) {
+      if (word !== null) {
+        commit('setSelectedWord', { word });
+      } else {
+        commit('setSelectedWord', null);
+      }
     },
   },
 };

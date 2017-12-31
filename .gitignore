@@ -7,3 +7,5 @@ static/dist/
 ti.xml
 .vscode/
 service-accounts/
+.DS_Store
+repos/

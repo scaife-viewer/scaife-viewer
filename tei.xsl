@@ -1,5 +1,10 @@
 <?xml version="1.0"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" xmlns:t="http://www.tei-c.org/ns/1.0" exclude-result-prefixes="t">
+<xsl:stylesheet
+  version="1.0"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:t="http://www.tei-c.org/ns/1.0"
+  xmlns:py="urn:python-funcs"
+  exclude-result-prefixes="t py">
 
   <!-- this all comes from https://github.com/PerseusDL/perseus_nemo_ui/tree/master/perseus_nemo_ui/data/assets/static/xslt -->
 
@@ -267,6 +272,32 @@
     <p>
       <xsl:apply-templates/>
     </p>
+  </xsl:template>
+
+  <xsl:template match="text()">
+    <xsl:for-each select="py:tokens(.)">
+      <xsl:choose>
+        <xsl:when test="py:token_type(.) = 'w'">
+          <xsl:element name="t">
+            <xsl:attribute name="t">w</xsl:attribute>
+            <xsl:attribute name="w"><xsl:value-of select="." /></xsl:attribute>
+            <xsl:attribute name="i"><xsl:value-of select="py:token_index(.)" /></xsl:attribute>
+            <xsl:value-of select="." />
+          </xsl:element>
+        </xsl:when>
+        <xsl:when test="py:token_type(.) = 'p'">
+          <xsl:element name="t">
+            <xsl:attribute name="t">p</xsl:attribute>
+            <xsl:attribute name="w"><xsl:value-of select="." /></xsl:attribute>
+            <xsl:attribute name="i"><xsl:value-of select="py:token_index(.)" /></xsl:attribute>
+            <xsl:value-of select="." />
+          </xsl:element>
+        </xsl:when>
+        <xsl:when test="py:token_type(.) = 's'">
+          <xsl:text> </xsl:text>
+        </xsl:when>
+      </xsl:choose>
+    </xsl:for-each>
   </xsl:template>
 
   <xsl:template match="t:name/t:reg"></xsl:template>

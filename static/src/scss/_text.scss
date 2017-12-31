@@ -116,6 +116,14 @@ div.text {
   .placeName {
     color: $gray-600;
   }
+  span.w:hover {
+    cursor: pointer;
+  }
+  span.w.selected {
+    background-color: #FEA;
+    padding: 0 0.1em 0.1em 0.15em;
+    margin: 0 -0.1em -0.1em -0.15em;
+  }
   .textpart {
     display: flex;
     & > .a {
