@@ -1,13 +1,9 @@
+from MyCapytain.errors import UnknownCollection
+
 from .capitains import default_resolver  # noqa
-from .exceptions import PassageDoesNotExist
-from .collections import (  # noqa
-    TextInventory,
-    Collection,
-    TextGroup,
-    Work,
-    Text,
-    resolve_collection,
-)
+from .collections import (Collection, Text, TextGroup, TextInventory,  # noqa
+                          Work, resolve_collection)
+from .exceptions import CollectionDoesNotExist, PassageDoesNotExist
 from .passage import Passage
 from .reference import URN
 
@@ -17,7 +13,10 @@ def text_inventory() -> TextInventory:
 
 
 def collection(urn: str) -> Collection:
-    metadata = TextInventory.load().metadata[urn]
+    try:
+        metadata = TextInventory.load().metadata[urn]
+    except UnknownCollection:
+        raise CollectionDoesNotExist(f"{urn} does not exist")
     return resolve_collection(metadata.TYPE_URI)(URN(urn), metadata)
 
 
