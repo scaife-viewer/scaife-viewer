@@ -21,9 +21,9 @@ export default {
   },
   computed: {
     selected() {
-      const { selectedWord } = this.$store.state.reader;
-      if (selectedWord) {
-        const { w: aw, i: ai } = this.$store.state.reader.selectedWord;
+      const { highlight } = this.$store.state.reader;
+      if (highlight) {
+        const [, aw, ai] = /^@([^[]+)(?:\[(\d+)\])?$/.exec(highlight);
         const { w: bw, i: bi } = this;
         return aw === bw && ai === bi;
       }
@@ -33,34 +33,13 @@ export default {
   methods: {
     handleClick(e) {
       if (this.t === 'w') {
-        const word = { w: this.w, i: this.i };
-        this.$store.dispatch('reader/selectWord', { word });
-        const passage = this.$store.getters['reader/passage'];
-        this.$router.push({
-          name: 'reader',
-          params: {
-            leftUrn: passage.urn.toString(),
-          },
-          query: {
-            ...this.$store.state.route.query,
-            highlight: `@${this.w}[${this.i}]`,
-          },
-        });
+        this.$store.dispatch('reader/highlight', { highlight: `@${this.w}[${this.i}]` });
       }
       e.stopPropagation();
     },
     handleMetaClick(e) {
       if (this.selected) {
-        this.$store.dispatch('reader/selectWord', { word: null });
-        const passage = this.$store.getters['reader/passage'];
-        const { query } = this.$store.state.route;
-        this.$router.push({
-          name: 'reader',
-          params: {
-            leftUrn: passage.urn.toString(),
-          },
-          query: (({ highlight: deleted, ...o }) => o)(query),
-        });
+        this.$store.dispatch('reader/highlight', { highlight: null });
       }
       e.stopPropagation();
     },

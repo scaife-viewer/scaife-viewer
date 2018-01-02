@@ -14,6 +14,7 @@
           <widget-passage-ancestors />
           <widget-passage-children />
           <widget-passage-reference />
+          <widget-highlight />
         </div>
       </div>
       <section id="content_body">
@@ -103,6 +104,7 @@ import VersionSelector from './version-selector';
 import WidgetPassageAncestors from './widgets/passage-ancestors';
 import WidgetPassageChildren from './widgets/passage-children';
 import WidgetPassageReference from './widgets/passage-reference';
+import WidgetHighlight from './widgets/highlight';
 import WidgetPassageLinks from './widgets/passage-links';
 import WidgetTextSize from './widgets/text-size';
 import WidgetDvWordList from './widgets/dv-word-list';
@@ -113,6 +115,7 @@ const widgets = {
   WidgetPassageAncestors,
   WidgetPassageChildren,
   WidgetPassageReference,
+  WidgetHighlight,
   WidgetPassageLinks,
   WidgetTextSize,
   WidgetSelectedWord,
@@ -187,7 +190,6 @@ export default {
     this.sync().then(() => {
       this.ready = true;
       window.addEventListener('keyup', this.handleKeyUp);
-      this.selectWord();
     });
   },
   beforeDestroy() {
@@ -195,10 +197,8 @@ export default {
   },
   methods: {
     sync() {
-      return this.$store.dispatch('reader/load', {
-        leftUrn: this.leftUrn,
-        rightUrn: this.rightUrn,
-      });
+      const { leftUrn, rightUrn } = this;
+      return this.$store.dispatch('reader/load', { leftUrn, rightUrn });
     },
     handleKeyUp(e) {
       if (e.key === 'ArrowLeft') {
@@ -231,12 +231,6 @@ export default {
         if (ref) {
           this.$router.push(this.toRef(ref));
         }
-      }
-    },
-    selectWord() {
-      if (this.$route.query.highlight) {
-        const [, w, i] = /^@([^[]+)(?:\[(\d+)\])?$/.exec(this.$route.query.highlight);
-        this.$store.dispatch('reader/selectWord', { word: { w, i } });
       }
     },
     toggleSidebar(side) {

@@ -57,6 +57,7 @@ module.exports = {
     rightText: null,
     leftPassage: null,
     rightPassage: null,
+    highlight: null,
     selectedWord: null,
     error: '',
   },
@@ -109,12 +110,12 @@ module.exports = {
         state.rightPassage = copyPassage(state.rightPassage, payload);
       }
     },
-    setSelectedWord(state, payload) {
+    setHighlight(state, payload) {
       if (payload === null) {
-        state.selectedWord = null;
+        state.highlight = null;
       } else {
-        const { word } = payload;
-        state.selectedWord = { ...word };
+        const { highlight } = payload;
+        state.highlight = highlight;
       }
     },
     setError(state, { error }) {
@@ -122,7 +123,7 @@ module.exports = {
     },
   },
   actions: {
-    load({ state, commit }, { leftUrn, rightUrn }) {
+    load({ commit, state, rootState }, { leftUrn, rightUrn }) {
       if (state.error) {
         commit('setError', { error: '' });
       }
@@ -173,17 +174,25 @@ module.exports = {
       } else if (state.rightText) {
         commit('setRightPassage', null);
       }
+      if (rootState.route.query.highlight && rootState.route.query.highlight !== state.highlight) {
+        commit('setHighlight', { highlight: rootState.route.query.highlight });
+      }
       return Promise.all(ps)
         .catch((err) => {
           commit('setError', { error: `failed to load reader: ${err}` });
         });
     },
-    selectWord({ commit }, { word }) {
-      if (word !== null) {
-        commit('setSelectedWord', { word });
+    highlight({ commit, rootState }, { highlight }) {
+      let { query } = rootState.route;
+      if (highlight !== null) {
+        query = { ...query, highlight };
+        commit('setHighlight', { highlight });
       } else {
-        commit('setSelectedWord', null);
+        query = (({ highlight: deleted, ...o }) => o)(query);
+        commit('setHighlight', null);
       }
+      const { default: router } = require('../router'); // eslint-disable-line global-require
+      router.push({ name: 'reader', params: rootState.route.params, query });
     },
   },
 };
