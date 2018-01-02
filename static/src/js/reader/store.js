@@ -138,7 +138,7 @@ module.exports = {
         }));
       }
       const leftTextUrn = leftUrn.upTo('version');
-      if (!state.leftText || state.leftText.urn.toString() !== leftUrn.toString()) {
+      if (!state.leftText || state.leftText.urn.toString() !== leftTextUrn) {
         ps.push(sv.fetchCollection(leftTextUrn).then((text) => {
           commit('setLeftText', { urn: leftTextUrn, metadata: text });
         }));
@@ -170,7 +170,7 @@ module.exports = {
               commit('setRightPassage', { error: err.toString() });
             }));
         }
-      } else {
+      } else if (state.rightText) {
         commit('setRightPassage', null);
       }
       return Promise.all(ps)
