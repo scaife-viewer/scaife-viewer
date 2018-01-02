@@ -20,7 +20,7 @@
         <button id="left-sidebar-toggle" :class="[{ open: !sidebarLeftOpened }]" @click="toggleSidebar('left')"><i></i></button>
         <button id="right-sidebar-toggle" :class="[{ open: !sidebarRightOpened }]" @click="toggleSidebar('right')"><i></i></button>
         <div class="passage-heading">
-          <a href="/">Library &gt;</a>
+          <a href="/library/">Library &gt;</a>
           <h1>
             <template v-for="(breadcrumb, idx) in text.metadata.ancestors">
               <a :key="breadcrumb.urn" :href="breadcrumb.url">{{ breadcrumb.label }}</a><template v-if="idx != text.metadata.ancestors.length - 1">, </template>
