@@ -13,9 +13,10 @@ export default {
   computed: {
     word() {
       let word = null;
-      const { selectedWord } = this.$store.state.reader;
-      if (selectedWord) {
-        word = selectedWord; // eslint-disable-line prefer-destructuring
+      const { highlight } = this.$store.state.reader;
+      if (highlight) {
+        const [, w, i] = /^@([^[]+)(?:\[(\d+)\])?$/.exec(highlight);
+        word = { w, i };
       }
       return word;
     },
