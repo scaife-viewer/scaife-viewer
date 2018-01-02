@@ -185,6 +185,12 @@ module.exports = {
     highlight({ commit, rootState }, { highlight }) {
       let { query } = rootState.route;
       if (highlight !== null) {
+        if (highlight.indexOf('@') === -1) {
+          highlight = `@${highlight}`;
+        }
+        if (highlight.indexOf('[') === -1) {
+          highlight = `${highlight}[1]`;
+        }
         query = { ...query, highlight };
         commit('setHighlight', { highlight });
       } else {
