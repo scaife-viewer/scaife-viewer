@@ -40,9 +40,9 @@ export default {
       if (!res.ok) {
         if (res.status === 404) {
           this.show = false;
-        } else {
-          throw new Error(res.status);
+          return;
         }
+        throw new Error(res.status);
       }
       if (this.show === false) {
         this.show = true;
