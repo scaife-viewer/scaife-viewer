@@ -234,8 +234,10 @@ export default {
       }
     },
     selectWord() {
-      const [, w, i] = /^@([^[]+)(?:\[(\d+)\])?$/.exec(this.$route.query.highlight);
-      this.$store.dispatch('reader/selectWord', { word: { w, i } });
+      if (this.$route.query.highlight) {
+        const [, w, i] = /^@([^[]+)(?:\[(\d+)\])?$/.exec(this.$route.query.highlight);
+        this.$store.dispatch('reader/selectWord', { word: { w, i } });
+      }
     },
     toggleSidebar(side) {
       switch (side) {
