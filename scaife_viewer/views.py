@@ -113,7 +113,7 @@ def reader(request, urn):
     right_version = request.GET.get("right")
     try:
         passage = cts.passage(urn)
-    except cts.PassageDoesNotExist:
+    except (cts.CollectionDoesNotExist, cts.PassageDoesNotExist):
         raise Http404()
     ctx = {
         "passage": passage,

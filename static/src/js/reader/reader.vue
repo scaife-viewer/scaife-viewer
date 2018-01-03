@@ -14,13 +14,14 @@
           <widget-passage-ancestors />
           <widget-passage-children />
           <widget-passage-reference />
+          <widget-highlight />
         </div>
       </div>
       <section id="content_body">
         <button id="left-sidebar-toggle" :class="[{ open: !sidebarLeftOpened }]" @click="toggleSidebar('left')"><i></i></button>
         <button id="right-sidebar-toggle" :class="[{ open: !sidebarRightOpened }]" @click="toggleSidebar('right')"><i></i></button>
         <div class="passage-heading">
-          <a href="/">Library &gt;</a>
+          <a href="/library/">Library &gt;</a>
           <h1>
             <template v-for="(breadcrumb, idx) in text.metadata.ancestors">
               <a :key="breadcrumb.urn" :href="breadcrumb.url">{{ breadcrumb.label }}</a><template v-if="idx != text.metadata.ancestors.length - 1">, </template>
@@ -103,6 +104,7 @@ import VersionSelector from './version-selector';
 import WidgetPassageAncestors from './widgets/passage-ancestors';
 import WidgetPassageChildren from './widgets/passage-children';
 import WidgetPassageReference from './widgets/passage-reference';
+import WidgetHighlight from './widgets/highlight';
 import WidgetPassageLinks from './widgets/passage-links';
 import WidgetTextSize from './widgets/text-size';
 import WidgetDvWordList from './widgets/dv-word-list';
@@ -113,6 +115,7 @@ const widgets = {
   WidgetPassageAncestors,
   WidgetPassageChildren,
   WidgetPassageReference,
+  WidgetHighlight,
   WidgetPassageLinks,
   WidgetTextSize,
   WidgetSelectedWord,
@@ -187,7 +190,6 @@ export default {
     this.sync().then(() => {
       this.ready = true;
       window.addEventListener('keyup', this.handleKeyUp);
-      this.selectWord();
     });
   },
   beforeDestroy() {
@@ -195,10 +197,8 @@ export default {
   },
   methods: {
     sync() {
-      return this.$store.dispatch('reader/load', {
-        leftUrn: this.leftUrn,
-        rightUrn: this.rightUrn,
-      });
+      const { leftUrn, rightUrn } = this;
+      return this.$store.dispatch('reader/load', { leftUrn, rightUrn });
     },
     handleKeyUp(e) {
       if (e.key === 'ArrowLeft') {
@@ -232,10 +232,6 @@ export default {
           this.$router.push(this.toRef(ref));
         }
       }
-    },
-    selectWord() {
-      const [, w, i] = /^@([^[]+)(?:\[(\d+)\])?$/.exec(this.$route.query.highlight);
-      this.$store.dispatch('reader/selectWord', { word: { w, i } });
     },
     toggleSidebar(side) {
       switch (side) {
