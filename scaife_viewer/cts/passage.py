@@ -81,16 +81,42 @@ class Passage:
         if reference:
             return Passage(self.text, reference)
 
+    def tokenize(self, words=True, puncutation=True, whitespace=True):
+        tokens = []
+        idx = defaultdict(int)
+        for w in token_re.findall(self.content):
+            if w_re.match(w):
+                if not words:
+                    continue
+                t = "w"
+            if p_re.match(w):
+                if not puncutation:
+                    continue
+                t = "p"
+            if ws_re.match(w):
+                if not whitespace:
+                    continue
+                t = "s"
+            idx[w] += 1
+            token = {
+                "w": w,
+                "i": idx[w],
+                "t": t,
+            }
+            tokens.append(token)
+        return tokens
+
     @lru_cache()
     def render(self):
         tei = self.textual_node().resource
         with open("tei.xsl") as f:
+            func_ns = "urn:python-funcs"
             transform = etree.XSLT(
                 etree.XML(f.read()),
                 extensions={
-                    ("urn:python-funcs", "tokens"): self.tokens,
-                    ("urn:python-funcs", "token_type"): self.token_type,
-                    ("urn:python-funcs", "token_index"): self.token_index,
+                    (func_ns, "tokens"): self.render_tokens,
+                    (func_ns, "token_type"): self.render_token_type,
+                    (func_ns, "token_index"): self.render_token_index,
                 }
             )
             try:
@@ -100,13 +126,13 @@ class Passage:
                     print(error.message, error.line)
                 raise
 
-    def tokens(self, context, s):
+    def render_tokens(self, context, s):
         ts = []
         for token in token_re.findall("".join(s)):
             ts.append(token)
         return ts
 
-    def token_type(self, context, value):
+    def render_token_type(self, context, value):
         v = "".join(value)
         if w_re.match(v):
             return "w"
@@ -115,7 +141,7 @@ class Passage:
         if ws_re.match(v):
             return "s"
 
-    def token_index(self, context, value):
+    def render_token_index(self, context, value):
         key = "".join(value)
         self.token_indexes[key] += 1
         return self.token_indexes[key]
@@ -160,6 +186,7 @@ class Passage:
                 "kind": self.text.kind,
             },
             "text_html": str(self.render()),
+            "word_tokens": self.tokenize(puncutation=False, whitespace=False),
             "refs": refs,
             "ancestors": [
                 {
