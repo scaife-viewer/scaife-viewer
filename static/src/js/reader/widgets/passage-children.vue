@@ -4,7 +4,7 @@
     <p>
       <template v-for="(child, idx) in passage.metadata.children">
         <!-- unable to figure how to insert a breaking space with vue (uses css :after but is included in <a>) -->
-        <router-link :key="`pc-${child.urn}`" :to="toRef(child.reference)">{{ child.lsb }}</router-link>
+        <router-link :key="`pc-${child.lsb}`" :to="toRef(child.reference)">{{ child.lsb }}</router-link>
       </template>
     </p>
   </div>
