@@ -1,5 +1,5 @@
 <template>
-  <div v-show="show" :style="{ 'text-align': 'center' }">
+  <div class="text-loader" :style="{ 'text-align': 'center' }">
     <div :style="[ spinnerStyle, spinnerDelay1 ]"></div>
     <div :style="[ spinnerStyle, spinnerDelay2 ]"></div>
     <div :style="[ spinnerStyle, spinnerDelay3 ]"></div>
@@ -8,11 +8,6 @@
 
 <script>
 export default {
-  mounted() {
-    setTimeout(() => {
-      this.show = true;
-    }, 200);
-  },
   props: {
     color: {
       type: String,
@@ -33,7 +28,6 @@ export default {
   },
   data() {
     return {
-      show: false,
       spinnerStyle: {
         backgroundColor: this.color,
         width: this.size,

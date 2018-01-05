@@ -1,7 +1,6 @@
 <template>
   <div :class="['text', `text-${textSize}`]">
-    <text-loader v-if="!passage.ready" />
-    <component v-if="passage.metadata" :class="{'text-loading': !passage.ready, 'text-loaded': passage.ready}" :is="renderedText"></component>
+    <component :class="{'text-loading': text === null, 'text-loaded': text !== null}" :is="renderedText" />
   </div>
 </template>
 
@@ -13,24 +12,47 @@ import Token from './token';
 
 export default {
   store,
-  props: ['passage'],
+  props: ['text'],
+  watch: {
+    text: 'renderText',
+  },
+  data() {
+    return {
+      renderedText: null,
+    };
+  },
   computed: {
     textSize() {
       return this.$store.state.reader.textSize;
     },
-    renderedText() {
-      return {
-        store,
-        template: this.passage.metadata.text_html,
-        components: {
-          TextPart,
-          t: Token,
-        },
-      };
-    },
   },
-  components: {
-    TextLoader,
+  created() {
+    this.renderText();
+  },
+  methods: {
+    renderText() {
+      if (this.text === null) {
+        // give the text fade out animation time to complete before
+        // we show the loader.
+        const delay = 250;
+        setTimeout(() => {
+          // check text before setting loader because it may have been
+          // loaded faster than our delay.
+          if (this.text === null) {
+            this.renderedText = TextLoader;
+          }
+        }, delay);
+      } else {
+        this.renderedText = {
+          store,
+          template: this.text,
+          components: {
+            TextPart,
+            t: Token,
+          },
+        };
+      }
+    },
   },
 };
 </script>

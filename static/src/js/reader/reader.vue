@@ -53,7 +53,7 @@
               <div v-if="leftPassage.error" class="alert alert-danger" role="alert">
                 Failed to load <b>{{ leftPassage.urn.toString() }}</b>: {{ leftPassage.error }}
               </div>
-              <passage-render-text v-else :passage="leftPassage" />
+              <passage-render-text v-else :text="leftPassageText" />
             </div>
             <div class="right">
               <version-selector :versions="versions" :to="toRightPassage" :remove="toRemoveRight">
@@ -63,14 +63,14 @@
               <div v-if="rightPassage.error" class="alert alert-danger" role="alert">
                 Failed to load <b>{{ rightPassage.urn.toString() }}</b>: {{ rightPassage.error }}
               </div>
-              <passage-render-text v-else :passage="rightPassage" />
+              <passage-render-text v-else :text="rightPassageText" />
             </div>
           </template>
           <template v-else>
             <div v-if="leftPassage.error" class="alert alert-danger" role="alert">
               Failed to load <b>{{ leftPassage.urn.toString() }}</b>: {{ leftPassage.error }}
             </div>
-            <passage-render-text v-else :passage="leftPassage" />
+            <passage-render-text v-else :text="leftPassageText" />
           </template>
           <div class="pg-right">
             <router-link v-if="passage.metadata.next" :to="toRef(passage.metadata.next.ref)">
@@ -180,6 +180,12 @@ export default {
     },
     rightPassage() {
       return this.$store.state.reader.rightPassage;
+    },
+    leftPassageText() {
+      return this.$store.state.reader.leftPassageText;
+    },
+    rightPassageText() {
+      return this.$store.state.reader.rightPassageText;
     },
   },
   watch: {
