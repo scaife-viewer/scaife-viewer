@@ -3,17 +3,17 @@
     <h2>
       <span @click.prevent="toggle">
         <span class="open-toggle">
-          <i :class="['fa', {'fa-chevron-right': !open, 'fa-chevron-down': open}]"></i>
+          <i :class="['fa', open ? 'fa-chevron-down' : 'fa-chevron-right']"></i>
         </span>
         <slot name="header"></slot>
       </span>
       <span v-if="open" class="fixed-toggle" @click.prevent="toggle_fix">
-        <i :class="['fa', {'fa-compress': !fixed, 'fa-expand': fixed}]"></i>
+        <i :class="['fa', fixed ? 'fa-expand' : 'fa-compress']"></i>
       </span>
     </h2>
-    <p v-if="open" :class="{ fixed }">
+    <div v-if="open" :class="['body', { fixed }]">
       <slot name="body"></slot>
-    </p>
+    </div>
   </div>
 </template>
 
