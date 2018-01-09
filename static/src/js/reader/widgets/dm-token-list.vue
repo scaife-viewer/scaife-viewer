@@ -1,7 +1,7 @@
 <template>
-  <div class="widget token-list" v-if="show">
-    <h2>Token List</h2>
-    <p>
+  <widget class="token-list" v-if="show">
+    <span slot="header">Token Size</span>
+    <div slot="body">
       <table>
         <template v-for="token in tokenList">
           <tr v-for="(analysis, idx) in token.analyses">
@@ -11,12 +11,13 @@
           </tr>
         </template>
       </table>
-    </p>
-  </div>
+    </div>
+  </widget>
 </template>
 
 <script>
 import store from '../../store';
+import widget from '../widget';
 
 export default {
   store,
@@ -55,6 +56,9 @@ export default {
       const data = await res.json();
       this.tokenList = data.tokens;
     },
+  },
+  components: {
+    widget,
   },
 };
 </script>

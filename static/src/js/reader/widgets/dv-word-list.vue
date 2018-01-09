@@ -1,17 +1,20 @@
 <template>
-  <div class="widget word-list" v-if="show">
-    <h2>Word List</h2>
-    <p class="legend">Number in parentheses is frequency per 10k in this work.</p>
-    <p v-for="word in wordList" :key="word.text">
-      <span class="w">{{ word.text }}</span>
-      <span class="df">{{ word.shortdef }}</span>
-      <span class="fr">({{ word.frequency }})</span>
-    </p>
-  </div>
+  <widget class="word-list" v-if="show">
+    <span slot="header">Word List</span>
+    <div slot="body">
+      <p class="legend">Number in parentheses is frequency per 10k in this work.</p>
+      <p v-for="word in wordList" :key="word.text">
+        <span class="w">{{ word.text }}</span>
+        <span class="df">{{ word.shortdef }}</span>
+        <span class="fr">({{ word.frequency }})</span>
+      </p>
+    </div>
+  </widget>
 </template>
 
 <script>
 import store from '../../store';
+import widget from '../widget';
 
 export default {
   store,
@@ -54,6 +57,9 @@ export default {
         frequency: lemma.work_frequency.toFixed(2),
       }));
     },
+  },
+  components: {
+    widget,
   },
 };
 </script>
