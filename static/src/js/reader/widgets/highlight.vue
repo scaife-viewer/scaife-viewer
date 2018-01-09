@@ -1,7 +1,7 @@
 <template>
-  <div class="widget highlight">
-    <h2>Highlight</h2>
-    <p>
+  <widget class="highlight">
+    <span slot="header">Highlight</span>
+    <div slot="body">
       <input
         v-model="value"
         v-on:keyup="handleKeyUp"
@@ -9,12 +9,13 @@
         type="text"
         class="form-control form-control-sm"
       >
-    </p>
-  </div>
+    </div>
+  </widget>
 </template>
 
 <script>
 import store from '../../store';
+import widget from '../widget';
 
 export default {
   store,
@@ -50,6 +51,9 @@ export default {
       const el = e.currentTarget;
       el.select();
     },
+  },
+  components: {
+    widget,
   },
 };
 </script>

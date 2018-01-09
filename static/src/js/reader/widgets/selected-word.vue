@@ -1,12 +1,15 @@
 <template>
-  <div class="widget selected-word" v-if="word">
-    <h2>Selected Word</h2>
-    <p>{{ word.w }}[{{ word.i }}]</p>
-  </div>
+  <widget class="selected-word" v-if="word">
+    <span slot="header">Selected Word</span>
+    <div slot="body">
+      {{ word.w }}[{{ word.i }}]
+    </div>
+  </widget>
 </template>
 
 <script>
 import store from '../../store';
+import widget from '../widget';
 
 export default {
   store,
@@ -20,6 +23,9 @@ export default {
       }
       return word;
     },
+  },
+  components: {
+    widget,
   },
 };
 </script>
