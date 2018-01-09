@@ -1,6 +1,9 @@
 .widget {
   padding: 15px 8px;
   border-bottom: 1px solid $gray-200;
+  &:first-of-type {
+    border-top: 1px solid $gray-200;
+  }
   h2 {
     display: flex;
     justify-content: space-between;
@@ -13,7 +16,7 @@
     > span:first-of-type {
       display: flex;
       .open-toggle {
-        width: 1.5em;
+        min-width: 1.5em;
         color: $gray-400;
       }
       &:hover .open-toggle {
@@ -21,7 +24,7 @@
       }
     }
     .fixed-toggle {
-      display: none;
+      opacity: 0;
       max-width: 2em;
       color: $gray-400;
       text-align: right;
@@ -31,7 +34,7 @@
     }
   }
   &:hover .fixed-toggle {
-    display: inline;
+    opacity: 1;
   }
   div.body {
     margin: 5px 0 0 0;

@@ -9,7 +9,10 @@
       </div>
     </div>
     <template v-else>
+      <button class="left-toggle" v-if="sidebarLeftOpened" @click="toggleSidebar('left')"><i></i></button>
+      <button class="right-toggle" v-if="sidebarRightOpened" @click="toggleSidebar('right')"><i></i></button>
       <div :class="['sidebar', { collapsed: sidebarLeftOpened }]" id="left-sidebar">
+        <button class="right-toggle" v-if="!sidebarLeftOpened" @click="toggleSidebar('left')"><i></i></button>
         <div>
           <widget-passage-ancestors />
           <widget-passage-children />
@@ -18,8 +21,6 @@
         </div>
       </div>
       <section id="content_body">
-        <button id="left-sidebar-toggle" :class="[{ open: !sidebarLeftOpened }]" @click="toggleSidebar('left')"><i></i></button>
-        <button id="right-sidebar-toggle" :class="[{ open: !sidebarRightOpened }]" @click="toggleSidebar('right')"><i></i></button>
         <div class="passage-heading">
           <a href="/library/">Library &gt;</a>
           <h1>
@@ -82,6 +83,7 @@
         </div>
       </section>
       <div :class="['sidebar', { collapsed: sidebarRightOpened }]" id="right-sidebar">
+        <button class="left-toggle" v-if="!sidebarRightOpened" @click="toggleSidebar('right')"><i></i></button>
         <div>
           <widget-passage-links />
           <widget-text-size />

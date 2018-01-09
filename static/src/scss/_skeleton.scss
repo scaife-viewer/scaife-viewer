@@ -1,34 +1,21 @@
-#left-sidebar-toggle {
+.left-toggle, .right-toggle {
   @extend .btn;
   @extend .btn-link;
   position: absolute;
-  top: 60px;
+  top: 0;
+  color: $gray-400;
+}
+
+.left-toggle {
   left: 0;
-  color: $gray-300;
   i {
-    @include icon(chevron-right);
-  }
-  &.open {
-    i {
-      @include icon(chevron-left);
-    }
+    @include icon(arrow-right);
   }
 }
-#right-sidebar-toggle {
-  @extend .btn;
-  @extend .btn-link;
-  position:
-  absolute;
-  top: 60px;
+.right-toggle {
   right: 0;
-  color: $gray-300;
   i {
-    @include icon(chevron-left);
-  }
-  &.open {
-    i {
-      @include icon(chevron-right);
-    }
+    @include icon(arrow-left);
   }
 }
 
@@ -36,6 +23,7 @@
   display: flex;
   height: calc(100vh - 65px);
   background: $gray-100;
+  position: relative;
 }
 
 #content_body {
@@ -54,6 +42,7 @@
   overflow-y: auto;
   max-width: 600px;
   transition: max-width .2s;
+  position: relative;
 
   &#left-sidebar {
     flex: 1;
