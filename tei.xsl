@@ -218,14 +218,7 @@
 
   <xsl:template match="t:quote">
     <xsl:element name="blockquote">
-      <xsl:choose>
-        <xsl:when test="child::t:l">
-            <ol class="hidenum"><xsl:apply-templates /></ol>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates/>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:apply-templates/>
     </xsl:element>
   </xsl:template>
 
@@ -338,31 +331,13 @@
       <xsl:if test="./t:speaker">
         <em><xsl:value-of select="./t:speaker/text()" /></em>
       </xsl:if>
-      <xsl:choose>
-        <xsl:when test="./t:l">
-          <ol>
-            <xsl:apply-templates select="./t:l"/>
-          </ol>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:apply-templates/>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:apply-templates/>
     </div>
   </xsl:template>
 
   <xsl:template match="t:said">
     <div class="said">
-      <xsl:choose>
-        <xsl:when test="./t:l">
-          <ol>
-            <xsl:apply-templates select="./t:l"/>
-          </ol>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:apply-templates/>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:apply-templates/>
     </div>
   </xsl:template>
 
