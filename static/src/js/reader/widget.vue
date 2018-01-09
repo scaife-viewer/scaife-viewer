@@ -1,10 +1,17 @@
 <template>
   <div class="widget">
-    <h2 @click.prevent="toggle">
-      <span class="summary" v-if="!open"><slot name="summary"></slot></span>
-      <slot name="header"></slot>
+    <h2>
+      <span @click.prevent="toggle">
+        <span class="open-toggle">
+          <i :class="['fa', {'fa-chevron-right': !open, 'fa-chevron-down': open}]"></i>
+        </span>
+        <slot name="header"></slot>
+      </span>
+      <span v-if="open" class="fixed-toggle" @click.prevent="toggle_fix">
+        <i :class="['fa', {'fa-compress': !fixed, 'fa-expand': fixed}]"></i>
+      </span>
     </h2>
-    <p v-if="open">
+    <p v-if="open" :class="{ fixed }">
       <slot name="body"></slot>
     </p>
   </div>
@@ -15,11 +22,15 @@
     data() {
       return {
         open: true,
+        fixed: true,
       };
     },
     methods: {
       toggle() {
         this.open = !this.open;
+      },
+      toggle_fix() {
+        this.fixed = !this.fixed;
       },
     },
   };

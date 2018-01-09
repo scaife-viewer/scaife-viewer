@@ -2,15 +2,43 @@
   padding: 5px 8px;
   margin-bottom: 20px;
   h2 {
+    display: flex;
+    justify-content: space-between;
     font-size: 14px;
     margin: 0;
     color: $gray-600;
     text-transform: uppercase;
     letter-spacing: 0.2em;
     cursor: pointer;
+    > span:first-of-type {
+      display: flex;
+      .open-toggle {
+        width: 1.5em;
+        color: $gray-400;
+      }
+      &:hover .open-toggle {
+        color: $gray-600;
+      }
+    }
+    .fixed-toggle {
+      display: none;
+      max-width: 2em;
+      color: $gray-400;
+      text-align: right;
+      &:hover {
+        color: $gray-600;
+      }
+    }
+  }
+  &:hover .fixed-toggle {
+    display: inline;
   }
   p {
     margin: 0;
+    &.fixed {
+      max-height: 200px;
+      overflow-y: auto;
+    }
   }
 }
 
