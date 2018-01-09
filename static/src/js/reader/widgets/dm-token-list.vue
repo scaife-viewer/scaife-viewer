@@ -1,6 +1,6 @@
 <template>
   <widget class="token-list" v-if="show">
-    <span slot="header">Token Size</span>
+    <span slot="header">Token List</span>
     <div slot="body">
       <table>
         <template v-for="token in tokenList">
