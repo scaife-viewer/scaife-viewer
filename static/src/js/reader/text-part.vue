@@ -15,7 +15,17 @@ export default {
   mixins: [
     ReaderNavigationMixin,
   ],
-  props: ['reference'],
+  props: {
+    reference: {
+      type: String,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      visible: false,
+    };
+  },
   computed: {
     n() {
       return this.reference.split('.').pop();

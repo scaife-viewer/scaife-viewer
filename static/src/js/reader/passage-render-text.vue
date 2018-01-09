@@ -1,6 +1,9 @@
 <template>
   <div :class="['text', `text-${textSize}`]">
-    <component :class="{'text-loading': text === null, 'text-loaded': text !== null}" :is="renderedText" />
+    <component
+      :class="{'text-loading': text === null, 'text-loaded': text !== null}"
+      :is="renderedText"
+    />
   </div>
 </template>
 
@@ -14,7 +17,7 @@ export default {
   store,
   props: ['text'],
   watch: {
-    text: 'renderText',
+    text: 'prepareText',
   },
   data() {
     return {
@@ -27,10 +30,10 @@ export default {
     },
   },
   created() {
-    this.renderText();
+    this.prepareText();
   },
   methods: {
-    renderText() {
+    prepareText() {
       if (this.text === null) {
         // give the text fade out animation time to complete before
         // we show the loader.
@@ -43,15 +46,50 @@ export default {
           }
         }, delay);
       } else {
-        this.renderedText = {
-          store,
-          template: this.text,
-          components: {
-            TextPart,
-            t: Token,
-          },
-        };
+        this.$nextTick(this.renderText);
       }
+    },
+    renderText() {
+      let observer = null;
+      this.renderedText = {
+        store,
+        template: this.text,
+        created() {
+          const opts = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0,
+          };
+          observer = new IntersectionObserver(this.ioCallback, opts);
+        },
+        mounted() {
+          this.$nextTick(() => {
+            this.$el.querySelectorAll('.textpart.o').forEach((e) => {
+              observer.observe(e);
+            });
+          });
+        },
+        destroy() {
+          observer.disconnect();
+          observer = null;
+        },
+        methods: {
+          ioCallback(entries) {
+            entries.forEach((entry) => {
+              if (entry) {
+                const vm = entry.target.__vue__; // eslint-disable-line no-underscore-dangle
+                if (vm) {
+                  vm.visible = entry.isIntersecting;
+                }
+              }
+            });
+          },
+        },
+        components: {
+          TextPart,
+          t: Token,
+        },
+      };
     },
   },
 };
