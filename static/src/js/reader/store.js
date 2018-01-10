@@ -57,6 +57,8 @@ module.exports = {
     rightText: null,
     leftPassage: null,
     rightPassage: null,
+    leftPassageText: null,
+    rightPassageText: null,
     highlight: null,
     selectedWord: null,
     error: '',
@@ -110,6 +112,12 @@ module.exports = {
         state.rightPassage = copyPassage(state.rightPassage, payload);
       }
     },
+    setLeftPassageText(state, { text }) {
+      state.leftPassageText = text;
+    },
+    setRightPassageText(state, { text }) {
+      state.rightPassageText = text;
+    },
     setHighlight(state, payload) {
       if (payload === null) {
         state.highlight = null;
@@ -145,9 +153,12 @@ module.exports = {
         }));
       }
       if (!state.leftPassage || state.leftPassage.urn.toString() !== leftUrn.toString()) {
+        commit('setLeftPassageText', { text: null });
         commit('setLeftPassage', { urn: leftUrn, ready: false, error: '' });
         ps.push(sv.fetchPassage(leftUrn)
           .then((passage) => {
+            commit('setLeftPassageText', { text: passage.text_html });
+            delete passage.text_html;
             commit('setLeftPassage', { metadata: passage, ready: true });
           })
           .catch((err) => {
@@ -162,9 +173,12 @@ module.exports = {
           }));
         }
         if (!state.rightPassage || state.rightPassage.urn.toString() !== rightUrn.toString()) {
+          commit('setRightPassageText', { text: null });
           commit('setRightPassage', { urn: rightUrn, ready: false, error: '' });
           ps.push(sv.fetchPassage(rightUrn)
             .then((passage) => {
+              commit('setRightPassageText', { text: passage.text_html });
+              delete passage.text_html;
               commit('setRightPassage', { metadata: passage, ready: true });
             })
             .catch((err) => {

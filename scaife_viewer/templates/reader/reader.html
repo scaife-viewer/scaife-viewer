@@ -6,6 +6,10 @@
 
 {% block body_class %}reader{% endblock %}
 
+{% block extra_head %}
+  <script src="https://polyfill.io/v2/polyfill.min.js?features=IntersectionObserver"></script>
+{% endblock %}
+
 {% block body_base %}
   <sv-reader></sv-reader>
 {% endblock %}

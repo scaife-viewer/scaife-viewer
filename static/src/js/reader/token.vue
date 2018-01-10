@@ -1,7 +1,3 @@
-<template>
-  <span :class="[t, { selected }]" @click="handleClick" @click.meta="handleMetaClick"><slot></slot></span>
-</template>
-
 <script>
 export default {
   name: 'Token',
@@ -19,30 +15,43 @@ export default {
       required: true,
     },
   },
-  computed: {
-    selected() {
-      const { highlight } = this.$store.state.reader;
+  render(h) {
+    let selected = false;
+    const {
+      t, w, i,
+      $parent: p,
+      $store: store,
+    } = this;
+    const { visible } = p;
+    if (visible) {
+      const { highlight } = store.state.reader;
       if (highlight) {
         const [, aw, ai] = /^@([^[]+)(?:\[(\d+)\])?$/.exec(highlight);
-        const { w: bw, i: bi } = this;
-        return aw === bw && ai === bi;
+        selected = (aw === w && ai === i);
       }
-      return false;
-    },
-  },
-  methods: {
-    handleClick(e) {
-      if (this.t === 'w') {
-        this.$store.dispatch('reader/highlight', { highlight: `@${this.w}[${this.i}]` });
-      }
-      e.stopPropagation();
-    },
-    handleMetaClick(e) {
-      if (this.selected) {
-        this.$store.dispatch('reader/highlight', { highlight: null });
-      }
-      e.stopPropagation();
-    },
+    }
+    return h(
+      'span',
+      {
+        class: [
+          t,
+          { selected },
+        ],
+        on: {
+          click(e) {
+            if (e.metaKey) {
+              if (selected) {
+                store.dispatch('reader/highlight', { highlight: null });
+              }
+            } else if (t === 'w') {
+              store.dispatch('reader/highlight', { highlight: `@${w}[${i}]` });
+            }
+            e.stopPropagation();
+          },
+        },
+      },
+      this.$slots.default,
+    );
   },
 };
 </script>
