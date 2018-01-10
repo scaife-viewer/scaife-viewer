@@ -1,5 +1,5 @@
 <template>
-  <div :class="['text', `text-${textSize}`]">
+  <div :class="['text', `text-${textSize}`]" @mousedown.prevent>
     <component
       :class="{'text-loading': text === null, 'text-loaded': text !== null}"
       :is="renderedText"
