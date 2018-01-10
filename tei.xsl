@@ -280,11 +280,6 @@
       <xsl:choose>
         <xsl:when test="py:token_type(.) = 'w'">
           <xsl:element name="t">
-            <xsl:attribute name="r">
-              <xsl:for-each select="$node/ancestor::t:div[@type='textpart']/@n">
-                <xsl:value-of select="concat(., '.')" />
-              </xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="t">w</xsl:attribute>
             <xsl:attribute name="w"><xsl:value-of select="." /></xsl:attribute>
             <xsl:attribute name="i"><xsl:value-of select="py:token_index(.)" /></xsl:attribute>

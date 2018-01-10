@@ -14,20 +14,16 @@ export default {
       type: String,
       required: true,
     },
-    r: {
-      type: String,
-      required: false,
-    },
   },
   render(h) {
     let selected = false;
     const {
-      r, t, w, i,
+      t, w, i,
       $parent: p,
       $store: store,
     } = this;
     const { visible } = p;
-    if (r && visible) {
+    if (visible) {
       const { highlight } = store.state.reader;
       if (highlight) {
         const [, aw, ai] = /^@([^[]+)(?:\[(\d+)\])?$/.exec(highlight);
