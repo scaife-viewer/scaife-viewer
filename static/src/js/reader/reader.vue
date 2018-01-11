@@ -17,7 +17,6 @@
           <widget-passage-ancestors />
           <widget-passage-children />
           <widget-passage-reference />
-          <widget-highlight />
         </div>
       </div>
       <section id="content_body">
@@ -87,7 +86,7 @@
         <div>
           <widget-passage-links />
           <widget-text-size />
-          <widget-selected-word />
+          <widget-highlight />
           <widget-token-list />
           <widget-dv-word-list />
         </div>
@@ -111,16 +110,14 @@ import WidgetPassageLinks from './widgets/passage-links';
 import WidgetTextSize from './widgets/text-size';
 import WidgetDvWordList from './widgets/dv-word-list';
 import WidgetTokenList from './widgets/dm-token-list';
-import WidgetSelectedWord from './widgets/selected-word';
 
 const widgets = {
   WidgetPassageAncestors,
   WidgetPassageChildren,
   WidgetPassageReference,
-  WidgetHighlight,
   WidgetPassageLinks,
   WidgetTextSize,
-  WidgetSelectedWord,
+  WidgetHighlight,
   WidgetDvWordList,
   WidgetTokenList,
 };
