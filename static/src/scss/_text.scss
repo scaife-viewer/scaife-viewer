@@ -154,6 +154,9 @@ div.text {
     & > .b {
       padding: 0px 4px;
     }
+    &.leaf > .b {
+      padding: 0px 12px;
+    }
   }
   &:hover {
     .textpart {
