@@ -1,7 +1,3 @@
-<template>
-  <span :class="[t, { selected }]" @click="handleClick" @click.meta="handleMetaClick"><slot></slot></span>
-</template>
-
 <script>
 export default {
   name: 'Token',
@@ -20,29 +16,48 @@ export default {
     },
   },
   computed: {
-    selected() {
-      const { highlight } = this.$store.state.reader;
-      if (highlight) {
-        const [, aw, ai] = /^@([^[]+)(?:\[(\d+)\])?$/.exec(highlight);
-        const { w: bw, i: bi } = this;
-        return aw === bw && ai === bi;
-      }
-      return false;
+    idx() {
+      return `${this.w}[${this.i}]`;
     },
   },
-  methods: {
-    handleClick(e) {
-      if (this.t === 'w') {
-        this.$store.dispatch('reader/highlight', { highlight: `@${this.w}[${this.i}]` });
+  render(h) {
+    let selected = false;
+    const {
+      t, idx,
+      $parent: p,
+      $store: store,
+    } = this;
+    const { visible } = p;
+    if (visible) {
+      const { annotations, annotationChange } = store.state.reader;
+      if (annotations.has(idx)) {
+        ({ selected } = annotations.get(idx));
       }
-      e.stopPropagation();
-    },
-    handleMetaClick(e) {
-      if (this.selected) {
-        this.$store.dispatch('reader/highlight', { highlight: null });
-      }
-      e.stopPropagation();
-    },
+    }
+    return h(
+      'span',
+      {
+        class: [
+          t,
+          { selected },
+        ],
+        on: {
+          click(e) {
+            if (e.metaKey) {
+              if (selected) {
+                store.dispatch('reader/setSelectedToken', { token: null });
+              }
+            } else if (e.shiftKey) {
+              store.dispatch('reader/selectTokenRange', { token: idx });
+            } else {
+              store.dispatch('reader/setSelectedToken', { token: idx });
+            }
+            e.stopPropagation();
+          },
+        },
+      },
+      this.$slots.default,
+    );
   },
 };
 </script>

@@ -57,9 +57,13 @@ module.exports = {
     rightText: null,
     leftPassage: null,
     rightPassage: null,
+    leftPassageText: null,
+    rightPassageText: null,
     highlight: null,
-    selectedWord: null,
+    annotations: new Map(),
+    annotationChange: 0,
     error: '',
+    selectedTokenRange: { start: null, end: null },
   },
   getters: {
     text(state) {
@@ -110,6 +114,12 @@ module.exports = {
         state.rightPassage = copyPassage(state.rightPassage, payload);
       }
     },
+    setLeftPassageText(state, { text }) {
+      state.leftPassageText = text;
+    },
+    setRightPassageText(state, { text }) {
+      state.rightPassageText = text;
+    },
     setHighlight(state, payload) {
       if (payload === null) {
         state.highlight = null;
@@ -118,12 +128,42 @@ module.exports = {
         state.highlight = highlight;
       }
     },
+    setAnnotation(state, { token, key, value, singleton }) {
+      const { annotations } = state;
+      if (singleton !== undefined && singleton) {
+        annotations.forEach((o) => {
+          delete o[key];
+        });
+      }
+      let ta = {};
+      if (annotations.has(token)) {
+        ta = annotations.get(token);
+      }
+      ta[key] = value;
+      annotations.set(token, ta);
+      state.annotationChange += 1;
+    },
+    clearAnnotation(state, { key }) {
+      const { annotations } = state;
+      annotations.forEach((o) => {
+        delete o[key];
+      });
+      state.annotationChange += 1;
+    },
+    setSelectedTokenRange(state, { start, end }) {
+      if (start !== undefined) {
+        state.selectedTokenRange.start = start;
+      }
+      if (end !== undefined) {
+        state.selectedTokenRange.end = end;
+      }
+    },
     setError(state, { error }) {
       state.error = error;
     },
   },
   actions: {
-    load({ commit, state, rootState }, { leftUrn, rightUrn }) {
+    load({ dispatch, commit, state, rootState }, { leftUrn, rightUrn, initial = false }) {
       if (state.error) {
         commit('setError', { error: '' });
       }
@@ -145,9 +185,15 @@ module.exports = {
         }));
       }
       if (!state.leftPassage || state.leftPassage.urn.toString() !== leftUrn.toString()) {
+        if (!initial) {
+          dispatch('setSelectedToken', { token: null });
+        }
+        commit('setLeftPassageText', { text: null });
         commit('setLeftPassage', { urn: leftUrn, ready: false, error: '' });
         ps.push(sv.fetchPassage(leftUrn)
           .then((passage) => {
+            commit('setLeftPassageText', { text: passage.text_html });
+            delete passage.text_html;
             commit('setLeftPassage', { metadata: passage, ready: true });
           })
           .catch((err) => {
@@ -162,9 +208,12 @@ module.exports = {
           }));
         }
         if (!state.rightPassage || state.rightPassage.urn.toString() !== rightUrn.toString()) {
+          commit('setRightPassageText', { text: null });
           commit('setRightPassage', { urn: rightUrn, ready: false, error: '' });
           ps.push(sv.fetchPassage(rightUrn)
             .then((passage) => {
+              commit('setRightPassageText', { text: passage.text_html });
+              delete passage.text_html;
               commit('setRightPassage', { metadata: passage, ready: true });
             })
             .catch((err) => {
@@ -174,31 +223,90 @@ module.exports = {
       } else if (state.rightText) {
         commit('setRightPassage', null);
       }
-      if (rootState.route.query.highlight && rootState.route.query.highlight !== state.highlight) {
-        commit('setHighlight', { highlight: rootState.route.query.highlight });
-      }
       return Promise.all(ps)
+        .then(() => {
+          if (rootState.route.query.highlight && rootState.route.query.highlight !== state.highlight) {
+            dispatch('highlight', {
+              highlight: rootState.route.query.highlight,
+              route: false,
+            });
+          }
+        })
         .catch((err) => {
           commit('setError', { error: `failed to load reader: ${err}` });
         });
     },
-    highlight({ commit, rootState }, { highlight }) {
+    setSelectedToken({ dispatch, commit, state }, { token }) {
+      commit('setSelectedTokenRange', { start: token, end: null });
+      if (token === null) {
+        dispatch('highlight', { highlight: null });
+      } else {
+        dispatch('highlight', { highlight: `@${state.selectedTokenRange.start}` });
+      }
+    },
+    selectTokenRange({ dispatch, commit, state }, { token }) {
+      if (state.selectedTokenRange.start === null) {
+        const firstToken = state.leftPassage.metadata.word_tokens[0];
+        const start = `${firstToken.w}[${firstToken.i}]`;
+        commit('setSelectedTokenRange', { start, end: token });
+      } else {
+        commit('setSelectedTokenRange', { end: token });
+      }
+      dispatch('highlight', { highlight: `@${state.selectedTokenRange.start}-${state.selectedTokenRange.end}` });
+    },
+    highlight({ commit, state, rootState }, { highlight, route = true }) {
       let { query } = rootState.route;
       if (highlight !== null) {
+        let singleton = false;
+        const selectedTokens = [];
         if (highlight.indexOf('@') === -1) {
           highlight = `@${highlight}`;
         }
-        if (highlight.indexOf('[') === -1) {
-          highlight = `${highlight}[1]`;
+        if (highlight.indexOf('-') >= 0) {
+          const allTokens = state.leftPassage.metadata.word_tokens;
+          let [start, end] = highlight.substr(1).split('-');
+          if (start.indexOf('[') === -1) {
+            start = `${start}[1]`;
+          }
+          if (end.indexOf('[') === -1) {
+            end = `${end}[1]`;
+          }
+          const startIdx = allTokens.findIndex(t => `${t.w}[${t.i}]` === start);
+          const endIdx = allTokens.findIndex(t => `${t.w}[${t.i}]` === end);
+          Array.prototype.push.apply(
+            selectedTokens,
+            allTokens.slice(Math.min(startIdx, endIdx), Math.max(startIdx, endIdx) + 1).map(t => `${t.w}[${t.i}]`),
+          );
+        } else {
+          if (highlight.indexOf('[') === -1) {
+            highlight = `${highlight}[1]`;
+          }
+          selectedTokens.push(highlight.substr(1));
+          singleton = true;
         }
-        query = { ...query, highlight };
+        selectedTokens.forEach((token) => {
+          commit('setAnnotation', {
+            token,
+            key: 'selected',
+            value: true,
+            singleton,
+          });
+        });
         commit('setHighlight', { highlight });
+        if (route) {
+          query = { ...query, highlight };
+        }
       } else {
-        query = (({ highlight: deleted, ...o }) => o)(query);
+        commit('clearAnnotation', { key: 'selected' });
         commit('setHighlight', null);
+        if (route) {
+          query = (({ highlight: deleted, ...o }) => o)(query);
+        }
       }
-      const { default: router } = require('../router'); // eslint-disable-line global-require
-      router.push({ name: 'reader', params: rootState.route.params, query });
+      if (route) {
+        const { default: router } = require('../router'); // eslint-disable-line global-require
+        router.push({ name: 'reader', params: rootState.route.params, query });
+      }
     },
   },
 };

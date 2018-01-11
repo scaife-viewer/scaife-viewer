@@ -203,7 +203,7 @@
 
   <xsl:template match="t:div[@type = 'textpart']">
     <xsl:element name="text-part">
-      <xsl:attribute name="class"><xsl:value-of select="@subtype" /></xsl:attribute>
+      <xsl:attribute name="class"><xsl:value-of select="@subtype" /><xsl:if test="count(t:div[@type='textpart']) = 0"> leaf o</xsl:if></xsl:attribute>
       <xsl:if test="@n">
         <xsl:attribute name="reference">
           <xsl:for-each select="ancestor::t:div[@type='textpart']/@n">
@@ -275,6 +275,7 @@
   </xsl:template>
 
   <xsl:template match="text()">
+    <xsl:variable name="node" select="." />
     <xsl:for-each select="py:tokens(.)">
       <xsl:choose>
         <xsl:when test="py:token_type(.) = 'w'">
@@ -282,6 +283,7 @@
             <xsl:attribute name="t">w</xsl:attribute>
             <xsl:attribute name="w"><xsl:value-of select="." /></xsl:attribute>
             <xsl:attribute name="i"><xsl:value-of select="py:token_index(.)" /></xsl:attribute>
+            <xsl:attribute name="o"><xsl:value-of select="py:token_offset(.)" /></xsl:attribute>
             <xsl:value-of select="." />
           </xsl:element>
         </xsl:when>
@@ -290,6 +292,7 @@
             <xsl:attribute name="t">p</xsl:attribute>
             <xsl:attribute name="w"><xsl:value-of select="." /></xsl:attribute>
             <xsl:attribute name="i"><xsl:value-of select="py:token_index(.)" /></xsl:attribute>
+            <xsl:attribute name="o"><xsl:value-of select="py:token_offset(.)" /></xsl:attribute>
             <xsl:value-of select="." />
           </xsl:element>
         </xsl:when>
@@ -342,7 +345,7 @@
   <xsl:template match="t:sp">
     <div class="speak">
       <xsl:if test="./t:speaker">
-        <em><xsl:value-of select="./t:speaker/text()" /></em>
+        <span class="speaker"><xsl:value-of select="./t:speaker/text()" /></span>
       </xsl:if>
       <xsl:choose>
         <xsl:when test="./t:l">
@@ -370,6 +373,12 @@
         </xsl:otherwise>
       </xsl:choose>
     </div>
+  </xsl:template>
+
+  <xsl:template match="t:label">
+    <span class="label">
+      <xsl:apply-templates/>
+    </span>
   </xsl:template>
 
   <xsl:template match="t:supplied">

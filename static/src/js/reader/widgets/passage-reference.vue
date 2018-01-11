@@ -1,7 +1,7 @@
 <template>
-  <div class="widget passage-reference">
-    <h2>Passage Reference</h2>
-    <p>
+  <widget class="passage-reference">
+    <span slot="header">Passage Reference</span>
+    <div slot="body">
       <input
         v-model="reference"
         v-on:keyup="handleKeyUp"
@@ -9,12 +9,13 @@
         type="text"
         class="form-control form-control-sm"
       >
-    </p>
-  </div>
+    </div>
+  </widget>
 </template>
 
 <script>
 import store from '../../store';
+import widget from '../widget';
 import ReaderNavigationMixin from '../reader-navigation-mixin';
 
 export default {
@@ -53,6 +54,9 @@ export default {
       const el = e.currentTarget;
       el.select();
     },
+  },
+  components: {
+    widget,
   },
 };
 </script>

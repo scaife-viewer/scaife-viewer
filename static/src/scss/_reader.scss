@@ -31,8 +31,7 @@ body.reader {
   }
 
   .pg-left, .pg-right {
-    min-width: 40px;
-    flex-grow: 1;
+    flex: 1;
     min-height: calc(100vh - 250px);
     a {
       display: block;
@@ -63,7 +62,8 @@ body.reader {
   }
 
   .left, .right {
-    padding: 0 2em;
+    padding: 0 0.5em;
+    flex: 10;
   }
   .right {
     border-left: 1px solid $gray-300;
@@ -132,12 +132,12 @@ body.reader {
       line-height: 12px;
     }
   }
-  .text-loading {
+  .text-loading:not(.text-loader) {
     transform: translate3d(0, 0, 0);  // to avoid flicker
     opacity: 0;
     transition-duration: 0.2s;
   }
-  .text-loaded {
+  .text-loaded:not(.text-loader) {
     transform: translate3d(0, 0, 0);  // to avoid flicker
     opacity: 1;
     transition-duration: 0.2s;

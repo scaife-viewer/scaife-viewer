@@ -1,25 +1,33 @@
 <template>
-  <div class="widget selected-word" v-if="word">
-    <h2>Selected Word</h2>
-    <p>{{ word.w }}[{{ word.i }}]</p>
-  </div>
+  <widget class="selected-word" v-if="words && words.length > 0">
+    <span slot="header">Selected Word</span>
+    <div slot="body">
+      <p v-for="word in words" :key="`${word.w}[${word.i}]`">{{ word.w }}[{{ word.i }}]</p>
+    </div>
+  </widget>
 </template>
 
 <script>
 import store from '../../store';
+import widget from '../widget';
 
 export default {
   store,
   computed: {
-    word() {
-      let word = null;
-      const { highlight } = this.$store.state.reader;
-      if (highlight) {
-        const [, w, i] = /^@([^[]+)(?:\[(\d+)\])?$/.exec(highlight);
-        word = { w, i };
-      }
-      return word;
+    words() {
+      const words = [];
+      const { annotations, annotationChange } = this.$store.state.reader;
+      annotations.forEach((o, token) => {
+        if (o.selected) {
+          const [, w, i] = /^([^[]+)(?:\[(\d+)\])?$/.exec(token);
+          words.push({ w, i });
+        }
+      });
+      return words;
     },
+  },
+  components: {
+    widget,
   },
 };
 </script>

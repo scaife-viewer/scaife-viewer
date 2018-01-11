@@ -116,6 +116,9 @@ div.text {
   .placeName {
     color: $gray-600;
   }
+  .said .label, .speaker {
+    font-weight: bold;
+  }
   span.w:hover {
     cursor: pointer;
   }
@@ -139,6 +142,7 @@ div.text {
         text-align: center;
         font-family: 'Noto Sans';
         font-size: 12px;
+        transform: translate3d(0px, 0px, 0px);
       }
       min-width: 24px;
       padding-top: 4px;
@@ -153,6 +157,9 @@ div.text {
     }
     & > .b {
       padding: 0px 4px;
+    }
+    &.leaf > .b {
+      padding: 0px 12px;
     }
   }
   &:hover {
