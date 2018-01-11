@@ -375,6 +375,12 @@
     </div>
   </xsl:template>
 
+  <xsl:template match="t:label">
+    <span class="label">
+      <xsl:apply-templates/>
+    </span>
+  </xsl:template>
+
   <xsl:template match="t:supplied">
     <span>
       <xsl:attribute name="class">supplied supplied_<xsl:value-of select='@cert' /></xsl:attribute>
