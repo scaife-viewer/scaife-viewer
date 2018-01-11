@@ -15,19 +15,23 @@ export default {
       required: true,
     },
   },
+  computed: {
+    idx() {
+      return `${this.w}[${this.i}]`;
+    },
+  },
   render(h) {
     let selected = false;
     const {
-      t, w, i,
+      t, idx,
       $parent: p,
       $store: store,
     } = this;
     const { visible } = p;
     if (visible) {
-      const { highlight } = store.state.reader;
-      if (highlight) {
-        const [, aw, ai] = /^@([^[]+)(?:\[(\d+)\])?$/.exec(highlight);
-        selected = (aw === w && ai === i);
+      const { annotations, annotationChange } = store.state.reader;
+      if (annotations.has(idx)) {
+        ({ selected } = annotations.get(idx));
       }
     }
     return h(
@@ -41,10 +45,12 @@ export default {
           click(e) {
             if (e.metaKey) {
               if (selected) {
-                store.dispatch('reader/highlight', { highlight: null });
+                store.dispatch('reader/setSelectedToken', { token: null });
               }
-            } else if (t === 'w') {
-              store.dispatch('reader/highlight', { highlight: `@${w}[${i}]` });
+            } else if (e.shiftKey) {
+              store.dispatch('reader/selectTokenRange', { token: idx });
+            } else {
+              store.dispatch('reader/setSelectedToken', { token: idx });
             }
             e.stopPropagation();
           },
