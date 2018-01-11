@@ -24,7 +24,6 @@ class Passage:
     def __init__(self, text, reference):
         self.text = text
         self.reference = reference
-        self.token_indexes = defaultdict(int)
 
     def __repr__(self):
         return f"<cts.Passage {self.urn} at {hex(id(self))}>"
@@ -84,12 +83,16 @@ class Passage:
     def tokenize(self, words=True, puncutation=True, whitespace=True):
         tokens = []
         idx = defaultdict(int)
+        offset = 0
         for w in token_re.findall(self.content):
+            wl = len(w)
             if w_re.match(w):
+                offset += wl
                 if not words:
                     continue
                 t = "w"
             if p_re.match(w):
+                offset += wl
                 if not puncutation:
                     continue
                 t = "p"
@@ -97,11 +100,13 @@ class Passage:
                 if not whitespace:
                     continue
                 t = "s"
-            idx[w] += 1
+            for wk in (w[i:j + 1] for i in range(wl) for j in range(i, wl)):
+                idx[wk] += 1
             token = {
                 "w": w,
                 "i": idx[w],
                 "t": t,
+                "o": offset,
             }
             tokens.append(token)
         return tokens
@@ -109,42 +114,7 @@ class Passage:
     @lru_cache()
     def render(self):
         tei = self.textual_node().resource
-        with open("tei.xsl") as f:
-            func_ns = "urn:python-funcs"
-            transform = etree.XSLT(
-                etree.XML(f.read()),
-                extensions={
-                    (func_ns, "tokens"): self.render_tokens,
-                    (func_ns, "token_type"): self.render_token_type,
-                    (func_ns, "token_index"): self.render_token_index,
-                }
-            )
-            try:
-                return transform(tei)
-            except Exception:
-                for error in transform.error_log:
-                    print(error.message, error.line)
-                raise
-
-    def render_tokens(self, context, s):
-        ts = []
-        for token in token_re.findall("".join(s)):
-            ts.append(token)
-        return ts
-
-    def render_token_type(self, context, value):
-        v = "".join(value)
-        if w_re.match(v):
-            return "w"
-        if p_re.match(v):
-            return "p"
-        if ws_re.match(v):
-            return "s"
-
-    def render_token_index(self, context, value):
-        key = "".join(value)
-        self.token_indexes[key] += 1
-        return self.token_indexes[key]
+        return TEIRenderer(tei)
 
     def ancestors(self):
         toc = self.text.toc()
@@ -203,3 +173,63 @@ class Passage:
             ],
         }
         return o
+
+
+class TEIRenderer:
+
+    def __init__(self, tei):
+        self.tei = tei
+        self.indexes = defaultdict(int)
+        self.offset = 0
+
+    def __str__(self):
+        return self.render()
+
+    @lru_cache()
+    def render(self):
+        with open("tei.xsl") as f:
+            func_ns = "urn:python-funcs"
+            transform = etree.XSLT(
+                etree.XML(f.read()),
+                extensions={
+                    (func_ns, "tokens"): self.tokens,
+                    (func_ns, "token_type"): self.token_type,
+                    (func_ns, "token_index"): self.token_index,
+                    (func_ns, "token_offset"): self.token_offset,
+                }
+            )
+            try:
+                return str(transform(self.tei))
+            except Exception:
+                for error in transform.error_log:
+                    print(error.message, error.line)
+                raise
+
+    def tokens(self, context, value):
+        ts = []
+        v = "".join(value)
+        for token in token_re.findall(v):
+            ts.append(token)
+        return ts
+
+    def token_type(self, context, value):
+        v = "".join(value)
+        if w_re.match(v):
+            self.offset += len(v)
+            return "w"
+        if p_re.match(v):
+            self.offset += len(v)
+            return "p"
+        if ws_re.match(v):
+            return "s"
+
+    def token_offset(self, context, value):
+        v = "".join(value)
+        return self.offset - len(v)
+
+    def token_index(self, context, value):
+        v = "".join(value)
+        lv = len(v)
+        for k in (v[i:j + 1] for i in range(lv) for j in range(i, lv)):
+            self.indexes[k] += 1
+        return self.indexes[v]
