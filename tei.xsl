@@ -345,7 +345,7 @@
   <xsl:template match="t:sp">
     <div class="speak">
       <xsl:if test="./t:speaker">
-        <em><xsl:value-of select="./t:speaker/text()" /></em>
+        <span class="speaker"><xsl:value-of select="./t:speaker/text()" /></span>
       </xsl:if>
       <xsl:choose>
         <xsl:when test="./t:l">
