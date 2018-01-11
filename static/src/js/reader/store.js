@@ -163,7 +163,7 @@ module.exports = {
     },
   },
   actions: {
-    load({ dispatch, commit, state, rootState }, { leftUrn, rightUrn }) {
+    load({ dispatch, commit, state, rootState }, { leftUrn, rightUrn, initial = false }) {
       if (state.error) {
         commit('setError', { error: '' });
       }
@@ -185,6 +185,9 @@ module.exports = {
         }));
       }
       if (!state.leftPassage || state.leftPassage.urn.toString() !== leftUrn.toString()) {
+        if (!initial) {
+          dispatch('setSelectedToken', { token: null });
+        }
         commit('setLeftPassageText', { text: null });
         commit('setLeftPassage', { urn: leftUrn, ready: false, error: '' });
         ps.push(sv.fetchPassage(leftUrn)

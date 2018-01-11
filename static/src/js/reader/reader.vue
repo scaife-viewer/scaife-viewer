@@ -192,7 +192,7 @@ export default {
   },
   mounted() {
     setTimeout(() => { this.showLoader = true; }, 50);
-    this.sync().then(() => {
+    this.sync({ initial: true }).then(() => {
       this.ready = true;
       window.addEventListener('keyup', this.handleKeyUp);
     });
@@ -201,9 +201,9 @@ export default {
     window.removeEventListener('keyup', this.handleKeyUp);
   },
   methods: {
-    sync() {
+    sync({ initial = false }) {
       const { leftUrn, rightUrn } = this;
-      return this.$store.dispatch('reader/load', { leftUrn, rightUrn });
+      return this.$store.dispatch('reader/load', { leftUrn, rightUrn, initial });
     },
     handleKeyUp(e) {
       if (e.key === 'ArrowLeft') {
