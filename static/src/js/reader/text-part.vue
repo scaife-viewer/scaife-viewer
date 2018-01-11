@@ -18,7 +18,6 @@ export default {
   props: {
     reference: {
       type: String,
-      required: true,
     },
   },
   data() {
