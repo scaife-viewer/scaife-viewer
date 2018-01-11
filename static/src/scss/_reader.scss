@@ -31,8 +31,7 @@ body.reader {
   }
 
   .pg-left, .pg-right {
-    min-width: 40px;
-    flex-grow: 1;
+    flex: 1;
     min-height: calc(100vh - 250px);
     a {
       display: block;
@@ -63,7 +62,8 @@ body.reader {
   }
 
   .left, .right {
-    padding: 0 0 0 0.5em;
+    padding: 0 0.5em;
+    flex: 10;
   }
   .right {
     border-left: 1px solid $gray-300;
