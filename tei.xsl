@@ -331,9 +331,6 @@
 
   <xsl:template match="t:sp">
     <div class="speak">
-      <xsl:if test="./t:speaker">
-        <span class="speaker"><xsl:value-of select="./t:speaker/text()" /></span>
-      </xsl:if>
       <xsl:apply-templates/>
     </div>
   </xsl:template>
@@ -346,6 +343,12 @@
 
   <xsl:template match="t:label">
     <span class="label">
+      <xsl:apply-templates/>
+    </span>
+  </xsl:template>
+
+  <xsl:template match="t:speaker">
+    <span class="speaker">
       <xsl:apply-templates/>
     </span>
   </xsl:template>
