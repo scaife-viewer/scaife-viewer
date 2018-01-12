@@ -257,10 +257,6 @@
     <div class='pb'><xsl:value-of select="@n"/></div>
   </xsl:template>
 
-  <xsl:template match="t:ab/text()">
-    <xsl:value-of select="." />
-  </xsl:template>
-
   <xsl:template match="t:p">
     <p>
       <xsl:apply-templates/>
