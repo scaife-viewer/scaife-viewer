@@ -27,7 +27,7 @@
 }
 
 #content_body {
-  background: white;
+  background: $white;
   overflow-y: auto;
   @extend .container;
   padding-top: 35px;
@@ -38,7 +38,7 @@
 }
 
 .sidebar {
-  background: white;
+  background: $white;
   overflow-y: auto;
   max-width: 600px;
   transition: max-width .2s;

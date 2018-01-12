@@ -15,7 +15,7 @@ section.hero {
     font-size: 28px;
     margin: 0;
     a {
-      color: lighten($perseus-red, 30%);
+      color: $perseus-red-lighter;
       &:hover {
         text-decoration: none;
       }
@@ -25,11 +25,11 @@ section.hero {
 
 .dev-note {
   margin: 50px 0;
-  background: #FFFAEE;
+  background: $highlight-color-lighter;
   padding: 10px 20px;
   font-family: 'Noto Serif';
   font-style: italic;
-  border: 1px solid lighten($perseus-red, 30%);
+  border: 1px solid $perseus-red-lighter;
 
   span {
     font-weight: bold;
@@ -93,7 +93,7 @@ section.hero {
     font-weight: bold;
 
     a {
-      color: black;
+      color: $black;
       &:hover {
         color: $link-color;
         text-decoration: none;

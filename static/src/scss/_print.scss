@@ -34,12 +34,12 @@
   }
 
   section.hero {
-    background: white;
-    color: black;
+    background: $white;
+    color: $black;
     h2 {
       margin: 0;
       a {
-        color: black;
+        color: $black;
       }
     }
     h1 {
@@ -48,8 +48,8 @@
   }
   section.home-hero {
     padding: 100px;
-    background: white;
-    color: black;
+    background: $white;
+    color: $black;
     .btn {
       display: none;
     }

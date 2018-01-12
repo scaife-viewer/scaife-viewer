@@ -79,7 +79,7 @@ body.reader {
   .btn-group.btn-group-left .dropdown-toggle {
     padding: 0.2rem 0.5rem 0.2rem 0.3rem !important;
     color: $gray-600;
-    background: white;
+    background: $white;
     border: none;
     &:hover {
       color: $black;
@@ -111,13 +111,13 @@ body.reader {
       padding: 0.25rem 1rem;
       &:active {
         .metadata {
-          color: lighten($perseus-red, 30%);
+          color: $perseus-red-lighter;
         }
       }
       &.remove {
         color: $red;
         &:active {
-          color: white;
+          color: $white;
         }
       }
     }
