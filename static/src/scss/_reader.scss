@@ -65,8 +65,16 @@ body.reader {
     padding: 0 0.5em;
     flex: 10;
   }
-  .right {
-    border-left: 1px solid $gray-300;
+
+  .overall[dir=rtl] {
+    .left {
+      border-left: 1px solid $gray-300;
+    }
+  }
+  .overall[dir=ltr] {
+    .right {
+      border-left: 1px solid $gray-300;
+    }
   }
 
   .side-delete {
