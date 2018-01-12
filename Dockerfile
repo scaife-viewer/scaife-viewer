@@ -1,6 +1,6 @@
 FROM node:8.9-alpine AS static
 WORKDIR /opt/scaife-viewer/src/
-COPY package.json package-lock.json .babelrc webpack.config.js ./
+COPY package.json package-lock.json .babelrc ./
 RUN npm install
 COPY ./static static
 RUN npm run build:prod

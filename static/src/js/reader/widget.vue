@@ -7,7 +7,7 @@
         </span>
         <slot name="header"></slot>
       </span>
-      <span v-if="open" class="fixed-toggle" @click.prevent="toggle_fix">
+      <span v-if="open" class="fixed-toggle" @click.prevent="toggleFix">
         <i :class="['fa', fixed ? 'fa-expand' : 'fa-compress']"></i>
       </span>
     </h2>
@@ -29,7 +29,7 @@
       toggle() {
         this.open = !this.open;
       },
-      toggle_fix() {
+      toggleFix() {
         this.fixed = !this.fixed;
       },
     },

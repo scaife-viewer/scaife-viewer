@@ -17,7 +17,6 @@
           <widget-passage-ancestors />
           <widget-passage-children />
           <widget-passage-reference />
-          <widget-highlight />
         </div>
       </div>
       <section id="content_body">
@@ -51,27 +50,27 @@
                 {{ leftText.metadata.label }}
                 <div class="metadata">{{ leftText.metadata.human_lang }} {{ leftText.metadata.kind }}</div>
               </version-selector>
-              <div v-if="leftPassage.error" class="alert alert-danger" role="alert">
+              <div v-if="leftPassage.error" class="alert text-danger" role="alert">
                 Failed to load <b>{{ leftPassage.urn.toString() }}</b>: {{ leftPassage.error }}
               </div>
-              <passage-render-text v-else :passage="leftPassage" />
+              <passage-render-text v-else :text="leftPassageText" />
             </div>
             <div class="right">
               <version-selector :versions="versions" :to="toRightPassage" :remove="toRemoveRight">
                 {{ rightText.metadata.label }}
                 <div class="metadata">{{ rightText.metadata.human_lang }} {{ rightText.metadata.kind }}</div>
               </version-selector>
-              <div v-if="rightPassage.error" class="alert alert-danger" role="alert">
+              <div v-if="rightPassage.error" class="alert text-danger" role="alert">
                 Failed to load <b>{{ rightPassage.urn.toString() }}</b>: {{ rightPassage.error }}
               </div>
-              <passage-render-text v-else :passage="rightPassage" />
+              <passage-render-text v-else :text="rightPassageText" />
             </div>
           </template>
           <template v-else>
-            <div v-if="leftPassage.error" class="alert alert-danger" role="alert">
+            <div v-if="leftPassage.error" class="alert text-danger" role="alert">
               Failed to load <b>{{ leftPassage.urn.toString() }}</b>: {{ leftPassage.error }}
             </div>
-            <passage-render-text v-else :passage="leftPassage" />
+            <passage-render-text v-else :text="leftPassageText" />
           </template>
           <div class="pg-right">
             <router-link v-if="passage.metadata.next" :to="toRef(passage.metadata.next.ref)">
@@ -87,7 +86,7 @@
         <div>
           <widget-passage-links />
           <widget-text-size />
-          <widget-selected-word />
+          <widget-highlight />
           <widget-token-list />
           <widget-dv-word-list />
         </div>
@@ -111,16 +110,14 @@ import WidgetPassageLinks from './widgets/passage-links';
 import WidgetTextSize from './widgets/text-size';
 import WidgetDvWordList from './widgets/dv-word-list';
 import WidgetTokenList from './widgets/dm-token-list';
-import WidgetSelectedWord from './widgets/selected-word';
 
 const widgets = {
   WidgetPassageAncestors,
   WidgetPassageChildren,
   WidgetPassageReference,
-  WidgetHighlight,
   WidgetPassageLinks,
   WidgetTextSize,
-  WidgetSelectedWord,
+  WidgetHighlight,
   WidgetDvWordList,
   WidgetTokenList,
 };
@@ -183,13 +180,19 @@ export default {
     rightPassage() {
       return this.$store.state.reader.rightPassage;
     },
+    leftPassageText() {
+      return this.$store.state.reader.leftPassageText;
+    },
+    rightPassageText() {
+      return this.$store.state.reader.rightPassageText;
+    },
   },
   watch: {
     $route: 'sync',
   },
   mounted() {
     setTimeout(() => { this.showLoader = true; }, 50);
-    this.sync().then(() => {
+    this.sync({ initial: true }).then(() => {
       this.ready = true;
       window.addEventListener('keyup', this.handleKeyUp);
     });
@@ -198,9 +201,9 @@ export default {
     window.removeEventListener('keyup', this.handleKeyUp);
   },
   methods: {
-    sync() {
+    sync({ initial = false }) {
       const { leftUrn, rightUrn } = this;
-      return this.$store.dispatch('reader/load', { leftUrn, rightUrn });
+      return this.$store.dispatch('reader/load', { leftUrn, rightUrn, initial });
     },
     handleKeyUp(e) {
       if (e.key === 'ArrowLeft') {
