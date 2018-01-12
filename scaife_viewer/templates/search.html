@@ -101,6 +101,8 @@
                 <a class="page-link" href="{% if page.has_next %}?q={{ q }}&amp;p={{ page.next_page_number }}{% else %}#{% endif %}">Next</a>
               </li>
             </ul>
+          {% else %}
+            <div>No results found for <b>{{ q }}</b>.</div>
           {% endif %}
         </div>
       </div>
