@@ -231,7 +231,7 @@
     <xsl:element name="text-part">
       <xsl:attribute name="class">
         <xsl:value-of select="@subtype" />
-        leaf
+        leaf o
       </xsl:attribute>
       <xsl:if test="@n">
         <xsl:attribute name="reference">
