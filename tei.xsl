@@ -342,6 +342,12 @@
     </div>
   </xsl:template>
 
+  <xsl:template match="t:head/t:title">
+    <div class="title">
+      <xsl:apply-templates/>
+    </div>
+  </xsl:template>
+
   <xsl:template match="t:sp">
     <div class="speak">
       <xsl:if test="./t:speaker">
