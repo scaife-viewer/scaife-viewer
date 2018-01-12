@@ -143,11 +143,11 @@ body.reader {
   .text-loading:not(.text-loader) {
     transform: translate3d(0, 0, 0);  // to avoid flicker
     opacity: 0;
-    transition-duration: 0.2s;
+    transition: opacity 0.2s;
   }
   .text-loaded:not(.text-loader) {
     transform: translate3d(0, 0, 0);  // to avoid flicker
     opacity: 1;
-    transition-duration: 0.2s;
+    transition: opacity 0.2s;
   }
 }
