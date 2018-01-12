@@ -41,55 +41,40 @@ div.text {
     color: $gray-600;
   }
 
-  ol > li {
-    display: list-item;
-
-    list-style: none;
-    &:hover {
-      list-style: decimal;
-    }
-    &:nth-child(5n) {
-      list-style: decimal;
-    }
-    &:nth-child(1) {
-      list-style: decimal;
-    }
-
-  }
-  ol.hidenum > li {
-    list-style: none;
-  }
-
-  .lang_far ol {
+  .lang_far .poem > .b {
     display: block;
-    > li {
-      display: block;
-      margin-bottom: 0.8em;
-      .seg {
+    > .textpart {
+      > .b {
         display: block;
-        text-align: center;
-        &:nth-child(1) {
-        }
-        &:nth-child(2) {
+        margin-bottom: 0.8em;
+        .seg {
+          display: block;
+          text-align: center;
+          &:nth-child(1) {
+          }
+          &:nth-child(2) {
+          }
         }
       }
     }
   }
   @include media-breakpoint-up(lg) {
-    .lang_far ol {
+    .lang_far .poem > .b {
       display: table;
-      > li {
-        display: table-row;
-        .seg {
-          display: table-cell;
-          white-space: nowrap;
-          &:nth-child(1) {
-            padding-left: 1em;
-            text-align: left;
-          }
-          &:nth-child(2) {
-            padding-right: 1em;
-            text-align: right;
+      > .textpart {
+        > .b {
+          display: table-row;
+          .seg {
+            display: table-cell;
+            white-space: nowrap;
+            &:nth-child(1) {
+              padding-left: 1em;
+              text-align: left;
+            }
+            &:nth-child(2) {
+              padding-right: 1em;
+              text-align: right;
+            }
           }
         }
       }
