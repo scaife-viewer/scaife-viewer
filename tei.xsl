@@ -196,7 +196,10 @@
 
   <xsl:template match="t:div[@type = 'textpart']">
     <xsl:element name="text-part">
-      <xsl:attribute name="class"><xsl:value-of select="@subtype" /><xsl:if test="count(t:div[@type='textpart']) = 0"> leaf o</xsl:if></xsl:attribute>
+      <xsl:attribute name="class">
+        <xsl:value-of select="@subtype" />
+        <xsl:if test="count(t:div[@type='textpart']|t:l) = 0"> leaf o</xsl:if>
+      </xsl:attribute>
       <xsl:if test="@n">
         <xsl:attribute name="reference">
           <xsl:for-each select="ancestor::t:div[@type='textpart']/@n">
@@ -226,7 +229,10 @@
 
   <xsl:template match="t:l">
     <xsl:element name="text-part">
-      <xsl:attribute name="class"><xsl:value-of select="@subtype" /></xsl:attribute>
+      <xsl:attribute name="class">
+        <xsl:value-of select="@subtype" />
+        leaf
+      </xsl:attribute>
       <xsl:if test="@n">
         <xsl:attribute name="reference">
           <xsl:for-each select="ancestor::t:div[@type='textpart']/@n">
