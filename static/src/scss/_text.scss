@@ -17,7 +17,7 @@ div.text {
   }
 
   .ex, .supplied, .unclear {
-    color: rgb(80,80,80);
+    color: $gray-600;
   }
 
   .unclear {
@@ -38,7 +38,7 @@ div.text {
   .note:hover > .note-content {
     display: inline;
     font-style: italic;
-    color: grey;
+    color: $gray-600;
   }
 
   ol > li {
@@ -123,7 +123,7 @@ div.text {
     cursor: pointer;
   }
   span.w.selected {
-    background-color: #FEA;
+    background-color: $highlight-color;
     padding: 0 0.1em 0.1em 0.15em;
     margin: 0 -0.1em -0.1em -0.15em;
   }
@@ -151,7 +151,7 @@ div.text {
       background: $gray-100;
       &:hover {
         background: $gray-400;
-        color: black;
+        color: $black;
         cursor: pointer;
       }
     }

@@ -30,7 +30,7 @@ body.search {
     }
   }
   em {
-    background-color: lighten(yellow, 20%);
+    background-color: $highlight-color;
     font-style: normal;
   }
   div.result {

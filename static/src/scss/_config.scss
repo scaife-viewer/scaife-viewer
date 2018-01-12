@@ -3,7 +3,10 @@
 // Font Awesome
 $fa-font-path: "//netdna.bootstrapcdn.com/font-awesome/4.7.0/fonts";
 
-$perseus-red: #B45141; // # C56352
+$perseus-red: #B45141;
+$perseus-red-lighter: lighten($perseus-red, 30%);
+$highlight-color: #FEA;
+$highlight-color-lighter: lighten($highlight-color, 12%);
 
 // Bootstrap v4
 // Reference: https://github.com/twbs/bootstrap/blob/v4-dev/scss/_variables.scss
