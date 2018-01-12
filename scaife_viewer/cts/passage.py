@@ -11,8 +11,8 @@ from .reference import URN
 
 
 w = r"\w[-\w]*"
-p = r"[\p{P}\p{C}]+"
-ws = r"\p{Z}"
+p = r"\p{P}+"
+ws = r"[\p{Z}\s]+"
 token_re = regex.compile(fr"{w}|{p}|{ws}")
 w_re = regex.compile(w)
 p_re = regex.compile(p)
@@ -85,30 +85,31 @@ class Passage:
         idx = defaultdict(int)
         offset = 0
         for w in token_re.findall(self.content):
-            wl = len(w)
-            if w_re.match(w):
-                offset += wl
-                if not words:
-                    continue
-                t = "w"
-            if p_re.match(w):
-                offset += wl
-                if not puncutation:
-                    continue
-                t = "p"
-            if ws_re.match(w):
-                if not whitespace:
-                    continue
-                t = "s"
-            for wk in (w[i:j + 1] for i in range(wl) for j in range(i, wl)):
-                idx[wk] += 1
-            token = {
-                "w": w,
-                "i": idx[w],
-                "t": t,
-                "o": offset,
-            }
-            tokens.append(token)
+            if w:
+                wl = len(w)
+                if w_re.match(w):
+                    offset += wl
+                    if not words:
+                        continue
+                    t = "w"
+                if p_re.match(w):
+                    offset += wl
+                    if not puncutation:
+                        continue
+                    t = "p"
+                if ws_re.match(w):
+                    if not whitespace:
+                        continue
+                    t = "s"
+                for wk in (w[i:j + 1] for i in range(wl) for j in range(i, wl)):
+                    idx[wk] += 1
+                token = {
+                    "w": w,
+                    "i": idx[w],
+                    "t": t,
+                    "o": offset,
+                }
+                tokens.append(token)
         return tokens
 
     @lru_cache()
@@ -209,7 +210,8 @@ class TEIRenderer:
         ts = []
         v = "".join(value)
         for token in token_re.findall(v):
-            ts.append(token)
+            if token:
+                ts.append(token)
         return ts
 
     def token_type(self, context, value):
