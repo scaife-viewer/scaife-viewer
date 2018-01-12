@@ -41,25 +41,6 @@ div.text {
     color: grey;
   }
 
-  ol > li {
-    display: list-item;
-
-    list-style: none;
-    &:hover {
-      list-style: decimal;
-    }
-    &:nth-child(5n) {
-      list-style: decimal;
-    }
-    &:nth-child(1) {
-      list-style: decimal;
-    }
-
-  }
-  ol.hidenum > li {
-    list-style: none;
-  }
-
   .lang_far .poem > .b {
     display: block;
     > .textpart {
