@@ -83,7 +83,10 @@ STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesSto
 if "SECRET_KEY" in os.environ:
     SECRET_KEY = os.environ["SECRET_KEY"]
 else:
-    raise RuntimeError("missing SECRET_KEY environment variable")
+    if not DEBUG:
+        raise RuntimeError("missing SECRET_KEY environment variable")
+    else:
+        SECRET_KEY = "----dev-secret-key----"
 
 TEMPLATES = [
     {
