@@ -80,8 +80,10 @@ STATICFILES_FINDERS = [
 
 STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
 
-# Make this unique, and don't share it with anybody.
-SECRET_KEY = "^l$c$-r@q2i(n=38g+pk@^u2-2ardu(9ebb8g!wvc1kg6(p+)m"
+if "SECRET_KEY" in os.environ:
+    SECRET_KEY = os.environ["SECRET_KEY"]
+else:
+    raise RuntimeError("missing SECRET_KEY environment variable")
 
 TEMPLATES = [
     {
