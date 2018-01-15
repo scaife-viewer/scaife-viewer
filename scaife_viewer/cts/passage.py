@@ -1,3 +1,4 @@
+import os
 from collections import defaultdict
 from functools import lru_cache
 
@@ -188,7 +189,8 @@ class TEIRenderer:
 
     @lru_cache()
     def render(self):
-        with open("tei.xsl") as f:
+        xsl_path = os.path.join(os.path.dirname(__file__), "tei.xsl")
+        with open(xsl_path) as f:
             func_ns = "urn:python-funcs"
             transform = etree.XSLT(
                 etree.XML(f.read()),
