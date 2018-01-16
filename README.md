@@ -1,4 +1,6 @@
-# Scaife Digital Library Viewer
+# Scaife Viewer
+
+The new reading environment for version 5.0 of the Perseus Digital Library.
 
 ## Getting Started
 
