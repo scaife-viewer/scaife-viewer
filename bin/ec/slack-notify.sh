@@ -17,7 +17,7 @@ else
 fi
 
 # prepare Slack message payload
-MESSAGE="${AUTHOR_NAME} deployed \`<https://github.com/eldarion-client/scaife-viewer/commit/${SHA_SHORT}|${SHA_SHORT}>\` to <${EC_INSTANCE_URL}|${INSTANCE}>."
+MESSAGE="${AUTHOR_NAME} deployed \`<https://github.com/scaife-viewer/scaife-viewer/commit/${SHA_SHORT}|${SHA_SHORT}>\` to <${EC_INSTANCE_URL}|${INSTANCE}>."
 PAYLOAD_DATA="payload={\"channel\": \"#dev-feed\", \"username\": \"EC Deployments\", \"text\": \"${MESSAGE}\", \"icon_emoji\": \":lightning_cloud:\"}"
 
 # post to Slack
