@@ -190,20 +190,16 @@
         <xsl:text>edition lang_</xsl:text>
         <xsl:value-of select="@xml:lang"/>
       </xsl:attribute>
-      <xsl:choose>
-          <xsl:when test="child::t:l">
-              <ol><xsl:apply-templates /></ol>
-          </xsl:when>
-          <xsl:otherwise>
-              <xsl:apply-templates/>
-          </xsl:otherwise>
-      </xsl:choose>
+      <xsl:apply-templates/>
     </div>
   </xsl:template>
 
   <xsl:template match="t:div[@type = 'textpart']">
     <xsl:element name="text-part">
-      <xsl:attribute name="class"><xsl:value-of select="@subtype" /><xsl:if test="count(t:div[@type='textpart']) = 0"> leaf o</xsl:if></xsl:attribute>
+      <xsl:attribute name="class">
+        <xsl:value-of select="@subtype" />
+        <xsl:if test="count(t:div[@type='textpart']|t:l) = 0"> leaf o</xsl:if>
+      </xsl:attribute>
       <xsl:if test="@n">
         <xsl:attribute name="reference">
           <xsl:for-each select="ancestor::t:div[@type='textpart']/@n">
@@ -212,14 +208,7 @@
           <xsl:value-of select="@n" />
         </xsl:attribute>
       </xsl:if>
-      <xsl:choose>
-        <xsl:when test="child::t:l">
-          <ol><xsl:apply-templates /></ol>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:apply-templates/>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:apply-templates/>
     </xsl:element>
   </xsl:template>
 
@@ -232,22 +221,26 @@
 
   <xsl:template match="t:quote">
     <xsl:element name="blockquote">
-      <xsl:choose>
-        <xsl:when test="child::t:l">
-            <ol class="hidenum"><xsl:apply-templates /></ol>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates/>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:apply-templates/>
     </xsl:element>
   </xsl:template>
 
   <xsl:template match="t:figure" />
 
   <xsl:template match="t:l">
-    <xsl:element name="li">
-      <xsl:attribute name="value"><xsl:value-of select="@n"/></xsl:attribute>
+    <xsl:element name="text-part">
+      <xsl:attribute name="class">
+        <xsl:value-of select="@subtype" />
+        leaf o
+      </xsl:attribute>
+      <xsl:if test="@n">
+        <xsl:attribute name="reference">
+          <xsl:for-each select="ancestor::t:div[@type='textpart']/@n">
+            <xsl:value-of select="concat(., '.')" />
+          </xsl:for-each>
+          <xsl:value-of select="@n" />
+        </xsl:attribute>
+      </xsl:if>
       <xsl:apply-templates/>
     </xsl:element>
   </xsl:template>
@@ -262,10 +255,6 @@
 
   <xsl:template match="t:pb">
     <div class='pb'><xsl:value-of select="@n"/></div>
-  </xsl:template>
-
-  <xsl:template match="t:ab/text()">
-    <xsl:value-of select="." />
   </xsl:template>
 
   <xsl:template match="t:p">
@@ -342,41 +331,32 @@
     </div>
   </xsl:template>
 
+  <xsl:template match="t:head/t:title">
+    <div class="title">
+      <xsl:apply-templates/>
+    </div>
+  </xsl:template>
+
   <xsl:template match="t:sp">
     <div class="speak">
-      <xsl:if test="./t:speaker">
-        <span class="speaker"><xsl:value-of select="./t:speaker/text()" /></span>
-      </xsl:if>
-      <xsl:choose>
-        <xsl:when test="./t:l">
-          <ol>
-            <xsl:apply-templates select="./t:l"/>
-          </ol>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:apply-templates/>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:apply-templates/>
     </div>
   </xsl:template>
 
   <xsl:template match="t:said">
     <div class="said">
-      <xsl:choose>
-        <xsl:when test="./t:l">
-          <ol>
-            <xsl:apply-templates select="./t:l"/>
-          </ol>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:apply-templates/>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:apply-templates/>
     </div>
   </xsl:template>
 
   <xsl:template match="t:label">
     <span class="label">
+      <xsl:apply-templates/>
+    </span>
+  </xsl:template>
+
+  <xsl:template match="t:speaker">
+    <span class="speaker">
       <xsl:apply-templates/>
     </span>
   </xsl:template>

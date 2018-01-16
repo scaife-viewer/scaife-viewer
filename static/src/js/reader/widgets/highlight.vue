@@ -41,7 +41,11 @@ export default {
     },
     handleKeyUp(e) {
       if (e.keyCode === 13) {
-        this.$store.dispatch('reader/highlight', { highlight: this.value });
+        if (this.value === '') {
+          this.$store.dispatch('reader/highlight', { highlight: null });
+        } else {
+          this.$store.dispatch('reader/highlight', { highlight: this.value });
+        }
         e.currentTarget.blur();
       } else {
         e.stopPropagation();
