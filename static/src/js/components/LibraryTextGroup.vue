@@ -7,6 +7,7 @@
         </span>
       </span>
       <a :href="textGroup.url">{{ textGroup.label }}</a>
+      <template v-if="!(open || filtered)">{{ textGroup.urn }}</template>
     </h4>
     <div v-if="open || filtered" v-for="work in textGroup.works" class="row" :key="work.urn">
       <div class="col">
