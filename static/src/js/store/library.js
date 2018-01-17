@@ -22,6 +22,16 @@ module.exports = {
         state.allTextGroups.forEach((textGroup) => {
           if (textGroup.label.toLowerCase().indexOf(query.toLowerCase()) !== -1) {
             textGroups.push(textGroup);
+          } else {
+            const works = [];
+            textGroup.works.forEach((work) => {
+              if (work.label.toLowerCase().indexOf(query.toLowerCase()) !== -1) {
+                works.push(work);
+              }
+            });
+            if (works.length > 0) {
+              textGroups.push({ ...textGroup, works });
+            }
           }
         });
         commit('setTextGroups', textGroups);

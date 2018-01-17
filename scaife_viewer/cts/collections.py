@@ -98,7 +98,10 @@ class TextGroup(Collection):
             "urn": str(self.urn),
             "label": str(self.label),
             "works": [
-                dict(urn=str(work.urn))
+                {
+                    "urn": str(work.urn),
+                    "label": work.label,
+                }
                 for work in self.works()
             ],
         }
