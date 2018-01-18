@@ -6,7 +6,7 @@
           type="text"
           class="form-control"
           v-model="query"
-          placeholder="Find a text group or work..."
+          placeholder="Find a text group or work... (e.g. Plato or Apology)"
           ref="filter-input"
         >
         <span class="input-group-addon" v-if="filtered">
@@ -14,7 +14,7 @@
         </span>
       </div>
     </div>
-    <div>
+    <div class="toggle-all" v-if="!filtered">
       <span @click="expandAll">expand all</span> | <span @click="collapseAll">collapse all</span>
     </div>
     <template v-if="loading">
@@ -22,11 +22,13 @@
         <i class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
       </div>
     </template>
-    <template v-else v-for="textGroup in textGroups">
-      <keep-alive>
-        <library-text-group ref="collapsible" :textGroup="textGroup" :filtered="filtered" :key="textGroup.urn" />
-      </keep-alive>
-    </template>
+    <div v-else :class="['text-groups', { filtered }]">
+      <template v-for="textGroup in textGroups">
+        <keep-alive>
+          <library-text-group ref="collapsible" :textGroup="textGroup" :filtered="filtered" :key="textGroup.urn" />
+        </keep-alive>
+      </template>
+    </div>
   </div>
 </template>
 

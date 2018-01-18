@@ -117,3 +117,73 @@ section.hero {
     }
   }
 }
+
+body.library {
+  margin-bottom: 100px;
+  .toggle-all {
+    font-size: 14px;
+    color: $gray-500;
+    span {
+      color: $gray-600;
+      cursor: pointer;
+      &:hover {
+        color: $black;
+      }
+    }
+  }
+  .text-groups {
+    &.filtered {
+      margin-top: 47px;
+    }
+    .text-group {
+      font-family: 'Noto Serif';
+      &.open {
+        h4 {
+          font-weight: bold;
+        }
+      }
+      h4 {
+        margin: 10px 0 0;
+        display: flex;
+        font-size: 20px;
+        .toggle {
+          font-size: 16px;
+          line-height: 24px;
+          width: 25px;
+          .open-toggle {
+            color: $gray-400;
+          }
+          &:hover .open-toggle {
+            color: $gray-600;
+          }
+        }
+        .label {
+          width: 60%;
+        }
+        .urn {
+          font-family: monospace;
+          font-size: 14px;
+          line-height: 26px;
+          color: $gray-700;
+        }
+      }
+      .works {
+        margin: 0 0 15px 0;
+        .work {
+          display: flex;
+          .filler {
+            width: 25px;
+          }
+          .label {
+            width: 60%;
+          }
+          .urn {
+            font-family: monospace;
+            font-size: 14px;
+            color: $gray-600;
+          }
+        }
+      }
+    }
+  }
+}
