@@ -2,10 +2,8 @@
   <div :class="['text-group', { open : open || filtered }]">
     <h4>
       <div class="toggle">
-        <span v-if="!filtered" @click.prevent="toggle">
-          <span class="open-toggle">
-            <i :class="['fa', open ? 'fa-chevron-down' : 'fa-chevron-right']"></i>
-          </span>
+        <span class="open-toggle" v-if="!filtered" @click.prevent="toggle">
+          <i :class="['fa', open ? 'fa-chevron-down' : 'fa-chevron-right']"></i>
         </span>
       </div>
       <div class="label">
