@@ -24,16 +24,9 @@
         </div>
         <div class="versions">
           <template v-for="text in work.texts">
-            <a
-              :key="text.urn"
-              :href="text.reader_url"
-              class="badge badge-light"
-              data-container="body"
-              data-toggle="popover"
-              data-placement="top"
-              data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">
-                {{ text.lang }}
-              </a>{{ ' ' }}
+            <a :key="text.urn" :href="text.reader_url" class="badge badge-light">
+              {{ text.lang }}
+            </a>{{ ' ' }}
           </template>
         </div>
       </div>
