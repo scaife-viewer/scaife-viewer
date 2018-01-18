@@ -162,6 +162,7 @@ section.hero {
           width: 35%;
         }
         .urn {
+          padding-left: 25px;
           width: 40%;
           font-family: monospace;
           font-size: 14px;
@@ -175,7 +176,7 @@ section.hero {
           &:hover {
             background: $gray-200;
             .versions {
-              opacity: 1;
+              display: block;
             }
           }
           display: flex;
@@ -187,20 +188,29 @@ section.hero {
             width: 35%;
           }
           .urn {
-            width: 40%;
+            padding-left: 25px;
+            width: 400px;
             font-family: monospace;
             font-size: 14px;
             line-height: 26px;
             color: $gray-600;
           }
           .versions {
-            opacity: 0;
+            padding-left: 25px;
+            display: none;
             line-height: 26px;
             font-family: 'Noto Sans';
             .badge {
               font-weight: normal;
               margin-top: 4px;
               vertical-align: top;
+              &:hover {
+                &::before {
+                  content: "read "
+                }
+                background: $perseus-red;
+                color: $white;
+              }
             }
           }
         }
