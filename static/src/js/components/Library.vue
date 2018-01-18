@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="library-component">
     <div class="form-group">
       <div class="input-group">
         <input

@@ -118,8 +118,9 @@ section.hero {
   }
 }
 
-body.library {
-  margin-bottom: 100px;
+.library-component {
+  margin: 50px 0 100px;
+
   .toggle-all {
     font-size: 14px;
     color: $gray-500;
