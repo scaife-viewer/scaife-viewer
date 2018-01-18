@@ -100,7 +100,19 @@ class TextGroup(Collection):
             "works": [
                 {
                     "urn": str(work.urn),
-                    "label": work.label,
+                    "label": str(work.label),
+                    "texts": [
+                        {
+                            "urn": str(text.urn),
+                            "label": str(text.label),
+                            "description": str(text.description),
+                            "kind": text.kind,
+                            "lang": text.lang,
+                            "rtl": text.rtl,
+                            "human_lang": text.human_lang,
+                        }
+                        for text in work.texts()
+                    ],
                 }
                 for work in self.works()
             ],

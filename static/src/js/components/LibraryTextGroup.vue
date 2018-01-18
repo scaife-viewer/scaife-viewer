@@ -23,10 +23,17 @@
           {{ work.urn }}
         </div>
         <div class="versions">
-          <a href="#" class="badge badge-light" data-container="body" data-toggle="popover" data-placement="top" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">GRC</a>
-          <a href="#" class="badge badge-light" data-container="body" data-toggle="popover" data-placement="top" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">EN</a>
-          <a href="#" class="badge badge-light" data-container="body" data-toggle="popover" data-placement="top" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">FR</a>
-          <a href="#" class="badge badge-light" data-container="body" data-toggle="popover" data-placement="top" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">DE</a>
+          <a
+            v-for="text in work.texts"
+            :key="text.urn"
+            :href="text.reader_url"
+            class="badge badge-light"
+            data-container="body"
+            data-toggle="popover"
+            data-placement="top"
+            data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">
+              {{ text.lang }}
+            </a>
         </div>
       </div>
     </div>
