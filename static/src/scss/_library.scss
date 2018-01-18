@@ -159,9 +159,10 @@ section.hero {
           }
         }
         .label {
-          width: 60%;
+          width: 35%;
         }
         .urn {
+          width: 40%;
           font-family: monospace;
           font-size: 14px;
           line-height: 26px;
@@ -171,17 +172,35 @@ section.hero {
       .works {
         margin: 0 0 15px 0;
         .work {
+          &:hover {
+            background: $gray-200;
+            .versions {
+              opacity: 1;
+            }
+          }
           display: flex;
           .filler {
             width: 25px;
           }
           .label {
-            width: 60%;
+            width: 35%;
           }
           .urn {
+            width: 40%;
             font-family: monospace;
             font-size: 14px;
+            line-height: 26px;
             color: $gray-600;
+          }
+          .versions {
+            opacity: 0;
+            line-height: 26px;
+            font-family: 'Noto Sans';
+            .badge {
+              font-weight: normal;
+              margin-top: 4px;
+              vertical-align: top;
+            }
           }
         }
       }
