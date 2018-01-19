@@ -213,3 +213,25 @@ def search(request):
             "page": paginator.page(page_num),
         })
     return render(request, "search.html", ctx)
+
+
+def search_json(request):
+    q = request.GET.get("q", "")
+    data = {"results": []}
+    if q:
+        scope = {}
+        text_group_urn = request.GET.get("text_group")
+        if text_group_urn:
+            scope["text_group"] = text_group_urn
+        work_urn = request.GET.get("work")
+        if work_urn:
+            scope["work"] = work_urn
+        text_urn = request.GET.get("text")
+        if text_urn:
+            scope["text.urn"] = text_urn
+        for result in SearchQuery(q, scope=scope):
+            data["results"].append({
+                "passage": apify(result["passage"], with_content=False),
+                "content": result["content"],
+            })
+    return JsonResponse(data)

@@ -17,8 +17,8 @@ def link_passage(urn) -> dict:
     }
 
 
-def apify(obj):
-    remaining = obj.as_json()
+def apify(obj, **kwargs):
+    remaining = obj.as_json(**kwargs)
     rels = {}
     if isinstance(obj, cts.TextGroup):
         works = remaining.pop("works")

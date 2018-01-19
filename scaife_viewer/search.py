@@ -69,8 +69,11 @@ class SearchQuery:
             **self.query_index()
         }
 
-    def search_window(self, size, offset):
-        return SearchResultSet(es.search(**self.search_kwargs(size, offset)))
+    def search_window(self, **kwargs):
+        return SearchResultSet(es.search(**self.search_kwargs(**kwargs)))
+
+    def __iter__(self):
+        return iter(self.search_window())
 
     def count(self):
         if self.total_count is None:

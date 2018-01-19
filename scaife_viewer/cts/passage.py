@@ -130,7 +130,7 @@ class Passage:
         for child in toc_ref.children:
             yield Passage(self.text, child.reference)
 
-    def as_json(self) -> dict:
+    def as_json(self, with_content=True) -> dict:
         refs = {
             "start": {
                 "reference": self.refs["start"].reference,
@@ -154,11 +154,10 @@ class Passage:
                     }
                     for ancestor in self.text.ancestors()
                 ],
+                "lang": self.text.lang,
                 "human_lang": self.text.human_lang,
                 "kind": self.text.kind,
             },
-            "text_html": str(self.render()),
-            "word_tokens": self.tokenize(puncutation=False, whitespace=False),
             "refs": refs,
             "ancestors": [
                 {
@@ -174,6 +173,11 @@ class Passage:
                 for child in self.children()
             ],
         }
+        if with_content:
+            o.update({
+                "text_html": str(self.render()),
+                "word_tokens": self.tokenize(puncutation=False, whitespace=False),
+            })
         return o
 
 

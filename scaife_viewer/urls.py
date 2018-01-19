@@ -12,6 +12,7 @@ from .views import (
     profile,
     reader,
     search,
+    search_json,
     library_text_redirect,
 )
 
@@ -29,6 +30,7 @@ urlpatterns = [
     url(r"^reader/(?P<urn>urn:[^/]+)/$", reader, name="reader"),
     url(r"^profile/$", profile, name="profile"),
     url(r"^search/$", search, name="search"),
+    url(r"^search/json/$", search_json, name="search_json"),
     url(r"^reading/", include("scaife_viewer.reading.urls")),
 ]
 

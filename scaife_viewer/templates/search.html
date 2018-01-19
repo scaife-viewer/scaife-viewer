@@ -76,7 +76,7 @@
                 {% with passage=result.passage %}
                   <div class="passage-heading">
                     <h2>
-                      <a href="{{ result.link }}">
+                      <a href="{{ result.link }}?q={{ q }}">
                         {% for breadcrumb in passage.text.ancestors %}
                           {{ breadcrumb.label }},
                         {% endfor %}
