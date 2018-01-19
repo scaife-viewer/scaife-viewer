@@ -23,7 +23,21 @@ def apify(obj):
     if isinstance(obj, cts.TextGroup):
         works = remaining.pop("works")
         rels = {
-            "works": [{**link_collection(work["urn"]), **work} for work in works],
+            "works": [
+                {
+                    **link_collection(work["urn"]),
+                    **work,
+                    "texts": [
+                        {
+                            **link_collection(text["urn"]),
+                            "reader_url": reverse("library_text_redirect", kwargs={"urn": text["urn"]}),
+                            **text
+                        }
+                        for text in work["texts"]
+                    ],
+                }
+                for work in works
+            ],
         }
     if isinstance(obj, cts.Work):
         texts = remaining.pop("texts")

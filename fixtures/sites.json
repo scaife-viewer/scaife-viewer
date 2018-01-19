@@ -4,7 +4,7 @@
         "model": "sites.site",
         "fields": {
             "domain": "localhost:8000",
-            "name": "Scaife Digital Library Viewer [localhost]"
+            "name": "Scaife Viewer [localhost]"
         }
     },
     {
@@ -12,7 +12,7 @@
         "model": "sites.site",
         "fields": {
             "domain": "lk353.eu1.eldarioncloud.com",
-            "name": "Scaife Digital Library Viewer"
+            "name": "Scaife Viewer"
         }
     }
 ]

@@ -11,7 +11,8 @@ from .views import (
     home,
     profile,
     reader,
-    search
+    search,
+    library_text_redirect,
 )
 
 urlpatterns = [
@@ -24,6 +25,7 @@ urlpatterns = [
     url(r"^library/passage/(?P<urn>[^/]+)/json/", LibraryPassageView.as_view(), name="library_passage_json"),
     url(r"^library/(?P<urn>[^/]+)/$", LibraryCollectionView.as_view(format="html"), name="library_collection"),
     url(r"^library/(?P<urn>[^/]+)/json/$", LibraryCollectionView.as_view(format="json"), name="library_collection_json"),
+    url(r"^library/(?P<urn>[^/]+)/redirect/$", library_text_redirect, name="library_text_redirect"),
     url(r"^reader/(?P<urn>urn:[^/]+)/$", reader, name="reader"),
     url(r"^profile/$", profile, name="profile"),
     url(r"^search/$", search, name="search"),

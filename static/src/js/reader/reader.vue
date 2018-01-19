@@ -21,7 +21,6 @@
       </div>
       <section id="content_body">
         <div class="passage-heading">
-          <a href="/library/">Library &gt;</a>
           <h1>
             <template v-for="(breadcrumb, idx) in text.metadata.ancestors">
               <a :key="breadcrumb.urn" :href="breadcrumb.url">{{ breadcrumb.label }}</a><template v-if="idx != text.metadata.ancestors.length - 1">, </template>
