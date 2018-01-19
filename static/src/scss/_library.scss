@@ -205,9 +205,6 @@ section.hero {
               margin-top: 4px;
               vertical-align: top;
               &:hover {
-                &::before {
-                  content: "read "
-                }
                 background: $perseus-red;
                 color: $white;
               }
