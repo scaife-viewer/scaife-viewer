@@ -14,13 +14,18 @@
         </span>
       </div>
     </div>
-    <div class="toggle-all" v-if="!filtered && collapsible">
-      <span @click="expandAll">expand all</span> | <span @click="collapseAll">collapse all</span>
-    </div>
-    <div class="sort">
-      <span @click="sort('cts-urn')" :class="{ active: sortKind === 'cts-urn' }">CTS URN</span> |
-      <span @click="sort('text-group')" :class="{ active: sortKind === 'text-group' }">text group</span> |
-      <span @click="sort('work')" :class="{ active: sortKind === 'work' }">work</span>
+    <div class="controls">
+      <div class="toggle-all">
+        <template v-if="!filtered && collapsible">
+        <span @click="expandAll">expand all</span> | <span @click="collapseAll">collapse all</span>
+        </template>
+      </div>
+      <div class="sort">
+        sort by: 
+        <span @click="sort('cts-urn')" :class="{ active: sortKind === 'cts-urn' }">CTS URN</span> |
+        <span @click="sort('text-group')" :class="{ active: sortKind === 'text-group' }">text group</span> |
+        <span @click="sort('work')" :class="{ active: sortKind === 'work' }">work</span>
+      </div>
     </div>
     <template v-if="loading">
       <div class="text-center">
@@ -35,7 +40,7 @@
           </keep-alive>
         </template>
       </template>
-      <div v-else-if="sortKind === 'work'" class="works">
+      <div v-else-if="sortKind === 'work'" class="flat-work-list">
         <template v-for="work in works">
           <keep-alive>
             <library-work :work="work" :filtered="filtered" :key="work.urn" />

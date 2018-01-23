@@ -121,35 +121,41 @@ section.hero {
 .library-component {
   margin: 50px 0 100px;
 
-  .toggle-all {
-    font-size: 14px;
-    color: $gray-500;
-    span {
-      color: $gray-600;
-      cursor: pointer;
-      &:hover {
-        color: $black;
+  .controls {
+    display: flex;
+    justify-content: space-between;
+
+    .toggle-all {
+      font-size: 14px;
+      color: $gray-500;
+      span {
+        color: $gray-600;
+        cursor: pointer;
+        &:hover {
+          color: $black;
+        }
       }
     }
-  }
-  .sort {
-    font-size: 14px;
-    color: $gray-500;
-    span {
-      color: $gray-600;
-      cursor: pointer;
-      &:hover {
-        color: $black;
-      }
-      &.active {
-        font-weight: bold;
+    .sort {
+      font-size: 14px;
+      color: $gray-500;
+      span {
+        cursor: pointer;
+        color: $gray-600;
+        &.active {
+          color: $black;
+          &:hover {
+            color: $black;
+          }
+        }
+        &:hover {
+          color: $gray-700;
+        }
       }
     }
   }
   .text-groups {
-    &.filtered {
-      margin-top: 47px;
-    }
+    margin-top: 15px;
     .text-group {
       font-family: 'Noto Serif';
       &.open {
@@ -223,6 +229,54 @@ section.hero {
                 color: $white;
               }
             }
+          }
+        }
+      }
+    }
+  }
+  .flat-work-list {
+    margin-top: 15px;
+    .work {
+      margin-top: 8px;
+      font-family: 'Noto Serif';
+      &:hover {
+        background: $gray-200;
+        .versions {
+          display: block;
+        }
+      }
+      display: flex;
+      flex-wrap: wrap;
+      .label {
+        padding-left: 25px;
+        width: 300px;
+        line-height: 24px;
+      }
+      .text-group {
+        padding-left: 25px;
+        width: 400px;
+        line-height: 24px;
+      }
+      .urn {
+        padding-left: 25px;
+        width: 300px;
+        font-family: monospace;
+        font-size: 14px;
+        line-height: 26px;
+        color: $gray-600;
+      }
+      .versions {
+        padding-left: 25px;
+        display: none;
+        line-height: 26px;
+        font-family: 'Noto Sans';
+        .badge {
+          font-weight: normal;
+          margin-top: 4px;
+          vertical-align: top;
+          &:hover {
+            background: $perseus-red;
+            color: $white;
           }
         }
       }
