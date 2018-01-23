@@ -1,9 +1,9 @@
 <template>
-  <widget>
+  <widget class="text-mode">
     <span slot="header">Text Mode</span>
     <div slot="body">
-      <a :class="[{active: textMode === 'browser'}]" @click.prevent="changeTextMode('browser')">Browser</a>
-      <a :class="[{active: textMode === 'clickable'}]" @click.prevent="changeTextMode('clickable')">Clickable</a>
+      <a :class="['mode', {active: textMode === 'browser'}]" @click.prevent="changeTextMode('browser')">Browser</a>
+      <a :class="['mode', {active: textMode === 'clickable'}]" @click.prevent="changeTextMode('clickable')">Clickable</a>
     </div>
   </widget>
 </template>

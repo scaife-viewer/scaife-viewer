@@ -111,3 +111,25 @@
     }
   }
 }
+
+.widget.text-mode {
+  .mode {
+    padding: 3px 6px;
+    font-family: 'Noto Serif';
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    color: $gray-500;
+    &.active {
+      color: $black;
+      &:hover {
+        color: $black;
+      }
+    }
+    &:hover {
+      color: $gray-700;
+      background: $gray-200;
+    }
+  }
+}
