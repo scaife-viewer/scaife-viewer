@@ -7,6 +7,9 @@
     <div class="urn">
       {{ work.urn }}
     </div>
+    <div class="text-group">
+      {{ work.textGroup.label }}
+    </div>
     <div class="versions">
       <template v-for="text in work.texts">
         <a :key="text.urn" :href="text.reader_url" class="badge badge-light">

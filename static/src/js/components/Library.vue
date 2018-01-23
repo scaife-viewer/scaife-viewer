@@ -73,6 +73,9 @@ export default {
     query() {
       this.filter();
     },
+    sortKind() {
+      this.filter();
+    },
   },
   computed: {
     textGroups() {
