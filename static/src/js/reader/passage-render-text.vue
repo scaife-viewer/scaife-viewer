@@ -1,5 +1,5 @@
 <template>
-  <div :class="['text', `text-${textSize}`]" @mousedown.prevent>
+  <div :class="['text', `text-${textSize}`]" @mousedown="handleMouseDown">
     <component
       :class="{'text-loading': text === null, 'text-loaded': text !== null}"
       :is="renderedText"
@@ -33,6 +33,11 @@ export default {
     this.prepareText();
   },
   methods: {
+    handleMouseDown(e) {
+      if (this.$store.state.reader.textMode === 'clickable') {
+        e.preventDefault();
+      }
+    },
     prepareText() {
       if (this.text === null) {
         // give the text fade out animation time to complete before

@@ -49,6 +49,7 @@ function copyPassage(passage, { urn, metadata, ready, error }) {
 module.exports = {
   namespaced: true,
   state: {
+    textMode: 'browser',
     textSize: 'md',
     sidebarLeftOpened: true,
     sidebarRightOpened: true,
@@ -74,6 +75,9 @@ module.exports = {
     },
   },
   mutations: {
+    setTextMode(state, { mode }) {
+      state.textMode = mode;
+    },
     setTextSize(state, { size }) {
       state.textSize = size;
     },

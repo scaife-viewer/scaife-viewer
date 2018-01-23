@@ -84,6 +84,7 @@
         <button class="left-toggle" v-if="!sidebarRightOpened" @click="toggleSidebar('right')"><i></i></button>
         <div>
           <widget-passage-links />
+          <widget-text-mode />
           <widget-text-size />
           <widget-highlight />
           <widget-token-list />
@@ -106,6 +107,7 @@ import WidgetPassageChildren from './widgets/passage-children';
 import WidgetPassageReference from './widgets/passage-reference';
 import WidgetHighlight from './widgets/highlight';
 import WidgetPassageLinks from './widgets/passage-links';
+import WidgetTextMode from './widgets/text-mode';
 import WidgetTextSize from './widgets/text-size';
 import WidgetDvWordList from './widgets/dv-word-list';
 import WidgetTokenList from './widgets/dm-token-list';
@@ -115,6 +117,7 @@ const widgets = {
   WidgetPassageChildren,
   WidgetPassageReference,
   WidgetPassageLinks,
+  WidgetTextMode,
   WidgetTextSize,
   WidgetHighlight,
   WidgetDvWordList,
