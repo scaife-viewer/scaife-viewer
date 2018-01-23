@@ -1,7 +1,8 @@
 <template>
-  <widget class="search" v-if="query">
+  <widget class="search">
     <span slot="header">Text Search</span>
     <div slot="body">
+      <input v-model="query" type="text" class="form-control form-control-sm" />
       <h3>{{ results.length }} results for "{{ query }}"</h3>
       <ul>
         <li v-for="r in results" :key="r.passage.urn">
@@ -18,6 +19,8 @@ import store from '../../store';
 import widget from '../widget';
 import ReaderNavigationMixin from '../reader-navigation-mixin';
 
+const debounce = require('lodash.debounce');
+
 export default {
   store,
   mixins: [
@@ -27,30 +30,44 @@ export default {
     passage() {
       this.doTextSearch();
     },
+    query() {
+      this.updateSearch();
+    },
   },
   created() {
     this.doTextSearch();
   },
   data() {
     return {
+      query: this.$store.state.route.query.q,
       results: [],
     };
   },
   computed: {
-    query() {
-      return this.$store.state.route.query.q;
-    },
     passage() {
       return this.$store.getters['reader/passage'];
     },
   },
   methods: {
+    updateSearch: debounce(
+      function f() {
+        const query = this.query.trim();
+        this.doTextSearch().then(() => {
+          this.$router.push({
+            name: 'reader',
+            params: this.$store.state.route.params,
+            query: { ...this.$store.state.route.query, q: query },
+          });
+        });
+      },
+      250,
+    ),
     doTextSearch() {
       const params = {
-        q: this.query,
+        q: this.query.trim(),
         work: this.passage.urn.upTo('work'),
       };
-      sv.textSearch(params).then((results) => {
+      return sv.textSearch(params).then((results) => {
         this.results = results;
       });
     },
