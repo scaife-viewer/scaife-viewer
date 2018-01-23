@@ -86,7 +86,7 @@ class SearchQuery:
     def __getitem__(self, key):
         if isinstance(key, slice):
             size = len(range(*key.indices(self.total_count)))
-            return self.search_window(size, key.start)
+            return self.search_window(size=size, offset=key.start)
         raise NotImplementedError()
 
 

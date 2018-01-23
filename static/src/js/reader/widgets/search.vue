@@ -51,9 +51,7 @@ export default {
         work: this.passage.urn.upTo('work'),
       };
       sv.textSearch(params).then((results) => {
-        this.results = results.filter((result) => {
-          return result.passage.urn !== this.passage.urn.toString();
-        });
+        this.results = results;
       });
     },
   },
