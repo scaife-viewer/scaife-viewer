@@ -113,7 +113,7 @@
 }
 
 .widget.text-mode {
-  .mode {
+  .mode a {
     padding: 3px 6px;
     font-family: 'Noto Serif';
     font-size: 12px;
@@ -131,5 +131,10 @@
       color: $gray-700;
       background: $gray-200;
     }
+  }
+  .help {
+    margin-left: 6px;
+    font-size: 11px;
+    color: $gray-600;
   }
 }
