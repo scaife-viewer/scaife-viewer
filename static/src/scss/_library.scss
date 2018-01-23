@@ -132,6 +132,20 @@ section.hero {
       }
     }
   }
+  .sort {
+    font-size: 14px;
+    color: $gray-500;
+    span {
+      color: $gray-600;
+      cursor: pointer;
+      &:hover {
+        color: $black;
+      }
+      &.active {
+        font-weight: bold;
+      }
+    }
+  }
   .text-groups {
     &.filtered {
       margin-top: 47px;
