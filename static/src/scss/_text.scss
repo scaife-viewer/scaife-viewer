@@ -129,6 +129,10 @@ div.text {
         font-size: 12px;
         transform: translate3d(0px, 0px, 0px);
         padding-top: 4px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
       }
       min-width: 24px;
     }
