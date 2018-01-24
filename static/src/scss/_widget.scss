@@ -138,3 +138,54 @@
     color: $gray-600;
   }
 }
+
+.widget.passage-reference {
+  div.body {
+    padding: 3px;
+  }
+}
+
+.widget.highlight {
+  div.body {
+    padding: 3px;
+  }
+}
+
+.widget.search {
+  div.body {
+    padding: 3px;
+    input {
+      margin-bottom: 6px;
+    }
+    .result-count {
+      font-size: 14px;
+      padding: 0 8px;
+      color: $gray-700;
+    }
+    ul.passages {
+      list-style: none;
+      padding: 0 4px;
+      margin: 0;
+      li {
+        font-family: 'Noto Serif';
+        font-size: 12px;
+        line-height: 14px;
+        margin-top: 4px;
+        a {
+          padding-left: 14px;
+          color: $gray-600;
+          &.active {
+            padding-left: 4px;
+            color: $black;
+            &::before {
+              content: "> ";
+            }
+          }
+          &:hover {
+            text-decoration: none;
+          }
+        }
+      }
+    }
+  }
+}

@@ -3,10 +3,10 @@
     <span slot="header">Text Search</span>
     <div slot="body">
       <input v-model="query" type="text" class="form-control form-control-sm" />
-      <h3>{{ results.length }} results for "{{ query }}"</h3>
-      <ul>
+      <div v-if="query" class="result-count">{{ results.length }} results</div>
+      <ul class="passages">
         <li v-for="r in results" :key="r.passage.urn">
-          <router-link :to="toPassage(r.passage.urn)">{{ r.passage.refs.start.human_reference }} [{{ r.passage.text.lang }}]</router-link>
+          <router-link :to="toPassage(r.passage.urn)" :class="{ active : r.passage.urn == passage.urn }">{{ r.passage.refs.start.human_reference }}</router-link>
         </li>
       </ul>
     </div>
