@@ -1,53 +1,55 @@
 <template>
   <div class="library-component">
-    <div class="form-group">
-      <div class="input-group">
-        <input
-          type="text"
-          class="form-control"
-          v-model="query"
-          placeholder="Find a text group or work... (e.g. Plato or Apology)"
-          ref="filter-input"
-        >
-        <span class="input-group-addon" v-if="filtered">
-          <i class="fa fa-times" @click="clearQuery"></i>
-        </span>
-      </div>
-    </div>
-    <div class="controls">
-      <div class="toggle-all">
-        <template v-if="!filtered && collapsible">
-        <span @click="expandAll">expand all</span> | <span @click="collapseAll">collapse all</span>
-        </template>
-      </div>
-      <div class="sort">
-        sort by: 
-        <span @click="sort('cts-urn')" :class="{ active: sortKind === 'cts-urn' }">CTS URN</span> |
-        <span @click="sort('text-group')" :class="{ active: sortKind === 'text-group' }">text group</span> |
-        <span @click="sort('work')" :class="{ active: sortKind === 'work' }">work</span>
-      </div>
-    </div>
     <template v-if="loading">
       <div class="text-center">
         <i class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
       </div>
     </template>
-    <div v-else :class="['text-groups', { filtered }]">
-      <template v-if="sortKind === 'cts-urn' || sortKind === 'text-group'">
-        <template v-for="textGroup in textGroups">
-          <keep-alive>
-            <library-text-group ref="collapsible" :textGroup="textGroup" :filtered="filtered" :key="textGroup.urn" />
-          </keep-alive>
-        </template>
-      </template>
-      <div v-else-if="sortKind === 'work'" class="flat-work-list">
-        <template v-for="work in works">
-          <keep-alive>
-            <library-work :work="work" :filtered="filtered" :key="work.urn" />
-          </keep-alive>
-        </template>
+    <template v-else>
+      <div class="form-group">
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control"
+            v-model="query"
+            placeholder="Find a text group or work... (e.g. Plato or Apology)"
+            ref="filter-input"
+          >
+          <span class="input-group-addon" v-if="filtered">
+            <i class="fa fa-times" @click="clearQuery"></i>
+          </span>
+        </div>
       </div>
-    </div>
+      <div class="controls">
+        <div class="toggle-all">
+          <template v-if="!filtered && collapsible">
+          <span @click="expandAll">expand all</span> | <span @click="collapseAll">collapse all</span>
+          </template>
+        </div>
+        <div class="sort">
+          sort by:
+          <span @click="sort('cts-urn')" :class="{ active: sortKind === 'cts-urn' }">CTS URN</span> |
+          <span @click="sort('text-group')" :class="{ active: sortKind === 'text-group' }">text group</span> |
+          <span @click="sort('work')" :class="{ active: sortKind === 'work' }">work</span>
+        </div>
+      </div>
+      <div :class="['text-groups', { filtered }]">
+        <template v-if="sortKind === 'cts-urn' || sortKind === 'text-group'">
+          <template v-for="textGroup in textGroups">
+            <keep-alive>
+              <library-text-group ref="collapsible" :textGroup="textGroup" :filtered="filtered" :key="textGroup.urn" />
+            </keep-alive>
+          </template>
+        </template>
+        <div v-else-if="sortKind === 'work'" class="flat-work-list">
+          <template v-for="work in works">
+            <keep-alive>
+              <library-work :work="work" :filtered="filtered" :key="work.urn" />
+            </keep-alive>
+          </template>
+        </div>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -63,8 +65,10 @@ export default {
   created() {
     this.loading = true;
     this.$store.dispatch('loadTextGroupList').then(() => {
-      this.$refs['filter-input'].focus();
       this.loading = false;
+      this.$nextTick(() => {
+        this.$refs['filter-input'].focus();
+      });
     });
   },
   data() {
