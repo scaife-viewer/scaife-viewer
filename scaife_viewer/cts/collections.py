@@ -100,16 +100,9 @@ class TextGroup(Collection):
             "works": [
                 {
                     "urn": str(work.urn),
-                    "label": str(work.label),
                     "texts": [
                         {
                             "urn": str(text.urn),
-                            "label": str(text.label),
-                            "description": str(text.description),
-                            "kind": text.kind,
-                            "lang": text.lang,
-                            "rtl": text.rtl,
-                            "human_lang": text.human_lang,
                         }
                         for text in work.texts()
                     ],
@@ -199,9 +192,8 @@ class Text(Collection):
         if chunk is not None:
             return Passage(self, URN(chunk.urn).reference)
 
-    def as_json(self) -> dict:
-        toc = self.toc()
-        return {
+    def as_json(self, with_toc=True) -> dict:
+        payload = {
             "urn": str(self.urn),
             "label": str(self.label),
             "description": str(self.description),
@@ -209,23 +201,28 @@ class Text(Collection):
             "lang": self.lang,
             "rtl": self.rtl,
             "human_lang": self.human_lang,
-            "first_passage": dict(urn=str(self.first_passage().urn)),
-            "ancestors": [
-                {
-                    "urn": str(ancestor.urn),
-                    "label": ancestor.label,
-                }
-                for ancestor in self.ancestors()
-            ],
-            "toc": [
-                {
-                    "urn": next(toc.chunks(ref_node), None).urn,
-                    "label": ref_node.label.title(),
-                    "num": ref_node.num,
-                }
-                for ref_node in toc.num_resolver.glob(toc.root, "*")
-            ],
         }
+        if with_toc:
+            toc = self.toc()
+            payload.update({
+                "first_passage": dict(urn=str(self.first_passage().urn)),
+                "ancestors": [
+                    {
+                        "urn": str(ancestor.urn),
+                        "label": ancestor.label,
+                    }
+                    for ancestor in self.ancestors()
+                ],
+                "toc": [
+                    {
+                        "urn": next(toc.chunks(ref_node), None).urn,
+                        "label": ref_node.label.title(),
+                        "num": ref_node.num,
+                    }
+                    for ref_node in toc.num_resolver.glob(toc.root, "*")
+                ],
+            })
+        return payload
 
 
 def resolve_collection(type_uri):

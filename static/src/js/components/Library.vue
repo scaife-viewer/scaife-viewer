@@ -14,8 +14,18 @@
         </span>
       </div>
     </div>
-    <div class="toggle-all" v-if="!filtered">
-      <span @click="expandAll">expand all</span> | <span @click="collapseAll">collapse all</span>
+    <div class="controls">
+      <div class="toggle-all">
+        <template v-if="!filtered && collapsible">
+        <span @click="expandAll">expand all</span> | <span @click="collapseAll">collapse all</span>
+        </template>
+      </div>
+      <div class="sort">
+        sort by: 
+        <span @click="sort('cts-urn')" :class="{ active: sortKind === 'cts-urn' }">CTS URN</span> |
+        <span @click="sort('text-group')" :class="{ active: sortKind === 'text-group' }">text group</span> |
+        <span @click="sort('work')" :class="{ active: sortKind === 'work' }">work</span>
+      </div>
     </div>
     <template v-if="loading">
       <div class="text-center">
@@ -23,19 +33,28 @@
       </div>
     </template>
     <div v-else :class="['text-groups', { filtered }]">
-      <template v-for="textGroup in textGroups">
-        <keep-alive>
-          <library-text-group ref="collapsible" :textGroup="textGroup" :filtered="filtered" :key="textGroup.urn" />
-        </keep-alive>
+      <template v-if="sortKind === 'cts-urn' || sortKind === 'text-group'">
+        <template v-for="textGroup in textGroups">
+          <keep-alive>
+            <library-text-group ref="collapsible" :textGroup="textGroup" :filtered="filtered" :key="textGroup.urn" />
+          </keep-alive>
+        </template>
       </template>
+      <div v-else-if="sortKind === 'work'" class="flat-work-list">
+        <template v-for="work in works">
+          <keep-alive>
+            <library-work :work="work" :filtered="filtered" :key="work.urn" />
+          </keep-alive>
+        </template>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
 import store from '../store';
 import LibraryTextGroup from './LibraryTextGroup';
+import LibraryWork from './LibraryWork';
 
 const debounce = require('lodash.debounce');
 
@@ -59,11 +78,26 @@ export default {
     query() {
       this.filter();
     },
+    sortKind() {
+      this.filter();
+    },
   },
   computed: {
-    ...mapState({
-      textGroups: state => state.library.textGroups,
-    }),
+    textGroups() {
+      if (this.sortKind === 'text-group') {
+        return this.$store.getters.sortedByTextGroup;
+      }
+      return this.$store.getters.sortedByURN;
+    },
+    works() {
+      return this.$store.getters.sortedByWork;
+    },
+    sortKind() {
+      return this.$store.state.library.sortKind;
+    },
+    collapsible() {
+      return this.sortKind === 'cts-urn' || this.sortKind === 'text-group';
+    },
   },
   methods: {
     clearQuery() {
@@ -72,11 +106,15 @@ export default {
     filter: debounce(
       function f() {
         const query = this.query.trim();
+        let kind = 'TextGroups';
+        if (this.sortKind === 'work') {
+          kind = 'TextGroupWorks';
+        }
         if (query === '') {
-          this.$store.dispatch('resetTextGroups');
+          this.$store.dispatch(`reset${kind}`);
           this.filtered = false;
         } else {
-          this.$store.dispatch('filterTextGroups', query);
+          this.$store.dispatch(`filter${kind}`, query);
           this.filtered = true;
         }
       },
@@ -92,9 +130,13 @@ export default {
         c.open = true;
       });
     },
+    sort(kind) {
+      this.$store.commit('setLibrarySort', { kind });
+    },
   },
   components: {
     LibraryTextGroup,
+    LibraryWork,
   },
 };
 </script>
