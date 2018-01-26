@@ -93,6 +93,9 @@ div.text {
     margin-left: 1em;
     font-style: italic;
   }
+  .lg {
+    margin: 1em 0;
+  }
   .head {
     margin: 2em 0;
     text-align: center;
@@ -121,7 +124,6 @@ div.text {
       display: block;
       color: transparent;
       div {
-        position: -webkit-sticky;
         position: sticky;
         top: 20px;
         text-align: center;
@@ -129,6 +131,7 @@ div.text {
         font-size: 12px;
         transform: translate3d(0px, 0px, 0px);
         padding-top: 4px;
+        user-select: none;
       }
       min-width: 24px;
     }

@@ -15,8 +15,14 @@ exports.cssLoaders = (options) => {
       sourceMap: options.sourceMap,
     },
   };
+  const postcssLoader = {
+    loader: 'postcss-loader',
+    options: {
+      sourceMap: options.sourceMap,
+    },
+  };
   function generateLoaders(loader, loaderOptions) {
-    const loaders = [cssLoader];
+    const loaders = [cssLoader, postcssLoader];
     if (loader) {
       loaders.push({
         loader: `${loader}-loader`,

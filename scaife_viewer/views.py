@@ -40,9 +40,24 @@ class LibraryView(BaseLibraryView):
         return render(self.request, "library/index.html", {})
 
     def as_json(self):
+        all_text_groups = cts.text_inventory().text_groups()
+
+        text_groups = []
+        works = []
+        texts = []
+
+        for text_group in all_text_groups:
+            for work in text_group.works():
+                works.append(work)
+                for text in work.texts():
+                    texts.append(text)
+            text_groups.append(text_group)
+
         text_groups = self.get_text_groups()
         payload = {
             "text_groups": [apify(text_group) for text_group in text_groups],
+            "works": [apify(work) for work in works],
+            "texts": [apify(text, with_toc=False) for text in texts],
         }
         return JsonResponse(payload)
 

@@ -15,6 +15,7 @@ export default {
       required: true,
     },
   },
+  inject: ['highlighting'],
   computed: {
     idx() {
       return `${this.w}[${this.i}]`;
@@ -24,12 +25,12 @@ export default {
     let selected = false;
     let clickable = false;
     const {
-      t, idx,
+      t, idx, highlighting,
       $parent: p,
       $store: store,
     } = this;
     const { visible } = p;
-    if (visible) {
+    if (visible && highlighting) {
       const { textMode, annotations, annotationChange } = store.state.reader;
       if (textMode === 'clickable') {
         clickable = true;
