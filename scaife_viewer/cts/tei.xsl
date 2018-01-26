@@ -194,7 +194,7 @@
     </div>
   </xsl:template>
 
-  <xsl:template match="t:div[@type = 'textpart']">
+  <xsl:template match="t:div[@type='textpart']|t:l">
     <xsl:element name="text-part">
       <xsl:attribute name="class">
         <xsl:value-of select="@subtype" />
@@ -229,24 +229,6 @@
 
   <xsl:template match="t:lg">
     <div class="lg"><xsl:apply-templates/></div>
-  </xsl:template>
-
-  <xsl:template match="t:l">
-    <xsl:element name="text-part">
-      <xsl:attribute name="class">
-        <xsl:value-of select="@subtype" />
-        leaf o
-      </xsl:attribute>
-      <xsl:if test="@n">
-        <xsl:attribute name="reference">
-          <xsl:for-each select="ancestor::t:div[@type='textpart']/@n">
-            <xsl:value-of select="concat(., '.')" />
-          </xsl:for-each>
-          <xsl:value-of select="@n" />
-        </xsl:attribute>
-      </xsl:if>
-      <xsl:apply-templates/>
-    </xsl:element>
   </xsl:template>
 
   <xsl:template match="t:seg">
