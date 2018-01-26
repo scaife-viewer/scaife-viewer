@@ -52,7 +52,7 @@
               <div v-if="leftPassage.error" class="alert text-danger" role="alert">
                 Failed to load <b>{{ leftPassage.urn.toString() }}</b>: {{ leftPassage.error }}
               </div>
-              <passage-render-text v-else :text="leftPassageText" />
+              <passage-render-text v-else :text="leftPassageText" :highlighting="true" />
             </div>
             <div class="right">
               <version-selector :versions="versions" :to="toRightPassage" :remove="toRemoveRight">
@@ -62,14 +62,14 @@
               <div v-if="rightPassage.error" class="alert text-danger" role="alert">
                 Failed to load <b>{{ rightPassage.urn.toString() }}</b>: {{ rightPassage.error }}
               </div>
-              <passage-render-text v-else :text="rightPassageText" />
+              <passage-render-text v-else :text="rightPassageText" :highlighting="false" />
             </div>
           </template>
           <template v-else>
             <div v-if="leftPassage.error" class="alert text-danger" role="alert">
               Failed to load <b>{{ leftPassage.urn.toString() }}</b>: {{ leftPassage.error }}
             </div>
-            <passage-render-text v-else :text="leftPassageText" />
+            <passage-render-text v-else :text="leftPassageText" :highlighting="true" />
           </template>
           <div class="pg-right">
             <router-link v-if="passage.metadata.next" :to="toRef(passage.metadata.next.ref)">

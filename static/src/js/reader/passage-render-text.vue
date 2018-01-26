@@ -15,7 +15,7 @@ import Token from './token';
 
 export default {
   store,
-  props: ['text'],
+  props: ['text', 'highlighting'],
   watch: {
     text: 'prepareText',
   },
@@ -29,12 +29,17 @@ export default {
       return this.$store.state.reader.textSize;
     },
   },
+  provide() {
+    return {
+      highlighting: this.highlighting,
+    };
+  },
   created() {
     this.prepareText();
   },
   methods: {
     handleMouseDown(e) {
-      if (this.$store.state.reader.textMode === 'clickable') {
+      if (this.highlighting && this.$store.state.reader.textMode === 'clickable') {
         e.preventDefault();
       }
     },
