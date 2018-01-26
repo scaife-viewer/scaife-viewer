@@ -37,6 +37,9 @@ You should now be set to run the development server:
 
 Browse to http://localhost:3000/.
 
+Note that, although running Scaife locally, this is relying on the Nautilus server at https://perseus-cts.eu1.eldarioncloud.com to retrieve texts.
+
+
 ## Translations
 
 Before you work with translations, you will need gettext installed.

@@ -1,6 +1,6 @@
 from django.core.paginator import Paginator
 from django.http import Http404, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.utils.safestring import mark_safe
 from django.views import View
 
@@ -40,9 +40,24 @@ class LibraryView(BaseLibraryView):
         return render(self.request, "library/index.html", {})
 
     def as_json(self):
+        all_text_groups = cts.text_inventory().text_groups()
+
+        text_groups = []
+        works = []
+        texts = []
+
+        for text_group in all_text_groups:
+            for work in text_group.works():
+                works.append(work)
+                for text in work.texts():
+                    texts.append(text)
+            text_groups.append(text_group)
+
         text_groups = self.get_text_groups()
         payload = {
             "text_groups": [apify(text_group) for text_group in text_groups],
+            "works": [apify(work) for work in works],
+            "texts": [apify(text, with_toc=False) for text in texts],
         }
         return JsonResponse(payload)
 
@@ -172,6 +187,23 @@ def reader(request, urn):
         if right_version and right_passage:
             ReadingLog.objects.create(user=request.user, urn=right_urn)
     return response
+
+
+def library_text_redirect(request, urn):
+    """
+    Given a text URN redirect to the first chunk. Required to prevent
+    TOCing on the top-level library page.
+    """
+    try:
+        text = cts.collection(urn)
+    except cts.CollectionDoesNotExist:
+        raise Http404()
+    if not isinstance(text, cts.Text):
+        raise Http404()
+    passage = text.first_passage()
+    if not passage:
+        raise Http404()
+    return redirect("reader", urn=passage.urn)
 
 
 def search(request):

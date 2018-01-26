@@ -32,6 +32,7 @@ honcho = "*"
 elasticsearch = ">=6.0.0"
 google-cloud-pubsub = "*"
 regex = "*"
+certifi = "*"
 
 
 [dev-packages]

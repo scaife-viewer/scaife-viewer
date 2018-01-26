@@ -1,5 +1,5 @@
 <template>
-  <div :class="['text', `text-${textSize}`]" @mousedown.prevent>
+  <div :class="['text', `text-${textSize}`]" @mousedown="handleMouseDown">
     <component
       :class="{'text-loading': text === null, 'text-loaded': text !== null}"
       :is="renderedText"
@@ -15,7 +15,7 @@ import Token from './token';
 
 export default {
   store,
-  props: ['text'],
+  props: ['text', 'highlighting'],
   watch: {
     text: 'prepareText',
   },
@@ -29,10 +29,20 @@ export default {
       return this.$store.state.reader.textSize;
     },
   },
+  provide() {
+    return {
+      highlighting: this.highlighting,
+    };
+  },
   created() {
     this.prepareText();
   },
   methods: {
+    handleMouseDown(e) {
+      if (this.highlighting && this.$store.state.reader.textMode === 'clickable') {
+        e.preventDefault();
+      }
+    },
     prepareText() {
       if (this.text === null) {
         // give the text fade out animation time to complete before

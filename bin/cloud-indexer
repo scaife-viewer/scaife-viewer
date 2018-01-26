@@ -4,10 +4,11 @@ set -ex
 
 # seed data
 export CTS_RESOLVER=api
+mkdir -p /var/lib/nautilus/data
 python manage.py load_text_repos
 
 export CTS_RESOLVER=local
 python manage.py indexer \
     --pusher=pubsub \
-    --pubsub-project=ec-perseus \
-    --pubsub-topic="indexer-$GONDOR_INSTANCE-documents"
+    --pubsub-project="${GCP_PROJECT}" \
+    --pubsub-topic="search-indexer-${SCAIFE_INSTANCE}-documents"

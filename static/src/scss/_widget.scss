@@ -64,6 +64,22 @@
   }
 }
 
+.widget.passage-links {
+  div.body {
+    font-size: 13px;
+    line-height: 15px;
+    p {
+      display: flex;
+      .side {
+        @extend .badge;
+        color: $gray-600;
+        background: $gray-100;
+        margin-right: 0.5em;
+      }
+      margin-bottom: 0.5rem;
+    }
+  }
+}
 .widget.selected-word {
   div.body {
     font-family: 'Noto Serif';
@@ -109,5 +125,32 @@
       font-family: monospace;
       color: $gray-600;
     }
+  }
+}
+
+.widget.text-mode {
+  .mode a {
+    padding: 3px 6px;
+    font-family: 'Noto Serif';
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    color: $gray-500;
+    &.active {
+      color: $black;
+      &:hover {
+        color: $black;
+      }
+    }
+    &:hover {
+      color: $gray-700;
+      background: $gray-200;
+    }
+  }
+  .help {
+    margin-left: 6px;
+    font-size: 11px;
+    color: $gray-600;
   }
 }

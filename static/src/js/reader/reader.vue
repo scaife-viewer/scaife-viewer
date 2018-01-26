@@ -21,7 +21,6 @@
       </div>
       <section id="content_body">
         <div class="passage-heading">
-          <a href="/library/">Library &gt;</a>
           <h1>
             <template v-for="(breadcrumb, idx) in text.metadata.ancestors">
               <a :key="breadcrumb.urn" :href="breadcrumb.url">{{ breadcrumb.label }}</a><template v-if="idx != text.metadata.ancestors.length - 1">, </template>
@@ -53,7 +52,7 @@
               <div v-if="leftPassage.error" class="alert text-danger" role="alert">
                 Failed to load <b>{{ leftPassage.urn.toString() }}</b>: {{ leftPassage.error }}
               </div>
-              <passage-render-text v-else :text="leftPassageText" />
+              <passage-render-text v-else :text="leftPassageText" :highlighting="true" />
             </div>
             <div class="right">
               <version-selector :versions="versions" :to="toRightPassage" :remove="toRemoveRight">
@@ -63,14 +62,14 @@
               <div v-if="rightPassage.error" class="alert text-danger" role="alert">
                 Failed to load <b>{{ rightPassage.urn.toString() }}</b>: {{ rightPassage.error }}
               </div>
-              <passage-render-text v-else :text="rightPassageText" />
+              <passage-render-text v-else :text="rightPassageText" :highlighting="false" />
             </div>
           </template>
           <template v-else>
             <div v-if="leftPassage.error" class="alert text-danger" role="alert">
               Failed to load <b>{{ leftPassage.urn.toString() }}</b>: {{ leftPassage.error }}
             </div>
-            <passage-render-text v-else :text="leftPassageText" />
+            <passage-render-text v-else :text="leftPassageText" :highlighting="true" />
           </template>
           <div class="pg-right">
             <router-link v-if="passage.metadata.next" :to="toRef(passage.metadata.next.ref)">
@@ -85,6 +84,7 @@
         <button class="left-toggle" v-if="!sidebarRightOpened" @click="toggleSidebar('right')"><i></i></button>
         <div>
           <widget-passage-links />
+          <widget-text-mode />
           <widget-text-size />
           <widget-highlight />
           <widget-token-list />
@@ -107,6 +107,7 @@ import WidgetPassageChildren from './widgets/passage-children';
 import WidgetPassageReference from './widgets/passage-reference';
 import WidgetHighlight from './widgets/highlight';
 import WidgetPassageLinks from './widgets/passage-links';
+import WidgetTextMode from './widgets/text-mode';
 import WidgetTextSize from './widgets/text-size';
 import WidgetDvWordList from './widgets/dv-word-list';
 import WidgetTokenList from './widgets/dm-token-list';
@@ -116,6 +117,7 @@ const widgets = {
   WidgetPassageChildren,
   WidgetPassageReference,
   WidgetPassageLinks,
+  WidgetTextMode,
   WidgetTextSize,
   WidgetHighlight,
   WidgetDvWordList,

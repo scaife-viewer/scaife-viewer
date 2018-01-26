@@ -93,6 +93,9 @@ div.text {
     margin-left: 1em;
     font-style: italic;
   }
+  .lg {
+    margin: 1em 0;
+  }
   .head {
     margin: 2em 0;
     text-align: center;
@@ -104,7 +107,7 @@ div.text {
   .said .label, .speaker {
     font-weight: bold;
   }
-  span.w:hover {
+  span.w.c:hover {
     cursor: pointer;
   }
   span.w.selected {
@@ -121,16 +124,16 @@ div.text {
       display: block;
       color: transparent;
       div {
-        position: -webkit-sticky;
         position: sticky;
         top: 20px;
         text-align: center;
         font-family: 'Noto Sans';
         font-size: 12px;
         transform: translate3d(0px, 0px, 0px);
+        padding-top: 4px;
+        user-select: none;
       }
       min-width: 24px;
-      padding-top: 4px;
     }
     &:hover > .a {
       background: $gray-100;

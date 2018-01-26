@@ -17,13 +17,26 @@ def link_passage(urn) -> dict:
     }
 
 
-def apify(obj):
-    remaining = obj.as_json()
+def apify(obj, **kwargs):
+    remaining = obj.as_json(**kwargs)
     rels = {}
     if isinstance(obj, cts.TextGroup):
         works = remaining.pop("works")
         rels = {
-            "works": [{**link_collection(work["urn"]), **work} for work in works],
+            "works": [
+                {
+                    **link_collection(work["urn"]),
+                    **work,
+                    "texts": [
+                        {
+                            **link_collection(text["urn"]),
+                            **text
+                        }
+                        for text in work["texts"]
+                    ],
+                }
+                for work in works
+            ],
         }
     if isinstance(obj, cts.Work):
         texts = remaining.pop("texts")
@@ -31,16 +44,23 @@ def apify(obj):
             "texts": [{**link_collection(text["urn"]), **text} for text in texts],
         }
     if isinstance(obj, cts.Text):
-        first_passage = remaining.pop("first_passage")
-        ancestors = remaining.pop("ancestors")
-        toc = remaining.pop("toc")
-        rels = {
-            "first_passage": {**link_passage(first_passage["urn"]), **first_passage},
-            "ancestors": [{**link_collection(ancestor["urn"]), **ancestor} for ancestor in ancestors],
-            "toc": [{**link_passage(entry["urn"]), **entry} for entry in toc],
-        }
+        if kwargs.get("with_toc", True):
+            first_passage = remaining.pop("first_passage")
+            ancestors = remaining.pop("ancestors")
+            toc = remaining.pop("toc")
+            rels = {
+                "first_passage": {**link_passage(first_passage["urn"]), **first_passage},
+                "ancestors": [{**link_collection(ancestor["urn"]), **ancestor} for ancestor in ancestors],
+                "toc": [{**link_passage(entry["urn"]), **entry} for entry in toc],
+            }
+        else:
+            rels = {}
     if isinstance(obj, cts.Collection):
         links = link_collection(str(obj.urn))
+        if isinstance(obj, cts.Text):
+            links.update({
+                "reader_url": reverse("library_text_redirect", kwargs={"urn": obj.urn}),
+            })
     if isinstance(obj, cts.Passage):
         links = link_passage(str(obj.urn))
         text = remaining.pop("text")
