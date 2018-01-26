@@ -227,6 +227,10 @@
 
   <xsl:template match="t:figure" />
 
+  <xsl:template match="t:lg">
+    <div class="lg"><xsl:apply-templates/></div>
+  </xsl:template>
+
   <xsl:template match="t:l">
     <xsl:element name="text-part">
       <xsl:attribute name="class">
