@@ -1,13 +1,13 @@
 <template>
-  <widget>
+  <widget class="passage-links">
     <span slot="header">CTS URN</span>
     <div slot="body">
       <template v-if="rightPassage">
-        <div>Left <tt><a :href="`${ctsApiUrl}?request=GetPassage&amp;urn=${rightPassage.urn}`">{{ leftPassage.urn.toString() }}</a></tt></div>
-        <div>Right <tt><a :href="`${ctsApiUrl}?request=GetPassage&amp;urn=${rightPassage.urn}`">{{ rightPassage.urn.toString() }}</a></tt></div>
+        <p><span class="side">L</span> <tt><a :href="`${ctsApiUrl}?request=GetPassage&amp;urn=${rightPassage.urn}`">{{ leftPassage.urn.toString() }}</a></tt></p>
+        <p><span class="side">R</span> <tt><a :href="`${ctsApiUrl}?request=GetPassage&amp;urn=${rightPassage.urn}`">{{ rightPassage.urn.toString() }}</a></tt></p>
       </template>
       <template v-else>
-        <tt><a :href="`${ctsApiUrl}?request=GetPassage&amp;urn=${passage.urn}`">{{ passage.urn.toString() }}</a></tt>
+        <p><tt><a :href="`${ctsApiUrl}?request=GetPassage&amp;urn=${passage.urn}`">{{ passage.urn.toString() }}</a></tt></p>
       </template>
     </div>
   </widget>

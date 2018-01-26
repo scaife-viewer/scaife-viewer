@@ -64,6 +64,22 @@
   }
 }
 
+.widget.passage-links {
+  div.body {
+    font-size: 13px;
+    line-height: 15px;
+    p {
+      display: flex;
+      .side {
+        @extend .badge;
+        color: $gray-600;
+        background: $gray-100;
+        margin-right: 0.5em;
+      }
+      margin-bottom: 0.5rem;
+    }
+  }
+}
 .widget.selected-word {
   div.body {
     font-family: 'Noto Serif';
