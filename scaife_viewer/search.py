@@ -13,9 +13,10 @@ es = Elasticsearch(hosts=[settings.ELASTICSEARCH_URL])
 
 class SearchQuery:
 
-    def __init__(self, q, scope=None):
+    def __init__(self, q, scope=None, sort_by=None):
         self.q = q
         self.scope = {} if scope is None else scope
+        self.sort_by = sort_by
         self.total_count = None
 
     def query_index(self):
@@ -23,6 +24,12 @@ class SearchQuery:
             "index": "scaife-viewer",
             "doc_type": "text",
         }
+
+    def query_sort(self):
+        if not self.sort_by:
+            return {}
+        if self.sort_by == "document":
+            return {"sort": [{"sort_idx": "desc"}]}
 
     def query(self):
         q = {}
@@ -47,6 +54,7 @@ class SearchQuery:
     def search_kwargs(self, size=10, offset=0):
         return {
             "body": {
+                **self.query_sort(),
                 "highlight": {
                     "fields": {
                         "content": {
