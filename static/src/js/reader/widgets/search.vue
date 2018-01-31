@@ -6,7 +6,7 @@
       <div v-if="query" class="result-count">{{ results.length }} results</div>
       <ul class="passages">
         <li v-for="r in results" :key="r.passage.urn">
-          <router-link :to="toPassage(r.passage.urn)" :class="{ active : r.passage.urn == passage.urn }">{{ r.passage.refs.start.human_reference }}</router-link>
+          <router-link :to="toPassage(r.passage.urn)" :class="{ active : r.active }">{{ r.passage.refs.start.human_reference }}</router-link>
         </li>
       </ul>
     </div>
@@ -27,12 +27,9 @@ export default {
     ReaderNavigationMixin,
   ],
   watch: {
-    passage() {
-      this.doTextSearch();
-    },
-    query() {
-      this.updateSearch();
-    },
+    passage: 'doTextSearch',
+    query: 'updateSearch',
+    activeResults: 'updateHighlights',
   },
   created() {
     this.doTextSearch();
@@ -46,6 +43,9 @@ export default {
   computed: {
     passage() {
       return this.$store.getters['reader/passage'];
+    },
+    activeResults() {
+      return this.results.filter(({ active }) => active);
     },
   },
   methods: {
@@ -63,12 +63,34 @@ export default {
       250,
     ),
     doTextSearch() {
-      const params = {
-        q: this.query.trim(),
-        work: this.passage.urn.upTo('work'),
-      };
-      return sv.textSearch(params).then((results) => {
-        this.results = results;
+      return new Promise((resolve, reject) => {
+        if (!this.passage.ready) {
+          resolve();
+        } else {
+          const params = {
+            q: this.query.trim(),
+            work: this.passage.urn.upTo('work'),
+          };
+          sv.textSearch(params)
+            .then((results) => {
+              this.results = results.map((result) => {
+                const active = result.passage.urn === this.passage.urn.toString();
+                return { ...result, active };
+              });
+            })
+            .then(resolve)
+            .catch(reject);
+        }
+      });
+    },
+    updateHighlights() {
+      this.$store.commit('reader/clearAnnotation', { key: 'highlighted' });
+      this.activeResults.forEach(({ highlights }) => {
+        this.$store.commit('reader/setAnnotations', {
+          tokens: highlights.map(({ w, i }) => `${w}[${i}]`),
+          key: 'highlighted',
+          value: true,
+        });
       });
     },
   },

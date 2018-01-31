@@ -1,8 +1,10 @@
+from collections import defaultdict
 from operator import itemgetter
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
 
+import regex
 from elasticsearch import Elasticsearch
 
 from . import cts
@@ -13,10 +15,11 @@ es = Elasticsearch(hosts=[settings.ELASTICSEARCH_URL])
 
 class SearchQuery:
 
-    def __init__(self, q, scope=None, sort_by=None):
+    def __init__(self, q, scope=None, sort_by=None, highlight_fragments=5):
         self.q = q
         self.scope = {} if scope is None else scope
         self.sort_by = sort_by
+        self.highlight_fragments = highlight_fragments
         self.total_count = None
 
     def query_index(self):
@@ -59,6 +62,7 @@ class SearchQuery:
                     "fields": {
                         "content": {
                             "type": "fvh",
+                            "number_of_fragments": self.highlight_fragments,
                         },
                     },
                 },
@@ -113,6 +117,7 @@ class SearchResultSet:
         return {
             "passage": passage,
             "content": hit["highlight"]["content"],
+            "highlights": extract_highlights(hit["highlight"]["content"][0]),
             "link": reverse("reader", kwargs={"urn": link_urn}),
         }
 
@@ -124,3 +129,28 @@ class SearchResultSet:
                 "count": bucket["doc_count"],
             })
         return sorted(buckets, key=itemgetter("count"), reverse=True)
+
+
+w = r"(?:<em>)?\w[-\w]*(?:</em>)?"
+p = r"\p{P}+"
+ws = r"[\p{Z}\s]+"
+token_re = regex.compile(fr"{w}|{p}|{ws}")
+w_re = regex.compile(w)
+
+
+def extract_highlights(content):
+    tokens = []
+    idx = defaultdict(int)
+    for w in token_re.findall(content):
+        if w:
+            highlighted = False
+            if w_re.match(w):
+                highlighted = "<em>" in w
+                if highlighted:
+                    w = regex.sub(r"</?em>", "", w)
+            wl = len(w)
+            for wk in (w[i:j + 1] for i in range(wl) for j in range(i, wl)):
+                idx[wk] += 1
+            if highlighted:
+                tokens.append({"w": w, "i": idx[w]})
+    return tokens

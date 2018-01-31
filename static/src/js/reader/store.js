@@ -147,6 +147,18 @@ module.exports = {
       annotations.set(token, ta);
       state.annotationChange += 1;
     },
+    setAnnotations(state, { tokens, key, value }) {
+      const { annotations } = state;
+      tokens.forEach((token) => {
+        let ta = {};
+        if (annotations.has(token)) {
+          ta = annotations.get(token);
+        }
+        ta[key] = value;
+        annotations.set(token, ta);
+      });
+      state.annotationChange += 1;
+    },
     clearAnnotation(state, { key }) {
       const { annotations } = state;
       annotations.forEach((o) => {

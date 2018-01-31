@@ -115,6 +115,11 @@ div.text {
     padding: 0 0.1em 0.1em 0.15em;
     margin: 0 -0.1em -0.1em -0.15em;
   }
+  span.w.highlighted {
+    background-color: $highlight-color;
+    padding: 0 0.1em 0.1em 0.15em;
+    margin: 0 -0.1em -0.1em -0.15em;
+  }
   .textpart {
     display: flex;
     & > .a {

@@ -244,9 +244,10 @@ def search_json(request):
         text_urn = request.GET.get("text")
         if text_urn:
             scope["text.urn"] = text_urn
-        for result in SearchQuery(q, scope=scope, sort_by="document"):
+        for result in SearchQuery(q, scope=scope, highlight_fragments=0):
             data["results"].append({
                 "passage": apify(result["passage"], with_content=False),
                 "content": result["content"],
+                "highlights": result["highlights"],
             })
     return JsonResponse(data)
