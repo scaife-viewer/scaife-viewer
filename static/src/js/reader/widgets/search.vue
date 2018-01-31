@@ -77,7 +77,7 @@ export default {
         } else {
           const params = {
             q: this.query.trim(),
-            work: this.passage.urn.upTo('work'),
+            text: this.passage.urn.upTo('version'),
           };
           sv.textSearch(params)
             .then((results) => {
