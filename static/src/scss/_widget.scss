@@ -1,10 +1,16 @@
 .widget {
-  padding: 15px 8px;
+  padding: 0 8px 8px 8px;
   border-bottom: 1px solid $gray-200;
   &:first-of-type {
     border-top: 1px solid $gray-200;
   }
+  .sticky-block {
+    position: sticky;
+    top: 0;
+  }
   h2 {
+    background: $white;
+    padding: 15px 0 5px;
     display: flex;
     justify-content: space-between;
     font-size: 14px;
@@ -36,8 +42,11 @@
   &:hover .fixed-toggle {
     opacity: 1;
   }
+  div.sticky-body {
+    background: $white;
+  }
   div.body {
-    margin: 5px 0 0 0;
+    margin: 0;
     &.fixed {
       max-height: 200px;
       overflow-y: auto;
@@ -95,10 +104,12 @@
     color: $gray-700;
   }
   p.legend {
+    padding: 4px 0 8px;
+    font-size: 12px;
+    font-family: 'Noto Serif';
     font-style: italic;
     line-height: 12px;
     color: $gray-600;
-    margin-bottom: 1em;
   }
   p {
     margin: 0;
@@ -168,37 +179,39 @@
 }
 
 .widget.search {
+  .search-input {
+    padding: 4px 0 8px;
+  }
   div.body {
     padding: 3px;
-    input {
-      margin-bottom: 6px;
-    }
-    .result-count {
-      font-size: 14px;
-      padding: 0 8px;
-      color: $gray-700;
-    }
-    ul.passages {
-      list-style: none;
-      padding: 0 4px;
+
+    .search-hits {
       margin: 0;
-      li {
-        font-family: 'Noto Serif';
-        font-size: 12px;
-        line-height: 14px;
-        margin-top: 4px;
-        a {
-          padding-left: 14px;
-          color: $gray-600;
-          &.active {
-            padding-left: 4px;
-            color: $black;
-            &::before {
-              content: "> ";
-            }
+
+      ul {
+        list-style: none;
+        padding: 0 4px;
+        li {
+          font-family: 'Noto Serif';
+          font-size: 12px;
+          line-height: 14px;
+          margin-top: 4px;
+          &:first-of-type {
+            margin-top: 0;
           }
-          &:hover {
-            text-decoration: none;
+          a {
+            padding-left: 14px;
+            color: $gray-600;
+            &.active {
+              padding-left: 4px;
+              color: $black;
+              &::before {
+                content: "> ";
+              }
+            }
+            &:hover {
+              text-decoration: none;
+            }
           }
         }
       }

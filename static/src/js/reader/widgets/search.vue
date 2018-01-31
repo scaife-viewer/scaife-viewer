@@ -1,14 +1,22 @@
 <template>
   <widget class="search">
-    <span slot="header">Text Search</span>
+    <span slot="header">
+      Text Search
+      <span v-if="query" class="result-count">({{ results.length }})</span>
+    </span>
+    <div slot="sticky">
+      <div class="search-input">
+        <input v-model="query" type="text" class="form-control form-control-sm" />
+      </div>
+    </div>
     <div slot="body">
-      <input v-model="query" type="text" class="form-control form-control-sm" />
-      <div v-if="query" class="result-count">{{ results.length }} results</div>
-      <ul class="passages">
-        <li v-for="r in results" :key="r.passage.urn">
-          <router-link :to="toPassage(r.passage.urn)" :class="{ active : r.active }">{{ r.passage.refs.start.human_reference }}</router-link>
-        </li>
-      </ul>
+      <div class="search-hits">
+        <ul>
+          <li v-for="r in results" :key="r.passage.urn">
+            <router-link :to="toPassage(r.passage.urn)" :class="{ active : r.active }">{{ r.passage.refs.start.human_reference }}</router-link>
+          </li>
+        </ul>
+      </div>
     </div>
   </widget>
 </template>
