@@ -32,7 +32,7 @@ class SearchQuery:
         if not self.sort_by:
             return {}
         if self.sort_by == "document":
-            return {"sort": [{"sort_idx": "desc"}]}
+            return {"sort": [{"sort_idx": "asc"}]}
 
     def query(self):
         q = {}
