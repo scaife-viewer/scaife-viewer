@@ -110,15 +110,18 @@ div.text {
   span.w.c:hover {
     cursor: pointer;
   }
-  span.w.selected {
-    background-color: $highlight-color;
+  span.w.selected, span.w.highlighted {
     padding: 0 0.1em 0.1em 0.15em;
     margin: 0 -0.1em -0.1em -0.15em;
   }
+  span.w.selected {
+    background-color: $selected-color;
+  }
   span.w.highlighted {
     background-color: $highlight-color;
-    padding: 0 0.1em 0.1em 0.15em;
-    margin: 0 -0.1em -0.1em -0.15em;
+  }
+  span.w.selected.highlighted {
+    background-color: mix($highlight-color, $selected-color);
   }
   .textpart {
     display: flex;
