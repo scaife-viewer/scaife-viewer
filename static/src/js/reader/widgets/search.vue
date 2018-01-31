@@ -2,7 +2,7 @@
   <widget class="search">
     <span slot="header">
       Text Search
-      <span v-if="query" class="result-count">({{ results.length }})</span>
+      <span v-if="query" class="result-count">({{ totalCount }})</span>
     </span>
     <div slot="sticky">
       <div class="search-input">
@@ -45,6 +45,7 @@ export default {
   data() {
     return {
       query: this.$store.state.route.query.q,
+      totalCount: 0,
       results: [],
     };
   },
@@ -80,7 +81,8 @@ export default {
             text: this.passage.urn.upTo('version'),
           };
           sv.textSearch(params)
-            .then((results) => {
+            .then(({ total_count: totalCount, results }) => {
+              this.totalCount = totalCount;
               this.results = results.map((result) => {
                 const active = result.passage.urn === this.passage.urn.toString();
                 return { ...result, active };

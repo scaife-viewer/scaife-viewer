@@ -249,7 +249,9 @@ def search_json(request):
             "sort_by": "document",
             "highlight_fragments": 0,
         }
-        for result in SearchQuery(q, **query_kwargs):
+        sq = SearchQuery(q, **query_kwargs)
+        data["total_count"] = sq.count()
+        for result in sq:
             data["results"].append({
                 "passage": apify(result["passage"], with_content=False),
                 "content": result["content"],
