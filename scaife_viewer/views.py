@@ -7,7 +7,7 @@ from django.views import View
 from . import cts
 from .cts.utils import natural_keys as nk
 from .reading.models import ReadingLog
-from .search import SearchQuery
+from .search import SearchQuery, es
 from .utils import apify, link_passage, encode_link_header
 
 
@@ -222,9 +222,56 @@ def search(request):
         text_group_urn = request.GET.get("tg")
         if text_group_urn:
             scope["text_group"] = text_group_urn
-        paginator = Paginator(SearchQuery(q, scope=scope), 10)
+        sq = SearchQuery(q, scope=scope, aggregate_field="text_group")
+        paginator = Paginator(sq, 10)
         ctx.update({
             "paginator": paginator,
             "page": paginator.page(page_num),
         })
     return render(request, "search.html", ctx)
+
+
+def search_json(request):
+    q = request.GET.get("q", "")
+    size = int(request.GET.get("size", "10"))
+    offset = int(request.GET.get("offset", "0"))
+    pivot = request.GET.get("pivot")
+    data = {"results": []}
+    if q:
+        scope = {}
+        text_group_urn = request.GET.get("text_group")
+        if text_group_urn:
+            scope["text_group"] = text_group_urn
+        work_urn = request.GET.get("work")
+        if work_urn:
+            scope["work"] = work_urn
+        text_urn = request.GET.get("text")
+        if text_urn:
+            scope["text.urn"] = text_urn
+        query_kwargs = {
+            "scope": scope,
+            "sort_by": "document",
+            "highlight_fragments": 0,
+        }
+        sq = SearchQuery(q, **query_kwargs)
+        if "text.urn" in scope and pivot:
+            urn = cts.URN(pivot)
+            urn_start = f"{urn.upTo(cts.URN.NO_PASSAGE)}:{urn.reference.start}"
+            for doc_offset, doc in enumerate(sq.scan()):
+                if doc["_id"] == urn_start:
+                    start_offset = max(0, doc_offset - (size // 2))
+                    data["pivot"] = {
+                        "offset": doc_offset,
+                        "start_offset": start_offset,
+                        "end_offset": start_offset + size - 1,
+                    }
+                    offset = start_offset
+                    break
+        data["total_count"] = sq.count()
+        for result in sq.search_window(size=size, offset=offset):
+            data["results"].append({
+                "passage": apify(result["passage"], with_content=False),
+                "content": result["content"],
+                "highlights": result["highlights"],
+            })
+    return JsonResponse(data)

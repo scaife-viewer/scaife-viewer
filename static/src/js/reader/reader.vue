@@ -17,6 +17,7 @@
           <widget-passage-ancestors />
           <widget-passage-children />
           <widget-passage-reference />
+          <widget-search />
         </div>
       </div>
       <section id="content_body">
@@ -105,6 +106,7 @@ import VersionSelector from './version-selector';
 import WidgetPassageAncestors from './widgets/passage-ancestors';
 import WidgetPassageChildren from './widgets/passage-children';
 import WidgetPassageReference from './widgets/passage-reference';
+import WidgetSearch from './widgets/search';
 import WidgetHighlight from './widgets/highlight';
 import WidgetPassageLinks from './widgets/passage-links';
 import WidgetTextMode from './widgets/text-mode';
@@ -116,6 +118,7 @@ const widgets = {
   WidgetPassageAncestors,
   WidgetPassageChildren,
   WidgetPassageReference,
+  WidgetSearch,
   WidgetPassageLinks,
   WidgetTextMode,
   WidgetTextSize,

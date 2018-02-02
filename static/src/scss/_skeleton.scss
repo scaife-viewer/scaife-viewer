@@ -31,7 +31,7 @@
   overflow-y: auto;
   @extend .container;
   padding-top: 35px;
-  flex: 4;
+  flex: 2;
   .container {
     padding: 0;
   }
@@ -52,7 +52,7 @@
     }
   }
   &#right-sidebar {
-    flex: 2;
+    flex: 1;
     border-left: 1px solid $gray-300;
     > div {
       padding: 35px 5px 5px;

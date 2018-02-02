@@ -23,6 +23,7 @@ export default {
   },
   render(h) {
     let selected = false;
+    let highlighted = false;
     let clickable = false;
     const {
       t, idx, highlighting,
@@ -36,7 +37,7 @@ export default {
         clickable = true;
       }
       if (annotations.has(idx)) {
-        ({ selected } = annotations.get(idx));
+        ({ selected, highlighted } = annotations.get(idx));
       }
     }
     return h(
@@ -44,7 +45,7 @@ export default {
       {
         class: [
           t,
-          { c: clickable, selected },
+          { c: clickable, selected, highlighted },
         ],
         on: {
           click(e) {

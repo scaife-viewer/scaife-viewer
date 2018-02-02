@@ -27,18 +27,18 @@ class Indexer:
         if self.urn_prefix:
             print(f"Applying URN prefix filter: {self.urn_prefix}")
         with self.executor as executor:
-            urns = chain.from_iterable(
+            passages = chain.from_iterable(
                 executor.map(
-                    self.passage_urns_from_text,
+                    self.passages_from_text,
                     self.texts(),
                     chunksize=100,
                 )
             )
             if self.limit is not None:
-                urns = islice(urns, self.limit)
-            urns = list(urns)
-            print(f"Indexing {len(urns)} passages")
-            consume(executor.map(self.indexer, chunker(urns, self.chunk_size), chunksize=10))
+                passages = islice(passages, self.limit)
+            passages = list(passages)
+            print(f"Indexing {len(passages)} passages")
+            consume(executor.map(self.indexer, chunker(passages, self.chunk_size), chunksize=10))
 
     def texts(self):
         ti = cts.text_inventory()
@@ -49,19 +49,24 @@ class Indexer:
                         continue
                     yield text
 
-    def passage_urns_from_text(self, text):
-        urns = []
+    def passages_from_text(self, text):
+        passages = []
         try:
             toc = text.toc()
         except Exception as e:
             print(f"{text.urn} toc error: {e}")
         else:
-            for node in PreOrderIter(toc.root, filter_=attrgetter("is_leaf")):
-                urns.append(f"{text.urn}:{node.reference}")
-        return urns
+            leaves = PreOrderIter(toc.root, filter_=attrgetter("is_leaf"))
+            for i, node in enumerate(leaves):
+                passages.append({
+                    "urn": f"{text.urn}:{node.reference}",
+                    "sort_idx": i,
+                })
+        return passages
 
     def indexer(self, chunk: Iterable[str]):
-        for urn in chunk:
+        for p in chunk:
+            urn = p["urn"]
             try:
                 passage = cts.passage(urn)
             except cts.PassageDoesNotExist:
@@ -70,11 +75,11 @@ class Indexer:
             except Exception as e:
                 print(f"Error {e}")
                 continue
-            doc = self.passage_to_doc(passage)
+            doc = self.passage_to_doc(passage, p["sort_idx"])
             if not self.dry_run:
                 self.pusher.push(doc)
 
-    def passage_to_doc(self, passage):
+    def passage_to_doc(self, passage, sort_idx):
         return {
             "urn": str(passage.urn),
             "text_group": str(passage.text.urn.upTo(cts.URN.TEXTGROUP)),
@@ -85,6 +90,7 @@ class Indexer:
                 "description": passage.text.description,
             },
             "reference": str(passage.reference),
+            "sort_idx": sort_idx,
             "content": passage.content,  # CPU intensive
         }
 
