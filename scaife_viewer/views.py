@@ -255,8 +255,10 @@ def search_json(request):
         }
         sq = SearchQuery(q, **query_kwargs)
         if "text.urn" in scope and pivot:
+            urn = cts.URN(pivot)
+            urn_start = f"{urn.upTo(cts.URN.NO_PASSAGE)}:{urn.reference.start}"
             for idx, doc in enumerate(sq.scan()):
-                if doc["_id"] == pivot:
+                if doc["_id"] == urn_start:
                     offset = max(0, idx - (size / 2))
                     size = int(size / 2 - 1)
                     data["pivot"] = {
