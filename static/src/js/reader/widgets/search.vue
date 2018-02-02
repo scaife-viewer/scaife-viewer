@@ -2,7 +2,7 @@
   <widget class="search">
     <span slot="header">
       Text Search
-      <span v-if="query && totalCount" class="result-count">({{ totalCount }})</span>
+      <span v-if="query && totalCount !== null" class="result-count">({{ totalCount }})</span>
     </span>
     <div slot="sticky">
       <div class="search-input">
@@ -12,8 +12,10 @@
     <div slot="body" ref="body">
       <div class="search-hits">
         <text-loader v-if="loading" size="7px" margin="1px" />
+        <div v-else-if="error"><small class="text-danger"><b>Error:</b> {{ error }}</small></div>
         <ul v-else ref="items">
-          <p v-if="results.length === 0"><small class="text-muted">Use text input above to find text in this version.</small></p>
+          <p v-if="query === '' && results.length === 0"><small class="text-muted">Use text input above to find text in this version.</small></p>
+          <p v-else-if="results.length === 0"><small class="text-muted">No results found.</small></p>
           <template v-else v-for="(r, idx) in results">
             <li :class="{ first: idx === 0, last: isLast(idx) }" :key="r.passage.urn">
               <router-link :to="toPassage(r.passage.urn)" :class="{ active : r.active }">{{ r.passage.refs.start.human_reference }}</router-link>
@@ -59,19 +61,33 @@ export default {
   },
   created() {
     this.chunkSize = 200;
-    this.initialTextSearch();
+    if (this.$store.state.route.query.q) {
+      this.query = this.$store.state.route.query.q;
+    }
+    if (this.query !== '') {
+      this.initialTextSearch();
+    }
   },
   data() {
     return {
-      query: this.$store.state.route.query.q,
+      q: '',
       totalCount: null,
       results: [],
       loading: false,
+      error: '',
     };
   },
   computed: {
     passage() {
       return this.$store.getters['reader/passage'];
+    },
+    query: {
+      get() {
+        return this.q;
+      },
+      set(value) {
+        this.q = value.trim();
+      },
     },
     activeResults() {
       return this.results.filter(({ active }) => active);
@@ -80,13 +96,12 @@ export default {
   methods: {
     updateSearch: debounce(
       function f() {
-        const query = this.query.trim();
         this.initialTextSearch()
           .then(() => {
             this.$router.push({
               name: 'reader',
               params: this.$store.state.route.params,
-              query: { ...this.$store.state.route.query, q: query },
+              query: { ...this.$store.state.route.query, q: this.query },
             });
           });
       },
@@ -97,49 +112,53 @@ export default {
       // enables us to scroll to passages not in the first page
       // of results.
       this.loading = true;
+      this.totalCount = null;
+      this.results = [];
       this.offsetMap = new Set();
       const opts = {
         size: this.chunkSize,
         pivot: this.passage.urn.toString(),
       };
-      return this.textSearch(opts).then((res) => {
-        if (!res) {
-          this.results = [];
+      return this.textSearch(opts)
+        .then((res) => {
+          if (!res || res.results.length === 0) {
+            this.totalCount = 0;
+            this.loading = false;
+          } else {
+            this.firstOffset = res.pivot.start_offset;
+            this.lastOffset = res.pivot.end_offset;
+            this.totalCount = res.total_count;
+            this.results = this.markActive(res.results);
+            this.loading = false;
+            this.$nextTick(() => {
+              this.scrollToActive();
+              if (res.results.length < this.totalCount) {
+                this.infiniteScroll();
+              }
+            });
+            this.$forceUpdate();
+          }
+        })
+        .catch((err) => {
           this.loading = false;
-        } else {
-          this.firstOffset = res.pivot.start_offset;
-          this.lastOffset = res.pivot.end_offset;
-          this.totalCount = res.total_count;
-          this.results = this.markActive(res.results);
-          this.loading = false;
-          this.$nextTick(() => {
-            this.scrollToActive();
-            if (res.results.length < this.totalCount) {
-              this.infiniteScroll();
-            }
-          });
-          this.$forceUpdate();
-        }
-      });
+          this.error = err.message;
+        });
     },
     textSearch({ offset = 0, size, pivot }) {
       return new Promise((resolve) => {
         if (!this.passage.ready) {
           resolve(Promise.resolve(null));
+        } else if (this.query === '') {
+          resolve(Promise.resolve(null));
         } else {
-          const q = this.query.trim();
-          if (q === '') {
-            resolve(Promise.resolve(null));
-          } else {
-            const params = {
-              q,
-              size,
-              offset,
-              pivot,
-              text: this.passage.urn.upTo('version'),
-            };
-            resolve(sv.textSearch(params));
-          }
+          const params = {
+            q: this.query,
+            size,
+            offset,
+            pivot,
+            text: this.passage.urn.upTo('version'),
+          };
+          resolve(sv.textSearch(params));
         }
       });
     },
