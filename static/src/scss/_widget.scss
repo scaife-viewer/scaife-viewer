@@ -46,6 +46,7 @@
     background: $white;
   }
   div.body {
+    position: relative;
     margin: 0;
     &.fixed {
       max-height: 200px;

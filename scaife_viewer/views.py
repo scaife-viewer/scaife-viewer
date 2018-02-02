@@ -7,7 +7,7 @@ from django.views import View
 from . import cts
 from .cts.utils import natural_keys as nk
 from .reading.models import ReadingLog
-from .search import SearchQuery
+from .search import SearchQuery, es
 from .utils import apify, link_passage, encode_link_header
 
 
@@ -222,7 +222,8 @@ def search(request):
         text_group_urn = request.GET.get("tg")
         if text_group_urn:
             scope["text_group"] = text_group_urn
-        paginator = Paginator(SearchQuery(q, scope=scope), 10)
+        sq = SearchQuery(q, scope=scope, aggregate_field="text_group")
+        paginator = Paginator(sq, 10)
         ctx.update({
             "paginator": paginator,
             "page": paginator.page(page_num),
@@ -232,6 +233,9 @@ def search(request):
 
 def search_json(request):
     q = request.GET.get("q", "")
+    size = int(request.GET.get("size", "10"))
+    offset = int(request.GET.get("offset", "0"))
+    pivot = request.GET.get("pivot")
     data = {"results": []}
     if q:
         scope = {}
@@ -250,11 +254,23 @@ def search_json(request):
             "highlight_fragments": 0,
         }
         sq = SearchQuery(q, **query_kwargs)
+        if "text.urn" in scope and pivot:
+            for idx, doc in enumerate(sq.scan()):
+                if doc["_id"] == pivot:
+                    offset = max(0, idx - (size / 2))
+                    size = int(size / 2 - 1)
+                    data["pivot"] = {
+                        "offset": idx,
+                        "start_offset": offset,
+                        "end_offset": size - 1,
+                    }
+                    break
         data["total_count"] = sq.count()
-        for result in sq:
+        for result in sq.search_window(size=size, offset=offset):
             data["results"].append({
                 "passage": apify(result["passage"], with_content=False),
                 "content": result["content"],
                 "highlights": result["highlights"],
+                "i": result["sort_idx"],
             })
     return JsonResponse(data)

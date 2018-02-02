@@ -128,8 +128,8 @@ module.exports = {
     const metadata = await res.json();
     return { ...metadata, ...pagination };
   },
-  async textSearch({ q, ...scope }) {
-    const params = { q, ...scope };
+  async textSearch({ q, size, offset, ...scope }) {
+    const params = { q, size, offset, ...scope };
     const url = `/search/json/?${qs.stringify(params)}`;
     const res = await fetch(url);
     if (!res.ok) {

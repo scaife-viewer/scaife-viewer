@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 
 import regex
 from elasticsearch import Elasticsearch
+from elasticsearch.helpers import scan as scanner
 
 from . import cts
 
@@ -15,11 +16,12 @@ es = Elasticsearch(hosts=[settings.ELASTICSEARCH_URL])
 
 class SearchQuery:
 
-    def __init__(self, q, scope=None, sort_by=None, highlight_fragments=5):
+    def __init__(self, q, scope=None, sort_by=None, highlight_fragments=5, aggregate_field=None):
         self.q = q
         self.scope = {} if scope is None else scope
         self.sort_by = sort_by
         self.highlight_fragments = highlight_fragments
+        self.aggregate_field = aggregate_field
         self.total_count = None
 
     def query_index(self):
@@ -33,6 +35,20 @@ class SearchQuery:
             return {}
         if self.sort_by == "document":
             return {"sort": [{"sort_idx": "asc"}]}
+
+    def query_aggs(self):
+        if not self.aggregate_field:
+            return {}
+        return {
+            "aggs": {
+                f"filtered_{self.aggregate_field}": {
+                    "terms": {
+                        "field": self.aggregate_field,
+                        "size": 300,
+                    },
+                },
+            },
+        }
 
     def query(self):
         q = {}
@@ -67,14 +83,7 @@ class SearchQuery:
                     },
                 },
                 "query": self.query(),
-                "aggs": {
-                    "filtered_text_groups": {
-                        "terms": {
-                            "field": "text_group",
-                            "size": 300,
-                        },
-                    },
-                },
+                **self.query_aggs(),
             },
             "size": size,
             "from_": offset,
@@ -94,6 +103,16 @@ class SearchQuery:
                 **self.query_index()
             })["count"]
         return self.total_count
+
+    def scan(self):
+        return scanner(
+            es,
+            query={
+                **self.query_sort(),
+                "query": self.query(),
+            },
+            preserve_order=bool(self.sort_by),
+        )
 
     def __getitem__(self, key):
         if isinstance(key, slice):
@@ -118,12 +137,13 @@ class SearchResultSet:
             "passage": passage,
             "content": hit["highlight"]["content"],
             "highlights": extract_highlights(hit["highlight"]["content"][0]),
+            "sort_idx": hit["_source"]["sort_idx"],
             "link": reverse("reader", kwargs={"urn": link_urn}),
         }
 
     def filtered_text_groups(self):
         buckets = []
-        for bucket in self.response["aggregations"]["filtered_text_groups"]["buckets"]:
+        for bucket in self.response["aggregations"]["filtered_text_group"]["buckets"]:
             buckets.append({
                 "text_group": cts.collection(bucket["key"]),
                 "count": bucket["doc_count"],
