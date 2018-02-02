@@ -230,6 +230,7 @@ export default {
               this.previousPage().then(({ results }) => {
                 if (results.length > 0) {
                   this.$nextTick(() => {
+                    this.$refs.body.parentElement.scrollTop = first.offsetTop - 5;
                     first = this.$refs.items.querySelector('li.first');
                     observer.observe(first);
                   });

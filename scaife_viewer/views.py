@@ -257,15 +257,15 @@ def search_json(request):
         if "text.urn" in scope and pivot:
             urn = cts.URN(pivot)
             urn_start = f"{urn.upTo(cts.URN.NO_PASSAGE)}:{urn.reference.start}"
-            for idx, doc in enumerate(sq.scan()):
+            for doc_offset, doc in enumerate(sq.scan()):
                 if doc["_id"] == urn_start:
-                    offset = max(0, idx - (size / 2))
-                    size = int(size / 2 - 1)
+                    start_offset = max(0, doc_offset - (size // 2))
                     data["pivot"] = {
-                        "offset": idx,
-                        "start_offset": offset,
-                        "end_offset": size - 1,
+                        "offset": doc_offset,
+                        "start_offset": start_offset,
+                        "end_offset": start_offset + size - 1,
                     }
+                    offset = start_offset
                     break
         data["total_count"] = sq.count()
         for result in sq.search_window(size=size, offset=offset):
