@@ -273,6 +273,5 @@ def search_json(request):
                 "passage": apify(result["passage"], with_content=False),
                 "content": result["content"],
                 "highlights": result["highlights"],
-                "i": result["sort_idx"],
             })
     return JsonResponse(data)
