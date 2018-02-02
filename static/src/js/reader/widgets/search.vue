@@ -11,9 +11,10 @@
     </div>
     <div slot="body" ref="body">
       <div class="search-hits">
-        <div v-if="loading">loading</div>
+        <text-loader v-if="loading" size="7px" margin="1px" />
         <ul v-else ref="items">
-          <template v-for="(r, idx) in results">
+          <p v-if="results.length === 0"><small class="text-muted">Use text input above to find text in this version.</small></p>
+          <template v-else v-for="(r, idx) in results">
             <li :class="{ first: idx === 0, last: isLast(idx) }" :key="r.passage.urn">
               <router-link :to="toPassage(r.passage.urn)" :class="{ active : r.active }">{{ r.passage.refs.start.human_reference }}</router-link>
             </li>
@@ -29,6 +30,7 @@ import sv from '../../scaife-viewer';
 import store from '../../store';
 import widget from '../widget';
 import ReaderNavigationMixin from '../reader-navigation-mixin';
+import TextLoader from '../text-loader';
 
 const debounce = require('lodash.debounce');
 
@@ -101,34 +103,44 @@ export default {
         pivot: this.passage.urn.toString(),
       };
       return this.textSearch(opts).then((res) => {
-        this.firstOffset = res.pivot.start_offset;
-        this.lastOffset = res.pivot.end_offset;
-        this.totalCount = res.total_count;
-        this.results = this.markActive(res.results);
-        this.loading = false;
-        this.$nextTick(() => {
-          this.scrollToActive();
-          if (res.results.length < this.totalCount) {
-            this.infiniteScroll();
-          }
-        });
-        this.$forceUpdate();
+        if (!res) {
+          this.results = [];
+          this.loading = false;
+        } else {
+          this.firstOffset = res.pivot.start_offset;
+          this.lastOffset = res.pivot.end_offset;
+          this.totalCount = res.total_count;
+          this.results = this.markActive(res.results);
+          this.loading = false;
+          this.$nextTick(() => {
+            this.scrollToActive();
+            if (res.results.length < this.totalCount) {
+              this.infiniteScroll();
+            }
+          });
+          this.$forceUpdate();
+        }
       });
     },
     textSearch({ offset = 0, size, pivot }) {
       return new Promise((resolve) => {
         if (!this.passage.ready) {
-          resolve();
-          return;
+          resolve(Promise.resolve(null));
+        } else {
+          const q = this.query.trim();
+          if (q === '') {
+            resolve(Promise.resolve(null));
+          } else {
+            const params = {
+              q,
+              size,
+              offset,
+              pivot,
+              text: this.passage.urn.upTo('version'),
+            };
+            resolve(sv.textSearch(params));
+          }
         }
-        const params = {
-          q: this.query.trim(),
-          size,
-          offset,
-          pivot,
-          text: this.passage.urn.upTo('version'),
-        };
-        resolve(sv.textSearch(params));
       });
     },
     previousPage() {
@@ -154,7 +166,7 @@ export default {
         }
         const p = { size, offset };
         return this.textSearch(p)
-          .then(({ results }) => {
+          .then(({ res: { results } }) => {
             if (op === 'prepend') {
               this.results = this.markActive([...results, ...this.results]);
             } else if (op === 'append') {
@@ -264,6 +276,7 @@ export default {
   },
   components: {
     widget,
+    TextLoader,
   },
 };
 </script>
