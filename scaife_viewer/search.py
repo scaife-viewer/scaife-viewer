@@ -109,6 +109,7 @@ class SearchQuery:
             es,
             query={
                 **self.query_sort(),
+                "_source": False,
                 "query": self.query(),
             },
             preserve_order=bool(self.sort_by),
