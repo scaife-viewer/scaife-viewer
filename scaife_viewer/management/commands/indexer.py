@@ -4,10 +4,11 @@ from decimal import Decimal
 
 from django.core.management.base import BaseCommand
 
+from ...cloud import CloudJob
 from ...indexer import Indexer, DirectPusher, PubSubPusher
 
 
-class Command(BaseCommand):
+class IndexerCommand(BaseCommand):
 
     help = "Indexes passages in Elasticsearch"
 
@@ -40,6 +41,10 @@ class Command(BaseCommand):
             indexer.index()
         elapsed = timer.elapsed.quantize(Decimal("0.00"))
         print(f"Finished in {elapsed}s")
+
+
+class Command(CloudJob, IndexerCommand):
+    pass
 
 
 class Timer:

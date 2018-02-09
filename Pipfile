@@ -33,6 +33,7 @@ elasticsearch = ">=6.0.0"
 google-cloud-pubsub = "*"
 regex = "*"
 certifi = "*"
+requests = "*"
 
 
 [dev-packages]
