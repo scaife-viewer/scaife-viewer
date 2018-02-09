@@ -6,9 +6,26 @@ set -ex
 export CTS_RESOLVER=api
 mkdir -p /var/lib/nautilus/data
 python manage.py load_text_repos
+mkdir -p /var/lib/scaife-viewer/morphology
+curl \
+    --silent \
+    --retry-delay 1 \
+    --retry-max-time 30 \
+    https://storage.googleapis.com/scaife-indexer-us-central1/forms-normalised-20180208_001.txt > /var/lib/scaife-viewer/morphology/forms-normalised.txt
+curl \
+    --silent \
+    --retry-delay 1 \
+    --retry-max-time 30 \
+    https://storage.googleapis.com/scaife-indexer-us-central1/works-20180208_001.txt > /var/lib/scaife-viewer/morphology/works.txt
+curl \
+    --silent \
+    --retry-delay 1 \
+    --retry-max-time 30 \
+    https://storage.googleapis.com/scaife-indexer-us-central1/text-20180208_001.txt > /var/lib/scaife-viewer/morphology/text.txt
 
 export CTS_RESOLVER=local
 python manage.py indexer \
     --pusher=pubsub \
     --pubsub-project="${GCP_PROJECT}" \
     --pubsub-topic="search-indexer-${SCAIFE_INSTANCE}-documents"
+    $@
