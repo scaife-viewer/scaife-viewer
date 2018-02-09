@@ -21,6 +21,7 @@ class Command(BaseCommand):
         parser.add_argument("--pusher", type=str, default="direct")
         parser.add_argument("--pubsub-project")
         parser.add_argument("--pubsub-topic")
+        parser.add_argument("--morphology-path", type=str, default="")
 
     def handle(self, *args, **options):
         executor = concurrent.futures.ProcessPoolExecutor(max_workers=options["max_workers"])
@@ -29,7 +30,7 @@ class Command(BaseCommand):
         elif options["pusher"] == "pubsub":
             pusher = PubSubPusher(options["pubsub_project"], options["pubsub_topic"])
         indexer = Indexer(
-            executor, pusher,
+            executor, pusher, options["morphology_path"],
             urn_prefix=options["urn_prefix"],
             chunk_size=options["chunk_size"],
             limit=options["limit"],

@@ -81,7 +81,7 @@ class Passage:
         if reference:
             return Passage(self.text, reference)
 
-    def tokenize(self, words=True, puncutation=True, whitespace=True):
+    def tokenize(self, words=True, punctuation=True, whitespace=True):
         tokens = []
         idx = defaultdict(int)
         offset = 0
@@ -95,7 +95,7 @@ class Passage:
                     t = "w"
                 if p_re.match(w):
                     offset += wl
-                    if not puncutation:
+                    if not punctuation:
                         continue
                     t = "p"
                 if ws_re.match(w):

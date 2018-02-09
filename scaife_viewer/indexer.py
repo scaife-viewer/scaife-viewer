@@ -9,17 +9,19 @@ import elasticsearch.helpers
 from anytree.iterators import PreOrderIter
 
 from . import cts
+from .morphology import Morphology
 
 
 class Indexer:
 
-    def __init__(self, executor, pusher, urn_prefix=None, chunk_size=100, limit=None, dry_run=False):
+    def __init__(self, executor, pusher, morphology_path, urn_prefix=None, chunk_size=100, limit=None, dry_run=False):
         self.executor = executor
         self.pusher = pusher
         self.urn_prefix = urn_prefix
         self.chunk_size = chunk_size
         self.limit = limit
         self.dry_run = dry_run
+        self.morphology_path = morphology_path
 
     def index(self):
         cts.TextInventory.load()
@@ -79,6 +81,40 @@ class Indexer:
             if not self.dry_run:
                 self.pusher.push(doc)
 
+    def offset_iter(self, tokens):
+        i = 1
+        for token in tokens:
+            yield i, token
+            if token["t"] != "s":
+                i += 1
+
+    def lemma_content(self, passage):
+        if not self.morphology_path:
+            return ""
+        if not hasattr(self, "morphology"):
+            self.morphology = Morphology.load(self.morphology_path)
+        short_key = self.morphology.short_keys.get(str(passage.text.urn))
+        if short_key is None:
+            return ""
+        lemmas = []
+        missing = chr(0x2593)
+        for i, token in self.offset_iter(passage.tokenize()):
+            if token["t"] == "w":
+                text_key = (short_key, str(passage.reference), str(i))
+                form_key = self.morphology.text.get(text_key)
+                if form_key is None:
+                    lemmas.append(missing)
+                else:
+                    try:
+                        form = self.morphology.forms[int(form_key)]
+                    except IndexError:
+                        lemmas.append(missing)
+                    else:
+                        lemmas.append(form.lemma)
+            else:
+                lemmas.append(token["w"])
+        return "".join(lemmas)
+
     def passage_to_doc(self, passage, sort_idx):
         return {
             "urn": str(passage.urn),
@@ -91,7 +127,8 @@ class Indexer:
             },
             "reference": str(passage.reference),
             "sort_idx": sort_idx,
-            "content": passage.content,  # CPU intensive
+            "lemma_content": self.lemma_content(passage),
+            "content": passage.content,
         }
 
     def __getstate__(self):
