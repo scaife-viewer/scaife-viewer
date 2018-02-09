@@ -27,5 +27,5 @@ export CTS_RESOLVER=local
 python manage.py indexer \
     --pusher=pubsub \
     --pubsub-project="${GCP_PROJECT}" \
-    --pubsub-topic="search-indexer-${SCAIFE_INSTANCE}-documents"
+    --pubsub-topic="search-indexer-${SCAIFE_INSTANCE}-documents" \
     $@
