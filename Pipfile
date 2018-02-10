@@ -34,6 +34,7 @@ google-cloud-pubsub = "*"
 regex = "*"
 certifi = "*"
 requests = "*"
+dask = {extras = ["bag"]}
 
 
 [dev-packages]

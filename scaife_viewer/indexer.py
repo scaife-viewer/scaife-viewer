@@ -4,6 +4,7 @@ from itertools import chain, islice, zip_longest
 from operator import attrgetter
 from typing import Iterable
 
+import dask.bag
 import elasticsearch
 import elasticsearch.helpers
 from anytree.iterators import PreOrderIter
@@ -14,8 +15,7 @@ from .morphology import Morphology
 
 class Indexer:
 
-    def __init__(self, executor, pusher, morphology_path, urn_prefix=None, chunk_size=100, limit=None, dry_run=False):
-        self.executor = executor
+    def __init__(self, pusher, morphology_path, urn_prefix=None, chunk_size=100, limit=None, dry_run=False):
         self.pusher = pusher
         self.urn_prefix = urn_prefix
         self.chunk_size = chunk_size
@@ -28,19 +28,14 @@ class Indexer:
         print("Text inventory loaded")
         if self.urn_prefix:
             print(f"Applying URN prefix filter: {self.urn_prefix}")
-        with self.executor as executor:
-            passages = chain.from_iterable(
-                executor.map(
-                    self.passages_from_text,
-                    self.texts(),
-                    chunksize=100,
-                )
-            )
-            if self.limit is not None:
-                passages = islice(passages, self.limit)
-            passages = list(passages)
-            print(f"Indexing {len(passages)} passages")
-            consume(executor.map(self.indexer, chunker(passages, self.chunk_size), chunksize=10))
+        passages = chain.from_iterable(
+            dask.bag.from_sequence(self.texts()).map(self.passages_from_text)
+        )
+        if self.limit is not None:
+            passages = islice(passages, self.limit)
+        passages = list(passages)
+        print(f"Indexing {len(passages)} passages")
+        dask.bag.from_sequence(passages).map_partitions(self.indexer).compute()
 
     def texts(self):
         ti = cts.text_inventory()
@@ -130,15 +125,6 @@ class Indexer:
             "lemma_content": self.lemma_content(passage),
             "content": passage.content,
         }
-
-    def __getstate__(self):
-        state = self.__dict__.copy()
-        del state["executor"]
-        return state
-
-    def __setstate__(self, state):
-        self.__dict__.update(state)
-        self.executor = None
 
 
 def consume(it):

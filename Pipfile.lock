@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "6b0d904ab8ad556831c15a2f97b06fef69fd5d51b57adcab08573b2ab9d9527a"
+            "sha256": "41045e479d841e5ac11b38ef20a093b8eb5abe54d5d794236de29f92c7cb741e"
         },
         "host-environment-markers": {
             "implementation_name": "cpython",
@@ -59,6 +59,20 @@
                 "sha256:84ab92ed1c4d4f16916e05906b6b75a6c0fb5db821cc65e70cbd64a3e2a5eaae"
             ],
             "version": "==3.0.4"
+        },
+        "cloudpickle": {
+            "hashes": [
+                "sha256:604c1cb39c2043ba44f017444dd89b7f82541701dfa8a64f5ae72e6346755c0b",
+                "sha256:b0e63dd89ed5285171a570186751bc9b84493675e99e12789e9a5dc5490ef554"
+            ],
+            "version": "==0.5.2"
+        },
+        "dask": {
+            "hashes": [
+                "sha256:55e8a3fac79f33136f628f48157b2cb43a742142670e50708082d5c61bc48394",
+                "sha256:4d2b0754d16ddc3f87026c1fc4fa3b589d7604a41d3f6510268f172abc1d0a5e"
+            ],
+            "version": "==0.17.0"
         },
         "dj-database-url": {
             "hashes": [
@@ -203,6 +217,12 @@
             ],
             "version": "==2.0.2"
         },
+        "locket": {
+            "hashes": [
+                "sha256:1fee63c1153db602b50154684f5725564e63a0f6d09366a1cb13dffcec179fb4"
+            ],
+            "version": "==0.2.0"
+        },
         "lxml": {
             "hashes": [
                 "sha256:41f59cbdab232f11680d5d4dec9f2e6782fd24d78e37ee833447702e34e675f4",
@@ -246,6 +266,13 @@
             "editable": true,
             "git": "https://github.com/opentracing/opentracing-python.git",
             "ref": "dcb39259562a5b6357a300d94d44c70b86d54620"
+        },
+        "partd": {
+            "hashes": [
+                "sha256:041ef0bd589e2d803b6ff6ac2b559adadcaf40a161a8eeb5a367d5e0f399ac1e",
+                "sha256:67291f1c4827cde3e0148b3be5d69af64b6d6169feb9ba88f0a6cfe77089400f"
+            ],
+            "version": "==0.3.8"
         },
         "pinax-eventlog": {
             "hashes": [
@@ -453,6 +480,12 @@
                 "sha256:70e8a77beed4562e7f14fe23a786b54f6296e34344c23bc42f07b15018ff98e9"
             ],
             "version": "==1.11.0"
+        },
+        "toolz": {
+            "hashes": [
+                "sha256:929f0a7ea7f61c178bd951bdae93920515d3fbdbafc8e6caf82d752b9b3b31c9"
+            ],
+            "version": "==0.9.0"
         },
         "urllib3": {
             "hashes": [

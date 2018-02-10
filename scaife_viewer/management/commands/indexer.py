@@ -1,4 +1,3 @@
-import concurrent.futures
 import time
 from decimal import Decimal
 
@@ -25,13 +24,13 @@ class IndexerCommand(BaseCommand):
         parser.add_argument("--morphology-path", type=str, default="")
 
     def handle(self, *args, **options):
-        executor = concurrent.futures.ProcessPoolExecutor(max_workers=options["max_workers"])
+        # executor = concurrent.futures.ProcessPoolExecutor(max_workers=options["max_workers"])
         if options["pusher"] == "direct":
             pusher = DirectPusher()
         elif options["pusher"] == "pubsub":
             pusher = PubSubPusher(options["pubsub_project"], options["pubsub_topic"])
         indexer = Indexer(
-            executor, pusher, options["morphology_path"],
+            pusher, options["morphology_path"],
             urn_prefix=options["urn_prefix"],
             chunk_size=options["chunk_size"],
             limit=options["limit"],
