@@ -1,6 +1,6 @@
 import json
 from collections import deque
-from itertools import chain, islice, zip_longest
+from itertools import zip_longest
 from operator import attrgetter
 from typing import Iterable
 
@@ -13,6 +13,9 @@ from . import cts
 from .morphology import Morphology
 
 
+morphology = None
+
+
 class Indexer:
 
     def __init__(self, pusher, morphology_path, urn_prefix=None, chunk_size=100, limit=None, dry_run=False):
@@ -21,19 +24,24 @@ class Indexer:
         self.chunk_size = chunk_size
         self.limit = limit
         self.dry_run = dry_run
-        self.morphology_path = morphology_path
+        self.load_morphology(morphology_path)
+
+    def load_morphology(self, path):
+        global morphology
+        if path and morphology is None:
+            morphology = Morphology.load(path)
 
     def index(self):
         cts.TextInventory.load()
         print("Text inventory loaded")
         if self.urn_prefix:
             print(f"Applying URN prefix filter: {self.urn_prefix}")
-        passages = chain.from_iterable(
-            dask.bag.from_sequence(self.texts()).map(self.passages_from_text)
-        )
+        texts = dask.bag.from_sequence(list(self.texts()))
+        passages = texts.map(self.passages_from_text).flatten()
         if self.limit is not None:
-            passages = islice(passages, self.limit)
-        passages = list(passages)
+            passages = passages.take(self.limit, npartitions=-1)
+        else:
+            passages = passages.compute()
         print(f"Indexing {len(passages)} passages")
         dask.bag.from_sequence(passages).map_partitions(self.indexer).compute()
 
@@ -84,11 +92,9 @@ class Indexer:
                 i += 1
 
     def lemma_content(self, passage):
-        if not self.morphology_path:
+        if morphology is None:
             return ""
-        if not hasattr(self, "morphology"):
-            self.morphology = Morphology.load(self.morphology_path)
-        short_key = self.morphology.short_keys.get(str(passage.text.urn))
+        short_key = morphology.short_keys.get(str(passage.text.urn))
         if short_key is None:
             return ""
         lemmas = []
@@ -96,12 +102,12 @@ class Indexer:
         for i, token in self.offset_iter(passage.tokenize()):
             if token["t"] == "w":
                 text_key = (short_key, str(passage.reference), str(i))
-                form_key = self.morphology.text.get(text_key)
+                form_key = morphology.text.get(text_key)
                 if form_key is None:
                     lemmas.append(missing)
                 else:
                     try:
-                        form = self.morphology.forms[int(form_key)]
+                        form = morphology.forms[int(form_key)]
                     except IndexError:
                         lemmas.append(missing)
                     else:

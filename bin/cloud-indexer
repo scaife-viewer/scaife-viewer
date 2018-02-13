@@ -11,16 +11,19 @@ curl \
     --silent \
     --retry-delay 1 \
     --retry-max-time 30 \
+    --compressed \
     https://storage.googleapis.com/scaife-indexer-us-central1/forms-normalised-20180208_001.txt > /var/lib/scaife-viewer/morphology/forms-normalised.txt
 curl \
     --silent \
     --retry-delay 1 \
     --retry-max-time 30 \
+    --compressed \
     https://storage.googleapis.com/scaife-indexer-us-central1/works-20180208_001.txt > /var/lib/scaife-viewer/morphology/works.txt
 curl \
     --silent \
     --retry-delay 1 \
     --retry-max-time 30 \
+    --compressed \
     https://storage.googleapis.com/scaife-indexer-us-central1/text-20180208_001.txt > /var/lib/scaife-viewer/morphology/text.txt
 
 export CTS_RESOLVER=local

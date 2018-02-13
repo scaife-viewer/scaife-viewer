@@ -36,8 +36,7 @@
         },
         "basictracer": {
             "editable": true,
-            "git": "https://github.com/opentracing/basictracer-python.git",
-            "ref": "7cd6fa73bb467a3b75db76fc3f23f07d745d1198"
+            "git": "https://github.com/opentracing/basictracer-python.git"
         },
         "cachetools": {
             "hashes": [
@@ -130,10 +129,10 @@
         },
         "google-auth": {
             "hashes": [
-                "sha256:5e634dfc326745738703862ed54beaefa96d0cc616ecff1b3d688a98c0473ed2",
-                "sha256:79d0413c38aaa6a52b44d2ad62e7ef5a816912b897d1536ef95ee5526aa08634"
+                "sha256:34088434cb2a2409360b8f3cbc04195a465df1fb2aafad71ebbded77cbf08803",
+                "sha256:9051802d3dae256036cca9e34633a32c0ed1427730d4ebc513dff91ec8b6dd45"
             ],
-            "version": "==1.4.0"
+            "version": "==1.4.1"
         },
         "google-cloud-pubsub": {
             "hashes": [
@@ -264,8 +263,7 @@
         },
         "opentracing": {
             "editable": true,
-            "git": "https://github.com/opentracing/opentracing-python.git",
-            "ref": "dcb39259562a5b6357a300d94d44c70b86d54620"
+            "git": "https://github.com/opentracing/opentracing-python.git"
         },
         "partd": {
             "hashes": [
@@ -518,11 +516,11 @@
         },
         "isort": {
             "hashes": [
-                "sha256:75e94757591197eb0afeb1f3b54f6517c1a26fecaeab2b373885739f63de3e66",
-                "sha256:77502c541ad5c40a158932498bf6177bb663d8a2662b50f02a59b906419ba699",
-                "sha256:34929af733faadf884da29d83e7df1884363b3cc647a48e000b3c5cc13d17549"
+                "sha256:ec9ef8f4a9bc6f71eec99e1806bfa2de401650d996c59330782b89a5555c1497",
+                "sha256:1153601da39a25b14ddc54955dbbacbb6b2d19135386699e2ad58517953b34af",
+                "sha256:b9c40e9750f3d77e6e4d441d8b0266cf555e7cdabdcff33c4fd06366ca761ef8"
             ],
-            "version": "==4.3.3"
+            "version": "==4.3.4"
         },
         "mccabe": {
             "hashes": [
