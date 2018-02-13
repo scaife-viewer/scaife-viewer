@@ -212,17 +212,24 @@ def search(request):
         page_num = int(request.GET.get("p", 1))
     except ValueError:
         page_num = 1
+    kind = request.GET.get("kind", "form")
     results = []
     ctx = {
         "q": q,
         "results": results,
+        "kind": kind,
     }
     if q:
         scope = {}
         text_group_urn = request.GET.get("tg")
         if text_group_urn:
             scope["text_group"] = text_group_urn
-        sq = SearchQuery(q, scope=scope, aggregate_field="text_group")
+        kwargs = {
+            "scope": scope,
+            "aggregate_field": "text_group",
+            "kind": kind,
+        }
+        sq = SearchQuery(q, **kwargs)
         paginator = Paginator(sq, 10)
         ctx.update({
             "paginator": paginator,
@@ -251,7 +258,7 @@ def search_json(request):
         query_kwargs = {
             "scope": scope,
             "sort_by": "document",
-            "highlight_fragments": 0,
+            "kind": request.GET.get("kind", "form"),
         }
         sq = SearchQuery(q, **query_kwargs)
         if "text.urn" in scope and pivot:
@@ -272,6 +279,6 @@ def search_json(request):
             data["results"].append({
                 "passage": apify(result["passage"], with_content=False),
                 "content": result["content"],
-                "highlights": result["highlights"],
+                "highlights": [dict(w=w, i=i) for w, i in result["highlights"]],
             })
     return JsonResponse(data)

@@ -176,7 +176,7 @@ class Passage:
         if with_content:
             o.update({
                 "text_html": str(self.render()),
-                "word_tokens": self.tokenize(puncutation=False, whitespace=False),
+                "word_tokens": self.tokenize(punctuation=False, whitespace=False),
             })
         return o
 

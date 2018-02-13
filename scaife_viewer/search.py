@@ -1,4 +1,5 @@
 from collections import defaultdict
+from itertools import tee
 from operator import itemgetter
 
 from django.conf import settings
@@ -10,18 +11,17 @@ from elasticsearch.helpers import scan as scanner
 
 from . import cts
 
-
 es = Elasticsearch(hosts=[settings.ELASTICSEARCH_URL])
 
 
 class SearchQuery:
 
-    def __init__(self, q, scope=None, sort_by=None, highlight_fragments=5, aggregate_field=None):
+    def __init__(self, q, scope=None, sort_by=None, aggregate_field=None, kind="form"):
         self.q = q
         self.scope = {} if scope is None else scope
         self.sort_by = sort_by
-        self.highlight_fragments = highlight_fragments
         self.aggregate_field = aggregate_field
+        self.kind = kind
         self.total_count = None
 
     def query_index(self):
@@ -52,10 +52,14 @@ class SearchQuery:
 
     def query(self):
         q = {}
+        if self.kind == "lemma":
+            fields = ["lemma_content"]
+        else:
+            fields = ["content"]
         sq = {
             "simple_query_string": {
                 "query": self.q,
-                "fields": ["content"],
+                "fields": fields,
                 "default_operator": "and",
             }
         }
@@ -70,18 +74,24 @@ class SearchQuery:
             q = {**sq}
         return q
 
+    def query_highlight(self):
+        if self.kind == "lemma":
+            fields = {"lemma_content": {}}
+        else:
+            fields = {"content": {}}
+        return {
+            "highlight": {
+                "type": "fvh",
+                "number_of_fragments": 0,
+                "fields": fields,
+            }
+        }
+
     def search_kwargs(self, size=10, offset=0):
         return {
             "body": {
                 **self.query_sort(),
-                "highlight": {
-                    "fields": {
-                        "content": {
-                            "type": "fvh",
-                            "number_of_fragments": self.highlight_fragments,
-                        },
-                    },
-                },
+                **self.query_highlight(),
                 "query": self.query(),
                 **self.query_aggs(),
             },
@@ -134,10 +144,15 @@ class SearchResultSet:
     def result(self, hit):
         passage = cts.passage(hit["_id"])
         link_urn = passage.urn  # @@@ consider dynamically chunking and giving a better passage URN
+        highlighter = Highlighter(
+            passage,
+            hit["highlight"].get("content", [""])[0],
+            hit["highlight"].get("lemma_content", [""])[0],
+        )
         return {
             "passage": passage,
-            "content": hit["highlight"]["content"],
-            "highlights": extract_highlights(hit["highlight"]["content"][0]),
+            "content": [highlighter.content()],
+            "highlights": highlighter.tokens(),
             "sort_idx": hit["_source"]["sort_idx"],
             "link": reverse("reader", kwargs={"urn": link_urn}),
         }
@@ -152,26 +167,47 @@ class SearchResultSet:
         return sorted(buckets, key=itemgetter("count"), reverse=True)
 
 
-w = r"(?:<em>)?\w[-\w]*(?:</em>)?"
+w = fr"(?:<em>)?\w[-\w]*|{chr(0x2593)}(?:</em>)?"
 p = r"\p{P}+"
 ws = r"[\p{Z}\s]+"
 token_re = regex.compile(fr"{w}|{p}|{ws}")
 w_re = regex.compile(w)
 
 
-def extract_highlights(content):
-    tokens = []
-    idx = defaultdict(int)
-    for w in token_re.findall(content):
-        if w:
-            highlighted = False
-            if w_re.match(w):
-                highlighted = "<em>" in w
-                if highlighted:
-                    w = regex.sub(r"</?em>", "", w)
-            wl = len(w)
-            for wk in (w[i:j + 1] for i in range(wl) for j in range(i, wl)):
-                idx[wk] += 1
-            if highlighted:
-                tokens.append({"w": w, "i": idx[w]})
-    return tokens
+class Highlighter:
+
+    def __init__(self, passage, *highlights):
+        self.passage = passage
+        self.highlights = highlights
+
+    def tokens(self):
+        if not hasattr(self, "_tokens"):
+            acc = set()
+            idx = defaultdict(int)
+            sit = iter(tee(iter(token_re.findall(self.passage.content)), len(self.highlights)))
+            for content in self.highlights:
+                it = zip(token_re.findall(content), next(sit))
+                for hw, sw in it:
+                    if hw:
+                        wl = len(sw)
+                        highlighted = False
+                        if w_re.match(hw):
+                            highlighted = "<em>" in hw
+                        for wk in (sw[i:j + 1] for i in range(wl) for j in range(i, wl)):
+                            idx[wk] += 1
+                        if highlighted:
+                            acc.add((sw, idx[sw]))
+            self._tokens = acc
+        return self._tokens
+
+    def content(self):
+        if not hasattr(self, "_tokens"):
+            acc = []
+            highlighted_tokens = self.tokens()
+            for token in self.passage.tokenize():
+                if (token["w"], token["i"]) in highlighted_tokens:
+                    acc.extend(["<em>", token["w"], "</em>"])
+                else:
+                    acc.append(token["w"])
+            self._content = "".join(acc)
+        return self._content
