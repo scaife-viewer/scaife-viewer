@@ -107,7 +107,7 @@ class Indexer:
                     lemmas.append(missing)
                 else:
                     try:
-                        form = morphology.forms[int(form_key)]
+                        form = morphology.forms[int(form_key) - 1]
                     except IndexError:
                         lemmas.append(missing)
                     else:
