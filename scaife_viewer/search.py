@@ -151,7 +151,7 @@ class SearchResultSet:
         )
         return {
             "passage": passage,
-            "content": [highlighter.content()],
+            "content": highlighter.fragments(),
             "highlights": highlighter.tokens(),
             "sort_idx": hit["_source"]["sort_idx"],
             "link": reverse("reader", kwargs={"urn": link_urn}),
@@ -211,3 +211,16 @@ class Highlighter:
                     acc.append(token["w"])
             self._content = "".join(acc)
         return self._content
+
+    def fragments(self, context=5):
+        content = self.content()
+        L = content.split(" ")
+        acc = []
+        for i, w in enumerate(L):
+            fragment = []
+            if regex.match(r"</?em>", w):
+                fragment.extend(L[max(0, i - context):i])
+                fragment.append(w)
+                fragment.extend(L[i + 1:i + context + 1])
+                acc.append(" ".join(fragment))
+        return acc
