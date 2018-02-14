@@ -105,7 +105,8 @@ class Indexer:
         text = morphology.text.get((short_key, str(passage.reference)))
         if text is None:
             return ""
-        for form_key in text:
+        for form_keys in text.values():
+            form_key = form_keys[0]
             form = morphology.forms[int(form_key) - 1]
             giuseppe.append((form.form, form.lemma))
         missing = chr(0xfffd)
