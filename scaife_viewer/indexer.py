@@ -124,7 +124,7 @@ class Indexer:
             "reference": str(passage.reference),
             "sort_idx": sort_idx,
             "lemma_content": self.lemma_content(passage),
-            "content": passage.content,
+            "content": " ".join([t["w"] for t in passage.tokenize(whitespace=False)]),
         }
 
 
