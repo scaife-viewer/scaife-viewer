@@ -27,6 +27,7 @@ class CloudJob:
                 super().handle(*args, **kwargs)
             except Exception:
                 self.update_metadata(status="failed")
+                raise
             else:
                 self.update_metadata(status="done")
         else:
