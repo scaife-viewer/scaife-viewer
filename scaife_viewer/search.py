@@ -187,7 +187,6 @@ class Highlighter:
                 self.highlights.split(" "),
                 [(t["w"], t["i"]) for t in self.passage.tokenize(whitespace=False)]
             )
-            print(it)
             for hw, (sw, si) in it:
                 if hw:
                     if w_re.match(hw):
@@ -200,7 +199,6 @@ class Highlighter:
         if not hasattr(self, "_content"):
             acc = []
             highlighted_tokens = self.tokens()
-            print(self.passage.urn, highlighted_tokens)
             for token in self.passage.tokenize():
                 if (token["w"], token["i"]) in highlighted_tokens:
                     acc.extend(["<em>", token["w"], "</em>"])
