@@ -253,5 +253,5 @@ def align_text(a, b):
     for x, y in result:
         if y is None:
             yield None
-        else:
+        elif x:
             yield y[1]

@@ -144,10 +144,11 @@ class SearchResultSet:
     def result(self, hit):
         passage = cts.passage(hit["_id"])
         link_urn = passage.urn  # @@@ consider dynamically chunking and giving a better passage URN
+        content_highlights = hit["highlight"].get("content", [""])[0]
+        lemma_highlights = hit["highlight"].get("lemma_content", [""])[0]
         highlighter = Highlighter(
             passage,
-            hit["highlight"].get("content", [""])[0],
-            hit["highlight"].get("lemma_content", [""])[0],
+            content_highlights if content_highlights else lemma_highlights,
         )
         return {
             "passage": passage,
@@ -175,39 +176,31 @@ w_re = regex.compile(w)
 
 class Highlighter:
 
-    def __init__(self, passage, *highlights):
+    def __init__(self, passage, highlights):
         self.passage = passage
         self.highlights = highlights
 
     def tokens(self):
         if not hasattr(self, "_tokens"):
             acc = set()
-            idx = defaultdict(int)
-            sit = iter(
-                tee(
-                    iter([t["w"] for t in self.passage.tokenize(whitespace=False)]),
-                    len(self.highlights)
-                )
+            it = zip(
+                self.highlights.split(" "),
+                [(t["w"], t["i"]) for t in self.passage.tokenize(whitespace=False)]
             )
-            for content in self.highlights:
-                it = zip(token_re.findall(content), next(sit))
-                for hw, sw in it:
-                    if hw:
-                        wl = len(sw)
-                        highlighted = False
-                        if w_re.match(hw):
-                            highlighted = "<em>" in hw
-                        for wk in (sw[i:j + 1] for i in range(wl) for j in range(i, wl)):
-                            idx[wk] += 1
-                        if highlighted:
-                            acc.add((sw, idx[sw]))
+            print(it)
+            for hw, (sw, si) in it:
+                if hw:
+                    if w_re.match(hw):
+                        if "<em>" in hw:
+                            acc.add((sw, si))
             self._tokens = acc
         return self._tokens
 
     def content(self):
-        if not hasattr(self, "_tokens"):
+        if not hasattr(self, "_content"):
             acc = []
             highlighted_tokens = self.tokens()
+            print(self.passage.urn, highlighted_tokens)
             for token in self.passage.tokenize():
                 if (token["w"], token["i"]) in highlighted_tokens:
                     acc.extend(["<em>", token["w"], "</em>"])
