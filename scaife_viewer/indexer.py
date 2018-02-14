@@ -12,7 +12,6 @@ from anytree.iterators import PreOrderIter
 from . import cts
 from .morphology import Morphology
 
-
 morphology = None
 
 
@@ -30,14 +29,25 @@ class Indexer:
         global morphology
         if path and morphology is None:
             morphology = Morphology.load(path)
+            print("Morphology loaded")
 
     def index(self):
         cts.TextInventory.load()
         print("Text inventory loaded")
         if self.urn_prefix:
-            print(f"Applying URN prefix filter: {self.urn_prefix}")
-        texts = dask.bag.from_sequence(list(self.texts()))
+            urn_prefix = cts.URN(self.urn_prefix)
+            print(f"Applying URN prefix filter: {urn_prefix.upTo(cts.URN.NO_PASSAGE)}")
+        else:
+            urn_prefix = None
+        texts = dask.bag.from_sequence(
+            self.texts(
+                urn_prefix.upTo(cts.URN.NO_PASSAGE) if urn_prefix else None
+            )
+        )
         passages = texts.map(self.passages_from_text).flatten()
+        if urn_prefix and urn_prefix.reference:
+            print(f"Applying URN reference filter: {urn_prefix.reference}")
+            passages = passages.filter(lambda p: p["urn"] == str(urn_prefix))
         if self.limit is not None:
             passages = passages.take(self.limit, npartitions=-1)
         else:
@@ -45,12 +55,12 @@ class Indexer:
         print(f"Indexing {len(passages)} passages")
         dask.bag.from_sequence(passages).map_partitions(self.indexer).compute()
 
-    def texts(self):
+    def texts(self, urn_prefix):
         ti = cts.text_inventory()
         for text_group in ti.text_groups():
             for work in text_group.works():
                 for text in work.texts():
-                    if self.urn_prefix and not str(text.urn).startswith(self.urn_prefix):
+                    if urn_prefix and not str(text.urn).startswith(urn_prefix):
                         continue
                     yield text
 
@@ -84,37 +94,22 @@ class Indexer:
             if not self.dry_run:
                 self.pusher.push(doc)
 
-    def offset_iter(self, tokens):
-        i = 1
-        for token in tokens:
-            yield i, token
-            if token["t"] != "s":
-                i += 1
-
-    def lemma_content(self, passage):
+    def lemma_content(self, passage) -> str:
         if morphology is None:
             return ""
         short_key = morphology.short_keys.get(str(passage.text.urn))
         if short_key is None:
             return ""
-        lemmas = []
-        missing = chr(0x2593)
-        for i, token in self.offset_iter(passage.tokenize()):
-            if token["t"] == "w":
-                text_key = (short_key, str(passage.reference), str(i))
-                form_key = morphology.text.get(text_key)
-                if form_key is None:
-                    lemmas.append(missing)
-                else:
-                    try:
-                        form = morphology.forms[int(form_key) - 1]
-                    except IndexError:
-                        lemmas.append(missing)
-                    else:
-                        lemmas.append(form.lemma)
-            else:
-                lemmas.append(token["w"])
-        return "".join(lemmas)
+        thibault = [t["w"] for t in passage.tokenize(whitespace=False)]
+        giuseppe = []
+        for form_key in morphology.text.get((short_key, str(passage.reference))):
+            form = morphology.forms[int(form_key) - 1]
+            giuseppe.append((form.form, form.lemma))
+        missing = chr(0xfffd)
+        return " ".join([
+            {None: missing}.get(w, w)
+            for w in align_text(thibault, giuseppe)
+        ])
 
     def passage_to_doc(self, passage, sort_idx):
         return {
@@ -208,3 +203,51 @@ class PubSubPusher:
         if "_publisher" in s:
             del s["_publisher"]
         return s
+
+
+def nw_align(a, b, replace_func=lambda x, y: -1 if x != y else 0, insert=-1, delete=-1):
+    ZERO, LEFT, UP, DIAGONAL = 0, 1, 2, 3
+    len_a, len_b = len(a), len(b)
+    matrix = [[(0, ZERO) for x in range(len_b + 1)] for y in range(len_a + 1)]
+    for i in range(len_a + 1):
+        matrix[i][0] = (insert * i, UP)
+    for j in range(len_b + 1):
+        matrix[0][j] = (delete * j, LEFT)
+    for i in range(1, len_a + 1):
+        for j in range(1, len_b + 1):
+            replace = replace_func(a[i - 1], b[j - 1])
+            matrix[i][j] = max([
+                (matrix[i - 1][j - 1][0] + replace, DIAGONAL),
+                (matrix[i][j - 1][0] + insert, LEFT),
+                (matrix[i - 1][j][0] + delete, UP)
+            ])
+    i, j = len_a, len_b
+    alignment = []
+    while (i, j) != (0, 0):
+        if matrix[i][j][1] == DIAGONAL:
+            alignment.insert(0, (a[i - 1], b[j - 1]))
+            i -= 1
+            j -= 1
+        elif matrix[i][j][1] == LEFT:
+            alignment.insert(0, (None, b[j - 1]))
+            j -= 1
+        else:  # UP
+            alignment.insert(0, (a[i - 1], None))
+            i -= 1
+    return alignment
+
+
+def replace_func(a, b):
+    if a == b[0]:
+        return 0
+    else:
+        return -1
+
+
+def align_text(a, b):
+    result = nw_align(a, b, replace_func=replace_func)
+    for x, y in result:
+        if y is None:
+            yield None
+        else:
+            yield y[1]

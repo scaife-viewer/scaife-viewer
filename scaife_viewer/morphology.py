@@ -1,9 +1,9 @@
 import os
-from collections import namedtuple
+from collections import namedtuple, defaultdict
 
 
 Form = namedtuple("Form", ["form", "code", "lemma"])
-TextKey = namedtuple("TextKey", ["short_key", "ref", "n"])
+TextKey = namedtuple("TextKey", ["short_key", "ref"])
 
 
 class Morphology:
@@ -20,11 +20,11 @@ class Morphology:
             for line in f:
                 form, _, code, lemma = line.strip().split("\t")
                 forms.append(Form(form, code, lemma))
-        text = {}
+        text = defaultdict(list)
         with open(os.path.join(root_dir, "text.txt")) as f:
             for line in f:
                 short_key, ref, n, form_key = line.strip().split("\t")
-                text[TextKey(short_key, ref, n)] = form_key
+                text[TextKey(short_key, ref)].append(form_key)
         return cls(short_keys, forms, text)
 
     def __init__(self, short_keys, forms, text):

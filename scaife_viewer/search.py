@@ -167,10 +167,9 @@ class SearchResultSet:
         return sorted(buckets, key=itemgetter("count"), reverse=True)
 
 
-w = fr"(?:<em>)?\w[-\w]*|{chr(0x2593)}(?:</em>)?"
+w = fr"(?:<em>)?(?:\w[-\w]*|{chr(0xfffd)})(?:</em>)?"
 p = r"\p{P}+"
-ws = r"[\p{Z}\s]+"
-token_re = regex.compile(fr"{w}|{p}|{ws}")
+token_re = regex.compile(fr"{w}|{p}")  # no ws needed to align with lemmas
 w_re = regex.compile(w)
 
 
@@ -184,7 +183,12 @@ class Highlighter:
         if not hasattr(self, "_tokens"):
             acc = set()
             idx = defaultdict(int)
-            sit = iter(tee(iter(token_re.findall(self.passage.content)), len(self.highlights)))
+            sit = iter(
+                tee(
+                    iter([t["w"] for t in self.passage.tokenize(whitespace=False)]),
+                    len(self.highlights)
+                )
+            )
             for content in self.highlights:
                 it = zip(token_re.findall(content), next(sit))
                 for hw, sw in it:
