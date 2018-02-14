@@ -102,7 +102,10 @@ class Indexer:
             return ""
         thibault = [t["w"] for t in passage.tokenize(whitespace=False)]
         giuseppe = []
-        for form_key in morphology.text.get((short_key, str(passage.reference))):
+        text = morphology.text.get((short_key, str(passage.reference)))
+        if text is None:
+            return ""
+        for form_key in text:
             form = morphology.forms[int(form_key) - 1]
             giuseppe.append((form.form, form.lemma))
         missing = chr(0xfffd)
