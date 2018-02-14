@@ -8,7 +8,7 @@
       <div class="search-input">
         <input v-model="query" type="text" class="form-control form-control-sm" />
         <input type="radio" id="kind-form" name="kind" value="form" v-model="queryKind"><label for="kind-form">Form</label>
-        <input type="radio" id="kind-lemma" name="kind" value="lemma" v-model="queryKind"><label for="kind-lemma">Lemma <small>(currently Greek only)</small></label>
+        <input type="radio" id="kind-lemma" name="kind" value="lemma" v-model="queryKind"><label for="kind-lemma">Lemma (Greek only)</label>
       </div>
     </div>
     <div slot="body" ref="body">
