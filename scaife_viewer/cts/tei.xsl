@@ -198,7 +198,7 @@
     <xsl:element name="text-part">
       <xsl:attribute name="class">
         <xsl:value-of select="@subtype" />
-        <xsl:if test="count(descendant::t:div[@type='textpart']|descendant::t:l)=0"> leaf o</xsl:if>
+        <xsl:if test="count(descendant::t:div[@type='textpart']|descendant::t:l[not(parent::t:quote)])=0"> leaf o</xsl:if>
       </xsl:attribute>
       <xsl:if test="@n">
         <xsl:attribute name="reference">

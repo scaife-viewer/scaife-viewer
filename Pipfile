@@ -19,7 +19,7 @@ pinax-theme-bootstrap = "*"
 mycapytain = "*"
 gunicorn = "*"
 whitenoise = "*"
-"psycopg2" = "*"
+"psycopg2" = "<2.7.4"
 dj-database-url = "*"
 raven = "*"
 python-mimeparse = "*"
@@ -33,6 +33,8 @@ elasticsearch = ">=6.0.0"
 google-cloud-pubsub = "*"
 regex = "*"
 certifi = "*"
+requests = "*"
+dask = {extras = ["bag"]}
 
 
 [dev-packages]

@@ -30,5 +30,7 @@ RUN set -x \
             | sort -u \
             | awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
         )" \
-    && apk --no-cache add $runDeps
+    && apk --no-cache add \
+        $runDeps \
+        curl
 COPY . /opt/scaife-viewer/src/

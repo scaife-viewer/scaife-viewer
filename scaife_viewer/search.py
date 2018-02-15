@@ -1,4 +1,3 @@
-from collections import defaultdict
 from operator import itemgetter
 
 from django.conf import settings
@@ -10,18 +9,17 @@ from elasticsearch.helpers import scan as scanner
 
 from . import cts
 
-
 es = Elasticsearch(hosts=[settings.ELASTICSEARCH_URL])
 
 
 class SearchQuery:
 
-    def __init__(self, q, scope=None, sort_by=None, highlight_fragments=5, aggregate_field=None):
+    def __init__(self, q, scope=None, sort_by=None, aggregate_field=None, kind="form"):
         self.q = q
         self.scope = {} if scope is None else scope
         self.sort_by = sort_by
-        self.highlight_fragments = highlight_fragments
         self.aggregate_field = aggregate_field
+        self.kind = kind
         self.total_count = None
 
     def query_index(self):
@@ -52,10 +50,14 @@ class SearchQuery:
 
     def query(self):
         q = {}
+        if self.kind == "lemma":
+            fields = ["lemma_content"]
+        else:
+            fields = ["content"]
         sq = {
             "simple_query_string": {
                 "query": self.q,
-                "fields": ["content"],
+                "fields": fields,
                 "default_operator": "and",
             }
         }
@@ -70,18 +72,24 @@ class SearchQuery:
             q = {**sq}
         return q
 
+    def query_highlight(self):
+        if self.kind == "lemma":
+            fields = {"lemma_content": {}}
+        else:
+            fields = {"content": {}}
+        return {
+            "highlight": {
+                "type": "fvh",
+                "number_of_fragments": 0,
+                "fields": fields,
+            }
+        }
+
     def search_kwargs(self, size=10, offset=0):
         return {
             "body": {
                 **self.query_sort(),
-                "highlight": {
-                    "fields": {
-                        "content": {
-                            "type": "fvh",
-                            "number_of_fragments": self.highlight_fragments,
-                        },
-                    },
-                },
+                **self.query_highlight(),
                 "query": self.query(),
                 **self.query_aggs(),
             },
@@ -132,15 +140,7 @@ class SearchResultSet:
             yield self.result(hit)
 
     def result(self, hit):
-        passage = cts.passage(hit["_id"])
-        link_urn = passage.urn  # @@@ consider dynamically chunking and giving a better passage URN
-        return {
-            "passage": passage,
-            "content": hit["highlight"]["content"],
-            "highlights": extract_highlights(hit["highlight"]["content"][0]),
-            "sort_idx": hit["_source"]["sort_idx"],
-            "link": reverse("reader", kwargs={"urn": link_urn}),
-        }
+        return SearchResult(hit)
 
     def filtered_text_groups(self):
         buckets = []
@@ -152,26 +152,85 @@ class SearchResultSet:
         return sorted(buckets, key=itemgetter("count"), reverse=True)
 
 
-w = r"(?:<em>)?\w[-\w]*(?:</em>)?"
-p = r"\p{P}+"
-ws = r"[\p{Z}\s]+"
-token_re = regex.compile(fr"{w}|{p}|{ws}")
-w_re = regex.compile(w)
+class SearchResult:
+
+    def __init__(self, hit):
+        self.hit = hit
+        self.passage = cts.passage(hit["_id"])
+        self.link_urn = self.passage.urn  # @@@ consider dynamically chunking and giving a better passage URN
+        self.content_highlights = hit["highlight"].get("content", [""])[0]
+        self.lemma_highlights = hit["highlight"].get("lemma_content", [""])[0]
+        self.highlighter = Highlighter(
+            self.passage,
+            self.content_highlights if self.content_highlights else self.lemma_highlights,
+        )
+        self.sort_idx = hit["_source"]["sort_idx"]
+
+    def __getitem__(self, key):
+        missing = object()
+        value = getattr(self, key, missing)
+        if value is missing:
+            raise KeyError(key)
+        return value
+
+    @property
+    def content(self):
+        return self.highlighter.fragments()
+
+    @property
+    def highlights(self):
+        return self.highlighter.tokens()
+
+    @property
+    def link(self):
+        return reverse("reader", kwargs={"urn": self.link_urn})
 
 
-def extract_highlights(content):
-    tokens = []
-    idx = defaultdict(int)
-    for w in token_re.findall(content):
-        if w:
-            highlighted = False
-            if w_re.match(w):
-                highlighted = "<em>" in w
-                if highlighted:
-                    w = regex.sub(r"</?em>", "", w)
-            wl = len(w)
-            for wk in (w[i:j + 1] for i in range(wl) for j in range(i, wl)):
-                idx[wk] += 1
-            if highlighted:
-                tokens.append({"w": w, "i": idx[w]})
-    return tokens
+w_re = regex.compile(fr"(?:<em>)?(?:\w[-\w]*|{chr(0xfffd)})(?:</em>)?")
+
+
+class Highlighter:
+
+    def __init__(self, passage, highlights):
+        self.passage = passage
+        self.highlights = highlights
+
+    def tokens(self):
+        if not hasattr(self, "_tokens"):
+            acc = set()
+            it = zip(
+                self.highlights.split(" "),
+                [(t["w"], t["i"]) for t in self.passage.tokenize(whitespace=False)]
+            )
+            for hw, (sw, si) in it:
+                if hw:
+                    if w_re.match(hw):
+                        if "<em>" in hw:
+                            acc.add((sw, si))
+            self._tokens = acc
+        return self._tokens
+
+    def content(self):
+        if not hasattr(self, "_content"):
+            acc = []
+            highlighted_tokens = self.tokens()
+            for token in self.passage.tokenize():
+                if (token["w"], token["i"]) in highlighted_tokens:
+                    acc.extend(["<em>", token["w"], "</em>"])
+                else:
+                    acc.append(token["w"])
+            self._content = "".join(acc)
+        return self._content
+
+    def fragments(self, context=5):
+        content = self.content()
+        L = content.split(" ")
+        acc = []
+        for i, w in enumerate(L):
+            fragment = []
+            if regex.match(r"</?em>", w):
+                fragment.extend(L[max(0, i - context):i])
+                fragment.append(w)
+                fragment.extend(L[i + 1:i + context + 1])
+                acc.append(" ".join(fragment))
+        return acc

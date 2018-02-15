@@ -27,7 +27,7 @@ Setup the database:
 
 Seed the text inventory to speed up local development:
 
-    curl -s "https://perseus-cts.eu1.eldarioncloud.com/api/cts?request=GetCapabilities" > ti.xml
+    curl -s "https://perseus-cts-dev.eu1.eldarioncloud.com/api/cts?request=GetCapabilities" > ti.xml
 
 You should now be set to run the development server:
 

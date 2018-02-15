@@ -7,6 +7,8 @@
     <div slot="sticky">
       <div class="search-input">
         <input v-model="query" type="text" class="form-control form-control-sm" />
+        <input type="radio" id="kind-form" name="kind" value="form" v-model="queryKind"><label for="kind-form">Form</label>
+        <input type="radio" id="kind-lemma" name="kind" value="lemma" v-model="queryKind"><label for="kind-lemma">Lemma (Greek only)</label>
       </div>
     </div>
     <div slot="body" ref="body">
@@ -57,12 +59,16 @@ export default {
       }
     },
     query: 'updateSearch',
+    queryKind: 'updateSearch',
     activeResults: 'updateHighlights',
   },
   created() {
     this.chunkSize = 200;
     if (this.$store.state.route.query.q) {
       this.query = this.$store.state.route.query.q;
+    }
+    if (this.$store.state.route.query.qk) {
+      this.queryKind = this.$store.state.route.query.qk;
     }
     if (this.query !== '') {
       this.initialTextSearch();
@@ -71,6 +77,7 @@ export default {
   data() {
     return {
       q: '',
+      queryKind: 'form',
       totalCount: null,
       results: [],
       loading: false,
@@ -101,7 +108,11 @@ export default {
             this.$router.push({
               name: 'reader',
               params: this.$store.state.route.params,
-              query: { ...this.$store.state.route.query, q: this.query },
+              query: {
+                ...this.$store.state.route.query,
+                q: this.query,
+                qk: this.queryKind,
+              },
             });
           });
       },
@@ -153,9 +164,11 @@ export default {
         } else {
           const params = {
             q: this.query,
+            kind: this.queryKind,
             size,
             offset,
             pivot,
+            fields: '',
             text: this.passage.urn.upTo('version'),
           };
           resolve(sv.textSearch(params));
@@ -217,11 +230,21 @@ export default {
     },
     updateHighlights() {
       this.$store.commit('reader/clearAnnotation', { key: 'highlighted' });
-      this.activeResults.forEach(({ highlights }) => {
-        this.$store.commit('reader/setAnnotations', {
-          tokens: highlights.map(({ w, i }) => `${w}[${i}]`),
-          key: 'highlighted',
-          value: true,
+      this.activeResults.forEach(({ passage }) => {
+        const params = {
+          q: this.query,
+          kind: this.queryKind,
+          fields: 'highlights',
+          passage: passage.urn,
+          size: 1,
+        };
+        sv.textSearch(params).then(({ results }) => {
+          const { highlights } = results[0];
+          this.$store.commit('reader/setAnnotations', {
+            tokens: highlights.map(({ w, i }) => `${w}[${i}]`),
+            key: 'highlighted',
+            value: true,
+          });
         });
       });
     },
