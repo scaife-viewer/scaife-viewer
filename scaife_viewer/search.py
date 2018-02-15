@@ -1,5 +1,3 @@
-from collections import defaultdict
-from itertools import tee
 from operator import itemgetter
 
 from django.conf import settings
