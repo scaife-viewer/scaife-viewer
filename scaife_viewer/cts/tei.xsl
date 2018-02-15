@@ -240,7 +240,11 @@
   </xsl:template>
 
   <xsl:template match="t:pb">
-    <div class='pb'><xsl:value-of select="@n"/></div>
+    <div class="pb"><xsl:value-of select="@n"/></div>
+  </xsl:template>
+
+  <xsl:template match="t:milestone">
+    <div class="milestone"><xsl:value-of select="@n"/></div>
   </xsl:template>
 
   <xsl:template match="t:p">
@@ -297,6 +301,17 @@
     </span>
   </xsl:template>
 
+  <xsl:template match="t:bibl">
+    <xsl:element name="cite">
+      <xsl:if test="@n">
+        <xsl:attribute name="data-ref">
+          <xsl:value-of select="@n" />
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:value-of select="." />
+    </xsl:element>
+  </xsl:template>
+
   <xsl:template match="t:gap">
     <span class="gap">
       <xsl:choose>
@@ -304,7 +319,7 @@
           <xsl:value-of select="string(@quantity)" />
         </xsl:when>
         <xsl:otherwise>
-          <xsl:text>---</xsl:text>
+          <xsl:text>⋯</xsl:text>
         </xsl:otherwise>
       </xsl:choose>
 
