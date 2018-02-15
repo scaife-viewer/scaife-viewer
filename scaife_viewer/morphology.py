@@ -1,4 +1,5 @@
 import os
+import unicodedata
 from collections import namedtuple, defaultdict
 
 
@@ -19,6 +20,8 @@ class Morphology:
         with open(os.path.join(root_dir, "forms-normalised.txt")) as f:
             for line in f:
                 form, _, code, lemma = line.strip().split("\t")
+                form = unicodedata.normalize("NFC", form)
+                lemma = unicodedata.normalize("NFC", lemma)
                 forms.append(Form(form, code, lemma))
         text = defaultdict(dict)
         with open(os.path.join(root_dir, "text.txt")) as f:

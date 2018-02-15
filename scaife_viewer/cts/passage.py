@@ -1,4 +1,5 @@
 import os
+import unicodedata
 from collections import defaultdict
 from functools import lru_cache
 
@@ -69,7 +70,8 @@ class Passage:
 
     @property
     def content(self):
-        return self.textual_node().export(Mimetypes.PLAINTEXT)
+        text = self.textual_node().export(Mimetypes.PLAINTEXT)
+        return unicodedata.normalize("NFC", text)
 
     def next(self):
         reference = self.textual_node().nextId
