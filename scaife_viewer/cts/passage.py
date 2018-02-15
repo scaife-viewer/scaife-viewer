@@ -219,7 +219,7 @@ class TEIRenderer:
         v = "".join(value)
         for token in token_re.findall(v):
             if token:
-                ts.append(token)
+                ts.append(unicodedata.normalize("NFC", token))
         return ts
 
     def token_type(self, context, value):
