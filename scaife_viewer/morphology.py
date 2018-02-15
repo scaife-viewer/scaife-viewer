@@ -22,6 +22,9 @@ class Morphology:
                 form, _, code, lemma = line.strip().split("\t")
                 form = unicodedata.normalize("NFC", form)
                 lemma = unicodedata.normalize("NFC", lemma)
+                if form in {"νυνδὴ", "νυνδή"}:
+                    code = "d---------"
+                    lemma = "νυνδί"
                 forms.append(Form(form, code, lemma))
         text = defaultdict(dict)
         with open(os.path.join(root_dir, "text.txt")) as f:
