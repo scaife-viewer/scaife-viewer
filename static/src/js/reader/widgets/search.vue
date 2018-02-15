@@ -168,6 +168,7 @@ export default {
             size,
             offset,
             pivot,
+            fields: '',
             text: this.passage.urn.upTo('version'),
           };
           resolve(sv.textSearch(params));
@@ -229,11 +230,21 @@ export default {
     },
     updateHighlights() {
       this.$store.commit('reader/clearAnnotation', { key: 'highlighted' });
-      this.activeResults.forEach(({ highlights }) => {
-        this.$store.commit('reader/setAnnotations', {
-          tokens: highlights.map(({ w, i }) => `${w}[${i}]`),
-          key: 'highlighted',
-          value: true,
+      this.activeResults.forEach(({ passage }) => {
+        const params = {
+          q: this.query,
+          kind: this.queryKind,
+          fields: 'highlights',
+          passage: passage.urn,
+          size: 1,
+        };
+        sv.textSearch(params).then(({ results }) => {
+          const { highlights } = results[0];
+          this.$store.commit('reader/setAnnotations', {
+            tokens: highlights.map(({ w, i }) => `${w}[${i}]`),
+            key: 'highlighted',
+            value: true,
+          });
         });
       });
     },

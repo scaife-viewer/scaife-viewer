@@ -140,21 +140,7 @@ class SearchResultSet:
             yield self.result(hit)
 
     def result(self, hit):
-        passage = cts.passage(hit["_id"])
-        link_urn = passage.urn  # @@@ consider dynamically chunking and giving a better passage URN
-        content_highlights = hit["highlight"].get("content", [""])[0]
-        lemma_highlights = hit["highlight"].get("lemma_content", [""])[0]
-        highlighter = Highlighter(
-            passage,
-            content_highlights if content_highlights else lemma_highlights,
-        )
-        return {
-            "passage": passage,
-            "content": highlighter.fragments(),
-            "highlights": highlighter.tokens(),
-            "sort_idx": hit["_source"]["sort_idx"],
-            "link": reverse("reader", kwargs={"urn": link_urn}),
-        }
+        return SearchResult(hit)
 
     def filtered_text_groups(self):
         buckets = []
@@ -164,6 +150,40 @@ class SearchResultSet:
                 "count": bucket["doc_count"],
             })
         return sorted(buckets, key=itemgetter("count"), reverse=True)
+
+
+class SearchResult:
+
+    def __init__(self, hit):
+        self.hit = hit
+        self.passage = cts.passage(hit["_id"])
+        self.link_urn = self.passage.urn  # @@@ consider dynamically chunking and giving a better passage URN
+        self.content_highlights = hit["highlight"].get("content", [""])[0]
+        self.lemma_highlights = hit["highlight"].get("lemma_content", [""])[0]
+        self.highlighter = Highlighter(
+            self.passage,
+            self.content_highlights if self.content_highlights else self.lemma_highlights,
+        )
+        self.sort_idx = hit["_source"]["sort_idx"]
+
+    def __getitem__(self, key):
+        missing = object()
+        value = getattr(self, key, missing)
+        if value is missing:
+            raise KeyError(key)
+        return value
+
+    @property
+    def content(self):
+        return self.highlighter.fragments()
+
+    @property
+    def highlights(self):
+        return self.highlighter.tokens()
+
+    @property
+    def link(self):
+        return reverse("reader", kwargs={"urn": self.link_urn})
 
 
 w = fr"(?:<em>)?(?:\w[-\w]*|{chr(0xfffd)})(?:</em>)?"

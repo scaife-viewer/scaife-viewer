@@ -247,14 +247,17 @@ def search_json(request):
     if q:
         scope = {}
         text_group_urn = request.GET.get("text_group")
+        work_urn = request.GET.get("work")
+        text_urn = request.GET.get("text")
+        passage_urn = request.GET.get("passage")
         if text_group_urn:
             scope["text_group"] = text_group_urn
-        work_urn = request.GET.get("work")
-        if work_urn:
+        elif work_urn:
             scope["work"] = work_urn
-        text_urn = request.GET.get("text")
-        if text_urn:
+        elif text_urn:
             scope["text.urn"] = text_urn
+        elif passage_urn:
+            scope["urn"] = passage_urn
         query_kwargs = {
             "scope": scope,
             "sort_by": "document",
@@ -275,10 +278,17 @@ def search_json(request):
                     offset = start_offset
                     break
         data["total_count"] = sq.count()
+        fields = set(request.GET.get("fields", "content,highlights").split(","))
         for result in sq.search_window(size=size, offset=offset):
-            data["results"].append({
+            r = {
                 "passage": apify(result["passage"], with_content=False),
-                "content": result["content"],
-                "highlights": [dict(w=w, i=i) for w, i in result["highlights"]],
-            })
+            }
+            if "content" in fields:
+                r["content"] = result["content"]
+            if "highlights" in fields:
+                r["highlights"] = [
+                    dict(w=w, i=i)
+                    for w, i in result["highlights"]
+                ]
+            data["results"].append(r)
     return JsonResponse(data)
