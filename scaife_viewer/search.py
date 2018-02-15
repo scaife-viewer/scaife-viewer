@@ -186,10 +186,7 @@ class SearchResult:
         return reverse("reader", kwargs={"urn": self.link_urn})
 
 
-w = fr"(?:<em>)?(?:\w[-\w]*|{chr(0xfffd)})(?:</em>)?"
-p = r"\p{P}+"
-token_re = regex.compile(fr"{w}|{p}")  # no ws needed to align with lemmas
-w_re = regex.compile(w)
+w_re = regex.compile(fr"(?:<em>)?(?:\w[-\w]*|{chr(0xfffd)})(?:</em>)?")
 
 
 class Highlighter:
