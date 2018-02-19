@@ -10,7 +10,7 @@ module.exports = {
     allTextGroups: null,
     allTextGroupWorks: null,
     allTextGroupTexts: null,
-    sortKind: 'cts-urn',
+    sortKind: 'text-group',
     works: [],
     allWorks: null,
     toc: [],

@@ -28,8 +28,8 @@
         </div>
         <div class="sort">
           sort by:
-          <span @click="sort('cts-urn')" :class="{ active: sortKind === 'cts-urn' }">CTS URN</span> |
           <span @click="sort('text-group')" :class="{ active: sortKind === 'text-group' }">text group</span> |
+          <span @click="sort('cts-urn')" :class="{ active: sortKind === 'cts-urn' }">CTS URN</span> |
           <span @click="sort('work')" :class="{ active: sortKind === 'work' }">work</span>
         </div>
       </div>
