@@ -1,14 +1,16 @@
 from django.core.paginator import Paginator
 from django.http import Http404, JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render
+from django.utils.decorators import method_decorator
 from django.utils.safestring import mark_safe
 from django.views import View
+from django.views.decorators.cache import cache_page
 
 from . import cts
 from .cts.utils import natural_keys as nk
 from .reading.models import ReadingLog
 from .search import SearchQuery, es
-from .utils import apify, link_passage, encode_link_header
+from .utils import apify, encode_link_header, link_passage
 
 
 def home(request):
@@ -31,6 +33,7 @@ class BaseLibraryView(View):
         return to_response()
 
 
+@method_decorator(cache_page(3600), name="dispatch")
 class LibraryView(BaseLibraryView):
 
     def as_html(self):
@@ -55,6 +58,7 @@ class LibraryView(BaseLibraryView):
         return JsonResponse(payload)
 
 
+@method_decorator(cache_page(3600), name="dispatch")
 class LibraryCollectionView(BaseLibraryView):
 
     def validate_urn(self):
@@ -78,6 +82,7 @@ class LibraryCollectionView(BaseLibraryView):
         return JsonResponse(apify(collection))
 
 
+@method_decorator(cache_page(3600), name="dispatch")
 class LibraryCollectionVectorView(View):
 
     def get(self, request, urn):
@@ -92,6 +97,7 @@ class LibraryCollectionVectorView(View):
         return JsonResponse(payload)
 
 
+@method_decorator(cache_page(3600), name="dispatch")
 class LibraryPassageView(View):
 
     def get(self, request, urn):
