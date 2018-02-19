@@ -37,6 +37,7 @@
     "jquery": "^3.2.1",
     "jsdom": "^11.2.0",
     "jsdom-global": "^3.0.2",
+    "loaders.css": "^0.1.2",
     "lodash.debounce": "^4.0.8",
     "mocha": "^3.5.0",
     "node-sass": "^4.5.3",

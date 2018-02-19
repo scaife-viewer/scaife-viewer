@@ -15,8 +15,10 @@
       </div>
     </div>
     <template v-if="loading">
-      <div class="text-center">
-        <i class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
+      <div class="ball-pulse partial-loader">
+        <div></div>
+        <div></div>
+        <div></div>
       </div>
     </template>
     <table v-else class="table">
