@@ -73,6 +73,17 @@ module.exports = {
     passage(state) {
       return state.leftPassage;
     },
+    selectedWords(state) {
+      const words = [];
+      const { annotations, annotationChange } = state;
+      annotations.forEach((o, token) => {
+        if (o.selected) {
+          const [, w, i] = /^([^[]+)(?:\[(\d+)\])?$/.exec(token);
+          words.push({ w, i });
+        }
+      });
+      return words;
+    },
   },
   mutations: {
     setTextMode(state, { mode }) {
