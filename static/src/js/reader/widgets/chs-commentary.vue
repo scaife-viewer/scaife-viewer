@@ -1,15 +1,15 @@
 <template>
-  <widget class="word-list" v-if="show">
+  <widget class="chs-commentary" v-if="show">
     <span slot="header">CHS Commentary</span>
     <div slot="body">
       <p v-if="!comments || comments.length === 0">
         No comments found.
       </p>
       <div v-else>
-        <div v-for="comment in comments" :key="comment._id">
+        <div v-for="comment in comments" :key="comment._id" class="comment">
           <h6>{{ comment.latestRevision.title }}</h6>
-          <b>{{ comment.commenters[0].name }}</b>
-          <div v-html="comment.latestRevision.text"></div>
+          <div class="commenter-name">{{ comment.commenters[0].name }}</div>
+          <div class="comment-text" v-html="comment.latestRevision.text"></div>
         </div>
       </div>
     </div>

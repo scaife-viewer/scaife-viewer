@@ -225,3 +225,24 @@
     }
   }
 }
+
+.widget.chs-commentary {
+  div.body {
+    font-size: 12px;
+    font-family: 'Noto Serif';
+    color: $gray-700;
+  }
+  .comment {
+    margin: 2em 0;
+    h6 {
+      margin-bottom: 0;
+    }
+    .commenter-name {
+      font-weight: bold;
+    }
+    .comment-text p {
+      margin-top: 1em;
+      margin-bottom: 0;
+    }
+  }
+}
