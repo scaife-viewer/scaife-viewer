@@ -34,7 +34,7 @@ export default {
     fetchData() {
       const word = this.selectedWord;
       if (word) {
-        const url = `http://services.perseids.org/bsp/morphologyservice/analysis/word?word=${word.w}&lang=grc&engine=morpheusgrc`;
+        const url = `/morpheus?word=${word.w}`;
         const headers = new Headers({
           Accept: 'application/json',
         });

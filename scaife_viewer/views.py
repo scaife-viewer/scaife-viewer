@@ -1,14 +1,18 @@
+from urllib.parse import urlencode
+
 from django.core.paginator import Paginator
 from django.http import Http404, JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render
 from django.utils.safestring import mark_safe
 from django.views import View
+
+import requests
 
 from . import cts
 from .cts.utils import natural_keys as nk
 from .reading.models import ReadingLog
 from .search import SearchQuery, es
-from .utils import apify, link_passage, encode_link_header
+from .utils import apify, encode_link_header, link_passage
 
 
 def home(request):
@@ -291,4 +295,24 @@ def search_json(request):
                     for w, i in result["highlights"]
                 ]
             data["results"].append(r)
+    return JsonResponse(data)
+
+
+def morpheus(request):
+    if "word" not in request.GET:
+        raise Http404()
+    word = request.GET["word"]
+    params = {
+        "word": word,
+        "lang": "grc",
+        "engine": "morpheusgrc",
+    }
+    qs = urlencode(params)
+    url = f"http://services.perseids.org/bsp/morphologyservice/analysis/word?{qs}"
+    headers = {
+        "Accept": "application/json",
+    }
+    r = requests.get(url, headers=headers)
+    r.raise_for_status()
+    data = r.json()
     return JsonResponse(data)

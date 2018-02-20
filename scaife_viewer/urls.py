@@ -9,11 +9,12 @@ from .views import (
     LibraryPassageView,
     LibraryView,
     home,
+    library_text_redirect,
+    morpheus,
     profile,
     reader,
     search,
-    search_json,
-    library_text_redirect,
+    search_json
 )
 
 urlpatterns = [
@@ -31,6 +32,7 @@ urlpatterns = [
     url(r"^profile/$", profile, name="profile"),
     url(r"^search/$", search, name="search"),
     url(r"^search/json/$", search_json, name="search_json"),
+    url(r"^morpheus/", morpheus, name="morpheus"),
     url(r"^reading/", include("scaife_viewer.reading.urls")),
 ]
 
