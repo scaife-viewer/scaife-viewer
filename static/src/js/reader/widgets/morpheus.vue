@@ -34,7 +34,7 @@ export default {
     fetchData() {
       const word = this.selectedWord;
       if (word) {
-        const url = `/morpheus?word=${word.w}`;
+        const url = `/morpheus/?word=${word.w}`;
         const headers = new Headers({
           Accept: 'application/json',
         });
