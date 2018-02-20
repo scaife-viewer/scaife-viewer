@@ -9,7 +9,7 @@ from django.views.decorators.cache import cache_page
 from . import cts
 from .cts.utils import natural_keys as nk
 from .reading.models import ReadingLog
-from .search import SearchQuery, es
+from .search import SearchQuery
 from .utils import apify, encode_link_header, link_passage
 
 
