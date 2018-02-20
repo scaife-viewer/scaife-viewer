@@ -90,6 +90,7 @@
           <widget-highlight />
           <widget-token-list />
           <widget-dv-word-list />
+          <widget-chs-commentary />
         </div>
       </div>
     </template>
@@ -113,6 +114,7 @@ import WidgetTextMode from './widgets/text-mode';
 import WidgetTextSize from './widgets/text-size';
 import WidgetDvWordList from './widgets/dv-word-list';
 import WidgetTokenList from './widgets/dm-token-list';
+import WidgetChsCommentary from './widgets/chs-commentary';
 
 const widgets = {
   WidgetPassageAncestors,
@@ -125,6 +127,7 @@ const widgets = {
   WidgetHighlight,
   WidgetDvWordList,
   WidgetTokenList,
+  WidgetChsCommentary,
 };
 
 export default {
