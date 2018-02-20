@@ -3,8 +3,10 @@ from urllib.parse import urlencode
 from django.core.paginator import Paginator
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
+from django.utils.decorators import method_decorator
 from django.utils.safestring import mark_safe
 from django.views import View
+from django.views.decorators.cache import cache_page
 
 import requests
 
@@ -35,29 +37,23 @@ class BaseLibraryView(View):
         return to_response()
 
 
+@method_decorator(cache_page(3600), name="dispatch")
 class LibraryView(BaseLibraryView):
-
-    def get_text_groups(self):
-        return cts.text_inventory().text_groups()
 
     def as_html(self):
         return render(self.request, "library/index.html", {})
 
     def as_json(self):
         all_text_groups = cts.text_inventory().text_groups()
-
         text_groups = []
         works = []
         texts = []
-
         for text_group in all_text_groups:
             for work in text_group.works():
                 works.append(work)
                 for text in work.texts():
                     texts.append(text)
             text_groups.append(text_group)
-
-        text_groups = self.get_text_groups()
         payload = {
             "text_groups": [apify(text_group) for text_group in text_groups],
             "works": [apify(work) for work in works],
@@ -66,6 +62,7 @@ class LibraryView(BaseLibraryView):
         return JsonResponse(payload)
 
 
+@method_decorator(cache_page(3600), name="dispatch")
 class LibraryCollectionView(BaseLibraryView):
 
     def validate_urn(self):
@@ -89,6 +86,7 @@ class LibraryCollectionView(BaseLibraryView):
         return JsonResponse(apify(collection))
 
 
+@method_decorator(cache_page(3600), name="dispatch")
 class LibraryCollectionVectorView(View):
 
     def get(self, request, urn):
@@ -103,6 +101,7 @@ class LibraryCollectionVectorView(View):
         return JsonResponse(payload)
 
 
+@method_decorator(cache_page(3600), name="dispatch")
 class LibraryPassageView(View):
 
     def get(self, request, urn):

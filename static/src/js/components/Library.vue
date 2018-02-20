@@ -1,8 +1,16 @@
 <template>
   <div class="library-component">
     <template v-if="loading">
-      <div class="text-center">
-        <i class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
+      <div class="ball-grid-pulse page-loader">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
       </div>
     </template>
     <template v-else>
@@ -28,8 +36,8 @@
         </div>
         <div class="sort">
           sort by:
-          <span @click="sort('cts-urn')" :class="{ active: sortKind === 'cts-urn' }">CTS URN</span> |
           <span @click="sort('text-group')" :class="{ active: sortKind === 'text-group' }">text group</span> |
+          <span @click="sort('cts-urn')" :class="{ active: sortKind === 'cts-urn' }">CTS URN</span> |
           <span @click="sort('work')" :class="{ active: sortKind === 'work' }">work</span>
         </div>
       </div>
