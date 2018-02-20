@@ -232,12 +232,18 @@
     font-family: 'Noto Serif';
     color: $gray-700;
   }
+  p.no-comment {
+    margin: 0 0 0 22px;
+    color: $gray-600;
+  }
   .comment {
     margin: 2em 0;
     h6 {
       margin-bottom: 0;
+      font-weight: normal;
     }
     .commenter-name {
+      color: $gray-600;
       font-weight: bold;
     }
     .comment-text p {

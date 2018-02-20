@@ -2,7 +2,7 @@
   <widget class="chs-commentary" v-if="show">
     <span slot="header">CHS Commentary</span>
     <div slot="body">
-      <p v-if="!comments || comments.length === 0">
+      <p class="no-comment" v-if="!comments || comments.length === 0">
         No comments found.
       </p>
       <div v-else>
