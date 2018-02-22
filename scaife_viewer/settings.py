@@ -150,6 +150,7 @@ INSTALLED_APPS = [
     "pinax.eventlog",
     "pinax.webanalytics",
     "raven.contrib.django.raven_compat",
+    "oidc_provider",
 
     # project
     "scaife_viewer",
@@ -204,6 +205,8 @@ LANGUAGES = [
     ("it", "italiano"),
 ]
 
+SESSION_COOKIE_NAME = "sv-sessionid"
+
 ACCOUNT_OPEN_SIGNUP = True
 ACCOUNT_EMAIL_UNIQUE = True
 ACCOUNT_EMAIL_CONFIRMATION_REQUIRED = False
@@ -216,6 +219,8 @@ ACCOUNT_LANGUAGES = LANGUAGES
 AUTHENTICATION_BACKENDS = [
     "account.auth_backends.UsernameAuthenticationBackend",
 ]
+
+LOGIN_URL = "account_login"
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SECURE_SSL_REDIRECT = bool(int(os.environ.get("SECURE_SSL_REDIRECT", "0")))
