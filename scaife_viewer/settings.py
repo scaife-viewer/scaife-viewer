@@ -222,6 +222,8 @@ AUTHENTICATION_BACKENDS = [
 
 LOGIN_URL = "account_login"
 
+OIDC_USERINFO = "scaife_viewer.oidc.userinfo"
+
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SECURE_SSL_REDIRECT = bool(int(os.environ.get("SECURE_SSL_REDIRECT", "0")))
 
