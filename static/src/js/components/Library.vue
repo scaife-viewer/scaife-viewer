@@ -13,6 +13,7 @@
         <div></div>
       </div>
     </template>
+    <div v-else-if="error" class="text-center"><b>Error</b>: {{ error }}</div>
     <template v-else>
       <div class="form-group">
         <div class="input-group">
@@ -72,16 +73,22 @@ export default {
   store,
   created() {
     this.loading = true;
-    this.$store.dispatch('loadTextGroupList').then(() => {
-      this.loading = false;
-      this.$nextTick(() => {
-        this.$refs['filter-input'].focus();
+    this.$store.dispatch('loadTextGroupList')
+      .then(() => {
+        this.loading = false;
+        this.$nextTick(() => {
+          this.$refs['filter-input'].focus();
+        });
+      })
+      .catch((err) => {
+        this.loading = false;
+        this.error = err.message;
       });
-    });
   },
   data() {
     return {
       loading: false,
+      error: '',
       query: '',
       filtered: false,
     };

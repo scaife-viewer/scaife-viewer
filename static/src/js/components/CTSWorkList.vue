@@ -1,19 +1,5 @@
 <template>
   <div class="work-list">
-    <div class="form-group">
-      <div class="input-group">
-        <input
-          type="text"
-          class="form-control"
-          v-model="query"
-          placeholder="Find a work..."
-          ref="filter-input"
-        >
-        <span class="input-group-addon" v-if="filtered">
-          <i class="fa fa-times" @click="clearQuery"></i>
-        </span>
-      </div>
-    </div>
     <template v-if="loading">
       <div class="ball-pulse partial-loader">
         <div></div>
@@ -21,7 +7,22 @@
         <div></div>
       </div>
     </template>
+    <div v-else-if="error" class="text-center"><b>Error</b>: {{ error }}</div>
     <div v-else>
+      <div class="form-group">
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control"
+            v-model="query"
+            placeholder="Find a work..."
+            ref="filter-input"
+          >
+          <span class="input-group-addon" v-if="filtered">
+            <i class="fa fa-times" @click="clearQuery"></i>
+          </span>
+        </div>
+      </div>
       <div class="work" v-for="work in works" :key="work.url">
         <h2><a :href="work.url"><b>{{ work.label }}</b></a></h2>
         <div class="card-deck">
@@ -52,14 +53,22 @@ export default {
   props: ['textGroupUrl'],
   created() {
     this.loading = true;
-    this.$store.dispatch('loadWorkList', this.textGroupUrl).then(() => {
-      this.$refs['filter-input'].focus();
-      this.loading = false;
-    });
+    this.$store.dispatch('loadWorkList', this.textGroupUrl)
+      .then(() => {
+        this.loading = false;
+        this.$nextTick(() => {
+          this.$refs['filter-input'].focus();
+        });
+      })
+      .catch((err) => {
+        this.loading = false;
+        this.error = err.message;
+      });
   },
   data() {
     return {
       loading: false,
+      error: '',
       query: '',
       filtered: false,
     };
