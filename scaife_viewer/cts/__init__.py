@@ -26,7 +26,16 @@ def passage(urn: str) -> Passage:
         raise ValueError("URN must contain a reference")
     reference = urn.reference
     urn = urn.upTo(URN.NO_PASSAGE)
-    text = collection(urn)
+    c = collection(urn)
+    if isinstance(c, Work):
+        work = c
+        text = next((text for text in work.texts() if text.kind == "edition"), None)
+        if text is None:
+            raise ValueError(f"{urn} does not have an edition")
+    elif isinstance(c, Text):
+        text = c
+    else:
+        raise ValueError(f"{urn} must reference a work or text")
     passage = Passage(text, reference)
     if not passage.exists():
         raise PassageDoesNotExist(text, f"{reference} does not exist in {urn}")
