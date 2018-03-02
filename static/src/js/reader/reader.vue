@@ -88,6 +88,7 @@
           <widget-text-mode />
           <widget-text-size />
           <widget-highlight />
+          <widget-morpheus />
           <widget-token-list />
           <widget-dv-word-list />
           <widget-chs-commentary />
@@ -112,6 +113,7 @@ import WidgetHighlight from './widgets/highlight';
 import WidgetPassageLinks from './widgets/passage-links';
 import WidgetTextMode from './widgets/text-mode';
 import WidgetTextSize from './widgets/text-size';
+import WidgetMorpheus from './widgets/morpheus';
 import WidgetDvWordList from './widgets/dv-word-list';
 import WidgetTokenList from './widgets/dm-token-list';
 import WidgetChsCommentary from './widgets/chs-commentary';
@@ -125,6 +127,7 @@ const widgets = {
   WidgetTextMode,
   WidgetTextSize,
   WidgetHighlight,
+  WidgetMorpheus,
   WidgetDvWordList,
   WidgetTokenList,
   WidgetChsCommentary,

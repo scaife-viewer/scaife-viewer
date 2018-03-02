@@ -1,3 +1,5 @@
+from urllib.parse import urlencode
+
 from django.core.paginator import Paginator
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
@@ -5,6 +7,8 @@ from django.utils.decorators import method_decorator
 from django.utils.safestring import mark_safe
 from django.views import View
 from django.views.decorators.cache import cache_page
+
+import requests
 
 from . import cts
 from .cts.utils import natural_keys as nk
@@ -307,4 +311,75 @@ def search_json(request):
                     for w, i in result["highlights"]
                 ]
             data["results"].append(r)
+    return JsonResponse(data)
+
+
+def morpheus(request):
+    if "word" not in request.GET:
+        raise Http404()
+    word = request.GET["word"]
+    params = {
+        "word": word,
+        "lang": "grc",
+        "engine": "morpheusgrc",
+    }
+    qs = urlencode(params)
+    url = f"http://services.perseids.org/bsp/morphologyservice/analysis/word?{qs}"
+    headers = {
+        "Accept": "application/json",
+    }
+    r = requests.get(url, headers=headers)
+    r.raise_for_status()
+    body = r.json()["RDF"]["Annotation"]["Body"]
+    if not isinstance(body, list):
+        body = [body]
+    data_body = []
+    for item in body:
+        entry = {
+            "uri": item["rest"]["entry"]["uri"],
+            # "dict": item["rest"]["entry"]["dict"],
+            "hdwd": item["rest"]["entry"]["dict"]["hdwd"]["$"],
+            "pofs": item["rest"]["entry"]["dict"]["pofs"]["$"],
+        }
+        if "decl" in item["rest"]["entry"]["dict"]:
+            entry["decl"] = item["rest"]["entry"]["dict"]["decl"]["$"]
+        infl_body = item["rest"]["entry"]["infl"]
+        if not isinstance(infl_body, list):
+            infl_body = [infl_body]
+        infl_list = []
+        for infl_item in infl_body:
+            infl_entry = {
+                # "raw": infl_item,
+            }
+            infl_entry["stem"] = infl_item["term"]["stem"]["$"]
+            if "suff" in infl_item["term"]:
+                infl_entry["suff"] = infl_item["term"]["suff"]["$"]
+            infl_entry["pofs"] = infl_item["pofs"]["$"]
+            if "case" in infl_item:
+                infl_entry["case"] = infl_item["case"]["$"]
+            if "mood" in infl_item:
+                infl_entry["mood"] = infl_item["mood"]["$"]
+            if "tense" in infl_item:
+                infl_entry["tense"] = infl_item["tense"]["$"]
+            if "voice" in infl_item:
+                infl_entry["voice"] = infl_item["voice"]["$"]
+            if "gend" in infl_item:
+                infl_entry["gend"] = infl_item["gend"]["$"]
+            if "num" in infl_item:
+                infl_entry["num"] = infl_item["num"]["$"]
+            if "pers" in infl_item:
+                infl_entry["pers"] = infl_item["pers"]["$"]
+            if "comp" in infl_item:
+                infl_entry["comp"] = infl_item["comp"]["$"]
+            if "dial" in infl_item:
+                infl_entry["dial"] = infl_item["dial"]["$"]
+            infl_entry["stemtype"] = infl_item["stemtype"]["$"]
+            if "derivtype" in infl_item:
+                infl_entry["derivtype"] = infl_item["derivtype"]["$"]
+            if "morph" in infl_item:
+                infl_entry["morph"] = infl_item["morph"]["$"]
+            infl_list.append(infl_entry)
+        entry["infl"] = infl_list
+        data_body.append(entry)
+    data = {"Body": data_body}
     return JsonResponse(data)
