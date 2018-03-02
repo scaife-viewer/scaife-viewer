@@ -252,3 +252,53 @@
     }
   }
 }
+
+.widget.morpheus {
+  div.body {
+    font-size: 12px;
+    font-family: 'Noto Serif';
+    color: $gray-700;
+  }
+  .group {
+    margin-top: 1em;
+    &:first-of-type {
+      margin-top: 0;
+    }
+    .head {
+      font-size: 16px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      .hdwd {
+        font-weight: bold;
+      }
+      .pofs-decl {
+        margin-left: 1em;
+        font-size: 14px;
+        font-family: 'Noto Sans';
+        color: $gray-600;
+      }
+    }
+    .entries {
+      margin-left: 1em;
+      .entry {
+        display: flex;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        .form {
+          font-weight: bold;
+        }
+        .props {
+          margin-left: 1em;
+          font-family: 'Noto Sans';
+          color: $gray-600;
+        }
+        .dial {
+          font-style: italic;
+          font-family: 'Noto Sans';
+          color: $gray-600;
+        }
+      }
+    }
+  }
+}

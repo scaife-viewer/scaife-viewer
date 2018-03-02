@@ -2,7 +2,34 @@
   <widget class="morpheus">
     <span slot="header">Morpheus</span>
     <div slot="body" v-if="morphBody">
-      <pre>{{ morphBody }}</pre>
+      <div class="group" v-for="group in morphBody" :key="group.uri">
+        <div class="head">
+          <span class="hdwd">{{ group.hdwd }}</span>
+          <span class="pofs-decl">{{ group.pofs }} {{ group.decl }}</span>
+        </div>
+        <div class="entries">
+          <div class="entry" v-for="entry in group.infl">
+            <div class="form">
+              <span class="stem">{{ entry.stem }}</span><span v-if="entry.suff" class="suff">-{{ entry.suff }}</span>
+            </div>
+            <!-- {{ entry.pofs }} -->
+            <!-- {{ entry.stemtype }} -->
+            <div class="props">
+              {{ entry.tense }}
+              {{ entry.voice }}
+              {{ entry.mood }}
+              {{ entry.pers }}
+              {{ entry.case }}
+              {{ entry.num }}
+              {{ entry.gend }}
+              {{ entry.comp }}
+              <span v-if="entry.dial" class="dial">({{ entry.dial }})</span>
+            </div>
+            <!-- {{ entry.derivtype }} -->
+            <!-- {{ entry.morph }} -->
+          </div>
+        </div>
+      </div>
     </div>
   </widget>
 </template>
