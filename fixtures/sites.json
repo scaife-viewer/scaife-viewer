@@ -11,7 +11,7 @@
         "pk": 2,
         "model": "sites.site",
         "fields": {
-            "domain": "lk353.eu1.eldarioncloud.com",
+            "domain": "scaife.eldarion.com",
             "name": "Scaife Viewer"
         }
     }

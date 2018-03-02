@@ -242,7 +242,7 @@ CACHES = {
 
 resolver = os.environ.get("CTS_RESOLVER", "api")
 if resolver == "api":
-    CTS_API_ENDPOINT = os.environ.get("CTS_API_ENDPOINT", "https://perseus-cts.eu1.eldarioncloud.com/api/cts")
+    CTS_API_ENDPOINT = os.environ.get("CTS_API_ENDPOINT", "https://scaife-cts-dev.eldarion.com/api/cts")
     CTS_RESOLVER = {
         "type": "api",
         "kwargs": {

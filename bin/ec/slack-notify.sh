@@ -11,9 +11,9 @@ SHA_SHORT="${CIRCLE_SHA1:0:7}"
 
 AUTHOR_NAME="$(git show -s --format='%an' $SHA_SHORT)"
 if [[ "$CIRCLE_BRANCH" == "master" ]]; then
-    EC_INSTANCE_URL="https://lk353.eu1.eldarioncloud.com/"
+    EC_INSTANCE_URL="https://scaife.eldarion.com/"
 else
-    EC_INSTANCE_URL="https://ho905.eu1.eldarioncloud.com/"
+    EC_INSTANCE_URL="https://scaife-dev.eldarion.com/"
 fi
 
 # prepare Slack message payload
