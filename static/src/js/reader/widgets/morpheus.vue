@@ -40,7 +40,7 @@ export default {
         });
         fetch(url, { method: 'GET', headers }).then((resp) => {
           resp.json().then((data) => {
-            this.morphBody = data.RDF.Annotation.Body;
+            this.morphBody = data.Body;
           });
         });
       } else {

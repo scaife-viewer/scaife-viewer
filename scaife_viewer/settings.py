@@ -16,6 +16,7 @@ DATABASES = {
 }
 
 ALLOWED_HOSTS = [
+    "localhost",
     "scaife.eldarion.com",
     "scaife-dev.eldarion.com",
 ]
