@@ -35,6 +35,7 @@ regex = "*"
 certifi = "*"
 requests = "*"
 dask = {extras = ["bag"]}
+django-oidc-provider = "*"
 
 
 [dev-packages]

@@ -13,6 +13,7 @@
         <div></div>
       </div>
     </template>
+    <div v-else-if="error" class="text-center"><b>Error</b>: {{ error }}</div>
     <div v-else>
       <div v-for="entry in toc" :key="entry.urn">
         <h2><a :href="entry.url">{{ entry.label }} {{ entry.num }}</a></h2>
@@ -30,13 +31,19 @@ export default {
   props: ['textUrl'],
   created() {
     this.loading = true;
-    this.$store.dispatch('loadTocList', this.textUrl).then(() => {
-      this.loading = false;
-    });
+    this.$store.dispatch('loadTocList', this.textUrl)
+      .then(() => {
+        this.loading = false;
+      })
+      .catch((err) => {
+        this.loading = false;
+        this.error = err.message;
+      });
   },
   data() {
     return {
       loading: false,
+      error: '',
     };
   },
   computed: {

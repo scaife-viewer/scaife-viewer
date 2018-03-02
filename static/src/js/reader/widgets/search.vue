@@ -156,7 +156,7 @@ export default {
         });
     },
     textSearch({ offset = 0, size, pivot }) {
-      return new Promise((resolve) => {
+      return new Promise((resolve, reject) => {
         if (!this.passage.ready) {
           resolve(Promise.resolve(null));
         } else if (this.query === '') {
@@ -171,7 +171,7 @@ export default {
             fields: '',
             text: this.passage.urn.upTo('version'),
           };
-          resolve(sv.textSearch(params));
+          sv.textSearch(params).then(resolve, reject);
         }
       });
     },
@@ -207,7 +207,10 @@ export default {
             this.offsetMap.add(offset);
             resolve({ results });
           })
-          .catch(reject);
+          .catch((err) => {
+            this.error = err.message;
+            reject(err);
+          });
       });
     },
     markActive(results) {

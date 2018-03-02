@@ -21,7 +21,7 @@ export default {
   store,
   data() {
     return {
-      ctsApiUrl: 'https://perseus-cts.eu1.eldarioncloud.com/api/cts',
+      ctsApiUrl: 'https://scaife-cts.eldarion.com/api/cts',
     };
   },
   computed: {

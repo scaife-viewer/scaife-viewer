@@ -15,7 +15,10 @@ DATABASES = {
     "default": dj_database_url.config(default="postgres://localhost/scaife-viewer")
 }
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "scaife.eldarion.com",
+    "scaife-dev.eldarion.com",
+]
 
 host_domain = os.environ.get("GONDOR_INSTANCE_DOMAIN")
 if host_domain:
@@ -150,6 +153,7 @@ INSTALLED_APPS = [
     "pinax.eventlog",
     "pinax.webanalytics",
     "raven.contrib.django.raven_compat",
+    "oidc_provider",
 
     # project
     "scaife_viewer",
@@ -204,9 +208,11 @@ LANGUAGES = [
     ("it", "italiano"),
 ]
 
+SESSION_COOKIE_NAME = "sv-sessionid"
+
 ACCOUNT_OPEN_SIGNUP = True
 ACCOUNT_EMAIL_UNIQUE = True
-ACCOUNT_EMAIL_CONFIRMATION_REQUIRED = False
+ACCOUNT_EMAIL_CONFIRMATION_REQUIRED = True
 ACCOUNT_LOGIN_REDIRECT_URL = "home"
 ACCOUNT_LOGOUT_REDIRECT_URL = "home"
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 2
@@ -216,6 +222,17 @@ ACCOUNT_LANGUAGES = LANGUAGES
 AUTHENTICATION_BACKENDS = [
     "account.auth_backends.UsernameAuthenticationBackend",
 ]
+
+LOGIN_URL = "account_login"
+
+OIDC_USERINFO = "scaife_viewer.oidc.userinfo"
+
+EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend")
+EMAIL_HOST = os.environ.get("EMAIL_HOST", "")
+EMAIL_PORT = os.environ.get("EMAIL_PORT", "")
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
+EMAIL_USE_TLS = True
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SECURE_SSL_REDIRECT = bool(int(os.environ.get("SECURE_SSL_REDIRECT", "0")))
@@ -228,7 +245,7 @@ CACHES = {
 
 resolver = os.environ.get("CTS_RESOLVER", "api")
 if resolver == "api":
-    CTS_API_ENDPOINT = os.environ.get("CTS_API_ENDPOINT", "https://perseus-cts.eu1.eldarioncloud.com/api/cts")
+    CTS_API_ENDPOINT = os.environ.get("CTS_API_ENDPOINT", "https://scaife-cts-dev.eldarion.com/api/cts")
     CTS_RESOLVER = {
         "type": "api",
         "kwargs": {

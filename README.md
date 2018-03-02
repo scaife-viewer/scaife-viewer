@@ -9,10 +9,16 @@ Requirements:
 * Node 8.6
 * PostgreSQL 9.6
 
-To setup the project for local development:
-
+First, set up a database to use for local development:
 
     createdb scaife-viewer
+
+This assumes your local PostgreSQL is configured to allow your user to create databases. If this is not the case you might be able to create the user yourself:
+
+    createuser --username=postgres --superuser $(whoami)
+
+Install the Node and Python dependencies:
+
     npm install
     pipenv install --dev
 
@@ -27,7 +33,7 @@ Setup the database:
 
 Seed the text inventory to speed up local development:
 
-    curl -s "https://perseus-cts-dev.eu1.eldarioncloud.com/api/cts?request=GetCapabilities" > ti.xml
+    curl -s "https://scaife-cts-dev.eldarion.com/api/cts?request=GetCapabilities" > ti.xml
 
 You should now be set to run the development server:
 
@@ -35,7 +41,7 @@ You should now be set to run the development server:
 
 Browse to http://localhost:3000/.
 
-Note that, although running Scaife locally, this is relying on the Nautilus server at https://perseus-cts.eu1.eldarioncloud.com to retrieve texts.
+Note that, although running Scaife locally, this is relying on the Nautilus server at https://scaife-cts-dev.eldarion.com to retrieve texts.
 
 
 ## Translations

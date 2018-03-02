@@ -24,7 +24,8 @@ urlpatterns = [
     url(r"^library/$", LibraryView.as_view(format="html"), name="library"),
     url(r"^library/json/$", LibraryView.as_view(format="json"), name="library_json"),
     url(r"^library/vector/(?P<urn>[^/]+)/$", LibraryCollectionVectorView.as_view(), name="library_collection_vector"),
-    url(r"^library/passage/(?P<urn>[^/]+)/json/", LibraryPassageView.as_view(), name="library_passage_json"),
+    url(r"^library/passage/(?P<urn>[^/]+)/json/", LibraryPassageView.as_view(format="json"), name="library_passage_json"),
+    url(r"^library/passage/(?P<urn>[^/]+)/text/", LibraryPassageView.as_view(format="text"), name="library_passage_text"),
     url(r"^library/(?P<urn>[^/]+)/$", LibraryCollectionView.as_view(format="html"), name="library_collection"),
     url(r"^library/(?P<urn>[^/]+)/json/$", LibraryCollectionView.as_view(format="json"), name="library_collection_json"),
     url(r"^library/(?P<urn>[^/]+)/redirect/$", library_text_redirect, name="library_text_redirect"),
@@ -34,6 +35,7 @@ urlpatterns = [
     url(r"^search/json/$", search_json, name="search_json"),
     url(r"^morpheus/", morpheus, name="morpheus"),
     url(r"^reading/", include("scaife_viewer.reading.urls")),
+    url(r"^openid/", include("oidc_provider.urls", namespace="oidc_provider")),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

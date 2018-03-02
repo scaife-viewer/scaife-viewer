@@ -1,7 +1,7 @@
 from urllib.parse import urlencode
 
 from django.core.paginator import Paginator
-from django.http import Http404, JsonResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.decorators import method_decorator
 from django.utils.safestring import mark_safe
@@ -13,7 +13,7 @@ import requests
 from . import cts
 from .cts.utils import natural_keys as nk
 from .reading.models import ReadingLog
-from .search import SearchQuery, es
+from .search import SearchQuery
 from .utils import apify, encode_link_header, link_passage
 
 
@@ -104,11 +104,24 @@ class LibraryCollectionVectorView(View):
 @method_decorator(cache_page(3600), name="dispatch")
 class LibraryPassageView(View):
 
-    def get(self, request, urn):
+    format = "json"
+
+    def get(self, request, **kwargs):
+        to_response = {
+            "json": self.as_json,
+            "text": self.as_text,
+        }.get(self.format, "json")
+        return to_response()
+
+    def get_passage(self):
+        urn = self.kwargs["urn"]
         try:
-            passage = cts.passage(urn)
+            return cts.passage(urn)
         except cts.PassageDoesNotExist:
             raise Http404()
+
+    def as_json(self):
+        passage = self.get_passage()
         lo = {}
         prev, nxt = passage.prev(), passage.next()
         if prev:
@@ -125,6 +138,10 @@ class LibraryPassageView(View):
         if lo:
             response["Link"] = encode_link_header(lo)
         return response
+
+    def as_text(self):
+        passage = self.get_passage()
+        return HttpResponse(f"{passage.content}\n", content_type="text/plain")
 
 
 def reader(request, urn):

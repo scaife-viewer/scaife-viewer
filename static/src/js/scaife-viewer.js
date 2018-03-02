@@ -133,7 +133,7 @@ module.exports = {
     const url = `/search/json/?${qs.stringify(params)}`;
     const res = await fetch(url);
     if (!res.ok) {
-      throw new Error(res.status);
+      throw new Error(`${res.status} ${res.statusText}`);
     }
     return res.json();
   },

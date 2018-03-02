@@ -62,6 +62,9 @@ module.exports = {
       const url = '/library/json/';
       const opts = { headers: { Accept: 'application/json' } };
       const res = await fetch(url, opts);
+      if (!res.ok) {
+        throw new Error(`${res.status} ${res.statusText}`);
+      }
       const textInventory = await res.json();
       const textGroups = [];
       const works = [];
@@ -156,6 +159,9 @@ module.exports = {
 
       const opts = { headers: { Accept: 'application/json' } };
       res = await fetch(textGroupUrl, opts);
+      if (!res.ok) {
+        throw new Error(`${res.status} ${res.statusText}`);
+      }
       const textGroup = await res.json();
 
       // To reduce the load on the API, we prepare two vector calls against works
@@ -167,6 +173,9 @@ module.exports = {
       });
       const workVectorUrl = `/library/vector/${textGroup.urn}/?${params}`;
       res = await fetch(workVectorUrl);
+      if (!res.ok) {
+        throw new Error(`${res.status} ${res.statusText}`);
+      }
       vector = await res.json();
       const workMap = vector.collections;
 
@@ -181,6 +190,9 @@ module.exports = {
       params = qs.stringify({ e });
       const textVectorUrl = `/library/vector/${textGroup.urn}/?${params}`;
       res = await fetch(textVectorUrl);
+      if (!res.ok) {
+        throw new Error(`${res.status} ${res.statusText}`);
+      }
       vector = await res.json();
       const textMap = vector.collections;
 
@@ -213,6 +225,9 @@ module.exports = {
     async loadTocList({ commit }, textUrl) {
       const opts = { headers: { Accept: 'application/json' } };
       const res = await fetch(textUrl, opts);
+      if (!res.ok) {
+        throw new Error(`${res.status} ${res.statusText}`);
+      }
       const text = await res.json();
       commit('setToc', text.toc);
     },
