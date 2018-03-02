@@ -63,6 +63,7 @@ module.exports = {
     highlight: null,
     annotations: new Map(),
     annotationChange: 0,
+    selectedLemmas: null,
     error: '',
     selectedTokenRange: { start: null, end: null },
   },
@@ -184,6 +185,9 @@ module.exports = {
       if (end !== undefined) {
         state.selectedTokenRange.end = end;
       }
+    },
+    setSelectedLemmas(state, { lemmas }) {
+      state.selectedLemmas = lemmas;
     },
     setError(state, { error }) {
       state.error = error;

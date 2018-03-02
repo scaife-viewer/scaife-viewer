@@ -68,10 +68,16 @@ export default {
         fetch(url, { method: 'GET', headers }).then((resp) => {
           resp.json().then((data) => {
             this.morphBody = data.Body;
+            const lemmas = [];
+            this.morphBody.forEach(({ hdwd }) => {
+              lemmas.push(hdwd);
+            });
+            this.$store.commit('reader/setSelectedLemmas', { lemmas });
           });
         });
       } else {
         this.morphBody = null;
+        this.$store.commit('reader/setSelectedLemmas', { lemmas: null });
       }
     },
   },
