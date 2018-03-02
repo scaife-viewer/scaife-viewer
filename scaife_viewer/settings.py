@@ -15,7 +15,10 @@ DATABASES = {
     "default": dj_database_url.config(default="postgres://localhost/scaife-viewer")
 }
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "scaife.eldarion.com",
+    "scaife-dev.eldarion.com",
+]
 
 host_domain = os.environ.get("GONDOR_INSTANCE_DOMAIN")
 if host_domain:
