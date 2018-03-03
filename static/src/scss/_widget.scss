@@ -196,7 +196,7 @@
     .search-hits {
       margin: 0;
 
-      p.instructions {
+      p.instructions, p.no-results {
         font-size: 12px;
         color: $gray-600;
         margin: 0;
