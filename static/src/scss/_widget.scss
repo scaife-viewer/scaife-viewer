@@ -181,7 +181,7 @@
 
 .widget.search {
   .search-input {
-    padding: 4px 0 8px;
+    padding: 4px 0 0;
     label {
       color: $gray-600;
       font-size: 12px;
@@ -195,6 +195,11 @@
     .search-hits {
       margin: 0;
 
+      p.instructions {
+        font-size: 12px;
+        color: $gray-600;
+        margin: 0;
+      }
       ul {
         list-style: none;
         padding: 0 4px;

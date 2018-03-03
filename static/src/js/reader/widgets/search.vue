@@ -15,15 +15,15 @@
       <div class="search-hits">
         <text-loader v-if="loading" size="7px" margin="1px" />
         <div v-else-if="error"><small class="text-danger"><b>Error:</b> {{ error }}</small></div>
-        <ul v-else ref="items">
-          <p v-if="query === '' && results.length === 0"><small class="text-muted">Use text input above to find text in this version.</small></p>
+        <template v-else ref="items">
+          <p class="instructions" v-if="query === '' && results.length === 0">Use text input above to find text in this version.</p>
           <p v-else-if="results.length === 0"><small class="text-muted">No results found.</small></p>
-          <template v-else v-for="(r, idx) in results">
+          <ul v-else v-for="(r, idx) in results">
             <li :class="{ first: idx === 0, last: isLast(idx) }" :key="r.passage.urn">
               <router-link :to="toPassage(r.passage.urn)" :class="{ active : r.active }">{{ r.passage.refs.start.human_reference }}</router-link>
             </li>
-          </template>
-        </ul>
+          </ul>
+        </template>
       </div>
     </div>
   </widget>
