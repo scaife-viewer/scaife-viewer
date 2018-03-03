@@ -264,6 +264,18 @@
     font-family: 'Noto Serif';
     color: $gray-700;
   }
+  p.instructions {
+    font-family: 'Noto Sans';
+    font-size: 12px;
+    color: $gray-600;
+    margin: 0 0 0 22px;
+    span.mode {
+      color: $black;
+      font-family: 'Noto Serif';
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+  }
   .group {
     margin-top: 1em;
     &:first-of-type {
