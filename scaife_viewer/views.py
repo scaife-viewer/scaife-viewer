@@ -1,3 +1,4 @@
+import datetime
 from urllib.parse import urlencode
 
 from django.core.paginator import Paginator
@@ -12,6 +13,7 @@ import requests
 
 from . import cts
 from .cts.utils import natural_keys as nk
+from .http import ConditionMixin, cache_control
 from .reading.models import ReadingLog
 from .search import SearchQuery
 from .utils import apify, encode_link_header, link_passage
@@ -23,6 +25,23 @@ def home(request):
 
 def profile(request):
     return render(request, "profile.html", {})
+
+
+start = datetime.datetime.utcnow()
+
+
+@method_decorator(cache_control(max_age=300), name="dispatch")
+class TestEndpoint(ConditionMixin, View):
+
+    def get_last_modified(self, request):
+        global start
+        now = datetime.datetime.utcnow()
+        if start <= now - datetime.timedelta(minutes=5):
+            start = now
+        return start
+
+    def get(self, request, **kwargs):
+        return JsonResponse({"data": start.isoformat()})
 
 
 class BaseLibraryView(View):
@@ -37,7 +56,7 @@ class BaseLibraryView(View):
         return to_response()
 
 
-@method_decorator(cache_page(3600), name="dispatch")
+@method_decorator(cache_control(max_age=300), name="dispatch")
 class LibraryView(BaseLibraryView):
 
     def as_html(self):
@@ -62,7 +81,7 @@ class LibraryView(BaseLibraryView):
         return JsonResponse(payload)
 
 
-@method_decorator(cache_page(3600), name="dispatch")
+@method_decorator(cache_control(max_age=300), name="dispatch")
 class LibraryCollectionView(BaseLibraryView):
 
     def validate_urn(self):
@@ -86,7 +105,7 @@ class LibraryCollectionView(BaseLibraryView):
         return JsonResponse(apify(collection))
 
 
-@method_decorator(cache_page(3600), name="dispatch")
+@method_decorator(cache_control(max_age=300), name="dispatch")
 class LibraryCollectionVectorView(View):
 
     def get(self, request, urn):
@@ -101,7 +120,7 @@ class LibraryCollectionVectorView(View):
         return JsonResponse(payload)
 
 
-@method_decorator(cache_page(3600), name="dispatch")
+@method_decorator(cache_control(max_age=300), name="dispatch")
 class LibraryPassageView(View):
 
     format = "json"

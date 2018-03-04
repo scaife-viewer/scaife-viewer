@@ -8,6 +8,7 @@ from .views import (
     LibraryCollectionView,
     LibraryPassageView,
     LibraryView,
+    TestEndpoint,
     home,
     library_text_redirect,
     morpheus,
@@ -34,6 +35,7 @@ urlpatterns = [
     url(r"^search/$", search, name="search"),
     url(r"^search/json/$", search_json, name="search_json"),
     url(r"^morpheus/", morpheus, name="morpheus"),
+    url(r"^test/json/$", TestEndpoint.as_view()),
     url(r"^reading/", include("scaife_viewer.reading.urls")),
     url(r"^openid/", include("oidc_provider.urls", namespace="oidc_provider")),
 ]

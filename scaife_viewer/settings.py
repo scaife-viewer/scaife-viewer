@@ -119,17 +119,26 @@ TEMPLATES = [
 
 MIDDLEWARE = [
     "scaife_viewer.tracing.OpenTracingMiddleware",
-    "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
-    "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "django.contrib.auth.middleware.SessionAuthenticationMiddleware",
-    "django.contrib.messages.middleware.MessageMiddleware",
-    "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "account.middleware.LocaleMiddleware",
+    "scaife_viewer.middleware.PerRequestMiddleware",
 ]
+
+PER_REQUEST_MIDDLEWARE = {
+    "default": [
+        "scaife_viewer.tracing.OpenTracingMiddleware",
+        "django.middleware.security.SecurityMiddleware",
+        "whitenoise.middleware.WhiteNoiseMiddleware",
+        "django.contrib.sessions.middleware.SessionMiddleware",
+        "django.middleware.common.CommonMiddleware",
+        "django.middleware.csrf.CsrfViewMiddleware",
+        "django.contrib.auth.middleware.AuthenticationMiddleware",
+        "django.contrib.messages.middleware.MessageMiddleware",
+        "django.middleware.clickjacking.XFrameOptionsMiddleware",
+        "account.middleware.LocaleMiddleware",
+    ],
+    "api": [],
+}
 
 ROOT_URLCONF = "scaife_viewer.urls"
 
