@@ -56,7 +56,7 @@ class BaseLibraryView(View):
         return to_response()
 
 
-@method_decorator(cache_control(max_age=300), name="dispatch")
+@method_decorator(cache_control(max_age=0, s_max_age=300), name="dispatch")
 class LibraryView(BaseLibraryView):
 
     def as_html(self):
