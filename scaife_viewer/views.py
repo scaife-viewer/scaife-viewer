@@ -30,7 +30,7 @@ def profile(request):
 start = datetime.datetime.utcnow()
 
 
-@method_decorator(cache_control(max_age=300), name="dispatch")
+@method_decorator(cache_control(max_age=0, s_max_age=300), name="dispatch")
 class TestEndpoint(ConditionMixin, View):
 
     def get_last_modified(self, request):
@@ -81,7 +81,7 @@ class LibraryView(BaseLibraryView):
         return JsonResponse(payload)
 
 
-@method_decorator(cache_control(max_age=300), name="dispatch")
+@method_decorator(cache_control(max_age=0, s_max_age=300), name="dispatch")
 class LibraryCollectionView(BaseLibraryView):
 
     def validate_urn(self):
@@ -105,7 +105,7 @@ class LibraryCollectionView(BaseLibraryView):
         return JsonResponse(apify(collection))
 
 
-@method_decorator(cache_control(max_age=300), name="dispatch")
+@method_decorator(cache_control(max_age=0, s_max_age=300), name="dispatch")
 class LibraryCollectionVectorView(View):
 
     def get(self, request, urn):
@@ -120,7 +120,7 @@ class LibraryCollectionVectorView(View):
         return JsonResponse(payload)
 
 
-@method_decorator(cache_control(max_age=300), name="dispatch")
+@method_decorator(cache_control(max_age=0, s_max_age=300), name="dispatch")
 class LibraryPassageView(View):
 
     format = "json"
