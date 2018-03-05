@@ -24,8 +24,6 @@ dj-database-url = "*"
 raven = "*"
 python-mimeparse = "*"
 google-auth = "*"
-opentracing = {git="https://github.com/opentracing/opentracing-python.git", editable=true}
-basictracer = {git="https://github.com/opentracing/basictracer-python.git", editable=true}
 wrapt = "*"
 anytree = "*"
 honcho = "*"
@@ -36,6 +34,7 @@ certifi = "*"
 requests = "*"
 dask = {extras = ["bag"]}
 django-oidc-provider = "*"
+opencensus = "*"
 
 
 [dev-packages]

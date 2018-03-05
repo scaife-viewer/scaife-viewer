@@ -118,26 +118,27 @@ TEMPLATES = [
 ]
 
 MIDDLEWARE = [
-    "scaife_viewer.tracing.OpenTracingMiddleware",
-    "django.middleware.security.SecurityMiddleware",
-    "django.middleware.common.CommonMiddleware",
     "scaife_viewer.middleware.PerRequestMiddleware",
 ]
 
 PER_REQUEST_MIDDLEWARE = {
     "default": [
-        "scaife_viewer.tracing.OpenTracingMiddleware",
         "django.middleware.security.SecurityMiddleware",
+        "django.middleware.common.CommonMiddleware",
         "whitenoise.middleware.WhiteNoiseMiddleware",
         "django.contrib.sessions.middleware.SessionMiddleware",
-        "django.middleware.common.CommonMiddleware",
         "django.middleware.csrf.CsrfViewMiddleware",
         "django.contrib.auth.middleware.AuthenticationMiddleware",
         "django.contrib.messages.middleware.MessageMiddleware",
         "django.middleware.clickjacking.XFrameOptionsMiddleware",
         "account.middleware.LocaleMiddleware",
+        "opencensus.trace.ext.django.middleware.OpencensusMiddleware",
     ],
-    "api": [],
+    "api": [
+        "django.middleware.security.SecurityMiddleware",
+        "django.middleware.common.CommonMiddleware",
+        "opencensus.trace.ext.django.middleware.OpencensusMiddleware",
+    ],
 }
 
 ROOT_URLCONF = "scaife_viewer.urls"
@@ -164,6 +165,7 @@ INSTALLED_APPS = [
     "pinax.webanalytics",
     "raven.contrib.django.raven_compat",
     "oidc_provider",
+    "opencensus.trace.ext.django",
 
     # project
     "scaife_viewer",
@@ -278,4 +280,17 @@ if "SENTRY_DSN" in os.environ:
     }
 
 TRACING_ENABLED = bool(int(os.environ.get("TRACING_ENABLED", not DEBUG)))
+OPENCENSUS_TRACE = {
+    "SAMPLER": "opencensus.trace.samplers.{0}".format(
+        "AlwaysOnSampler"
+        if TRACING_ENABLED else
+        "AlwaysOffSampler"
+    ),
+    "EXPORTER": "scaife_viewer.tracing.StackdriverExporter",
+    "PROPAGATOR": "opencensus.trace.propagation.google_cloud_format.GoogleCloudFormatPropagator",
+}
+OPENCENSUS_TRACE_PARAMS = {
+    "BLACKLIST_PATHS": [],
+}
+
 ELASTICSEARCH_URL = os.environ.get("ELASTICSEARCH_URL", "http://localhost:9200")
