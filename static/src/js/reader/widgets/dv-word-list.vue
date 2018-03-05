@@ -34,11 +34,11 @@ export default {
       wordList: [],
     };
   },
-  mounted() {
-    this.fetchWordList();
-  },
   watch: {
-    passage: 'fetchWordList',
+    passage: {
+      handler: 'fetchWordList',
+      immediate: true,
+    },
   },
   methods: {
     async fetchWordList() {

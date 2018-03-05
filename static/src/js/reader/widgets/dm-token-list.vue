@@ -32,11 +32,11 @@ export default {
       tokenList: [],
     };
   },
-  mounted() {
-    this.fetchTokenList();
-  },
   watch: {
-    passage: 'fetchTokenList',
+    passage: {
+      handler: 'fetchTokenList',
+      immediate: true,
+    },
   },
   methods: {
     async fetchTokenList() {

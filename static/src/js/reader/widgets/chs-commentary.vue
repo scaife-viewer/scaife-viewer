@@ -38,7 +38,10 @@ export default {
     this.fetchCommentary();
   },
   watch: {
-    passage: 'fetchCommentary',
+    passage: {
+      handler: 'fetchCommentary',
+      immediate: true,
+    },
   },
   methods: {
     async fetchCommentary() {

@@ -24,10 +24,10 @@ export default {
     ReaderNavigationMixin,
   ],
   watch: {
-    passage: 'setInputRef',
-  },
-  created() {
-    this.setInputRef();
+    passage: {
+      handler: 'setInputRef',
+      immediate: true,
+    },
   },
   computed: {
     passage() {

@@ -44,7 +44,10 @@ import widget from '../widget';
 export default {
   store,
   watch: {
-    selectedWord: 'fetchData',
+    selectedWord: {
+      handler: 'fetchData',
+      immediate: true,
+    },
   },
   data() {
     return {
