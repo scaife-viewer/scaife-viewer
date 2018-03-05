@@ -10,7 +10,7 @@
   <h2>
     <a href="{% url 'library' %}">Library</a>
     {% for breadcrumb in textgroup.ancestors %}
-      <a href="{% url 'library_collection_json' breadcrumb.urn %}">{{ breadcrumb.label }}{% if not forloop.last %} &gt;{% endif %}</a>
+      <a href="{% url 'api:library_collection' breadcrumb.urn %}">{{ breadcrumb.label }}{% if not forloop.last %} &gt;{% endif %}</a>
     {% endfor %}
   </h2>
 
@@ -32,5 +32,5 @@
 
   <h2>Works</h2>
 
-  <sv-cts-work-list text-group-url="{% url 'library_collection_json' textgroup.urn %}"></sv-cts-work-list>
+  <sv-cts-work-list text-group-url="{% url 'api:library_collection' textgroup.urn %}"></sv-cts-work-list>
 {% endblock %}

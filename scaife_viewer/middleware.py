@@ -41,8 +41,10 @@ class PerRequestMiddleware:
         self.mws[(key, "exception")] = exception_mw
 
     def request_to_key(self, request):
-        if request.path.endswith("/json/"):
-            return "api"
+        match = request.resolver_match
+        if match:
+            if "api" in match.namespaces:
+                return "api"
         return "default"
 
     def __call__(self, request):
