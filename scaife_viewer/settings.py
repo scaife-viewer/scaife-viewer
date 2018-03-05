@@ -10,6 +10,7 @@ PACKAGE_ROOT = os.path.abspath(os.path.dirname(__file__))
 BASE_DIR = PACKAGE_ROOT
 
 DEBUG = bool(int(os.environ.get("DEBUG", "1")))
+TRACING_ENABLED = bool(int(os.environ.get("TRACING_ENABLED", not DEBUG)))
 
 DATABASES = {
     "default": dj_database_url.config(default="postgres://localhost/scaife-viewer")
@@ -120,6 +121,8 @@ TEMPLATES = [
 MIDDLEWARE = [
     "scaife_viewer.middleware.PerRequestMiddleware",
 ]
+if TRACING_ENABLED:
+    MIDDLEWARE.append("opencensus.trace.ext.django.middleware.OpencensusMiddleware")
 
 PER_REQUEST_MIDDLEWARE = {
     "default": [
@@ -132,12 +135,10 @@ PER_REQUEST_MIDDLEWARE = {
         "django.contrib.messages.middleware.MessageMiddleware",
         "django.middleware.clickjacking.XFrameOptionsMiddleware",
         "account.middleware.LocaleMiddleware",
-        "opencensus.trace.ext.django.middleware.OpencensusMiddleware",
     ],
     "api": [
         "django.middleware.security.SecurityMiddleware",
         "django.middleware.common.CommonMiddleware",
-        "opencensus.trace.ext.django.middleware.OpencensusMiddleware",
     ],
 }
 
@@ -279,13 +280,8 @@ if "SENTRY_DSN" in os.environ:
         "dsn": os.environ["SENTRY_DSN"],
     }
 
-TRACING_ENABLED = bool(int(os.environ.get("TRACING_ENABLED", not DEBUG)))
 OPENCENSUS_TRACE = {
-    "SAMPLER": "opencensus.trace.samplers.{0}".format(
-        "AlwaysOnSampler"
-        if TRACING_ENABLED else
-        "AlwaysOffSampler"
-    ),
+    "SAMPLER": "opencensus.trace.samplers.AlwaysOnSampler",
     "EXPORTER": "scaife_viewer.tracing.StackdriverExporter",
     "PROPAGATOR": "opencensus.trace.propagation.google_cloud_format.GoogleCloudFormatPropagator",
 }
