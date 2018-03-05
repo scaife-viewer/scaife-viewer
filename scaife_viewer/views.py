@@ -7,7 +7,6 @@ from django.shortcuts import redirect, render
 from django.utils.decorators import method_decorator
 from django.utils.safestring import mark_safe
 from django.views import View
-from django.views.decorators.cache import cache_page
 
 import requests
 

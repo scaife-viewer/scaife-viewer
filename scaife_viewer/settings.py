@@ -1,7 +1,5 @@
 import os
 
-from django.utils.translation import ugettext_lazy as _
-
 import dj_database_url
 
 
