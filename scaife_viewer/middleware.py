@@ -43,7 +43,6 @@ class PerRequestMiddleware:
     def resolve_key(self, path):
         resolver = get_resolver()
         match = resolver.resolve(path)
-        print(match)
         if "api" in match.namespaces:
             return "api"
         return "default"
