@@ -348,7 +348,7 @@ def morpheus(request):
     }
     r = requests.get(url, headers=headers)
     r.raise_for_status()
-    body = r.json()["RDF"]["Annotation"]["Body"]
+    body = r.json().get("RDF", {}).get("Annotation", {}).get("Body", [])
     if not isinstance(body, list):
         body = [body]
     data_body = []
