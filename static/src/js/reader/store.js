@@ -288,6 +288,9 @@ module.exports = {
     highlight({ commit, state, rootState }, { highlight, route = true }) {
       let { query } = rootState.route;
       if (highlight !== null) {
+        if (state.mode !== 'clickable') {
+          commit('setTextMode', { mode: 'clickable' });
+        }
         let singleton = false;
         const selectedTokens = [];
         if (highlight.indexOf('@') === -1) {
