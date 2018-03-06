@@ -8,7 +8,6 @@ from .views import (
     LibraryCollectionView,
     LibraryPassageView,
     LibraryView,
-    TestEndpoint,
     home,
     library_text_redirect,
     morpheus,
@@ -27,7 +26,6 @@ api_patterns = (
         url(r"^library/(?P<urn>[^/]+)/json/$", LibraryCollectionView.as_view(format="json"), name="library_collection"),
         url(r"^search/json/$", search_json, name="search"),
         url(r"^morpheus/", morpheus, name="morpheus"),
-        url(r"^test/json/$", TestEndpoint.as_view()),
     ],
     "api",
 )

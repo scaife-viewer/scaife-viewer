@@ -1,4 +1,5 @@
 import datetime
+import os
 from urllib.parse import urlencode
 
 from django.core.paginator import Paginator
@@ -9,6 +10,8 @@ from django.utils.safestring import mark_safe
 from django.views import View
 
 import requests
+
+import dateutil.parser
 
 from . import cts
 from .cts.utils import natural_keys as nk
@@ -26,23 +29,6 @@ def profile(request):
     return render(request, "profile.html", {})
 
 
-start = datetime.datetime.utcnow()
-
-
-@method_decorator(cache_control(max_age=0, s_max_age=300), name="dispatch")
-class TestEndpoint(ConditionMixin, View):
-
-    def get_last_modified(self, request):
-        global start
-        now = datetime.datetime.utcnow()
-        if start <= now - datetime.timedelta(minutes=5):
-            start = now
-        return start
-
-    def get(self, request, **kwargs):
-        return JsonResponse({"data": start.isoformat()})
-
-
 class BaseLibraryView(View):
 
     format = "html"
@@ -55,8 +41,20 @@ class BaseLibraryView(View):
         return to_response()
 
 
+class LibraryConditionMixin(ConditionMixin):
+
+    def get_last_modified(self, request):
+        # @@@ per-URN modification dates will need nautilus-cnd
+        # for now, use only deployment creation timestamp.
+        last_modified = datetime.datetime.utcnow()
+        deployment_timestamp = os.environ.get("EC_DEPLOYMENT_CREATED")
+        if deployment_timestamp:
+            last_modified = dateutil.parser.parse(deployment_timestamp)
+        return last_modified
+
+
 @method_decorator(cache_control(max_age=0, s_max_age=300), name="dispatch")
-class LibraryView(BaseLibraryView):
+class LibraryView(LibraryConditionMixin, BaseLibraryView):
 
     def as_html(self):
         return render(self.request, "library/index.html", {})
@@ -81,7 +79,7 @@ class LibraryView(BaseLibraryView):
 
 
 @method_decorator(cache_control(max_age=0, s_max_age=300), name="dispatch")
-class LibraryCollectionView(BaseLibraryView):
+class LibraryCollectionView(LibraryConditionMixin, BaseLibraryView):
 
     def validate_urn(self):
         if not self.kwargs["urn"].startswith("urn:"):
@@ -105,7 +103,7 @@ class LibraryCollectionView(BaseLibraryView):
 
 
 @method_decorator(cache_control(max_age=0, s_max_age=300), name="dispatch")
-class LibraryCollectionVectorView(View):
+class LibraryCollectionVectorView(LibraryConditionMixin, View):
 
     def get(self, request, urn):
         entries = request.GET.getlist("e")
@@ -120,7 +118,7 @@ class LibraryCollectionVectorView(View):
 
 
 @method_decorator(cache_control(max_age=0, s_max_age=300), name="dispatch")
-class LibraryPassageView(View):
+class LibraryPassageView(LibraryConditionMixin, View):
 
     format = "json"
 

@@ -35,9 +35,15 @@ requests = "*"
 dask = {extras = ["bag"]}
 django-oidc-provider = "*"
 opencensus = "*"
+python-dateutil = "*"
 
 
 [dev-packages]
 
 "flake8" = "*"
 isort = "*"
+
+
+[pipenv]
+
+keep_outdated = true
