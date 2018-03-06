@@ -11,7 +11,7 @@
     </div>
     <div class="versions">
       <template v-for="text in work.texts">
-        <a :key="text.urn" :href="text.reader_url" class="badge badge-light" v-tooltip:bottom="`${text.label}`">
+        <a :key="text.urn" :href="text.reader_url" class="badge badge-light" v-popover:bottom="{title: text.label, content: text.description, trigger: 'hover'}">
           {{ text.lang }}
         </a>{{ ' ' }}
       </template>

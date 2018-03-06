@@ -38,13 +38,9 @@ div.text {
     content:" ";
   }
 
-  .note > .note-content {
-    display: none;
-  }
-  .note:hover > .note-content {
-    display: inline;
-    font-style: italic;
+  .note {
     color: $gray-600;
+    cursor: pointer;
   }
 
   .lang_far .poem > .b {
@@ -109,6 +105,7 @@ div.text {
   }
   .placeName {
     color: $gray-600;
+    cursor: pointer;
   }
   .said .label, .speaker {
     font-weight: bold;
