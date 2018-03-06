@@ -43,7 +43,7 @@ class BaseLibraryView(View):
 
 class LibraryConditionMixin(ConditionMixin):
 
-    def get_last_modified(self, request):
+    def get_last_modified(self, request, *args, **kwargs):
         # @@@ per-URN modification dates will need nautilus-cnd
         # for now, use only deployment creation timestamp.
         last_modified = datetime.datetime.utcnow()
