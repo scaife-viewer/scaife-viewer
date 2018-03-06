@@ -137,6 +137,7 @@ PER_REQUEST_MIDDLEWARE = {
     "api": [
         "django.middleware.security.SecurityMiddleware",
         "django.middleware.common.CommonMiddleware",
+        "whitenoise.middleware.WhiteNoiseMiddleware",
     ],
 }
 
