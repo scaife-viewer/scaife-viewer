@@ -24,6 +24,13 @@ Vue.directive('tooltip', (el, binding) => {
   });
 });
 
+Vue.directive('popover', (el, binding) => {
+  $(el).popover({
+    placement: binding.arg,
+    ...binding.value,
+  });
+});
+
 Vue.customElement('sv-library', Library);
 Vue.customElement('sv-cts-textgroup-list', CTSTextGroupList);
 Vue.customElement('sv-cts-work-list', CTSWorkList);
