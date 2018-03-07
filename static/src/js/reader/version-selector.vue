@@ -8,8 +8,13 @@
     </div>
     <div :class="['version-option', 'dropdown-menu', { show }]">
       <router-link v-for="version in versions" :key="version.urn" class="dropdown-item" :to="to(version.urn)" @click.native="handleItemClick">
-        <span v-if="version.urn === leftText.urn" class="side">L</span>
-        <span v-if="version.urn === rightText.urn" class="side">R</span>
+        <template v-if="rightPassage">
+          <span v-if="version.urn === leftText.urn" class="side">L</span>
+          <span v-if="version.urn === rightText.urn" class="side">R</span>
+        </template>
+        <template v-else>
+          <span v-if="version.urn === leftText.urn" class="side">&nbsp;</span>
+        </template>
         <div>
           <div class="label">
             {{ version.label }}
@@ -40,6 +45,9 @@ export default {
     },
     rightText() {
       return this.$store.state.reader.rightText;
+    },
+    rightPassage() {
+      return this.$store.state.reader.rightPassage;
     },
   },
   methods: {
