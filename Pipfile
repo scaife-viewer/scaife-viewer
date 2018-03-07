@@ -1,16 +1,11 @@
 [[source]]
-
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 
-
 [requires]
-
 python_version = "3.6"
 
-
 [packages]
-
 django-user-accounts = "*"
 pinax-webanalytics = "*"
 pinax-eventlog = "*"
@@ -19,7 +14,7 @@ pinax-theme-bootstrap = "*"
 mycapytain = "*"
 gunicorn = "*"
 whitenoise = "*"
-"psycopg2" = "<2.7.4"
+"psycopg2" = "*"
 dj-database-url = "*"
 raven = "*"
 python-mimeparse = "*"
@@ -37,13 +32,9 @@ django-oidc-provider = "*"
 opencensus = "*"
 python-dateutil = "*"
 
-
 [dev-packages]
-
 "flake8" = "*"
 isort = "*"
 
-
 [pipenv]
-
 keep_outdated = true
