@@ -17,6 +17,7 @@ const store = new Vuex.Store({
         'reader.sidebarLeftOpened',
         'reader.sidebarRightOpened',
         'reader.textSize',
+        'reader.textMode',
       ],
       storage: window.localStorage,
     }),

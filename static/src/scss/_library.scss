@@ -283,3 +283,17 @@ section.hero {
     }
   }
 }
+
+body.library {
+  .popover-header {
+    background: white;
+    font-family: 'Noto Serif';
+    padding: 6px 8px;
+  }
+  .popover-body {
+    font-size: 12px;
+    line-height: 14px;
+    color: $gray-800;
+    padding: 4px 8px;
+  }
+}

@@ -1,7 +1,5 @@
 import os
 
-from django.utils.translation import ugettext_lazy as _
-
 import dj_database_url
 
 
@@ -10,12 +8,17 @@ PACKAGE_ROOT = os.path.abspath(os.path.dirname(__file__))
 BASE_DIR = PACKAGE_ROOT
 
 DEBUG = bool(int(os.environ.get("DEBUG", "1")))
+TRACING_ENABLED = bool(int(os.environ.get("TRACING_ENABLED", not DEBUG)))
 
 DATABASES = {
     "default": dj_database_url.config(default="postgres://localhost/scaife-viewer")
 }
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "localhost",
+    "scaife.eldarion.com",
+    "scaife-dev.eldarion.com",
+]
 
 host_domain = os.environ.get("GONDOR_INSTANCE_DOMAIN")
 if host_domain:
@@ -114,18 +117,25 @@ TEMPLATES = [
 ]
 
 MIDDLEWARE = [
-    "scaife_viewer.tracing.OpenTracingMiddleware",
-    "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.middleware.common.CommonMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
-    "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "django.contrib.auth.middleware.SessionAuthenticationMiddleware",
-    "django.contrib.messages.middleware.MessageMiddleware",
-    "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "account.middleware.LocaleMiddleware",
+    "scaife_viewer.middleware.PerRequestMiddleware",
 ]
+if TRACING_ENABLED:
+    MIDDLEWARE.append("opencensus.trace.ext.django.middleware.OpencensusMiddleware")
+
+PER_REQUEST_MIDDLEWARE = {
+    "default": [
+        "django.contrib.sessions.middleware.SessionMiddleware",
+        "django.middleware.csrf.CsrfViewMiddleware",
+        "django.contrib.auth.middleware.AuthenticationMiddleware",
+        "django.contrib.messages.middleware.MessageMiddleware",
+        "django.middleware.clickjacking.XFrameOptionsMiddleware",
+        "account.middleware.LocaleMiddleware",
+    ],
+    "api": [],
+}
 
 ROOT_URLCONF = "scaife_viewer.urls"
 
@@ -150,6 +160,8 @@ INSTALLED_APPS = [
     "pinax.eventlog",
     "pinax.webanalytics",
     "raven.contrib.django.raven_compat",
+    "oidc_provider",
+    "opencensus.trace.ext.django",
 
     # project
     "scaife_viewer",
@@ -204,9 +216,11 @@ LANGUAGES = [
     ("it", "italiano"),
 ]
 
+SESSION_COOKIE_NAME = "sv-sessionid"
+
 ACCOUNT_OPEN_SIGNUP = True
 ACCOUNT_EMAIL_UNIQUE = True
-ACCOUNT_EMAIL_CONFIRMATION_REQUIRED = False
+ACCOUNT_EMAIL_CONFIRMATION_REQUIRED = True
 ACCOUNT_LOGIN_REDIRECT_URL = "home"
 ACCOUNT_LOGOUT_REDIRECT_URL = "home"
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 2
@@ -217,12 +231,29 @@ AUTHENTICATION_BACKENDS = [
     "account.auth_backends.UsernameAuthenticationBackend",
 ]
 
+LOGIN_URL = "account_login"
+
+OIDC_USERINFO = "scaife_viewer.oidc.userinfo"
+
+EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend")
+EMAIL_HOST = os.environ.get("EMAIL_HOST", "")
+EMAIL_PORT = os.environ.get("EMAIL_PORT", "")
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
+EMAIL_USE_TLS = True
+
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SECURE_SSL_REDIRECT = bool(int(os.environ.get("SECURE_SSL_REDIRECT", "0")))
 
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+    },
+}
+
 resolver = os.environ.get("CTS_RESOLVER", "api")
 if resolver == "api":
-    CTS_API_ENDPOINT = os.environ.get("CTS_API_ENDPOINT", "https://perseus-cts.eu1.eldarioncloud.com/api/cts")
+    CTS_API_ENDPOINT = os.environ.get("CTS_API_ENDPOINT", "https://scaife-cts-dev.eldarion.com/api/cts")
     CTS_RESOLVER = {
         "type": "api",
         "kwargs": {
@@ -244,5 +275,13 @@ if "SENTRY_DSN" in os.environ:
         "dsn": os.environ["SENTRY_DSN"],
     }
 
-TRACING_ENABLED = bool(int(os.environ.get("TRACING_ENABLED", not DEBUG)))
+OPENCENSUS_TRACE = {
+    "SAMPLER": "opencensus.trace.samplers.AlwaysOnSampler",
+    "EXPORTER": "scaife_viewer.tracing.StackdriverExporter",
+    "PROPAGATOR": "opencensus.trace.propagation.google_cloud_format.GoogleCloudFormatPropagator",
+}
+OPENCENSUS_TRACE_PARAMS = {
+    "BLACKLIST_PATHS": [],
+}
+
 ELASTICSEARCH_URL = os.environ.get("ELASTICSEARCH_URL", "http://localhost:9200")

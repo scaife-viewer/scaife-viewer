@@ -1,3 +1,5 @@
+/* global $ */
+
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import { sync } from 'vuex-router-sync';
@@ -13,6 +15,21 @@ sync(store, router);
 
 Vue.use(VueRouter);
 Vue.use(vueCustomElement);
+
+Vue.directive('tooltip', (el, binding) => {
+  $(el).tooltip({
+    title: binding.value,
+    placement: binding.arg,
+    trigger: 'hover',
+  });
+});
+
+Vue.directive('popover', (el, binding) => {
+  $(el).popover({
+    placement: binding.arg,
+    ...binding.value,
+  });
+});
 
 Vue.customElement('sv-library', Library);
 Vue.customElement('sv-cts-textgroup-list', CTSTextGroupList);

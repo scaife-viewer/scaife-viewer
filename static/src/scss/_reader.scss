@@ -82,6 +82,7 @@ body.reader {
 
   .btn-group.btn-group-left {
     margin-bottom: 10px;
+    width: 100%;
   }
   .btn-group.btn-group-left .dropdown-toggle {
     padding: 0.2rem 0.5rem 0.2rem 0.3rem !important;
@@ -97,6 +98,7 @@ body.reader {
   }
 
   .version-select {
+    // width: 100%;
     padding: 0.5rem 0.75rem 0.5rem 0;
     text-align: left;
     white-space: normal;
@@ -108,11 +110,14 @@ body.reader {
       font-family: 'Noto Sans';
       color: $gray-500;
       font-style: italic;
+      margin-top: 4px;
       font-size: 12px;
       line-height: 12px;
     }
   }
   .version-option {
+    width: 100%;
+    max-width: 500px;
     a {
       white-space: normal;
       padding: 0.25rem 1rem;
@@ -121,30 +126,51 @@ body.reader {
           color: $perseus-red-lighter;
         }
       }
+      &:hover {
+      }
       &.remove {
+        padding: 0 1rem;
+        font-size: 14px;
         color: $red;
         &:active {
           color: $white;
         }
       }
+      display: flex;
+      .side {
+        @extend .badge;
+        font-family: 'Noto Sans';
+        color: $gray-600;
+        background: $gray-200;
+        margin-right: 0.5em;
+      }
     }
-    font-size: 14px;
-    line-height: 16px;
-    font-family: 'Noto Serif';
-    .metadata {
+    .label {
+      font-family: 'Noto Serif';
+      font-weight: bold;
+      font-size: 14px;
+      line-height: 16px;
+    }
+    .description {
       font-family: 'Noto Sans';
       color: $gray-600;
+      font-size: 12px;
+      line-height: 14px;
+    }
+    .metadata {
+      font-family: 'Noto Serif';
+      color: $gray-800;
       font-style: italic;
       font-size: 12px;
-      line-height: 12px;
+      line-height: 14px;
     }
   }
-  .text-loading:not(.text-loader) {
+  .text-loading:not(.partial-loader) {
     transform: translate3d(0, 0, 0);  // to avoid flicker
     opacity: 0;
     transition: opacity 0.2s;
   }
-  .text-loaded:not(.text-loader) {
+  .text-loaded:not(.partial-loader) {
     transform: translate3d(0, 0, 0);  // to avoid flicker
     opacity: 1;
     transition: opacity 0.2s;

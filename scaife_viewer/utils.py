@@ -6,14 +6,14 @@ from . import cts
 def link_collection(urn) -> dict:
     return {
         "url": reverse("library_collection", kwargs={"urn": urn}),
-        "json_url": reverse("library_collection_json", kwargs={"urn": urn})
+        "json_url": reverse("api:library_collection", kwargs={"urn": urn})
     }
 
 
 def link_passage(urn) -> dict:
     return {
         "url": reverse("reader", kwargs={"urn": urn}),
-        "json_url": reverse("library_passage_json", kwargs={"urn": urn}),
+        "json_url": reverse("api:library_passage", kwargs={"urn": urn}),
     }
 
 

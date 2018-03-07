@@ -1,5 +1,5 @@
 div.text {
-  font-family: 'Noto Serif';
+  font-family: 'Noto Serif', 'Noto Sans Coptic';
 }
 
 
@@ -14,6 +14,12 @@ div.text {
     &::before {
       content: 'p.';
     }
+  }
+  .milestone {
+    font-size: 80%;
+    font-style: italic;
+    text-align: center;
+    color: $gray-500;
   }
 
   .ex, .supplied, .unclear {
@@ -31,14 +37,13 @@ div.text {
   .lang_heb span.w::before {
     content:" ";
   }
-
-  .note > .note-content {
-    display: none;
+  .lang_cop span.phr::before {
+    content:" ";
   }
-  .note:hover > .note-content {
-    display: inline;
-    font-style: italic;
+
+  .note {
     color: $gray-600;
+    cursor: pointer;
   }
 
   .lang_far .poem > .b {
@@ -90,7 +95,7 @@ div.text {
     flex-direction: row;
   }
   blockquote {
-    margin-left: 1em;
+    margin: 1em 0 0 1em;
     font-style: italic;
   }
   .lg {
@@ -103,17 +108,32 @@ div.text {
   }
   .placeName {
     color: $gray-600;
+    cursor: pointer;
   }
   .said .label, .speaker {
     font-weight: bold;
   }
+  blockquote + cite {
+    display: block;
+    text-align: right;
+    margin-bottom: 1em;
+  }
+
   span.w.c:hover {
     cursor: pointer;
   }
-  span.w.selected {
-    background-color: $highlight-color;
+  span.w.selected, span.w.highlighted {
     padding: 0 0.1em 0.1em 0.15em;
     margin: 0 -0.1em -0.1em -0.15em;
+  }
+  span.w.selected {
+    background-color: $selected-color;
+  }
+  span.w.highlighted {
+    background-color: $highlight-color;
+  }
+  span.w.selected.highlighted {
+    background-color: mix($highlight-color, $selected-color);
   }
   .textpart {
     display: flex;

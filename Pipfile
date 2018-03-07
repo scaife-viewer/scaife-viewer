@@ -1,16 +1,11 @@
 [[source]]
-
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 
-
 [requires]
-
 python_version = "3.6"
 
-
 [packages]
-
 django-user-accounts = "*"
 pinax-webanalytics = "*"
 pinax-eventlog = "*"
@@ -24,8 +19,6 @@ dj-database-url = "*"
 raven = "*"
 python-mimeparse = "*"
 google-auth = "*"
-opentracing = {git="https://github.com/opentracing/opentracing-python.git", editable=true}
-basictracer = {git="https://github.com/opentracing/basictracer-python.git", editable=true}
 wrapt = "*"
 anytree = "*"
 honcho = "*"
@@ -33,9 +26,15 @@ elasticsearch = ">=6.0.0"
 google-cloud-pubsub = "*"
 regex = "*"
 certifi = "*"
-
+requests = "*"
+dask = {extras = ["bag"]}
+django-oidc-provider = "*"
+opencensus = "*"
+python-dateutil = "*"
 
 [dev-packages]
-
 "flake8" = "*"
 isort = "*"
+
+[pipenv]
+keep_outdated = true

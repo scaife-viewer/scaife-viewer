@@ -1,10 +1,19 @@
 <template>
   <div class="library-component">
     <template v-if="loading">
-      <div class="text-center">
-        <i class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
+      <div class="ball-grid-pulse page-loader">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
       </div>
     </template>
+    <div v-else-if="error" class="text-center"><b>Error</b>: {{ error }}</div>
     <template v-else>
       <div class="form-group">
         <div class="input-group">
@@ -28,8 +37,8 @@
         </div>
         <div class="sort">
           sort by:
-          <span @click="sort('cts-urn')" :class="{ active: sortKind === 'cts-urn' }">CTS URN</span> |
           <span @click="sort('text-group')" :class="{ active: sortKind === 'text-group' }">text group</span> |
+          <span @click="sort('cts-urn')" :class="{ active: sortKind === 'cts-urn' }">CTS URN</span> |
           <span @click="sort('work')" :class="{ active: sortKind === 'work' }">work</span>
         </div>
       </div>
@@ -64,16 +73,22 @@ export default {
   store,
   created() {
     this.loading = true;
-    this.$store.dispatch('loadTextGroupList').then(() => {
-      this.loading = false;
-      this.$nextTick(() => {
-        this.$refs['filter-input'].focus();
+    this.$store.dispatch('loadTextGroupList')
+      .then(() => {
+        this.loading = false;
+        this.$nextTick(() => {
+          this.$refs['filter-input'].focus();
+        });
+      })
+      .catch((err) => {
+        this.loading = false;
+        this.error = err.message;
       });
-    });
   },
   data() {
     return {
       loading: false,
+      error: '',
       query: '',
       filtered: false,
     };

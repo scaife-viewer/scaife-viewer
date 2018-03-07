@@ -20,6 +20,17 @@ body.search {
     }
   }
 
+  .search-form {
+    input[type=radio] {
+      margin-left: 8px;
+    }
+    label {
+      color: $gray-600;
+      font-size: 12px;
+      padding: 4px 4px 0 4px;
+      vertical-align: middle;
+    }
+  }
   .passage-heading {
     font-family: 'Noto Serif';
     h2 {

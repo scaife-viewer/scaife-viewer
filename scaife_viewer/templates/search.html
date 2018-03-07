@@ -34,9 +34,11 @@
           </div>
         </div>
       </div>
-      <form method="get" action="">
+      <form class="search-form" method="get" action="">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Search..." value="{{ q }}" name="q">
+          <input type="radio" id="kind-form" name="kind" value="form"{% if kind == "form" %} checked{% endif %}><label for="kind-form">Form</label>
+          <input type="radio" id="kind-lemma" name="kind" value="lemma"{% if kind == "lemma" %} checked{% endif %}><label for="kind-lemma">Lemma (Greek only)</label>
         </div>
       </form>
       <div class="row">
@@ -77,7 +79,7 @@
                 {% with passage=result.passage %}
                   <div class="passage-heading">
                     <h2>
-                      <a href="{{ result.link }}">
+                      <a href="{{ result.link }}?q={{ q }}&amp;qk={{ kind }}">
                         {% for breadcrumb in passage.text.ancestors %}
                           {{ breadcrumb.label }},
                         {% endfor %}

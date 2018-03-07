@@ -1,6 +1,6 @@
 FROM node:8.9-alpine AS static
 WORKDIR /opt/scaife-viewer/src/
-COPY package.json package-lock.json .babelrc ./
+COPY package.json package-lock.json .babelrc .postcssrc.js ./
 RUN npm install
 COPY ./static static
 RUN npm run build:prod
@@ -30,5 +30,7 @@ RUN set -x \
             | sort -u \
             | awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
         )" \
-    && apk --no-cache add $runDeps
+    && apk --no-cache add \
+        $runDeps \
+        curl
 COPY . /opt/scaife-viewer/src/

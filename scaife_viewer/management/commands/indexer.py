@@ -1,13 +1,13 @@
-import concurrent.futures
 import time
 from decimal import Decimal
 
 from django.core.management.base import BaseCommand
 
+from ...cloud import CloudJob
 from ...indexer import Indexer, DirectPusher, PubSubPusher
 
 
-class Command(BaseCommand):
+class IndexerCommand(BaseCommand):
 
     help = "Indexes passages in Elasticsearch"
 
@@ -21,15 +21,16 @@ class Command(BaseCommand):
         parser.add_argument("--pusher", type=str, default="direct")
         parser.add_argument("--pubsub-project")
         parser.add_argument("--pubsub-topic")
+        parser.add_argument("--morphology-path", type=str, default="")
 
     def handle(self, *args, **options):
-        executor = concurrent.futures.ProcessPoolExecutor(max_workers=options["max_workers"])
+        # executor = concurrent.futures.ProcessPoolExecutor(max_workers=options["max_workers"])
         if options["pusher"] == "direct":
             pusher = DirectPusher()
         elif options["pusher"] == "pubsub":
             pusher = PubSubPusher(options["pubsub_project"], options["pubsub_topic"])
         indexer = Indexer(
-            executor, pusher,
+            pusher, options["morphology_path"],
             urn_prefix=options["urn_prefix"],
             chunk_size=options["chunk_size"],
             limit=options["limit"],
@@ -39,6 +40,10 @@ class Command(BaseCommand):
             indexer.index()
         elapsed = timer.elapsed.quantize(Decimal("0.00"))
         print(f"Finished in {elapsed}s")
+
+
+class Command(CloudJob, IndexerCommand):
+    pass
 
 
 class Timer:
