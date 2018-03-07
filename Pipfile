@@ -1,11 +1,16 @@
 [[source]]
+
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 
+
 [requires]
+
 python_version = "3.6"
 
+
 [packages]
+
 django-user-accounts = "*"
 pinax-webanalytics = "*"
 pinax-eventlog = "*"
@@ -31,10 +36,10 @@ dask = {extras = ["bag"]}
 django-oidc-provider = "*"
 opencensus = "*"
 python-dateutil = "*"
+django-letsencrypt = "*"
+
 
 [dev-packages]
+
 "flake8" = "*"
 isort = "*"
-
-[pipenv]
-keep_outdated = true

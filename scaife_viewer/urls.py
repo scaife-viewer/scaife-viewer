@@ -43,6 +43,7 @@ urlpatterns = [
     url(r"^search/$", search, name="search"),
     url(r"^reading/", include("scaife_viewer.reading.urls")),
     url(r"^openid/", include("oidc_provider.urls", namespace="oidc_provider")),
+    url(r"^\.well-known/", include("letsencrypt.urls")),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

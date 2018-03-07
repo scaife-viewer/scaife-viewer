@@ -16,6 +16,8 @@ DATABASES = {
 
 ALLOWED_HOSTS = [
     "localhost",
+    "scaife.perseus.org",
+    "scaife-dev.perseus.org",
     "scaife.eldarion.com",
     "scaife-dev.eldarion.com",
 ]
@@ -162,6 +164,7 @@ INSTALLED_APPS = [
     "raven.contrib.django.raven_compat",
     "oidc_provider",
     "opencensus.trace.ext.django",
+    "letsencrypt",
 
     # project
     "scaife_viewer",
@@ -244,6 +247,9 @@ EMAIL_USE_TLS = True
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SECURE_SSL_REDIRECT = bool(int(os.environ.get("SECURE_SSL_REDIRECT", "0")))
+SECURE_REDIRECT_EXEMPT = [
+    r"\.well-known/acme-challenge/.+",
+]
 
 CACHES = {
     "default": {
