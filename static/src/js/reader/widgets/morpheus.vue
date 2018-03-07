@@ -33,7 +33,7 @@
           </div>
         </div>
       </div>
-      <p v-else-if="selectedWord" class="instructions">No results found.</p>
+      <p v-else-if="selectedWord" class="no-results">No results found.</p>
       <p v-else class="instructions">In <span class="mode">HIGHLIGHT</span> text mode, select a word to get morphological analysis (Greek only).</p>
     </div>
   </widget>
