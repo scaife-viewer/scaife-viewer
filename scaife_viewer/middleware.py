@@ -62,8 +62,7 @@ class PerRequestMiddleware:
     def process_template_response(self, request, response):
         for mw_method in self.mws[(self.resolve_key(request.path_info), "template_response")]:
             response = mw_method(request, response)
-            if response is not None:
-                return response
+        return response
 
     def process_exception(self, request, e):
         for mw_method in self.mws[(self.resolve_key(request.path_info), "exception")]:
