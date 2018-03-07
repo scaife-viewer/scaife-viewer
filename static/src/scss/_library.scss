@@ -23,26 +23,6 @@ section.hero {
   }
 }
 
-.dev-note {
-  margin: 50px 0;
-  background: $highlight-color-lighter;
-  padding: 10px 20px;
-  font-family: 'Noto Serif';
-  font-style: italic;
-  border: 1px solid $perseus-red-lighter;
-
-  span {
-    font-weight: bold;
-    font-style: normal;
-    font-family: 'Noto Sans';
-    color: $perseus-red;
-  }
-
-  b {
-    font-weight: bold;
-  }
-}
-
 .work-list {
   .form-group {
     margin-bottom: 50px;
@@ -295,5 +275,15 @@ body.library {
     line-height: 14px;
     color: $gray-800;
     padding: 4px 8px;
+  }
+}
+
+body.cts_text {
+  .toc {
+    margin: 50px 0;
+    h2 {
+      font-size: 18px;
+      font-family: 'Noto Serif';
+    }
   }
 }

@@ -18,18 +18,6 @@
 {% endblock %}
 
 {% block content %}
-  <p class="dev-note lead">
-    <span>DEV NOTE:</span>
-    We wanted to provide a landing page for each text group that would not
-    merely list the available works but provide data about the text group
-    as a whole (both general and customized to the authenticated user if
-    appropriate). This is just a placeholder for now, so DOES just list the
-    available works, but during the development process, it can evolve to
-    include things like metadata, activity feeds, visualisations, and
-    actions that the user can take. Exactly how to display works is still
-    to be established.
-  </p>
-
   <h2>Works</h2>
 
   <sv-cts-work-list text-group-url="{% url 'api:library_collection' textgroup.urn %}"></sv-cts-work-list>

@@ -1,0 +1,37 @@
+body.profile {
+
+  section.hero {
+    background: $gray-200;
+    color: $black;
+    padding: 20px 0;
+    margin-bottom: 20px;
+
+    h1 {
+      font-family: 'Noto Serif';
+      font-size: 48px;
+      font-style: italic;
+    }
+
+    h2 {
+      font-family: 'Noto Serif';
+      font-size: 28px;
+      margin: 0;
+      color: $gray-800;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+    }
+  }
+
+  p.lead {
+    font-family: 'Noto Serif';
+    margin: 50px 0;
+    color: $gray-800;
+  }
+  h2 {
+    font-family: 'Noto Sans';
+    font-size: 20px;
+    color: $gray-600;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+  }
+}
