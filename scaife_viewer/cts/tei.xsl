@@ -5,7 +5,7 @@
   xmlns:t="http://www.tei-c.org/ns/1.0"
   xmlns:py="urn:python-funcs"
   xmlns:v-popover="v-popover"
-  exclude-result-prefixes="t py">
+  exclude-result-prefixes="t py v-popover">
 
   <!-- this all comes from https://github.com/PerseusDL/perseus_nemo_ui/tree/master/perseus_nemo_ui/data/assets/static/xslt -->
 
@@ -216,6 +216,13 @@
   <xsl:template match="t:w">
     <xsl:element name="span">
       <xsl:attribute name="class">w</xsl:attribute>
+      <xsl:apply-templates/>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="t:phr">
+    <xsl:element name="span">
+      <xsl:attribute name="class">phr</xsl:attribute>
       <xsl:apply-templates/>
     </xsl:element>
   </xsl:template>

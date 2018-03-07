@@ -37,6 +37,9 @@ div.text {
   .lang_heb span.w::before {
     content:" ";
   }
+  .lang_cop span.phr::before {
+    content:" ";
+  }
 
   .note {
     color: $gray-600;
