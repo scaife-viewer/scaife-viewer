@@ -18,10 +18,7 @@
 {% endblock %}
 
 {% block content %}
-  <p class="dev-note lead">
-    <span>DEV NOTE:</span>
-    We're still working on how best to chunk and display this.
-  </p>
-
-  <sv-cts-toc-list text-url="{% url 'api:library_collection' text.urn %}"></sv-cts-toc-list>
+  <div class="toc">
+    <sv-cts-toc-list text-url="{% url 'api:library_collection' text.urn %}"></sv-cts-toc-list>
+  </div>
 {% endblock %}

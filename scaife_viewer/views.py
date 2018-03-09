@@ -369,7 +369,7 @@ def morpheus(request):
             }
             infl_entry["stem"] = infl_item["term"]["stem"]["$"]
             if "suff" in infl_item["term"]:
-                infl_entry["suff"] = infl_item["term"]["suff"]["$"]
+                infl_entry["suff"] = infl_item["term"]["suff"].get("$", "")
             infl_entry["pofs"] = infl_item["pofs"]["$"]
             if "case" in infl_item:
                 infl_entry["case"] = infl_item["case"]["$"]

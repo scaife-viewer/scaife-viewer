@@ -1,15 +1,47 @@
 {% extends "site_base.html" %}
 
-{% load i18n %}
+{% load i18n reading %}
 
 {% block head_title %}{% trans "Profile" %}{% endblock %}
 
 {% block body_class %}profile{% endblock %}
 
-{% block body %}
-  <p class="dev-note lead">
-    <span>DEV NOTE:</span>
-    This is a placeholder for your profile page. It will provide a overview of
-    all the data and activities specific to you.
-  </p>
+{% block body_base %}
+  <section class="hero">
+    <div class="container">
+      <h2>Profile</h2>
+      <h1>{{ user }}</h1>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <p class="lead">
+        As more personalized features are rolled out, information specific to
+        you will be displayed here. This includes reading lists, bookmarks, notes,
+        vocabulary lists, saved searches, and more.
+      </p>
+      <div class="row">
+        <div class="col-md-6">
+
+          {% if user.is_authenticated %}
+            {% recently_read_by user 10 as recently_read %}
+            {% if recently_read %}
+              <h2>Recently Read</h2>
+              {% for log in recently_read %}
+                <div class="log">
+                  <div class="label">
+                    <a href="{% url 'reader' log.urn %}">
+                      {{ log.metadata.textgroup_label }},
+                      {{ log.metadata.work_label }}&nbsp;{{ log.metadata.reference }}
+                    </a>
+                  </div>
+                </div>
+              {% endfor %}
+            {% endif %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </section>
 {% endblock %}

@@ -1,5 +1,9 @@
 # Scaife Digital Library Viewer
 
+The Scaife Viewer is the new reading environment for the Perseus Digital Library.
+
+See [Ways to Contribute](https://github.com/scaife-viewer/scaife-viewer/wiki/Ways-to-Contribute).
+
 ## Getting Started
 
 Requirements:
