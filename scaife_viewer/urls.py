@@ -2,6 +2,7 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.views.generic.base import TemplateView
 
 from .views import (
     LibraryCollectionVectorView,
@@ -38,7 +39,7 @@ urlpatterns = [
     url(r"^library/$", LibraryView.as_view(format="html"), name="library"),
     url(r"^library/(?P<urn>[^/]+)/$", LibraryCollectionView.as_view(format="html"), name="library_collection"),
     url(r"^library/(?P<urn>[^/]+)/redirect/$", library_text_redirect, name="library_text_redirect"),
-    url(r"^reader/(?P<urn>urn:[^/]+)/$", reader, name="reader"),
+    url(r"^reader/(?P<urn>urn:[^/]+)/$", TemplateView.as_view(template_name="reader/reader.html"), name="reader"),
     url(r"^profile/$", profile, name="profile"),
     url(r"^search/$", search, name="search"),
     url(r"^reading/", include("scaife_viewer.reading.urls")),
