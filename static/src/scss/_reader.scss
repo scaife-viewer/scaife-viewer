@@ -176,3 +176,10 @@ body.reader {
     transition: opacity 0.2s;
   }
 }
+
+.passage-redirect-alert {
+  @extend .alert;
+  @extend .alert-info;
+  @extend .text-info;
+  background: none;  // might consider doing this for all alerts
+}
