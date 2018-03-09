@@ -86,15 +86,18 @@ export default {
               });
               this.$store.commit('reader/setSelectedLemmas', { lemmas });
             } else {
-              this.morphBody = null;
+              this.reset();
             }
             this.loading = false;
           });
         });
       } else {
-        this.morphBody = null;
-        this.$store.commit('reader/setSelectedLemmas', { lemmas: null });
+        this.reset();
       }
+    },
+    reset() {
+      this.morphBody = null;
+      this.$store.commit('reader/setSelectedLemmas', { lemmas: null });
     },
   },
   components: {
