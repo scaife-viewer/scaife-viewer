@@ -162,7 +162,10 @@ class LibraryPassageView(LibraryConditionMixin, View):
         return response
 
     def as_text(self):
-        return HttpResponse(f"{self.passage.content}\n", content_type="text/plain")
+        return HttpResponse(
+            f"{self.passage.content}\n",
+            content_type="text/plain; charset=utf-8",
+        )
 
 
 class Reader(TemplateView):
