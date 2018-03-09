@@ -2,7 +2,8 @@
   <widget class="morpheus">
     <span slot="header">Morpheus</span>
     <div slot="body">
-      <div v-if="morphBody">
+      <text-loader v-if="loading" size="7px" margin="1px" />
+      <div v-else-if="morphBody">
         <div class="group" v-for="group in morphBody" :key="group.uri">
           <div class="head">
             <span class="hdwd">{{ group.hdwd }}</span>
@@ -32,6 +33,7 @@
           </div>
         </div>
       </div>
+      <p v-else-if="selectedWord" class="no-results">No results found.</p>
       <p v-else class="instructions">In <span class="mode">HIGHLIGHT</span> text mode, select a word to get morphological analysis (Greek only).</p>
     </div>
   </widget>
@@ -39,6 +41,7 @@
 
 <script>
 import store from '../../store';
+import TextLoader from '../text-loader';
 import widget from '../widget';
 
 export default {
@@ -51,6 +54,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       morphBody: null,
     };
   },
@@ -67,28 +71,38 @@ export default {
     fetchData() {
       const word = this.selectedWord;
       if (word) {
+        this.loading = true;
         const url = `/morpheus/?word=${word.w}`;
         const headers = new Headers({
           Accept: 'application/json',
         });
         fetch(url, { method: 'GET', headers }).then((resp) => {
           resp.json().then((data) => {
-            this.morphBody = data.Body;
-            const lemmas = [];
-            this.morphBody.forEach(({ hdwd }) => {
-              lemmas.push(hdwd);
-            });
-            this.$store.commit('reader/setSelectedLemmas', { lemmas });
+            if (data.Body && data.Body.length > 0) {
+              this.morphBody = data.Body;
+              const lemmas = [];
+              this.morphBody.forEach(({ hdwd }) => {
+                lemmas.push(hdwd);
+              });
+              this.$store.commit('reader/setSelectedLemmas', { lemmas });
+            } else {
+              this.reset();
+            }
+            this.loading = false;
           });
         });
       } else {
-        this.morphBody = null;
-        this.$store.commit('reader/setSelectedLemmas', { lemmas: null });
+        this.reset();
       }
+    },
+    reset() {
+      this.morphBody = null;
+      this.$store.commit('reader/setSelectedLemmas', { lemmas: null });
     },
   },
   components: {
     widget,
+    TextLoader,
   },
 };
 </script>
