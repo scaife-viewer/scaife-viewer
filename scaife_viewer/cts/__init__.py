@@ -6,6 +6,7 @@ from .collections import (Collection, Text, TextGroup, TextInventory,  # noqa
 from .exceptions import CollectionDoesNotExist, PassageDoesNotExist
 from .passage import Passage
 from .reference import URN
+from .heal import heal
 
 
 def text_inventory() -> TextInventory:
@@ -20,7 +21,7 @@ def collection(urn: str) -> Collection:
     return resolve_collection(metadata.TYPE_URI)(URN(urn), metadata)
 
 
-def passage(urn: str) -> Passage:
+def _passage_urn_objs(urn: str):
     urn = URN(urn)
     if urn.reference is None:
         raise ValueError("URN must contain a reference")
@@ -36,7 +37,25 @@ def passage(urn: str) -> Passage:
         text = c
     else:
         raise ValueError(f"{urn} must reference a work or text")
+    return text, reference
+
+
+def passage(urn: str) -> Passage:
+    text, reference = _passage_urn_objs(urn)
     passage = Passage(text, reference)
     if not passage.exists():
         raise PassageDoesNotExist(text, f"{reference} does not exist in {urn}")
     return passage
+
+
+def passage_heal(urn: str) -> Passage:
+    text, reference = _passage_urn_objs(urn)
+    start, start_healed = heal(Passage(text, reference.start))
+    if reference.end:
+        end, end_healed = heal(Passage(text, reference.end))
+        healed = any([start_healed, end_healed])
+        if start == end:
+            return start, healed
+        return Passage(text, f"{start.reference}-{end.reference}"), healed
+    else:
+        return start, start_healed
