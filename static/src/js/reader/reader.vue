@@ -53,7 +53,12 @@
               <div v-if="leftPassage.error" class="alert text-danger" role="alert">
                 Failed to load <b>{{ leftPassage.urn.toString() }}</b>: {{ leftPassage.error }}
               </div>
-              <passage-render-text v-else :text="leftPassageText" :highlighting="true" />
+              <template v-else>
+                <div v-if="leftPassage.redirected" class="alert alert-info text-info text-center" role="alert">
+                  <b>{{ leftPassage.redirected.previousUrn.reference }}</b> did not exist. Instead, we are showing you <b>{{ leftPassage.urn.reference }}</b>.
+                </div>
+                <passage-render-text :text="leftPassageText" :highlighting="true" />
+              </template>
             </div>
             <div class="right">
               <version-selector :versions="versions" :to="toRightPassage" :remove="toRemoveRight">
@@ -63,15 +68,25 @@
               <div v-if="rightPassage.error" class="alert text-danger" role="alert">
                 Failed to load <b>{{ rightPassage.urn.toString() }}</b>: {{ rightPassage.error }}
               </div>
-              <passage-render-text v-else :text="rightPassageText" :highlighting="false" />
+              <template v-else>
+                <div v-if="rightPassage.redirected" class="alert alert-info text-info text-center" role="alert">
+                  <b>{{ rightPassage.redirected.previousUrn.reference }}</b> did not exist. Instead, we are showing you <b>{{ rightPassage.urn.reference }}</b>.
+                </div>
+                <passage-render-text :text="rightPassageText" :highlighting="false" />
+              </template>
             </div>
           </template>
-          <template v-else>
+          <div v-else>
             <div v-if="leftPassage.error" class="alert text-danger" role="alert">
               Failed to load <b>{{ leftPassage.urn.toString() }}</b>: {{ leftPassage.error }}
             </div>
-            <passage-render-text v-else :text="leftPassageText" :highlighting="true" />
-          </template>
+            <template v-else>
+              <div v-if="leftPassage.redirected" class="alert alert-info text-info text-center" role="alert">
+                <b>{{ leftPassage.redirected.previousUrn.reference }}</b> did not exist. Instead, we are showing you <b>{{ leftPassage.urn.reference }}</b>.
+              </div>
+              <passage-render-text :text="leftPassageText" :highlighting="true" />
+            </template>
+          </div>
           <div class="pg-right">
             <router-link v-if="passage.metadata.next" :to="toRef(passage.metadata.next.ref)">
               <span>

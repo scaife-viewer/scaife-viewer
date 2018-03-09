@@ -7,6 +7,7 @@ import anytree
 import regex
 from lxml import etree
 from MyCapytain.common.constants import Mimetypes
+from MyCapytain.common.reference import Reference
 
 from .capitains import default_resolver
 from .reference import URN
@@ -26,6 +27,8 @@ class Passage:
     def __init__(self, text, reference):
         self.text = text
         self.reference = reference
+        if not isinstance(self.reference, Reference):
+            self.reference = Reference(self.reference)
 
     def __repr__(self):
         return f"<cts.Passage {self.urn} at {hex(id(self))}>"
@@ -52,7 +55,7 @@ class Passage:
 
     @property
     def lsb(self):
-        return self.reference.split(".")[-1]
+        return str(self.reference).split(".")[-1]
 
     @lru_cache()
     def textual_node(self):
@@ -163,13 +166,13 @@ class Passage:
             "refs": refs,
             "ancestors": [
                 {
-                    "reference": ancestor.reference,
+                    "reference": str(ancestor.reference),
                 }
                 for ancestor in self.ancestors()
             ],
             "children": [
                 {
-                    "reference": child.reference,
+                    "reference": str(child.reference),
                     "lsb": child.lsb,
                 }
                 for child in self.children()

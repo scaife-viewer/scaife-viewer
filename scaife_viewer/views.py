@@ -123,6 +123,16 @@ class LibraryPassageView(LibraryConditionMixin, View):
     format = "json"
 
     def get(self, request, **kwargs):
+        passage, healed = self.get_passage()
+        if healed:
+            key = {
+                "json": "json_url",
+                "text": "text_url",
+            }.get(self.format, "json")
+            redirect = HttpResponse(status=303)
+            redirect["Location"] = link_passage(str(passage.urn))[key]
+            return redirect
+        self.passage = passage
         to_response = {
             "json": self.as_json,
             "text": self.as_text,
@@ -132,14 +142,13 @@ class LibraryPassageView(LibraryConditionMixin, View):
     def get_passage(self):
         urn = self.kwargs["urn"]
         try:
-            return cts.passage(urn)
+            return cts.passage_heal(urn)
         except cts.PassageDoesNotExist:
             raise Http404()
 
     def as_json(self):
-        passage = self.get_passage()
         lo = {}
-        prev, nxt = passage.prev(), passage.next()
+        prev, nxt = self.passage.prev(), self.passage.next()
         if prev:
             lo["prev"] = {
                 "target": link_passage(str(prev.urn))["url"],
@@ -150,7 +159,7 @@ class LibraryPassageView(LibraryConditionMixin, View):
                 "target": link_passage(str(nxt.urn))["url"],
                 "urn": str(nxt.urn),
             }
-        response = JsonResponse(apify(passage))
+        response = JsonResponse(apify(self.passage))
         if lo:
             response["Link"] = encode_link_header(lo)
         return response

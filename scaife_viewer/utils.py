@@ -6,7 +6,8 @@ from . import cts
 def link_collection(urn) -> dict:
     return {
         "url": reverse("library_collection", kwargs={"urn": urn}),
-        "json_url": reverse("api:library_collection", kwargs={"urn": urn})
+        "json_url": reverse("api:library_collection", kwargs={"urn": urn}),
+        "text_url": reverse("api:library_passage_text", kwargs={"urn": urn}),
     }
 
 
