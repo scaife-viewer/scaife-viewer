@@ -6,17 +6,14 @@ from django.core.paginator import Paginator
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.decorators import method_decorator
-from django.utils.safestring import mark_safe
 from django.views import View
-
-import requests
+from django.views.generic.base import TemplateView
 
 import dateutil.parser
+import requests
 
 from . import cts
-from .cts.utils import natural_keys as nk
 from .http import ConditionMixin, cache_control
-from .reading.models import ReadingLog
 from .search import SearchQuery
 from .utils import apify, encode_link_header, link_passage
 
@@ -169,69 +166,22 @@ class LibraryPassageView(LibraryConditionMixin, View):
         return HttpResponse(f"{passage.content}\n", content_type="text/plain")
 
 
-def reader(request, urn):
-    right_version = request.GET.get("right")
-    try:
-        passage = cts.passage(urn)
-    except (cts.CollectionDoesNotExist, cts.PassageDoesNotExist):
-        raise Http404()
-    ctx = {
-        "passage": passage,
-    }
-    image_collection_link_urns = {
-        "urn:cts:greekLit:tlg0553.tlg001.1st1K-grc1": "https://digital.slub-dresden.de/id403855756",
-    }
-    if str(passage.urn) in image_collection_link_urns:
-        ctx["image_collection_link"] = image_collection_link_urns[str(passage.urn)]
-    passage_urn_to_image = {
-        "urn:cts:greekLit:tlg0553.tlg001.1st1K-grc1": [
-            (nk("1.18"), nk("1.21"), "https://digital.slub-dresden.de/data/goobi/403855756/403855756_tif/jpegs/00000033.tif.large.jpg"),
-            (nk("1.21"), nk("1.21"), "https://digital.slub-dresden.de/data/goobi/403855756/403855756_tif/jpegs/00000034.tif.large.jpg"),
-            (nk("1.22"), nk("1.22"), "https://digital.slub-dresden.de/data/goobi/403855756/403855756_tif/jpegs/00000035.tif.large.jpg"),
-            (nk("1.22"), nk("1.24"), "https://digital.slub-dresden.de/data/goobi/403855756/403855756_tif/jpegs/00000036.tif.large.jpg"),
-        ]
-    }
-    images = []
-    if str(passage.urn.upTo(cts.URN.WORK)) in passage_urn_to_image:
-        passage_start = passage.refs["start"].sort_key()
-        passage_end = passage.refs.get("end", passage.refs["start"]).sort_key()
-        for (start, end, image) in passage_urn_to_image[passage.urn]:
-            if start < passage_start and end >= passage_start:
-                if image not in images:
-                    images.append(image)
-            if start >= passage_start and start <= passage_end:
-                if image not in images:
-                    images.append(image)
-    ctx["images"] = images
-    if right_version:
-        right_urn = f"{passage.text.urn.upTo(cts.URN.WORK)}.{right_version}:{passage.reference}"
+class Reader(TemplateView):
+
+    template_name = "reader/reader.html"
+
+    def get_text(self):
+        urn = cts.URN(self.kwargs["urn"])
         try:
-            right_passage = cts.passage(right_urn)
-        except cts.PassageDoesNotExist as e:
-            right_text = e.text
-            right_passage = None
-            ctx["reader_error"] = mark_safe(f"Unable to load passage: <b>{right_urn}</b> was not found.")
-        else:
-            right_text = right_passage.text
-            ctx.update({
-                "right_version": right_version,
-                "right_passage": right_passage,
-            })
-    versions = []
-    for version in passage.text.versions():
-        versions.append({
-            "text": version,
-            "left": (version.urn == passage.text.urn) if right_version else False,
-            "right": (version.urn == right_text.urn) if right_version else False,
-            "overall": version.urn == passage.text.urn and not right_version,
-        })
-    ctx["versions"] = versions
-    response = render(request, "reader/reader.html", ctx)
-    if request.user.is_authenticated():
-        ReadingLog.objects.create(user=request.user, urn=urn)
-        if right_version and right_passage:
-            ReadingLog.objects.create(user=request.user, urn=right_urn)
-    return response
+            text = cts.collection(urn.upTo(cts.URN.NO_PASSAGE))
+        except cts.CollectionDoesNotExist:
+            raise Http404()
+        return text
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["text"] = self.get_text()
+        return context
 
 
 def library_text_redirect(request, urn):
