@@ -54,9 +54,7 @@
                 Failed to load <b>{{ leftPassage.urn.toString() }}</b>: {{ leftPassage.error }}
               </div>
               <template v-else>
-                <div v-if="leftPassage.redirected" class="alert alert-info text-info text-center" role="alert">
-                  <b>{{ leftPassage.redirected.previousUrn.reference }}</b> did not exist. Instead, we are showing you <b>{{ leftPassage.urn.reference }}</b>.
-                </div>
+                <passage-redirect-notice v-if="leftPassage.redirected" :passage="leftPassage" />
                 <passage-render-text :text="leftPassageText" :highlighting="true" />
               </template>
             </div>
@@ -69,9 +67,7 @@
                 Failed to load <b>{{ rightPassage.urn.toString() }}</b>: {{ rightPassage.error }}
               </div>
               <template v-else>
-                <div v-if="rightPassage.redirected" class="alert alert-info text-info text-center" role="alert">
-                  <b>{{ rightPassage.redirected.previousUrn.reference }}</b> did not exist. Instead, we are showing you <b>{{ rightPassage.urn.reference }}</b>.
-                </div>
+                <passage-redirect-notice v-if="rightPassage.redirected" :passage="rightPassage" />
                 <passage-render-text :text="rightPassageText" :highlighting="false" />
               </template>
             </div>
@@ -81,9 +77,7 @@
               Failed to load <b>{{ leftPassage.urn.toString() }}</b>: {{ leftPassage.error }}
             </div>
             <template v-else>
-              <div v-if="leftPassage.redirected" class="alert alert-info text-info text-center" role="alert">
-                <b>{{ leftPassage.redirected.previousUrn.reference }}</b> did not exist. Instead, we are showing you <b>{{ leftPassage.urn.reference }}</b>.
-              </div>
+              <passage-redirect-notice v-if="leftPassage.redirected" :passage="leftPassage" />
               <passage-render-text :text="leftPassageText" :highlighting="true" />
             </template>
           </div>
@@ -117,6 +111,7 @@
 import store from '../store';
 import PassageHumanReference from './passage-human-reference';
 import PassageRenderText from './passage-render-text';
+import PassageRedirectNotice from './passage-redirect-notice';
 import ReaderLoader from './reader-loader';
 import ReaderNavigationMixin from './reader-navigation-mixin';
 import VersionSelector from './version-selector';
@@ -154,6 +149,7 @@ export default {
   components: {
     PassageHumanReference,
     PassageRenderText,
+    PassageRedirectNotice,
     ReaderLoader,
     VersionSelector,
     ...widgets,
