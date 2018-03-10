@@ -18,8 +18,6 @@ ALLOWED_HOSTS = [
     "localhost",
     "scaife.perseus.org",
     "scaife-dev.perseus.org",
-    "scaife-cts.perseus.org",
-    "scaife-cts-dev.perseus.org",
     "scaife.eldarion.com",
     "scaife-dev.eldarion.com",
 ]
