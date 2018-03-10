@@ -8,11 +8,11 @@ from .views import (
     LibraryCollectionView,
     LibraryPassageView,
     LibraryView,
+    Reader,
     home,
     library_text_redirect,
     morpheus,
     profile,
-    reader,
     search,
     search_json
 )
@@ -38,11 +38,12 @@ urlpatterns = [
     url(r"^library/$", LibraryView.as_view(format="html"), name="library"),
     url(r"^library/(?P<urn>[^/]+)/$", LibraryCollectionView.as_view(format="html"), name="library_collection"),
     url(r"^library/(?P<urn>[^/]+)/redirect/$", library_text_redirect, name="library_text_redirect"),
-    url(r"^reader/(?P<urn>urn:[^/]+)/$", reader, name="reader"),
+    url(r"^reader/(?P<urn>urn:[^/]+)/$", Reader.as_view(), name="reader"),
     url(r"^profile/$", profile, name="profile"),
     url(r"^search/$", search, name="search"),
     url(r"^reading/", include("scaife_viewer.reading.urls")),
     url(r"^openid/", include("oidc_provider.urls", namespace="oidc_provider")),
+    url(r"^\.well-known/", include("letsencrypt.urls")),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

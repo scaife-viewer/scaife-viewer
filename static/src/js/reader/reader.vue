@@ -53,7 +53,10 @@
               <div v-if="leftPassage.error" class="alert text-danger" role="alert">
                 Failed to load <b>{{ leftPassage.urn.toString() }}</b>: {{ leftPassage.error }}
               </div>
-              <passage-render-text v-else :text="leftPassageText" :highlighting="true" />
+              <template v-else>
+                <passage-redirect-notice v-if="leftPassage.redirected" :passage="leftPassage" />
+                <passage-render-text :text="leftPassageText" :highlighting="true" />
+              </template>
             </div>
             <div class="right">
               <version-selector :versions="versions" :to="toRightPassage" :remove="toRemoveRight">
@@ -63,15 +66,21 @@
               <div v-if="rightPassage.error" class="alert text-danger" role="alert">
                 Failed to load <b>{{ rightPassage.urn.toString() }}</b>: {{ rightPassage.error }}
               </div>
-              <passage-render-text v-else :text="rightPassageText" :highlighting="false" />
+              <template v-else>
+                <passage-redirect-notice v-if="rightPassage.redirected" :passage="rightPassage" />
+                <passage-render-text :text="rightPassageText" :highlighting="false" />
+              </template>
             </div>
           </template>
-          <template v-else>
+          <div v-else>
             <div v-if="leftPassage.error" class="alert text-danger" role="alert">
               Failed to load <b>{{ leftPassage.urn.toString() }}</b>: {{ leftPassage.error }}
             </div>
-            <passage-render-text v-else :text="leftPassageText" :highlighting="true" />
-          </template>
+            <template v-else>
+              <passage-redirect-notice v-if="leftPassage.redirected" :passage="leftPassage" />
+              <passage-render-text :text="leftPassageText" :highlighting="true" />
+            </template>
+          </div>
           <div class="pg-right">
             <router-link v-if="passage.metadata.next" :to="toRef(passage.metadata.next.ref)">
               <span>
@@ -102,6 +111,7 @@
 import store from '../store';
 import PassageHumanReference from './passage-human-reference';
 import PassageRenderText from './passage-render-text';
+import PassageRedirectNotice from './passage-redirect-notice';
 import ReaderLoader from './reader-loader';
 import ReaderNavigationMixin from './reader-navigation-mixin';
 import VersionSelector from './version-selector';
@@ -139,6 +149,7 @@ export default {
   components: {
     PassageHumanReference,
     PassageRenderText,
+    PassageRedirectNotice,
     ReaderLoader,
     VersionSelector,
     ...widgets,

@@ -265,6 +265,10 @@
     font-family: 'Noto Serif';
     color: $gray-700;
   }
+  p.no-results {
+    margin: 0 0 0 22px;
+    color: $gray-600;
+  }
   p.instructions {
     font-family: 'Noto Sans';
     font-size: 12px;
