@@ -11,7 +11,7 @@
         "pk": 2,
         "model": "sites.site",
         "fields": {
-            "domain": "scaife.eldarion.com",
+            "domain": "scaife.perseus.org",
             "name": "Scaife Viewer"
         }
     }
