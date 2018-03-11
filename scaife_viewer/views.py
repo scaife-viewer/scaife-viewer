@@ -26,6 +26,10 @@ def profile(request):
     return render(request, "profile.html", {})
 
 
+def skeleton(request):
+    return render(request, "reader/skeleton.html", {})
+
+
 class BaseLibraryView(View):
 
     format = "html"

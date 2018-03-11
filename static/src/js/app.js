@@ -10,6 +10,7 @@ import CTSWorkList from './components/CTSWorkList';
 import CTSTocList from './components/CTSTocList';
 import router from './router';
 import store from './store';
+import Skeleton from './reader/Skeleton';
 
 sync(store, router);
 
@@ -39,3 +40,4 @@ Vue.customElement('sv-reader', {
   router, // tied to sv-reader until we vueify the whole site
   template: '<router-view />',
 });
+Vue.customElement('sv-skeleton', Skeleton);
