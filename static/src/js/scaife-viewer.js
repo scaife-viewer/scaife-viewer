@@ -105,7 +105,7 @@ module.exports = {
     const url = `/library/passage/${urn}/json/`;
     const res = await fetch(url);
     if (!res.ok) {
-      throw new Error(res.status);
+      throw new Error(`[${res.status}] ${res.statusText}`);
     }
     const pagination = {};
     if (res.headers.has('link')) {

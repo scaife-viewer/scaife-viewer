@@ -215,16 +215,25 @@ module.exports = {
       }
       const leftTextUrn = leftUrn.upTo('version');
       if (!state.leftText || state.leftText.urn.toString() !== leftTextUrn) {
-        ps.push(sv.fetchCollection(leftTextUrn).then((text) => {
-          commit('setLeftText', { urn: leftTextUrn, metadata: text });
-        }));
+        ps.push(sv.fetchCollection(leftTextUrn)
+          .then((text) => {
+            commit('setLeftText', { urn: leftTextUrn, metadata: text });
+          })
+          .catch((err) => {
+            commit('setError', { error: err.message });
+          }));
       }
       if (!state.leftPassage || state.leftPassage.urn.toString() !== leftUrn.toString()) {
         if (!initial) {
           dispatch('setSelectedToken', { token: null });
         }
         commit('setLeftPassageText', { text: null });
-        commit('setLeftPassage', { urn: leftUrn, ready: false, error: '', redirected: null });
+        commit('setLeftPassage', {
+          urn: leftUrn,
+          ready: false,
+          error: '',
+          redirected: null,
+        });
         ps.push(sv.fetchPassage(leftUrn)
           .then((passage) => {
             const urn = new URN(passage.urn);
@@ -244,7 +253,7 @@ module.exports = {
             }
           })
           .catch((err) => {
-            commit('setLeftPassage', { error: err.toString() });
+            commit('setError', { error: err.message });
           }));
       }
       if (rightUrn) {
@@ -256,7 +265,12 @@ module.exports = {
         }
         if (!state.rightPassage || state.rightPassage.urn.toString() !== rightUrn.toString()) {
           commit('setRightPassageText', { text: null });
-          commit('setRightPassage', { urn: rightUrn, ready: false, error: '', redirected: null });
+          commit('setRightPassage', {
+            urn: rightUrn,
+            ready: false,
+            error: '',
+            redirected: null,
+          });
           ps.push(sv.fetchPassage(rightUrn)
             .then((passage) => {
               const urn = new URN(passage.urn);
@@ -274,7 +288,7 @@ module.exports = {
               }
             })
             .catch((err) => {
-              commit('setRightPassage', { error: err.toString() });
+              commit('setRightPassage', { error: err.message });
             }));
         }
       } else if (state.rightText) {
