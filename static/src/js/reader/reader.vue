@@ -59,16 +59,18 @@
               </template>
             </div>
             <div class="right">
-              <version-selector :versions="versions" :to="toRightPassage" :remove="toRemoveRight">
-                {{ rightText.metadata.label }}
-                <div class="metadata">{{ rightText.metadata.human_lang }} {{ rightText.metadata.kind }}</div>
-              </version-selector>
-              <div v-if="rightPassage.error" class="alert text-danger" role="alert">
-                Failed to load <b>{{ rightPassage.urn.toString() }}</b>: {{ rightPassage.error }}
-              </div>
-              <template v-else>
-                <passage-redirect-notice v-if="rightPassage.redirected" :passage="rightPassage" />
-                <passage-render-text :text="rightPassageText" :highlighting="false" />
+              <template v-if="rightText.metadata">
+                <version-selector :versions="versions" :to="toRightPassage" :remove="toRemoveRight">
+                  {{ rightText.metadata.label }}
+                  <div class="metadata">{{ rightText.metadata.human_lang }} {{ rightText.metadata.kind }}</div>
+                </version-selector>
+                <div v-if="rightPassage.error" class="alert text-danger" role="alert">
+                  Failed to load <b>{{ rightPassage.urn.toString() }}</b>: {{ rightPassage.error }}
+                </div>
+                <template v-else>
+                  <passage-redirect-notice v-if="rightPassage.redirected" :passage="rightPassage" />
+                  <passage-render-text :text="rightPassageText" :highlighting="false" />
+                </template>
               </template>
             </div>
           </template>

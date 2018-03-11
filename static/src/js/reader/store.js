@@ -259,9 +259,13 @@ module.exports = {
       if (rightUrn) {
         const rightTextUrn = rightUrn.upTo('version');
         if (!state.rightText || state.rightText.urn.toString() !== rightTextUrn.toString()) {
-          ps.push(sv.fetchCollection(rightTextUrn).then((text) => {
-            commit('setRightText', { urn: rightTextUrn, metadata: text });
-          }));
+          ps.push(sv.fetchCollection(rightTextUrn)
+            .then((text) => {
+              commit('setRightText', { urn: rightTextUrn, metadata: text });
+            })
+            .catch((err) => {
+              commit('setError', { error: err.message });
+            }));
         }
         if (!state.rightPassage || state.rightPassage.urn.toString() !== rightUrn.toString()) {
           commit('setRightPassageText', { text: null });
