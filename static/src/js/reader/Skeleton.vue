@@ -1,24 +1,27 @@
 <template>
-  <div class="wrapper">
-    <template>
-      <button class="left-toggle" v-if="sidebarLeftOpened" @click="toggleSidebar('left')"><i></i></button>
-      <button class="right-toggle" v-if="sidebarRightOpened" @click="toggleSidebar('right')"><i></i></button>
-      <div :class="['sidebar', { collapsed: sidebarLeftOpened }]" id="left-sidebar">
-        <button class="right-toggle" v-if="!sidebarLeftOpened" @click="toggleSidebar('left')"><i></i></button>
-        <div>
-          LEFT PANEL
-        </div>
+  <div class="skeleton-wrapper">
+
+    <div :class="['sidebar', { collapsed: sidebarLeftOpened }]" id="left-sidebar">
+      <button class="close-left" v-if="!sidebarLeftOpened" @click="toggleSidebar('left')"><i></i></button>
+      <div>
+        LEFT PANEL
       </div>
-      <section id="content_body">
-        CONTENT BODY
-      </section>
-      <div :class="['sidebar', { collapsed: sidebarRightOpened }]" id="right-sidebar">
-        <button class="left-toggle" v-if="!sidebarRightOpened" @click="toggleSidebar('right')"><i></i></button>
-        <div>
-          RIGHT PANEL
-        </div>
+    </div>
+
+    <button class="open-left" v-if="sidebarLeftOpened" @click="toggleSidebar('left')"><i></i></button>
+
+    <section id="content_body">
+      CONTENT BODY
+    </section>
+
+    <button class="open-right" v-if="sidebarRightOpened" @click="toggleSidebar('right')"><i></i></button>
+
+    <div :class="['sidebar', { collapsed: sidebarRightOpened }]" id="right-sidebar">
+      <button class="close-right" v-if="!sidebarRightOpened" @click="toggleSidebar('right')"><i></i></button>
+      <div>
+        RIGHT PANEL
       </div>
-    </template>
+    </div>
   </div>
 </template>
 
