@@ -1,0 +1,20 @@
+version: "2.2"
+services:
+  scaife-viewer:
+    build: .
+    ports:
+      - "8000:8000"
+    links:
+      - "postgres"
+    depends_on:
+      - "postgres"
+    command:
+      - "./docker-run-server.sh"
+    environment:
+      - DATABASE_URL=postgres://root:scaife@postgres/scaife-viewer
+  postgres:
+    image: postgres:9.6
+    environment:
+      - POSTGRES_PASSWORD=scaife
+      - POSTGRES_USER=root
+      - POSTGRES_DB=scaife-viewer
