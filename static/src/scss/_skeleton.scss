@@ -9,6 +9,7 @@ body.reader {
 
   .sidebar {
     background: $white;
+    z-index: 900;
 
     &#left-sidebar {
       border-right: 1px solid $gray-300;
@@ -50,20 +51,25 @@ body.reader {
     .sidebar {
       height: 100%;
       position: absolute;
-      max-width: 50%;
+      max-width: 80%;
+      transition: max-width .2s;
+
+      &.both-opened {
+        max-width: 50%;
+      }
 
       &#left-sidebar {
         transition: left .2s;
         left: 0;
         &.collapsed {
-          left: -50%;
+          left: -80%;
         }
       }
       &#right-sidebar {
         transition: right .2s;
         right: 0;
         &.collapsed {
-          right: -50%;
+          right: -80%;
         }
       }
     }
