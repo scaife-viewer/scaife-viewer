@@ -51,7 +51,7 @@ body.reader {
     .sidebar {
       height: 100%;
       position: absolute;
-      max-width: 80%;
+      max-width: 90%;
       transition: max-width .2s;
 
       &.both-opened {
@@ -62,14 +62,14 @@ body.reader {
         transition: left .2s;
         left: 0;
         &.collapsed {
-          left: -80%;
+          left: -100%;
         }
       }
       &#right-sidebar {
         transition: right .2s;
         right: 0;
         &.collapsed {
-          right: -80%;
+          right: -100%;
         }
       }
     }
