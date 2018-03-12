@@ -123,6 +123,7 @@ export default {
       // enables us to scroll to passages not in the first page
       // of results.
       this.loading = true;
+      this.error = '';
       this.totalCount = null;
       this.results = [];
       this.offsetMap = new Set();
