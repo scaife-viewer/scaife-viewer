@@ -2,4 +2,4 @@
 
 python manage.py migrate
 python manage.py loaddata sites
-honcho start web
+exec honcho start web
