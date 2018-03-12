@@ -26,7 +26,7 @@ def _passage_urn_objs(urn: str):
     if urn.reference is None:
         raise InvalidPassageReference("URN must contain a reference")
     reference = urn.reference
-    if reference.start.subreference or reference.end.subreference:
+    if reference.start.subreference or (reference.end and reference.end.subreference):
         raise InvalidPassageReference("URN must not contain a start or end subreference")
     urn = urn.upTo(URN.NO_PASSAGE)
     c = collection(urn)
