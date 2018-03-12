@@ -238,6 +238,9 @@ LOGIN_URL = "account_login"
 
 OIDC_USERINFO = "scaife_viewer.oidc.userinfo"
 
+DEFAULT_FROM_EMAIL = "Scaife Viewer <perseus_webmaster@tufts.edu>"
+THEME_CONTACT_EMAIL = "perseus_webmaster@tufts.edu"
+
 EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend")
 EMAIL_HOST = os.environ.get("EMAIL_HOST", "")
 EMAIL_PORT = os.environ.get("EMAIL_PORT", "")
