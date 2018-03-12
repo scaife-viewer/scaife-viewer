@@ -7,3 +7,4 @@
 
 - Patrick Altman
 - Jake Wegner
+- Ryan Baumann
