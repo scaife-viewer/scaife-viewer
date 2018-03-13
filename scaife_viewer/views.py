@@ -6,7 +6,6 @@ from urllib.parse import urlencode
 from django.core.paginator import Paginator
 from django.http import Http404, HttpResponse, JsonResponse, HttpResponseBadRequest
 from django.shortcuts import redirect, render
-from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic.base import TemplateView
 
@@ -14,7 +13,7 @@ import dateutil.parser
 import requests
 
 from . import cts
-from .http import ConditionMixin, cache_control
+from .http import ConditionMixin
 from .search import SearchQuery
 from .utils import apify, encode_link_header, link_passage
 
@@ -51,7 +50,6 @@ class LibraryConditionMixin(ConditionMixin):
         return last_modified
 
 
-@method_decorator(cache_control(max_age=0, s_max_age=300), name="dispatch")
 class LibraryView(LibraryConditionMixin, BaseLibraryView):
 
     def as_html(self):
@@ -76,7 +74,6 @@ class LibraryView(LibraryConditionMixin, BaseLibraryView):
         return JsonResponse(payload)
 
 
-@method_decorator(cache_control(max_age=0, s_max_age=300), name="dispatch")
 class LibraryCollectionView(LibraryConditionMixin, BaseLibraryView):
 
     def validate_urn(self):
@@ -100,7 +97,6 @@ class LibraryCollectionView(LibraryConditionMixin, BaseLibraryView):
         return JsonResponse(apify(collection))
 
 
-@method_decorator(cache_control(max_age=0, s_max_age=300), name="dispatch")
 class LibraryCollectionVectorView(LibraryConditionMixin, View):
 
     def get(self, request, urn):
@@ -115,7 +111,6 @@ class LibraryCollectionVectorView(LibraryConditionMixin, View):
         return JsonResponse(payload)
 
 
-@method_decorator(cache_control(max_age=0, s_max_age=300), name="dispatch")
 class LibraryPassageView(LibraryConditionMixin, View):
 
     format = "json"
