@@ -304,15 +304,15 @@ def search_json(request):
 def morpheus(request):
     if ("word" not in request.GET) or ("lang" not in request.GET):
         return HttpResponseBadRequest(
-                content='Error when processing morpheus request: "word" and "lang" parameters are required'
-                )
+            content='Error when processing morpheus request: "word" and "lang" parameters are required'
+        )
     word = request.GET["word"]
     lang = request.GET["lang"]
     allowed_langs = ["grc", "lat"]
     if lang not in allowed_langs:
         return HttpResponseBadRequest(
-                content='Error when processing morpheus request: "lang" parameter must be one of: {}'.format(', '.join(allowed_langs))
-                )
+            content='Error when processing morpheus request: "lang" parameter must be one of: {}'.format(', '.join(allowed_langs))
+        )
     params = {
         "word": word,
         "lang": lang,
