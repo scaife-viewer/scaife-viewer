@@ -15,11 +15,11 @@
       <div class="search-hits">
         <text-loader v-if="loading" size="7px" margin="1px" />
         <div v-else-if="error"><small class="text-danger"><b>Error:</b> {{ error }}</small></div>
-        <template v-else ref="items">
+        <template v-else>
           <p class="instructions" v-if="query === '' && results.length === 0">Use text input above to find text in this version.</p>
           <p class="no-results" v-else-if="results.length === 0">No results found.</p>
-          <ul v-else v-for="(r, idx) in results">
-            <li :class="{ first: idx === 0, last: isLast(idx) }" :key="r.passage.urn">
+          <ul v-else ref="items">
+            <li v-for="(r, idx) in results" :class="{ first: idx === 0, last: isLast(idx) }" :key="r.passage.urn">
               <router-link :to="toPassage(r.passage.urn)" :class="{ active : r.active }">{{ r.passage.refs.start.human_reference }}</router-link>
             </li>
           </ul>
@@ -123,6 +123,7 @@ export default {
       // enables us to scroll to passages not in the first page
       // of results.
       this.loading = true;
+      this.error = '';
       this.totalCount = null;
       this.results = [];
       this.offsetMap = new Set();
@@ -147,6 +148,7 @@ export default {
                 this.infiniteScroll();
               }
             });
+            // @@@ check if we really need to forceUpdate
             this.$forceUpdate();
           }
         })

@@ -1,4 +1,5 @@
 import datetime
+import json
 import os
 from urllib.parse import urlencode
 
@@ -120,7 +121,16 @@ class LibraryPassageView(LibraryConditionMixin, View):
     format = "json"
 
     def get(self, request, **kwargs):
-        passage, healed = self.get_passage()
+        try:
+            passage, healed = self.get_passage()
+        except cts.InvalidPassageReference as e:
+            return HttpResponse(
+                json.dumps({
+                    "reason": str(e),
+                }),
+                status=400,
+                content_type="application/json",
+            )
         if healed:
             key = {
                 "json": "json_url",

@@ -83,30 +83,34 @@ class URN {
 module.exports = {
   Reference,
   URN,
+  async handleError(res) {
+    if (!res.ok) {
+      if (res.headers.get('content-type') === 'application/json') {
+        const err = await res.json();
+        throw new Error(`[${res.status}] ${res.statusText}: ${err.reason}`);
+      } else {
+        throw new Error(`[${res.status}] ${res.statusText}`);
+      }
+    }
+  },
   async fetchCollection(urn) {
     const url = `/library/${urn}/json/`;
     const res = await fetch(url);
-    if (!res.ok) {
-      throw new Error(res.status);
-    }
+    await this.handleError(res);
     return res.json();
   },
   async fetchCollectionVector(urn, ends) {
     const params = qs.stringify({ e: ends });
     const url = `/library/vector/${urn}/?${params}`;
     const res = await fetch(url);
-    if (!res.ok) {
-      throw new Error(res.status);
-    }
+    await this.handleError(res);
     const vector = await res.json();
     return Object.values(vector.collections);
   },
   async fetchPassage(urn) {
     const url = `/library/passage/${urn}/json/`;
     const res = await fetch(url);
-    if (!res.ok) {
-      throw new Error(res.status);
-    }
+    await this.handleError(res);
     const pagination = {};
     if (res.headers.has('link')) {
       const links = parseLinkHeader(res.headers.get('link'));
@@ -132,9 +136,7 @@ module.exports = {
     const params = { q, size, offset, ...scope };
     const url = `/search/json/?${qs.stringify(params)}`;
     const res = await fetch(url);
-    if (!res.ok) {
-      throw new Error(`${res.status} ${res.statusText}`);
-    }
+    await this.handleError(res);
     return res.json();
   },
 };
