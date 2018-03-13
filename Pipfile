@@ -43,3 +43,4 @@ django-letsencrypt = "*"
 
 "flake8" = "*"
 isort = "*"
+"flake8-quotes" = "*"
