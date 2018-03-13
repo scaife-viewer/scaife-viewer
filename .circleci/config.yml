@@ -10,6 +10,10 @@ jobs:
         name: Install Python dependencies
         command: |
           pipenv install --dev
+    - run:
+        name: Run flake8
+        command: |
+          pipenv run flake8 .
   deploy:
     docker:
     - image: buildpack-deps:trusty-scm
