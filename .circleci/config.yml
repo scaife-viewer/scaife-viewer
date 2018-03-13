@@ -13,7 +13,7 @@ jobs:
     - run:
         name: Run flake8
         command: |
-          pipenv run flake8 .
+          pipenv run flake8 scaife_viewer
   deploy:
     docker:
     - image: buildpack-deps:trusty-scm
