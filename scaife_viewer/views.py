@@ -311,7 +311,7 @@ def morpheus(request):
     allowed_langs = ["grc", "lat"]
     if lang not in allowed_langs:
         return HttpResponseBadRequest(
-            content='Error when processing morpheus request: "lang" parameter must be one of: {}'.format(', '.join(allowed_langs))
+            content='Error when processing morpheus request: "lang" parameter must be one of: {}'.format(", ".join(allowed_langs))
         )
     params = {
         "word": word,
