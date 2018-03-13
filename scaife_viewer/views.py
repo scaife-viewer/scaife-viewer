@@ -4,7 +4,7 @@ import os
 from urllib.parse import urlencode
 
 from django.core.paginator import Paginator
-from django.http import Http404, HttpResponse, JsonResponse
+from django.http import Http404, HttpResponse, JsonResponse, HttpResponseBadRequest
 from django.shortcuts import redirect, render
 from django.utils.decorators import method_decorator
 from django.views import View
@@ -302,13 +302,21 @@ def search_json(request):
 
 
 def morpheus(request):
-    if "word" not in request.GET:
-        raise Http404()
+    if ("word" not in request.GET) or ("lang" not in request.GET):
+        return HttpResponseBadRequest(
+                content='Error when processing morpheus request: "word" and "lang" parameters are required'
+                )
     word = request.GET["word"]
+    lang = request.GET["lang"]
+    allowed_langs = ["grc", "lat"]
+    if lang not in allowed_langs:
+        return HttpResponseBadRequest(
+                content='Error when processing morpheus request: "lang" parameter must be one of: {}'.format(', '.join(allowed_langs))
+                )
     params = {
         "word": word,
-        "lang": "grc",
-        "engine": "morpheusgrc",
+        "lang": lang,
+        "engine": f"morpheus{lang}",
     }
     qs = urlencode(params)
     url = f"http://services.perseids.org/bsp/morphologyservice/analysis/word?{qs}"
