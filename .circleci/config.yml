@@ -7,9 +7,9 @@ jobs:
     steps:
     - checkout
     - run:
-      name: Install Python dependencies
-      command: |
-        pipenv install --dev
+        name: Install Python dependencies
+        command: |
+          pipenv install --dev
   deploy:
     docker:
     - image: buildpack-deps:trusty-scm
@@ -30,10 +30,12 @@ jobs:
           bin/ec/slack-notify.sh "$INSTANCE"
 workflows:
   version: 2
-  deploy:
+  qa-deploy:
     jobs:
     - qa
     - deploy:
+        requires:
+        - qa
         filters:
           branches:
             only: /(?:master|dev)/
