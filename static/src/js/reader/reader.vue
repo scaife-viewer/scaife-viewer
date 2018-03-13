@@ -175,12 +175,6 @@ export default {
     error() {
       return this.$store.state.reader.error;
     },
-    sidebarLeftOpened() {
-      return this.$store.state.reader.sidebarLeftOpened;
-    },
-    sidebarRightOpened() {
-      return this.$store.state.reader.sidebarRightOpened;
-    },
     versions() {
       return this.$store.state.reader.versions;
     },
@@ -258,17 +252,6 @@ export default {
         if (ref) {
           this.$router.push(this.toRef(ref));
         }
-      }
-    },
-    toggleSidebar(side) {
-      switch (side) {
-        case 'left':
-          this.$store.commit('reader/toggleSidebarLeft');
-          break;
-        case 'right':
-          this.$store.commit('reader/toggleSidebarRight');
-          break;
-        default:
       }
     },
   },
