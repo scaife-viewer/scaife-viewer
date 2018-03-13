@@ -66,13 +66,18 @@ export default {
       }
       return selectedWords[0];
     },
+    text() {
+      const text = this.$store.getters['reader/text'];
+      return text;
+    },
   },
   methods: {
     fetchData() {
       const word = this.selectedWord;
+      const lang = this.text.metadata.lang;
       if (word) {
         this.loading = true;
-        const url = `/morpheus/?word=${word.w}`;
+        const url = `/morpheus/?word=${word.w}&lang=${lang}`;
         const headers = new Headers({
           Accept: 'application/json',
         });
