@@ -20,7 +20,7 @@
       "model": "sites.site",
       "fields": {
           "domain": "scaife-dev.perseus.org",
-          "name": "Scaife Viewer Development"
+          "name": "Scaife Viewer"
       }
   }
 ]
