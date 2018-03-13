@@ -1,68 +1,121 @@
-.left-toggle, .right-toggle {
-  @extend .btn;
-  @extend .btn-link;
-  position: absolute;
-  top: 0;
-  color: $gray-500;
-}
+body.reader {
 
-.left-toggle {
-  left: 0;
-  i {
-    @include icon(arrow-right);
+  .wrapper {
+    display: flex;
+    height: calc(100vh - 65px);
+    background: $gray-100;
+    position: relative;
   }
-}
-.right-toggle {
-  right: 0;
-  i {
-    @include icon(arrow-left);
-  }
-}
 
-.wrapper {
-  display: flex;
-  height: calc(100vh - 65px);
-  background: $gray-100;
-  position: relative;
-}
+  .sidebar {
+    background: $white;
+    z-index: 900;
 
-#content_body {
-  background: $white;
-  overflow-y: auto;
-  @extend .container;
-  padding-top: 35px;
-  flex: 2;
-  .container {
-    padding: 0;
-  }
-}
-
-.sidebar {
-  background: $white;
-  overflow-y: auto;
-  max-width: 600px;
-  transition: max-width .2s;
-  position: relative;
-
-  &#left-sidebar {
-    flex: 1;
-    border-right: 1px solid $gray-300;
-    > div {
-      padding: 35px 5px 5px;
+    &#left-sidebar {
+      border-right: 1px solid $gray-300;
+      > div {
+        padding: 35px 5px 5px;
+      }
     }
-  }
-  &#right-sidebar {
-    flex: 1;
-    border-left: 1px solid $gray-300;
-    > div {
-      padding: 35px 5px 5px;
+    &#right-sidebar {
+      border-left: 1px solid $gray-300;
+      > div {
+        padding: 35px 5px 5px;
+      }
     }
   }
 
-  &.collapsed {
-    flex: 1;
-    max-width: 0;
-    overflow: hidden;
-    opacity: 0;
+  @include media-breakpoint-up(sm) {  // pusher
+    .sidebar {
+      max-width: 600px;
+      transition: max-width .2s;
+      position: relative;
+
+      &#left-sidebar {
+        flex: 1;
+      }
+      &#right-sidebar {
+        flex: 1;
+      }
+
+      &.collapsed {
+        flex: 1;
+        max-width: 0;
+        overflow: hidden;
+        opacity: 0;
+      }
+    }
+  }
+
+  @include media-breakpoint-down(sm) {  // overlay
+    .sidebar {
+      height: 100%;
+      position: absolute;
+      max-width: 90%;
+      transition: max-width .2s;
+
+      &.both-opened {
+        max-width: 50%;
+      }
+
+      &#left-sidebar {
+        transition: left .2s;
+        left: 0;
+        &.collapsed {
+          left: -100%;
+        }
+      }
+      &#right-sidebar {
+        transition: right .2s;
+        right: 0;
+        &.collapsed {
+          right: -100%;
+        }
+      }
+    }
+  }
+
+  .open-left, .close-left, .open-right, .close-right {
+    @extend .btn;
+    @extend .btn-link;
+    position: absolute;
+    top: 0;
+    color: $gray-500;
+  }
+
+  .open-left {
+    left: 0;
+    i {
+      @include icon(arrow-right);
+    }
+  }
+  .close-right {
+    left: 0;
+    i {
+      @include icon(arrow-right);
+    }
+  }
+  .open-right {
+    right: 0;
+    i {
+      @include icon(arrow-left);
+    }
+  }
+  .close-left {
+    right: 0;
+    i {
+      @include icon(arrow-left);
+    }
+  }
+
+  #content_body {
+    background: $white;
+    overflow-y: auto;
+    @extend .container;
+    padding-top: 35px;
+    flex: 2;  // not needed for overlay case? (but doesn't hurt)
+    .container {
+      padding: 0;
+    }
   }
 }
