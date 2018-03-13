@@ -9,6 +9,7 @@ from elasticsearch.helpers import scan as scanner
 
 from . import cts
 
+
 es = Elasticsearch(hosts=[settings.ELASTICSEARCH_URL])
 
 

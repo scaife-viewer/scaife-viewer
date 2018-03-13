@@ -1,5 +1,5 @@
-from functools import lru_cache
 import copy
+from functools import lru_cache
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured, MiddlewareNotUsed
