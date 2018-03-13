@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.static import static
+
 from django.contrib import admin
 
 from .views import (
@@ -14,8 +15,9 @@ from .views import (
     morpheus,
     profile,
     search,
-    search_json,
+    search_json
 )
+
 
 api_patterns = (
     [
