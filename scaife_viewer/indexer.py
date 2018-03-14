@@ -109,10 +109,10 @@ class Indexer:
             except Exception as e:
                 print(f"Error {e}")
                 continue
-            # tokenized once and passed around as an optimization
-            tokens = passage.tokenize(whitespace=False)
-            words.append((str(passage.text.lang), self.count_words(tokens)))
             try:
+                # tokenized once and passed around as an optimization
+                tokens = passage.tokenize(whitespace=False)
+                words.append((str(passage.text.lang), self.count_words(tokens)))
                 doc = self.passage_to_doc(passage, p.sort_idx, tokens)
             except Exception:
                 sentry.captureException()
