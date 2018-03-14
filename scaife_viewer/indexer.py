@@ -72,10 +72,14 @@ class Indexer:
         for text_group in ti.text_groups():
             for work in text_group.works():
                 for text in work.texts():
-                    if str(text.urn) == "urn:cts:greekLit:tlg2371.tlg001.opp-grc1":
-                        # skip this URN because it takes massive amounts of memory to
-                        # index
-                        # @@@ proper exclude functionality
+                    # skip these URNs because they cause MemoryError due to their
+                    # massive token size when doing morphology alignment
+                    # @@@ proper exclude functionality
+                    exclude = {
+                        "urn:cts:greekLit:tlg2371.tlg001.opp-grc1",
+                        "urn:cts:greekLit:tlg4013.tlg001.opp-grc1",
+                    }
+                    if str(text.urn) in exclude:
                         continue
                     if urn_prefix and not str(text.urn).startswith(urn_prefix):
                         continue
