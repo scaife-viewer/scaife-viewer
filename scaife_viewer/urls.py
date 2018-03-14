@@ -10,6 +10,7 @@ from .views import (
     LibraryPassageView,
     LibraryView,
     Reader,
+    about,
     home,
     library_text_redirect,
     morpheus,
@@ -34,6 +35,7 @@ api_patterns = (
 
 urlpatterns = [
     url(r"^$", home, name="home"),
+    url(r"^about/$", about, name="about"),
     url(r"^admin/", include(admin.site.urls)),
     url(r"^account/", include("account.urls")),
     url(r"", include(api_patterns)),
