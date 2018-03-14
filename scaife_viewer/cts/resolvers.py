@@ -3,15 +3,10 @@ import os
 from functools import lru_cache
 
 from MyCapytain.common.reference import URN
-from MyCapytain.errors import (
-    InvalidURN,
-    UndispatchedTextError,
-    UnknownObjectError
-)
+from MyCapytain.errors import InvalidURN, UndispatchedTextError
 from MyCapytain.resolvers.cts.local import CtsCapitainsLocalResolver
 from MyCapytain.resources.collections.cts import (
     XmlCtsCitation,
-    XmlCtsEditionMetadata,
     XmlCtsTextgroupMetadata,
     XmlCtsWorkMetadata
 )

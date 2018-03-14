@@ -4,7 +4,7 @@ from decimal import Decimal
 from django.core.management.base import BaseCommand
 
 from ...cloud import CloudJob
-from ...indexer import Indexer, DirectPusher, PubSubPusher
+from ...indexer import DirectPusher, Indexer, PubSubPusher
 
 
 class IndexerCommand(BaseCommand):

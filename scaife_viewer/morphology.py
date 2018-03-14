@@ -1,6 +1,6 @@
 import os
 import unicodedata
-from collections import namedtuple, defaultdict
+from collections import defaultdict, namedtuple
 
 
 Form = namedtuple("Form", ["form", "code", "lemma"])

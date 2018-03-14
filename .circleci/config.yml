@@ -1,5 +1,23 @@
 version: 2
 jobs:
+  qa:
+    docker:
+    - image: circleci/python:3.6.4
+    working_directory: ~/repo
+    steps:
+    - checkout
+    - run:
+        name: Install Python dependencies
+        command: |
+          pipenv install --dev
+    - run:
+        name: Run isort
+        command: |
+          pipenv run isort -c scaife_viewer/**/*.py
+    - run:
+        name: Run flake8
+        command: |
+          pipenv run flake8 scaife_viewer
   deploy:
     docker:
     - image: buildpack-deps:trusty-scm
@@ -20,9 +38,12 @@ jobs:
           bin/ec/slack-notify.sh "$INSTANCE"
 workflows:
   version: 2
-  deploy:
+  qa-deploy:
     jobs:
+    - qa
     - deploy:
+        requires:
+        - qa
         filters:
           branches:
             only: /(?:master|dev)/

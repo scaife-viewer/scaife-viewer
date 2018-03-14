@@ -1,11 +1,11 @@
 import datetime
+import json
 import os
 from urllib.parse import urlencode
 
 from django.core.paginator import Paginator
-from django.http import Http404, HttpResponse, JsonResponse
+from django.http import Http404, HttpResponse, JsonResponse, HttpResponseBadRequest
 from django.shortcuts import redirect, render
-from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic.base import TemplateView
 
@@ -13,7 +13,7 @@ import dateutil.parser
 import requests
 
 from . import cts
-from .http import ConditionMixin, cache_control
+from .http import ConditionMixin
 from .search import SearchQuery
 from .utils import apify, encode_link_header, link_passage
 
@@ -50,7 +50,6 @@ class LibraryConditionMixin(ConditionMixin):
         return last_modified
 
 
-@method_decorator(cache_control(max_age=0, s_max_age=300), name="dispatch")
 class LibraryView(LibraryConditionMixin, BaseLibraryView):
 
     def as_html(self):
@@ -75,7 +74,6 @@ class LibraryView(LibraryConditionMixin, BaseLibraryView):
         return JsonResponse(payload)
 
 
-@method_decorator(cache_control(max_age=0, s_max_age=300), name="dispatch")
 class LibraryCollectionView(LibraryConditionMixin, BaseLibraryView):
 
     def validate_urn(self):
@@ -99,7 +97,6 @@ class LibraryCollectionView(LibraryConditionMixin, BaseLibraryView):
         return JsonResponse(apify(collection))
 
 
-@method_decorator(cache_control(max_age=0, s_max_age=300), name="dispatch")
 class LibraryCollectionVectorView(LibraryConditionMixin, View):
 
     def get(self, request, urn):
@@ -114,13 +111,21 @@ class LibraryCollectionVectorView(LibraryConditionMixin, View):
         return JsonResponse(payload)
 
 
-@method_decorator(cache_control(max_age=0, s_max_age=300), name="dispatch")
 class LibraryPassageView(LibraryConditionMixin, View):
 
     format = "json"
 
     def get(self, request, **kwargs):
-        passage, healed = self.get_passage()
+        try:
+            passage, healed = self.get_passage()
+        except cts.InvalidPassageReference as e:
+            return HttpResponse(
+                json.dumps({
+                    "reason": str(e),
+                }),
+                status=400,
+                content_type="application/json",
+            )
         if healed:
             key = {
                 "json": "json_url",
@@ -292,13 +297,21 @@ def search_json(request):
 
 
 def morpheus(request):
-    if "word" not in request.GET:
-        raise Http404()
+    if ("word" not in request.GET) or ("lang" not in request.GET):
+        return HttpResponseBadRequest(
+            content='Error when processing morpheus request: "word" and "lang" parameters are required'
+        )
     word = request.GET["word"]
+    lang = request.GET["lang"]
+    allowed_langs = ["grc", "lat"]
+    if lang not in allowed_langs:
+        return HttpResponseBadRequest(
+            content='Error when processing morpheus request: "lang" parameter must be one of: {}'.format(", ".join(allowed_langs))
+        )
     params = {
         "word": word,
-        "lang": "grc",
-        "engine": "morpheusgrc",
+        "lang": lang,
+        "engine": f"morpheus{lang}",
     }
     qs = urlencode(params)
     url = f"http://services.perseids.org/bsp/morphologyservice/analysis/word?{qs}"

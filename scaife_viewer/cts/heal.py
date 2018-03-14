@@ -1,8 +1,8 @@
-from typing import Tuple, List
+from typing import List, Tuple
 
 from .passage import Passage
-from .utils import natural_keys
 from .toc import RefNode
+from .utils import natural_keys
 
 
 def heal(passage: Passage) -> Tuple[Passage, bool]:

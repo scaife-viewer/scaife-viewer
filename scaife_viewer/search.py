@@ -9,6 +9,7 @@ from elasticsearch.helpers import scan as scanner
 
 from . import cts
 
+
 es = Elasticsearch(hosts=[settings.ELASTICSEARCH_URL])
 
 
@@ -121,6 +122,7 @@ class SearchQuery:
                 "query": self.query(),
             },
             preserve_order=bool(self.sort_by),
+            raise_on_error=False,
         )
 
     def __getitem__(self, key):

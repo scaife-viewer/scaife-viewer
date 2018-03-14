@@ -1,11 +1,11 @@
 body.reader {
+
   .passage-heading {
     margin-bottom: 20px;
     font-family: 'Noto Serif';
     color: $gray-600;
     h1 {
       margin: 0;
-      font-size: 24px;
       font-weight: normal;
       a {
         color: inherit;
@@ -13,15 +13,38 @@ body.reader {
     }
     h2 {
       margin: 0;
-      font-size: 16px;
-      line-height: 24px;
       font-weight: normal;
       font-style: italic;
     }
     h3 {
+      color: $gray-500;
+    }
+  }
+
+  @include media-breakpoint-up(sm) {
+    h1 {
+      font-size: 24px;
+    }
+    h2 {
+      font-size: 16px;
+      line-height: 24px;
+    }
+    h3 {
       font-size: 14px;
       line-height: 18px;
-      color: $gray-500;
+    }
+  }
+  @include media-breakpoint-down(sm) {
+    h1 {
+      font-size: 18px;
+    }
+    h2 {
+      font-size: 14px;
+      line-height: 20px;
+    }
+    h3 {
+      font-size: 12px;
+      line-height: 14px;
     }
   }
 

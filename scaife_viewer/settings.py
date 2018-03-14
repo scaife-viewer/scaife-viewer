@@ -113,6 +113,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "account.context_processors.account",
                 "pinax_theme_bootstrap.context_processors.theme",
+                "scaife_viewer.context_processors.google_analytics",
             ],
         },
     },
@@ -132,6 +133,7 @@ PER_REQUEST_MIDDLEWARE = {
         "django.contrib.sessions.middleware.SessionMiddleware",
         "django.middleware.csrf.CsrfViewMiddleware",
         "django.contrib.auth.middleware.AuthenticationMiddleware",
+        "django.contrib.sites.middleware.CurrentSiteMiddleware",
         "django.contrib.messages.middleware.MessageMiddleware",
         "django.middleware.clickjacking.XFrameOptionsMiddleware",
         "account.middleware.LocaleMiddleware",
@@ -237,6 +239,9 @@ AUTHENTICATION_BACKENDS = [
 LOGIN_URL = "account_login"
 
 OIDC_USERINFO = "scaife_viewer.oidc.userinfo"
+
+DEFAULT_FROM_EMAIL = "Scaife Viewer <perseus_webmaster@tufts.edu>"
+THEME_CONTACT_EMAIL = "perseus_webmaster@tufts.edu"
 
 EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend")
 EMAIL_HOST = os.environ.get("EMAIL_HOST", "")
