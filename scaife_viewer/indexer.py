@@ -1,5 +1,5 @@
 import json
-from collections import deque
+from collections import deque, Counter
 from itertools import zip_longest
 from operator import attrgetter
 from typing import Iterable, List, NamedTuple
@@ -60,7 +60,12 @@ class Indexer:
         else:
             passages = passages.compute()
         print(f"Indexing {len(passages)} passages")
-        dask.bag.from_sequence(passages).map_partitions(self.indexer).compute()
+        word_counts = dask.bag.from_sequence(passages).map_partitions(self.indexer).compute()
+        total_word_counts = Counter()
+        for (lang, count) in word_counts:
+            total_word_counts[lang] += count
+        word_count_line = [f"{lang}={count}" for lang, count in total_word_counts.items()]
+        print("Word Count Summary: {0}".format(", ".join(word_count_line)))
 
     def texts(self, urn_prefix):
         ti = cts.text_inventory()
@@ -93,6 +98,7 @@ class Indexer:
 
     def indexer(self, chunk: Iterable[SortedPassage]):
         from raven.contrib.django.raven_compat.models import client as sentry
+        words = []
         for p in chunk:
             urn = p.urn
             try:
@@ -103,21 +109,32 @@ class Indexer:
             except Exception as e:
                 print(f"Error {e}")
                 continue
+            # tokenized once and passed around as an optimization
+            tokens = passage.tokenize(whitespace=False)
+            words.append((str(passage.text.lang), self.count_words(tokens)))
             try:
-                doc = self.passage_to_doc(passage, p.sort_idx)
+                doc = self.passage_to_doc(passage, p.sort_idx, tokens)
             except Exception:
                 sentry.captureException()
                 raise
             if not self.dry_run:
                 self.pusher.push(doc)
+        return words
 
-    def lemma_content(self, passage) -> str:
+    def count_words(self, tokens) -> int:
+        n = 0
+        for token in tokens:
+            if token["t"] == "w":
+                n += 1
+        return n
+
+    def lemma_content(self, passage, tokens) -> str:
         if morphology is None:
             return ""
         short_key = morphology.short_keys.get(str(passage.text.urn))
         if short_key is None:
             return ""
-        thibault = [t["w"] for t in passage.tokenize(whitespace=False)]
+        thibault = [token["w"] for token in tokens]
         giuseppe = []
         text = morphology.text.get((short_key, str(passage.reference)))
         if text is None:
@@ -132,7 +149,7 @@ class Indexer:
             for w in align_text(thibault, giuseppe)
         ])
 
-    def passage_to_doc(self, passage, sort_idx):
+    def passage_to_doc(self, passage, sort_idx, tokens):
         return {
             "urn": str(passage.urn),
             "text_group": str(passage.text.urn.upTo(cts.URN.TEXTGROUP)),
@@ -144,8 +161,8 @@ class Indexer:
             },
             "reference": str(passage.reference),
             "sort_idx": sort_idx,
-            "lemma_content": self.lemma_content(passage),
-            "content": " ".join([t["w"] for t in passage.tokenize(whitespace=False)]),
+            "lemma_content": self.lemma_content(passage, tokens),
+            "content": " ".join([token["w"] for token in tokens]),
         }
 
 
