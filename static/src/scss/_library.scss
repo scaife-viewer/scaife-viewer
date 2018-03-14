@@ -22,6 +22,24 @@ section.hero {
     }
   }
 }
+@include media-breakpoint-down(sm) {
+  section.hero {
+    padding: 10px 0;
+    h1 {
+      font-size: 32px;
+    }
+    h2 {
+      font-size: 20px;
+    }
+  }
+}
+
+section.main > .container > h2 {
+  font-size: 18px;
+  color: $gray-600;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
 
 .work-list {
   .form-group {
@@ -99,7 +117,7 @@ section.hero {
 }
 
 .library-component {
-  margin: 50px 0 100px;
+  margin: 10px 0 100px;
 
   .controls {
     display: flex;
@@ -280,7 +298,7 @@ body.library {
 
 body.cts_text {
   .toc {
-    margin: 50px 0;
+    margin: 10px 0;
     h2 {
       font-size: 18px;
       font-family: 'Noto Serif';

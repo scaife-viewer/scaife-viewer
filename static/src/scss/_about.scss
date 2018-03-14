@@ -2,4 +2,10 @@ body.about {
   section.main {
     padding-top: 50px;
   }
+
+  @include media-breakpoint-down(sm) {
+    section.main {
+      padding-top: 20px;
+    }
+  }
 }
