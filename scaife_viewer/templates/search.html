@@ -44,10 +44,10 @@
       <div class="row">
         <div class="col-sm-3">
           {% if page.object_list.filtered_text_groups %}
-            <h5>Text Groups{% if request.GET.tg %} <a href="?{% query tg='' %}"><small>clear</small></a>{% endif %}</h5>
+            <h5>Text Groups{% if request.GET.tg %} <a href="?{% query tg='' p='' %}"><small>clear</small></a>{% endif %}</h5>
             <div class="list-group">
               {% for ftg in page.object_list.filtered_text_groups %}
-                <a href="?{% query tg=ftg.text_group.urn %}" class="list-group-item d-flex justify-content-between align-items-center">
+                <a href="?{% query tg=ftg.text_group.urn p='' %}" class="list-group-item d-flex justify-content-between align-items-center">
                   {{ ftg.text_group.label }}
                   <span class="badge badge-primary badge-pill">{{ ftg.count }}</span>
                 </a>
@@ -63,47 +63,31 @@
             </div>
           {% endif %}
           {% if paginator.count %}
-            <div>Showing <b>{{ page.start_index }}</b>&ndash;<b>{{ page.end_index }}</b> of <b>{{ paginator.count }}</b>; page {{ page.number }} of {{ paginator.num_pages }}</div>
-
-            <ul class="pagination justify-content-center">
-              <li class="page-item{% if not page.has_previous %} disabled{% endif %}">
-                <a class="page-link" href="{% if page.has_previous %}?q={{ q }}&amp;p={{ page.previous_page_number }}{% else %}#{% endif %}" tabindex="-1">Previous</a>
-              </li>
-              <li class="page-item{% if not page.has_next %} disabled{% endif %}">
-                <a class="page-link" href="{% if page.has_next %}?q={{ q }}&amp;p={{ page.next_page_number }}{% else %}#{% endif %}">Next</a>
-              </li>
-            </ul>
-
-            {% for result in page.object_list %}
-              <div class="result">
-                {% with passage=result.passage %}
-                  <div class="passage-heading">
-                    <h2>
-                      <a href="{{ result.link }}?q={{ q }}&amp;qk={{ kind }}">
-                        {% for breadcrumb in passage.text.ancestors %}
-                          {{ breadcrumb.label }},
-                        {% endfor %}
-                        {{ passage.refs.start.human_reference }}{% if passage.refs.end %} to {{ passage.refs.end.human_reference }}{% endif %} ({{ passage.refs.start.reference }}{% if passage.refs.end %} &ndash; {{ passage.refs.end.reference }}{% endif %})
-                      </a>
-                    </h2>
+            {% include "_search_pagination.html" %}
+            <div>
+              {% for result in page.object_list %}
+                <div class="result">
+                  {% with passage=result.passage %}
+                    <div class="passage-heading">
+                      <h2>
+                        <a href="{{ result.link }}?q={{ q }}&amp;qk={{ kind }}">
+                          {% for breadcrumb in passage.text.ancestors %}
+                            {{ breadcrumb.label }},
+                          {% endfor %}
+                          {{ passage.refs.start.human_reference }}{% if passage.refs.end %} to {{ passage.refs.end.human_reference }}{% endif %} ({{ passage.refs.start.reference }}{% if passage.refs.end %} &ndash; {{ passage.refs.end.reference }}{% endif %})
+                        </a>
+                      </h2>
+                    </div>
+                  {% endwith %}
+                  <div class="content">
+                    {% for c in result.content %}
+                      <p>{{ c|safe }}</p>
+                    {% endfor %}
                   </div>
-                {% endwith %}
-                <div class="content">
-                  {% for c in result.content %}
-                    <p>{{ c|safe }}</p>
-                  {% endfor %}
                 </div>
-              </div>
-            {% endfor %}
-
-            <ul class="pagination justify-content-center">
-              <li class="page-item{% if not page.has_previous %} disabled{% endif %}">
-                <a class="page-link" href="{% if page.has_previous %}?q={{ q }}&amp;p={{ page.previous_page_number }}{% else %}#{% endif %}" tabindex="-1">Previous</a>
-              </li>
-              <li class="page-item{% if not page.has_next %} disabled{% endif %}">
-                <a class="page-link" href="{% if page.has_next %}?q={{ q }}&amp;p={{ page.next_page_number }}{% else %}#{% endif %}">Next</a>
-              </li>
-            </ul>
+              {% endfor %}
+            </div>
+            {% include "_search_pagination.html" %}
           {% elif q %}
             <div>No results found for <b>{{ q }}</b>.</div>
           {% endif %}
