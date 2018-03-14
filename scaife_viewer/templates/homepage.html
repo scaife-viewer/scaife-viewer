@@ -17,10 +17,18 @@
     <h2>Perseus Digital Library</h2>
     <h1>Scaife Viewer</h1>
 
-    <p>
+    <p class="buttons">
       <a class="btn btn-primary" href="{% url 'library' %}">Browse Library</a>
       <a class="btn btn-secondary" href="{% url 'search' %}">Text Search</a>
     </p>
+
+    <p class="jump">
+      or try the
+      <a href="{% url 'reader' 'urn:cts:greekLit:tlg0012.tlg001.perseus-grc2:1.1-1.7' %}">Iliad</a>
+      or
+      Plato's <a href="{% url 'reader' 'urn:cts:greekLit:tlg0059.tlg002.perseus-grc2:17' %}">Apology</a>.
+    </p>
+
   </section>
 
   <section class="main">

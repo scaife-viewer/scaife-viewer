@@ -7,8 +7,28 @@ body.home {
 
     margin-bottom: 20px;
 
-    padding: 0 0 5px 100px;
-    background-size: 90px;
+    p.buttons {
+      margin-bottom: 0;
+      a {
+        margin-bottom: 5px;
+      }
+    }
+    p.jump {
+      font-family: 'Noto Serif';
+      font-size: 18px;
+      margin: 1em 0 0 1em;
+      color: $gray-400;
+      a {
+        color: $white;
+        // text-decoration: underline;
+        &:hover {
+          // color: $gray-600;
+        }
+      }
+    }
+
+    padding: 5px 0 10px 130px;
+    background-size: 130px;
     h1 {
       font-family: 'Noto Serif';
       font-size: 28px;
@@ -24,10 +44,19 @@ body.home {
       line-height: 1.5;
       padding: 0.3em 1em;
     }
+    p.jump {
+      font-size: 12px;
+    }
+
+    @include media-breakpoint-down(sm) {
+      p.jump {
+        margin: 0 0 1em 1em;
+      }
+    }
 
     @include media-breakpoint-up(sm) {
-      padding: 30px 0 30px 220px;
-      background-size: 200px;
+      padding: 10px 0 30px 220px;
+      background-size: 210px;
       h1 {
         font-size: 52px;
       }
@@ -37,9 +66,12 @@ body.home {
       a.btn {
         font-size: 16px;
       }
+      p.jump {
+        font-size: 14px;
+      }
     }
     @include media-breakpoint-up(md) {
-      padding: 50px 0 70px 320px;
+      padding: 30px 0 60px 320px;
       background-size: 300px;
       h1 {
         font-size: 64px;
@@ -50,9 +82,12 @@ body.home {
       a.btn {
         font-size: 20px;
       }
+      p.jump {
+        font-size: 18px;
+      }
     }
     @include media-breakpoint-up(lg) {
-      padding: 70px 0 140px 420px;
+      padding: 50px 0 100px 420px;
       background-size: 400px;
       h1 {
         font-size: 80px;
@@ -63,15 +98,21 @@ body.home {
       a.btn {
         font-size: 24px;
       }
+      p.jump {
+        font-size: 20px;
+      }
     }
     @include media-breakpoint-up(xl) {
-      padding: 100px 0 180px 520px;
+      padding: 80px 0 120px 520px;
       background-size: 500px;
       h1 {
         font-size: 96px;
       }
       h2 {
         font-size: 48px;
+      }
+      p.jump {
+        font-size: 24px;
       }
     }
   }
@@ -98,6 +139,20 @@ body.home {
     .more {
       text-align: right;
       font-style: italic;
+    }
+  }
+  @include media-breakpoint-down(sm) {
+    section.main {
+      padding-top: 10px;
+      h2 {
+        font-size: 24px;
+      }
+      p.lead {
+        font-size: 16px;
+      }
+      p.more {
+        font-size: 14px;
+      }
     }
   }
 }
