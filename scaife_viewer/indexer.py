@@ -8,7 +8,6 @@ import dask.bag
 import elasticsearch
 import elasticsearch.helpers
 from anytree.iterators import PreOrderIter
-from raven.contrib.django.raven_compat.models import client as sentry
 
 from . import cts
 from .morphology import Morphology
@@ -88,6 +87,7 @@ class Indexer:
         return passages
 
     def indexer(self, chunk: Iterable[SortedPassage]):
+        from raven.contrib.django.raven_compat.models import client as sentry
         for p in chunk:
             urn = p.urn
             try:
