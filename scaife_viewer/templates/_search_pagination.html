@@ -1,0 +1,33 @@
+{% load scaife_tags %}
+
+<div class="search-pagination">
+  <div>
+    Showing <b>{{ page.start_index }}</b>&ndash;<b>{{ page.end_index }}</b> of <b>{{ paginator.count }}</b>
+  </div>
+
+  <div>
+    {% if page.number > 1 %}
+        <a href="?{% query p=1 %}"><i class="fa fa-step-backward"></i></a>
+      {% else %}
+        <span class="text-muted"><i class="fa fa-step-backward"></i></span>
+      {% endif %}
+    {% if page.has_previous %}
+      <a href="?{% query p=page.previous_page_number %}"><i class="fa fa-backward"></i></a>
+    {% else %}
+      <span class="text-muted"><i class="fa fa-backward"></i></span>
+    {% endif %}
+    <span class="current">
+      page <b>{{ page.number }}</b> of <b>{{ page.paginator.num_pages }}</b>
+    </span>
+    {% if page.has_next %}
+      <a href="?{% query p=page.next_page_number %}"><i class="fa fa-forward"></i></a>
+    {% else %}
+      <span class="text-muted"><i class="fa fa-forward"></i></span>
+    {% endif %}
+    {% if page.number < page.paginator.num_pages %}
+      <a href="?{% query p=page.paginator.num_pages %}"><i class="fa fa-step-forward"></i></a>
+    {% else %}
+      <span class="text-muted"><i class="fa fa-step-forward"></i></span>
+    {% endif %}
+  </div>
+</div>

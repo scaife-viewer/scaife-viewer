@@ -57,4 +57,9 @@ body.search {
       line-height: 1.8;
     }
   }
+
+  .search-pagination {
+    @extend .d-flex, .justify-content-between;
+    margin-bottom: 20px;
+  }
 }
