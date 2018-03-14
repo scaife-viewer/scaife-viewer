@@ -78,6 +78,9 @@ class Indexer:
                     exclude = {
                         "urn:cts:greekLit:tlg2371.tlg001.opp-grc1",
                         "urn:cts:greekLit:tlg4013.tlg001.opp-grc1",
+                        "urn:cts:greekLit:tlg4013.tlg003.opp-grc1",
+                        "urn:cts:greekLit:tlg4013.tlg004.opp-grc1",
+                        "urn:cts:greekLit:tlg4013.tlg005.opp-grc1",
                     }
                     if str(text.urn) in exclude:
                         continue
