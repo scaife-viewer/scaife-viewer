@@ -5,8 +5,6 @@ body.home {
     background-color: $gray-800;
     color: $white;
 
-    margin-bottom: 20px;
-
     p.buttons {
       margin-bottom: 0;
       a {
@@ -20,10 +18,6 @@ body.home {
       color: $gray-400;
       a {
         color: $white;
-        // text-decoration: underline;
-        &:hover {
-          // color: $gray-600;
-        }
       }
     }
 
@@ -143,7 +137,7 @@ body.home {
   }
   @include media-breakpoint-down(sm) {
     section.main {
-      padding-top: 10px;
+      padding-top: 20px;
       h2 {
         font-size: 24px;
       }
@@ -151,6 +145,24 @@ body.home {
         font-size: 16px;
       }
       p.more {
+        font-size: 14px;
+      }
+    }
+  }
+
+  section.stats {
+    background: $gray-200;
+    padding: 16px 0;
+    p {
+      text-align: center;
+      @extend .lead;
+      margin: 0
+    }
+  }
+  @include media-breakpoint-down(sm) {
+    section.stats {
+      padding: 10px 0;
+      p {
         font-size: 14px;
       }
     }

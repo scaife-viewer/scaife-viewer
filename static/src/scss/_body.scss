@@ -6,3 +6,7 @@ body {
   @extend .container;
   padding-top: 50px;
 }
+
+p.lead b {
+  font-weight: bold;
+}
