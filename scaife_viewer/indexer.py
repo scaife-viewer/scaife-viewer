@@ -8,6 +8,7 @@ import dask.bag
 import elasticsearch
 import elasticsearch.helpers
 from anytree.iterators import PreOrderIter
+from raven.contrib.django.raven_compat.models import client as sentry
 
 from . import cts
 from .morphology import Morphology
@@ -91,7 +92,11 @@ class Indexer:
             except Exception as e:
                 print(f"Error {e}")
                 continue
-            doc = self.passage_to_doc(passage, p["sort_idx"])
+            try:
+                doc = self.passage_to_doc(passage, p["sort_idx"])
+            except Exception:
+                sentry.captureException()
+                raise
             if not self.dry_run:
                 self.pusher.push(doc)
 
