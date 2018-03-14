@@ -37,6 +37,7 @@ django-oidc-provider = "*"
 opencensus = "*"
 python-dateutil = "*"
 django-letsencrypt = "*"
+lxml = "<4.2"
 
 
 [dev-packages]
