@@ -34,3 +34,4 @@ RUN set -x \
         $runDeps \
         curl
 COPY . /opt/scaife-viewer/src/
+RUN python manage.py collectstatic --noinput
