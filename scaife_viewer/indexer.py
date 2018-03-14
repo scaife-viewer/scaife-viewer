@@ -81,6 +81,14 @@ class Indexer:
                         "urn:cts:greekLit:tlg4013.tlg003.opp-grc1",
                         "urn:cts:greekLit:tlg4013.tlg004.opp-grc1",
                         "urn:cts:greekLit:tlg4013.tlg005.opp-grc1",
+                        "urn:cts:greekLit:tlg4015.tlg001.opp-grc1",
+                        "urn:cts:greekLit:tlg4015.tlg002.opp-grc1",
+                        "urn:cts:greekLit:tlg4015.tlg004.opp-grc1",
+                        "urn:cts:greekLit:tlg4015.tlg005.opp-grc1",
+                        "urn:cts:greekLit:tlg4015.tlg006.opp-grc1",
+                        "urn:cts:greekLit:tlg4015.tlg007.opp-grc1",
+                        "urn:cts:greekLit:tlg4015.tlg008.opp-grc1",
+                        "urn:cts:greekLit:tlg4015.tlg009.opp-grc1",
                     }
                     if str(text.urn) in exclude:
                         continue
@@ -121,6 +129,8 @@ class Indexer:
                 tokens = passage.tokenize(whitespace=False)
                 words.append((str(passage.text.lang), self.count_words(tokens)))
                 doc = self.passage_to_doc(passage, p.sort_idx, tokens)
+            except MemoryError:
+                return words
             except Exception:
                 sentry.captureException()
                 raise
