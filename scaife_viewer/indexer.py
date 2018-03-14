@@ -2,7 +2,7 @@ import json
 from collections import deque
 from itertools import zip_longest
 from operator import attrgetter
-from typing import Iterable
+from typing import Iterable, List, NamedTuple
 
 import dask.bag
 import elasticsearch
@@ -15,6 +15,12 @@ from .morphology import Morphology
 
 
 morphology = None
+
+
+class SortedPassage(NamedTuple):
+
+    urn: str
+    sort_idx: int
 
 
 class Indexer:
@@ -66,7 +72,7 @@ class Indexer:
                         continue
                     yield text
 
-    def passages_from_text(self, text):
+    def passages_from_text(self, text) -> List[SortedPassage]:
         passages = []
         try:
             toc = text.toc()
@@ -75,15 +81,15 @@ class Indexer:
         else:
             leaves = PreOrderIter(toc.root, filter_=attrgetter("is_leaf"))
             for i, node in enumerate(leaves):
-                passages.append({
-                    "urn": f"{text.urn}:{node.reference}",
-                    "sort_idx": i,
-                })
+                passages.append(SortedPassage(
+                    urn=f"{text.urn}:{node.reference}",
+                    sort_idx=i,
+                ))
         return passages
 
-    def indexer(self, chunk: Iterable[str]):
+    def indexer(self, chunk: Iterable[SortedPassage]):
         for p in chunk:
-            urn = p["urn"]
+            urn = p.urn
             try:
                 passage = cts.passage(urn)
             except cts.PassageDoesNotExist:
@@ -93,7 +99,7 @@ class Indexer:
                 print(f"Error {e}")
                 continue
             try:
-                doc = self.passage_to_doc(passage, p["sort_idx"])
+                doc = self.passage_to_doc(passage, p.sort_idx)
             except Exception:
                 sentry.captureException()
                 raise
