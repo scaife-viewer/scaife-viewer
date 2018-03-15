@@ -15,6 +15,7 @@
     </template>
     <div v-else-if="error" class="text-center"><b>Error</b>: {{ error }}</div>
     <template v-else>
+      <h2>Text Groups and Works</h2>
       <div class="form-group">
         <div class="input-group">
           <input

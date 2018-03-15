@@ -34,20 +34,13 @@ section.hero {
   }
 }
 
-section.main > .container > h2 {
-  font-size: 18px;
-  color: $gray-600;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-}
-
 .work-list {
   .form-group {
     margin-bottom: 50px;
   }
   .work {
     margin-top: 2em;
-    h2 {
+    h3 {
       font-family: 'Noto Serif';
       font-weight: normal;
       font-style: italic;
@@ -116,6 +109,15 @@ section.main > .container > h2 {
   }
 }
 
+section.main {
+  h2 {
+    font-size: 18px;
+    color: $gray-600;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+  }
+
+}
 .library-component {
   margin: 10px 0 100px;
 
@@ -299,7 +301,7 @@ body.library {
 body.cts_text {
   .toc {
     margin: 10px 0;
-    h2 {
+    h3 {
       font-size: 18px;
       font-family: 'Noto Serif';
     }

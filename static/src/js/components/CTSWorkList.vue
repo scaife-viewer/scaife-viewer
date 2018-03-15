@@ -9,6 +9,8 @@
     </template>
     <div v-else-if="error" class="text-center"><b>Error</b>: {{ error }}</div>
     <div v-else>
+      <h2>Works</h2>
+
       <div class="form-group">
         <div class="input-group">
           <input
@@ -24,7 +26,7 @@
         </div>
       </div>
       <div class="work" v-for="work in works" :key="work.url">
-        <h2><a :href="work.url"><b>{{ work.label }}</b></a></h2>
+        <h3><a :href="work.url"><b>{{ work.label }}</b></a></h3>
         <div class="card-deck">
           <div class="version-card" v-for="text in work.texts" :key="text.url">
             <div class="card-body">

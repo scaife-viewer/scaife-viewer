@@ -15,8 +15,9 @@
     </template>
     <div v-else-if="error" class="text-center"><b>Error</b>: {{ error }}</div>
     <div v-else>
+      <h2>Table of Contents</h2>
       <div v-for="entry in toc" :key="entry.urn">
-        <h2><a :href="entry.url">{{ entry.label }} {{ entry.num }}</a></h2>
+        <h3><a :href="entry.url">{{ entry.label }} {{ entry.num }}</a></h3>
       </div>
     </div>
   </div>
