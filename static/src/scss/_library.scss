@@ -109,15 +109,15 @@ section.hero {
   }
 }
 
-section.main {
+body.library section.main {
   h2 {
     font-size: 18px;
     color: $gray-600;
     text-transform: uppercase;
     letter-spacing: 0.2em;
   }
-
 }
+
 .library-component {
   margin: 10px 0 100px;
 
