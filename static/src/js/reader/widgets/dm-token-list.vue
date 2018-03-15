@@ -50,7 +50,7 @@ export default {
   },
   methods: {
     async fetchTokenList() {
-      const server = 'https://li550.us1.eldarioncloud.com';
+      const server = 'https://morph.perseus.org';
       const { urn } = this.passage;
       const res = await fetch(`${server}/read/${urn}/json/`);
       if (!res.ok) {
