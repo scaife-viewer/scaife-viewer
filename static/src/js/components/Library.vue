@@ -25,9 +25,9 @@
             placeholder="Find a text group or work... (e.g. Plato or Apology)"
             ref="filter-input"
           >
-          <span class="input-group-addon" v-if="filtered">
-            <i class="fa fa-times" @click="clearQuery"></i>
-          </span>
+          <div class="input-group-append" v-if="filtered">
+            <button class="btn btn-outline-secondary" type="button" @click="clearQuery"><i class="fa fa-times"></i></button>
+          </div>
         </div>
       </div>
       <div class="controls">
