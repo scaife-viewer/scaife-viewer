@@ -22,6 +22,17 @@ section.hero {
     }
   }
 }
+@include media-breakpoint-down(sm) {
+  section.hero {
+    padding: 10px 0;
+    h1 {
+      font-size: 32px;
+    }
+    h2 {
+      font-size: 20px;
+    }
+  }
+}
 
 .work-list {
   .form-group {
@@ -29,7 +40,7 @@ section.hero {
   }
   .work {
     margin-top: 2em;
-    h2 {
+    h3 {
       font-family: 'Noto Serif';
       font-weight: normal;
       font-style: italic;
@@ -98,8 +109,17 @@ section.hero {
   }
 }
 
+body.library section.main {
+  h2 {
+    font-size: 18px;
+    color: $gray-600;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+  }
+}
+
 .library-component {
-  margin: 50px 0 100px;
+  margin: 10px 0 100px;
 
   .controls {
     display: flex;
@@ -280,8 +300,8 @@ body.library {
 
 body.cts_text {
   .toc {
-    margin: 50px 0;
-    h2 {
+    margin: 10px 0;
+    h3 {
       font-size: 18px;
       font-family: 'Noto Serif';
     }

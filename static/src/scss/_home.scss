@@ -1,97 +1,173 @@
-section.home-hero {
-  background-image: url(../images/perseus_running_man.png);
-  background-repeat: no-repeat;
-  background-color: $gray-800;
-  color: $white;
+body.home {
+  section.home-hero {
+    background-image: url(../images/perseus_running_man.png);
+    background-repeat: no-repeat;
+    background-color: $gray-800;
+    color: $white;
 
-  margin-bottom: 20px;
+    p.buttons {
+      margin-bottom: 0;
+      a {
+        margin-bottom: 5px;
+      }
+    }
+    p.jump {
+      font-family: 'Noto Serif';
+      font-size: 18px;
+      margin: 1em 0 0 1em;
+      color: $gray-400;
+      a {
+        color: $white;
+      }
+    }
 
-  padding: 0 0 5px 100px;
-  background-size: 90px;
-  h1 {
+    padding: 5px 0 10px 130px;
+    background-size: 130px;
+    h1 {
+      font-family: 'Noto Serif';
+      font-size: 28px;
+      margin-bottom: 0.3em;
+    }
+    h2 {
+      font-family: 'Noto Serif';
+      margin-bottom: 0;
+      font-size: 14px;
+    }
+    a.btn {
+      font-size: 12px;
+      line-height: 1.5;
+      padding: 0.3em 1em;
+    }
+    p.jump {
+      font-size: 12px;
+    }
+
+    @include media-breakpoint-down(sm) {
+      p.jump {
+        margin: 0 0 1em 1em;
+      }
+    }
+
+    @include media-breakpoint-up(sm) {
+      padding: 10px 0 30px 220px;
+      background-size: 210px;
+      h1 {
+        font-size: 52px;
+      }
+      h2 {
+        font-size: 26px;
+      }
+      a.btn {
+        font-size: 16px;
+      }
+      p.jump {
+        font-size: 14px;
+      }
+    }
+    @include media-breakpoint-up(md) {
+      padding: 30px 0 60px 320px;
+      background-size: 300px;
+      h1 {
+        font-size: 64px;
+      }
+      h2 {
+        font-size: 32px;
+      }
+      a.btn {
+        font-size: 20px;
+      }
+      p.jump {
+        font-size: 18px;
+      }
+    }
+    @include media-breakpoint-up(lg) {
+      padding: 50px 0 100px 420px;
+      background-size: 400px;
+      h1 {
+        font-size: 80px;
+      }
+      h2 {
+        font-size: 40px;
+      }
+      a.btn {
+        font-size: 24px;
+      }
+      p.jump {
+        font-size: 20px;
+      }
+    }
+    @include media-breakpoint-up(xl) {
+      padding: 80px 0 120px 520px;
+      background-size: 500px;
+      h1 {
+        font-size: 96px;
+      }
+      h2 {
+        font-size: 48px;
+      }
+      p.jump {
+        font-size: 24px;
+      }
+    }
+  }
+
+  section.main {
     font-family: 'Noto Serif';
-    font-size: 28px;
-    margin-bottom: 0.3em;
+    padding-top: 50px;
+    h2 {
+      color: $perseus-red;
+    }
+    h3 {
+      font-family: 'Noto Sans';
+      font-size: 14px;
+      margin: 1.5em 0 0;
+      color: $gray-600;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+    }
+    ul {
+      list-style-type: circle;
+      margin-top: 0.5em;
+      font-size: 14px;
+    }
+    .lead {
+      margin-top: 15px;
+    }
+    .more {
+      text-align: right;
+      font-style: italic;
+    }
   }
-  h2 {
-    font-family: 'Noto Serif';
-    margin-bottom: 0;
-    font-size: 14px;
-  }
-  a.btn {
-    font-size: 12px;
-    line-height: 1.5;
-    padding: 0.3em 1em;
+  @include media-breakpoint-down(sm) {
+    section.main {
+      padding-top: 20px;
+      h2 {
+        font-size: 24px;
+      }
+      p.lead {
+        font-size: 16px;
+      }
+      p.more {
+        font-size: 14px;
+      }
+    }
   }
 
-  @include media-breakpoint-up(sm) {
-    padding: 30px 0 30px 220px;
-    background-size: 200px;
-    h1 {
-      font-size: 52px;
-    }
-    h2 {
-      font-size: 26px;
-    }
-    a.btn {
-      font-size: 16px;
+  section.stats {
+    background: $gray-200;
+    padding: 16px 0;
+    p {
+      text-align: center;
+      @extend .lead;
+      margin: 0
     }
   }
-  @include media-breakpoint-up(md) {
-    padding: 50px 0 70px 320px;
-    background-size: 300px;
-    h1 {
-      font-size: 64px;
+  @include media-breakpoint-down(sm) {
+    section.stats {
+      padding: 10px 0;
+      p {
+        font-size: 14px;
+      }
     }
-    h2 {
-      font-size: 32px;
-    }
-    a.btn {
-      font-size: 20px;
-    }
-  }
-  @include media-breakpoint-up(lg) {
-    padding: 70px 0 140px 420px;
-    background-size: 400px;
-    h1 {
-      font-size: 80px;
-    }
-    h2 {
-      font-size: 40px;
-    }
-    a.btn {
-      font-size: 24px;
-    }
-  }
-  @include media-breakpoint-up(xl) {
-    padding: 100px 0 180px 520px;
-    background-size: 500px;
-    h1 {
-      font-size: 96px;
-    }
-    h2 {
-      font-size: 48px;
-    }
-  }
-}
-
-.changelog {
-  font-family: 'Noto Serif';
-  margin-top: 50px;
-  h2 {
-    color: $perseus-red;
-  }
-  h3 {
-    font-family: 'Noto Sans';
-    font-size: 14px;
-    margin: 1.5em 0 0;
-    color: $gray-600;
-    text-transform: uppercase;
-    letter-spacing: 0.2em;
-  }
-  ul {
-    list-style-type: circle;
-    margin-top: 0.5em;
-    font-size: 14px;
   }
 }

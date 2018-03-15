@@ -9,6 +9,8 @@
     </template>
     <div v-else-if="error" class="text-center"><b>Error</b>: {{ error }}</div>
     <div v-else>
+      <h2>Works</h2>
+
       <div class="form-group">
         <div class="input-group">
           <input
@@ -18,13 +20,13 @@
             placeholder="Find a work..."
             ref="filter-input"
           >
-          <span class="input-group-addon" v-if="filtered">
-            <i class="fa fa-times" @click="clearQuery"></i>
-          </span>
+          <div class="input-group-append" v-if="filtered">
+            <button class="btn btn-outline-secondary" type="button" @click="clearQuery"><i class="fa fa-times"></i></button>
+          </div>
         </div>
       </div>
       <div class="work" v-for="work in works" :key="work.url">
-        <h2><a :href="work.url"><b>{{ work.label }}</b></a></h2>
+        <h3><a :href="work.url"><b>{{ work.label }}</b></a></h3>
         <div class="card-deck">
           <div class="version-card" v-for="text in work.texts" :key="text.url">
             <div class="card-body">

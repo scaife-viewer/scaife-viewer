@@ -1,5 +1,5 @@
 <template>
-  <widget class="word-list" v-if="show">
+  <widget class="word-list" v-if="enabled && show">
     <span slot="header">Word List</span>
     <div slot="sticky">
       <p v-if="!usedFallbackApi" class="legend">Number in parentheses is frequency per 10k in this work.</p>
@@ -22,11 +22,17 @@ import widget from '../widget';
 export default {
   store,
   computed: {
+    text() {
+      return this.$store.getters['reader/text'];
+    },
     passage() {
       return this.$store.getters['reader/passage'];
     },
     selectedLemmas() {
       return this.$store.state.reader.selectedLemmas;
+    },
+    enabled() {
+      return this.text.metadata.lang === 'grc';
     },
   },
   data() {
@@ -37,11 +43,13 @@ export default {
     };
   },
   watch: {
-    passage: {
-      handler: 'fetchWordList',
-      immediate: true,
-    },
+    passage: 'fetchWordList',
     selectedLemmas: 'fetchWordList',
+  },
+  created() {
+    if (this.enabled) {
+      this.fetchWordList();
+    }
   },
   methods: {
     async fetchWordList() {

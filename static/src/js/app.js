@@ -5,7 +5,6 @@ import VueRouter from 'vue-router';
 import { sync } from 'vuex-router-sync';
 import vueCustomElement from 'vue-custom-element';
 import Library from './components/Library';
-import CTSTextGroupList from './components/CTSTextGroupList';
 import CTSWorkList from './components/CTSWorkList';
 import CTSTocList from './components/CTSTocList';
 import router from './router';
@@ -32,7 +31,6 @@ Vue.directive('popover', (el, binding) => {
 });
 
 Vue.customElement('sv-library', Library);
-Vue.customElement('sv-cts-textgroup-list', CTSTextGroupList);
 Vue.customElement('sv-cts-work-list', CTSWorkList);
 Vue.customElement('sv-cts-toc-list', CTSTocList);
 Vue.customElement('sv-reader', {

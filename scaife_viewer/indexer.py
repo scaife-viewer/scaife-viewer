@@ -1,8 +1,8 @@
 import json
-from collections import deque
+from collections import deque, Counter
 from itertools import zip_longest
 from operator import attrgetter
-from typing import Iterable
+from typing import Iterable, List, NamedTuple
 
 import dask.bag
 import elasticsearch
@@ -14,6 +14,12 @@ from .morphology import Morphology
 
 
 morphology = None
+
+
+class SortedPassage(NamedTuple):
+
+    urn: str
+    sort_idx: int
 
 
 class Indexer:
@@ -54,18 +60,43 @@ class Indexer:
         else:
             passages = passages.compute()
         print(f"Indexing {len(passages)} passages")
-        dask.bag.from_sequence(passages).map_partitions(self.indexer).compute()
+        word_counts = dask.bag.from_sequence(passages).map_partitions(self.indexer).compute()
+        total_word_counts = Counter()
+        for (lang, count) in word_counts:
+            total_word_counts[lang] += count
+        word_count_line = [f"{lang}={count}" for lang, count in total_word_counts.items()]
+        print("Word Count Summary: {0}".format(", ".join(word_count_line)))
 
     def texts(self, urn_prefix):
         ti = cts.text_inventory()
         for text_group in ti.text_groups():
             for work in text_group.works():
                 for text in work.texts():
+                    # skip these URNs because they cause MemoryError due to their
+                    # massive token size when doing morphology alignment
+                    # @@@ proper exclude functionality
+                    exclude = {
+                        "urn:cts:greekLit:tlg2371.tlg001.opp-grc1",
+                        "urn:cts:greekLit:tlg4013.tlg001.opp-grc1",
+                        "urn:cts:greekLit:tlg4013.tlg003.opp-grc1",
+                        "urn:cts:greekLit:tlg4013.tlg004.opp-grc1",
+                        "urn:cts:greekLit:tlg4013.tlg005.opp-grc1",
+                        "urn:cts:greekLit:tlg4015.tlg001.opp-grc1",
+                        "urn:cts:greekLit:tlg4015.tlg002.opp-grc1",
+                        "urn:cts:greekLit:tlg4015.tlg004.opp-grc1",
+                        "urn:cts:greekLit:tlg4015.tlg005.opp-grc1",
+                        "urn:cts:greekLit:tlg4015.tlg006.opp-grc1",
+                        "urn:cts:greekLit:tlg4015.tlg007.opp-grc1",
+                        "urn:cts:greekLit:tlg4015.tlg008.opp-grc1",
+                        "urn:cts:greekLit:tlg4015.tlg009.opp-grc1",
+                    }
+                    if str(text.urn) in exclude:
+                        continue
                     if urn_prefix and not str(text.urn).startswith(urn_prefix):
                         continue
                     yield text
 
-    def passages_from_text(self, text):
+    def passages_from_text(self, text) -> List[SortedPassage]:
         passages = []
         try:
             toc = text.toc()
@@ -74,15 +105,17 @@ class Indexer:
         else:
             leaves = PreOrderIter(toc.root, filter_=attrgetter("is_leaf"))
             for i, node in enumerate(leaves):
-                passages.append({
-                    "urn": f"{text.urn}:{node.reference}",
-                    "sort_idx": i,
-                })
+                passages.append(SortedPassage(
+                    urn=f"{text.urn}:{node.reference}",
+                    sort_idx=i,
+                ))
         return passages
 
-    def indexer(self, chunk: Iterable[str]):
+    def indexer(self, chunk: Iterable[SortedPassage]):
+        from raven.contrib.django.raven_compat.models import client as sentry
+        words = []
         for p in chunk:
-            urn = p["urn"]
+            urn = p.urn
             try:
                 passage = cts.passage(urn)
             except cts.PassageDoesNotExist:
@@ -91,17 +124,34 @@ class Indexer:
             except Exception as e:
                 print(f"Error {e}")
                 continue
-            doc = self.passage_to_doc(passage, p["sort_idx"])
+            try:
+                # tokenized once and passed around as an optimization
+                tokens = passage.tokenize(whitespace=False)
+                words.append((str(passage.text.lang), self.count_words(tokens)))
+                doc = self.passage_to_doc(passage, p.sort_idx, tokens)
+            except MemoryError:
+                return words
+            except Exception:
+                sentry.captureException()
+                raise
             if not self.dry_run:
                 self.pusher.push(doc)
+        return words
 
-    def lemma_content(self, passage) -> str:
+    def count_words(self, tokens) -> int:
+        n = 0
+        for token in tokens:
+            if token["t"] == "w":
+                n += 1
+        return n
+
+    def lemma_content(self, passage, tokens) -> str:
         if morphology is None:
             return ""
         short_key = morphology.short_keys.get(str(passage.text.urn))
         if short_key is None:
             return ""
-        thibault = [t["w"] for t in passage.tokenize(whitespace=False)]
+        thibault = [token["w"] for token in tokens]
         giuseppe = []
         text = morphology.text.get((short_key, str(passage.reference)))
         if text is None:
@@ -116,7 +166,7 @@ class Indexer:
             for w in align_text(thibault, giuseppe)
         ])
 
-    def passage_to_doc(self, passage, sort_idx):
+    def passage_to_doc(self, passage, sort_idx, tokens):
         return {
             "urn": str(passage.urn),
             "text_group": str(passage.text.urn.upTo(cts.URN.TEXTGROUP)),
@@ -128,8 +178,8 @@ class Indexer:
             },
             "reference": str(passage.reference),
             "sort_idx": sort_idx,
-            "lemma_content": self.lemma_content(passage),
-            "content": " ".join([t["w"] for t in passage.tokenize(whitespace=False)]),
+            "lemma_content": self.lemma_content(passage, tokens),
+            "content": " ".join([token["w"] for token in tokens]),
         }
 
 

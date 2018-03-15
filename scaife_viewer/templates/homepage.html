@@ -17,56 +17,66 @@
     <h2>Perseus Digital Library</h2>
     <h1>Scaife Viewer</h1>
 
-    <p>
+    <p class="buttons">
       <a class="btn btn-primary" href="{% url 'library' %}">Browse Library</a>
       <a class="btn btn-secondary" href="{% url 'search' %}">Text Search</a>
     </p>
+
+    <p class="jump">
+      or try the
+      <a href="{% url 'reader' 'urn:cts:greekLit:tlg0012.tlg001.perseus-grc2:1.1-1.7' %}">Iliad</a>
+      or
+      Plato&rsquo;s <a href="{% url 'reader' 'urn:cts:greekLit:tlg0059.tlg002.perseus-grc2:17' %}">Apology</a>.
+    </p>
+
   </section>
 
-  <section>
+  <section class="stats">
+    <div class="container">
+      <p>
+        <b>1,834</b> works in <b>2,320</b> editions and translations
+        (1,178 in Greek and 612 in Latin)
+        <br>
+        <b>50.1 million</b> words (20.1 million in Greek, 15.6 million in Latin)
+      </p>
+    </div>
+  </section>
+
+  <section class="main">
     <div class="container">
 
       <div class="row">
         <div class="col-md-6">
+          <h2>About the Scaife Viewer</h2>
+          <p class="lead">
+            The <b>Scaife Viewer</b> is a reading environment for pre-modern text
+            collections in both their original languages and in translation.
+            It is the first phase of work towards the next version of the Perseus
+            Digital Library, Perseus&nbsp;5.0.
+          </p>
+          <p class="more">
+            <a href="{% url 'about' %}">read more</a>
+          </p>
         </div>
         <div class="col-md-6">
-          <div class="changelog">
-            <h2>Recent Changes</h2>
+          <h2>Recent Changes</h2>
 
-            <h3>week of March 12th</h3>
+          <h3>week of March 12th</h3>
 
-            <ul>
-              <li>added push and overlay style sidebars based on device width</li>
-              <li>added support for Latin in the Morpheus widget</li>
-              <li>improved stability</li>
-            </ul>
+          <ul>
+            <li>added push and overlay style sidebars based on device width</li>
+            <li>added support for Latin in the Morpheus widget</li>
+            <li>improved stability and fixed various bugs</li>
+            <li>LAUNCH!</li>
+          </ul>
 
-            <h3>week of March 5th</h3>
+          <h3>week of March 5th</h3>
 
-            <ul>
-              <li>changed passage notes and place annotations to appear in popovers</li>
-              <li>implemented passage healing for references which do not resolve</li>
-              <li>used a fallback API for word list widget when GVT does not contain the edition or work</li>
-            </ul>
-
-            <h3>Previously...</h3>
-
-            <ul>
-              <li>added text search widget in reader</li>
-              <li>implemented lemma search for Greek</li>
-              <li>changed widgets to fix heading while scrolling</li>
-              <li>changed loaders to be consistent across site</li>
-              <li>continued on-going effort to speed up all parts of the site</li>
-              <li>improved styling of milestones, quote, bibl and gaps</li>
-              <li>added Morpheus widget</li>
-              <li>added filtering to word list widget based on selected word</li>
-              <li>added CHS commentary widget</li>
-              <li>implemented OpenID Connect authentication</li>
-              <li>added popovers for versions in library (providing more metadata)</li>
-              <li>improved Coptic support</li>
-              <li>improved version selector in reader</li>
-            </ul>
-
+          <ul>
+            <li>changed passage notes and place annotations to appear in popovers</li>
+            <li>implemented passage healing for references which do not resolve</li>
+            <li>used a fallback API for word list widget when GVT does not contain the edition or work</li>
+          </ul>
         </div>
       </div>
     </div>

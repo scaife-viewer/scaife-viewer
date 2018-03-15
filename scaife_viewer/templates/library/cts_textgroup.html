@@ -4,7 +4,7 @@
 
 {% block head_title %}{{ textgroup.label }}{% endblock %}
 
-{% block body_class %}cts_textgroup{% endblock %}
+{% block body_class %}library cts_textgroup{% endblock %}
 
 {% block hero %}
   <h2>
@@ -18,7 +18,5 @@
 {% endblock %}
 
 {% block content %}
-  <h2>Works</h2>
-
   <sv-cts-work-list text-group-url="{% url 'api:library_collection' textgroup.urn %}"></sv-cts-work-list>
 {% endblock %}

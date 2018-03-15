@@ -111,11 +111,6 @@ body.reader {
   #content_body {
     background: $white;
     overflow-y: auto;
-    @extend .container;
-    padding-top: 35px;
     flex: 2;  // not needed for overlay case? (but doesn't hurt)
-    .container {
-      padding: 0;
-    }
   }
 }

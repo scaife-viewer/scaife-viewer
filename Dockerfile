@@ -1,11 +1,11 @@
-FROM node:8.9-alpine AS static
+FROM node:8.10-alpine AS static
 WORKDIR /opt/scaife-viewer/src/
 COPY package.json package-lock.json .babelrc .postcssrc.js ./
 RUN npm install
 COPY ./static static
 RUN npm run build:prod
 
-FROM python:3.6-alpine3.6 AS build
+FROM python:3.6-alpine3.7 AS build
 WORKDIR /opt/scaife-viewer/src/
 RUN pip --no-cache-dir --disable-pip-version-check install pipenv
 ENV PATH="/opt/scaife-viewer/bin:${PATH}" VIRTUAL_ENV="/opt/scaife-viewer"
@@ -16,7 +16,7 @@ RUN set -x \
         build-base curl git libxml2-dev libxslt-dev postgresql-dev linux-headers \
     && pipenv install --deploy
 
-FROM python:3.6-alpine3.6
+FROM python:3.6-alpine3.7
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONPATH /opt/scaife-viewer/src/
 ENV PATH="/opt/scaife-viewer/bin:${PATH}" VIRTUAL_ENV="/opt/scaife-viewer"
@@ -34,3 +34,4 @@ RUN set -x \
         $runDeps \
         curl
 COPY . /opt/scaife-viewer/src/
+RUN python manage.py collectstatic --noinput

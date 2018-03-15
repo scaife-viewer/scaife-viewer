@@ -22,6 +22,10 @@ def home(request):
     return render(request, "homepage.html", {})
 
 
+def about(request):
+    return render(request, "about.html", {})
+
+
 def profile(request):
     return render(request, "profile.html", {})
 

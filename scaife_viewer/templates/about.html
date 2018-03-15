@@ -1,0 +1,98 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}About the Scaife Viewer{% endblock %}
+
+{% block body_class %}about{% endblock %}
+
+{% block body_base %}
+  <section class="hero">
+    <div class="container">
+      <h1>About the Scaife Viewer</h1>
+    </div>
+  </section>
+
+  <section class="main">
+    <div class="container">
+      <p class="lead">
+        The <b>Scaife Viewer</b> is a reading environment for pre-modern text
+        collections in both their original languages and in translation.
+        It is the first phase of work towards the next version of the Perseus
+        Digital Library, Perseus 5.0.
+      </p>
+
+      <p>
+        This project is part of the
+        <a href="http://www.dh.uni-leipzig.de/wo/projects/open-greek-and-latin-project/">Open Greek and Latin Project</a>,
+        an international collaborative consortium of librarians and researchers,
+        that includes the Center for Hellenic Studies of Harvard, the Harvard
+        Library, the Library of the University of Virginia,
+        Mount Allison University, the Perseus Digital Library at Tufts,
+        and the Open Philology Project at the University of Leipzig.
+        The Alexander von Humboldt Chair of Digital Humanities at Leipzig
+        funded the initial development by <a href="https://eldarion.com">Eldarion</a>.
+      </p>
+
+      <p>
+        The Scaife Viewer is named for <a href="https://en.wikipedia.org/wiki/Ross_Scaife"><b>Ross Scaife</b></a>,
+        a pioneer in digital classics who lived the virtues of
+        collaboration and who set an early example in establishing open access
+        and openly licensed data as the standards upon which Digital Classics
+        now depends. The initial release of the Scaife Viewer was on March 15, 2018,
+        the tenth anniversary of his premature passing on March 15, 2008.
+      </p>
+
+      <p>
+        While Eldarion has led the initial work, the goal is to create a
+        foundation which members of the community can extend. The code is open
+        source under an MIT license. See
+        <a href="https://github.com/scaife-viewer/">https://github.com/scaife-viewer/</a>
+        for the code repositories and read about the many
+        <a href="https://github.com/scaife-viewer/scaife-viewer/wiki/Ways-to-Contribute"><b>ways to contribute</b></a>.
+      </p>
+
+      <p>
+        The Scaife Viewer is intended to be highly extensible, with a growing
+        library of widgets that integrate texts with various types of
+        annotation and external APIs. As well as the core reading environment,
+        the library browsing, and full text search, we are working on
+        personalised functionality around reading lists and vocabulary.
+      </p>
+
+      <p>
+        The Scaife Viewer makes use of the
+        <a href="http://capitains.org/">CapiTainS</a> suite of tools for the
+        serving and processing of texts.
+      </p>
+
+      <p>
+        Currently, texts are drawn from the following GitHub repositories:
+      </p>
+
+      <ul style="font-size: 90%;">
+        <li><a href="https://github.com/PerseusDL/canonical-greekLit">PerseusDL/canonical-greekLit</a></li>
+        <li><a href="https://github.com/PerseusDL/canonical-latinLit">PerseusDL/canonical-latinLit</a></li>
+        <li><a href="https://github.com/OpenGreekAndLatin/First1KGreek">OpenGreekAndLatin/First1KGreek</a></li>
+        <li><a href="https://github.com/OpenGreekAndLatin/csel-dev">OpenGreekAndLatin/csel-dev</a></li>
+        <li><a href="https://github.com/PerseusDL/canonical-farsiLit">PerseusDL/canonical-farsiLit</a></li>
+        <li><a href="https://github.com/PerseusDL/canonical-pdlpsci">PerseusDL/canonical-pdlpsci</a></li>
+        <li><a href="https://github.com/hlapin/ancJewLitCTS">hlapin/ancJewLitCTS</a></li>
+        <li><a href="https://github.com/lascivaroma/priapeia">lascivaroma/priapeia</a></li>
+        <li><a href="https://github.com/nevenjovanovic/sophocles-ajax-latinus">nevenjovanovic/sophocles-ajax-latinus</a></li>
+      </ul>
+
+      <p>
+        Corrections to the texts should be filed as issues in these
+        repositories. Problems with or suggestions about the site functionality
+        itself can be filed
+        <a href="https://github.com/scaife-viewer/scaife-viewer/issues">here</a>.
+      </p>
+
+      <p>
+        If you have any questions, please contact
+        <a href="mailto:perseus_webmaster@tufts.edu">perseus_webmaster@tufts.edu</a>.
+      </p>
+    </div>
+  </section>
+{% endblock %}

@@ -1,5 +1,5 @@
 <template>
-  <widget class="token-list" v-if="show">
+  <widget class="token-list" v-if="enabled && show">
     <span slot="header">Token List</span>
     <div slot="body">
       <table>
@@ -17,13 +17,21 @@
 
 <script>
 import store from '../../store';
+import { URN } from '../../scaife-viewer';
 import widget from '../widget';
 
 export default {
   store,
   computed: {
+    text() {
+      return this.$store.getters['reader/text'];
+    },
     passage() {
       return this.$store.getters['reader/passage'];
+    },
+    enabled() {
+      const urn = new URN(this.text.urn);
+      return this.text.metadata.lang === 'grc' && urn.upTo('textGroup') === 'urn:cts:greekLit:tlg0012';
     },
   },
   data() {
@@ -33,10 +41,12 @@ export default {
     };
   },
   watch: {
-    passage: {
-      handler: 'fetchTokenList',
-      immediate: true,
-    },
+    passage: 'fetchTokenList',
+  },
+  created() {
+    if (this.enabled) {
+      this.fetchTokenList();
+    }
   },
   methods: {
     async fetchTokenList() {
