@@ -17,6 +17,7 @@
 
 <script>
 import store from '../../store';
+import { URN } from '../../scaife-viewer';
 import widget from '../widget';
 
 export default {
@@ -29,7 +30,8 @@ export default {
       return this.$store.getters['reader/passage'];
     },
     enabled() {
-      return this.text.metadata.lang === 'grc' && this.text.urn.upTo('textGroup') === 'urn:cts:greekLit:tlg0012';
+      const urn = new URN(this.text.urn);
+      return this.text.metadata.lang === 'grc' && urn.upTo('textGroup') === 'urn:cts:greekLit:tlg0012';
     },
   },
   data() {
