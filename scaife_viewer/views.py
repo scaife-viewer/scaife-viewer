@@ -86,7 +86,10 @@ class LibraryCollectionView(LibraryConditionMixin, BaseLibraryView):
 
     def get_collection(self):
         self.validate_urn()
-        return cts.collection(self.kwargs["urn"])
+        try:
+            return cts.collection(self.kwargs["urn"])
+        except cts.CollectionDoesNotExist:
+            raise Http404()
 
     def as_html(self):
         collection = self.get_collection()
@@ -105,6 +108,10 @@ class LibraryCollectionVectorView(LibraryConditionMixin, View):
 
     def get(self, request, urn):
         entries = request.GET.getlist("e")
+        try:
+            cts.collection(urn)
+        except cts.CollectionDoesNotExist:
+            raise Http404()
         collections = {}
         for entry in entries:
             collection = cts.collection(f"{urn}.{entry}")
