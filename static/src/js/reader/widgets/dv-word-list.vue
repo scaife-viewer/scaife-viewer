@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     async fetchWordList() {
-      const server = 'https://gu658.us1.eldarioncloud.com';
+      const server = 'https://vocab.perseus.org';
       const { urn } = this.passage;
       let res = await fetch(`${server}/word-list/${urn}/json/?page=all&amp;o=1`);
       if (!res.ok) {
