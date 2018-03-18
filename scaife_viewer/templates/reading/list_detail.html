@@ -1,0 +1,23 @@
+{% extends "reading/base.html" %}
+
+{% block head_title %}
+  Reading List
+{% endblock %}
+
+{% block hero %}
+  {% with owner=resource_list.owner %}
+    <h1>{{ resource_list.title }} {% if owner %}({{ owner }}){% endif %}</h1>
+  {% endwith %}
+{% endblock %}
+
+{% block content %}
+  {% if not request.user.is_anonymous %}
+    {% include "reading/_list_actions.html" %}
+  {% endif %}
+
+  {% if is_reading_list %}
+    {% include "reading/_reading_list_detail.html" %}
+  {% elif is_vocabulary_list %}
+    {% include "reading/_vocabulary_list_detail.html" %}
+  {% endif %}
+{% endblock %}

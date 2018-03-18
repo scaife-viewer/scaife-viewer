@@ -1,0 +1,171 @@
+[
+{
+  "model": "reading.readinglist",
+  "pk": 2,
+  "fields": {
+    "created": "2018-02-18T04:50:01.638Z",
+    "updated": "2018-02-18T04:50:01.638Z",
+    "owner": null,
+    "cloned_from": null,
+    "title": "Tufts Department of Classics MA Greek Reading List",
+    "description": "",
+    "secret_key": "d777f2e8-e948-43c1-9a94-e518e4291943"
+  }
+},
+{
+  "model": "reading.readinglistentry",
+  "pk": 23,
+  "fields": {
+    "created": "2018-02-18T04:50:01.640Z",
+    "updated": "2018-02-18T04:50:01.640Z",
+    "note": "",
+    "cts_urn": "urn:cts:greekLit:tlg0019.tlg009.perseus-grc2:1-1533",
+    "resource_list": 2,
+    "_order": 0
+  }
+},
+{
+  "model": "reading.readinglistentry",
+  "pk": 24,
+  "fields": {
+    "created": "2018-02-18T04:50:01.641Z",
+    "updated": "2018-02-18T04:50:01.641Z",
+    "note": "",
+    "cts_urn": "urn:cts:greekLit:tlg0006.tlg017.perseus-grc2",
+    "resource_list": 2,
+    "_order": 1
+  }
+},
+{
+  "model": "reading.readinglistentry",
+  "pk": 25,
+  "fields": {
+    "created": "2018-02-18T04:50:01.642Z",
+    "updated": "2018-02-18T04:50:01.642Z",
+    "note": "",
+    "cts_urn": "urn:cts:greekLit:tlg0016.tlg001.perseus-grc2:1.1-1.13",
+    "resource_list": 2,
+    "_order": 2
+  }
+},
+{
+  "model": "reading.readinglistentry",
+  "pk": 26,
+  "fields": {
+    "created": "2018-02-18T04:50:01.643Z",
+    "updated": "2018-02-18T04:50:01.643Z",
+    "note": "",
+    "cts_urn": "urn:cts:greekLit:tlg0016.tlg001.perseus-grc2:1.29-1.33",
+    "resource_list": 2,
+    "_order": 3
+  }
+},
+{
+  "model": "reading.readinglistentry",
+  "pk": 27,
+  "fields": {
+    "created": "2018-02-18T04:50:01.644Z",
+    "updated": "2018-02-18T04:50:01.644Z",
+    "note": "",
+    "cts_urn": "urn:cts:greekLit:tlg0016.tlg001.perseus-grc2:1.46-1.56",
+    "resource_list": 2,
+    "_order": 4
+  }
+},
+{
+  "model": "reading.readinglistentry",
+  "pk": 28,
+  "fields": {
+    "created": "2018-02-18T04:50:01.645Z",
+    "updated": "2018-02-18T04:50:01.645Z",
+    "note": "",
+    "cts_urn": "urn:cts:greekLit:tlg0016.tlg001.perseus-grc2:1.79-1.89",
+    "resource_list": 2,
+    "_order": 5
+  }
+},
+{
+  "model": "reading.readinglistentry",
+  "pk": 29,
+  "fields": {
+    "created": "2018-02-18T04:50:01.646Z",
+    "updated": "2018-02-18T04:50:01.646Z",
+    "note": "",
+    "cts_urn": "urn:cts:greekLit:tlg0016.tlg001.perseus-grc2:1.107-1.140",
+    "resource_list": 2,
+    "_order": 6
+  }
+},
+{
+  "model": "reading.readinglistentry",
+  "pk": 30,
+  "fields": {
+    "created": "2018-02-18T04:50:01.647Z",
+    "updated": "2018-02-18T04:50:01.647Z",
+    "note": "",
+    "cts_urn": "urn:cts:greekLit:tlg0016.tlg001.perseus-grc2:1.141",
+    "resource_list": 2,
+    "_order": 7
+  }
+},
+{
+  "model": "reading.readinglistentry",
+  "pk": 31,
+  "fields": {
+    "created": "2018-02-18T04:50:01.648Z",
+    "updated": "2018-02-18T04:50:01.648Z",
+    "note": "",
+    "cts_urn": "urn:cts:greekLit:tlg0016.tlg001.perseus-grc2:1.152-1.153",
+    "resource_list": 2,
+    "_order": 8
+  }
+},
+{
+  "model": "reading.readinglistentry",
+  "pk": 32,
+  "fields": {
+    "created": "2018-02-18T04:50:01.649Z",
+    "updated": "2018-02-18T04:50:01.649Z",
+    "note": "",
+    "cts_urn": "urn:cts:greekLit:tlg0016.tlg001.perseus-grc2:1.204-1.216",
+    "resource_list": 2,
+    "_order": 9
+  }
+},
+{
+  "model": "reading.readinglistentry",
+  "pk": 33,
+  "fields": {
+    "created": "2018-02-18T04:50:01.650Z",
+    "updated": "2018-02-18T04:50:01.650Z",
+    "note": "",
+    "cts_urn": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc2:22",
+    "resource_list": 2,
+    "_order": 10
+  }
+},
+{
+  "model": "reading.readinglistentry",
+  "pk": 34,
+  "fields": {
+    "created": "2018-02-18T04:50:01.651Z",
+    "updated": "2018-02-18T04:50:01.651Z",
+    "note": "",
+    "cts_urn": "urn:cts:greekLit:tlg0059.tlg002.perseus-grc2",
+    "resource_list": 2,
+    "_order": 11
+  }
+},
+{
+  "model": "reading.readinglistentry",
+  "pk": 35,
+  "fields": {
+    "created": "2018-02-18T04:50:01.652Z",
+    "updated": "2018-02-18T04:50:01.652Z",
+    "note": "",
+    "cts_urn": "urn:cts:greekLit:tlg0011.tlg003.perseus-grc2",
+    "resource_list": 2,
+    "_order": 12
+  }
+}
+]

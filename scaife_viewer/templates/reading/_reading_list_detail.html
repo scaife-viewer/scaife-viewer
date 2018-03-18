@@ -1,0 +1,20 @@
+{% for text_edition, entries in partitioned.items %}
+  <div class="text-group">
+    <h5>{{ text_edition.work_label }}</h5>
+    {% for entry in entries %}
+      <div class="row">
+        {% with cts_urn=entry.cts_urn %}
+          <div class="col"><tt>{{ cts_urn }}</tt></div>
+          {% if entry.note %}
+            <div class="col">{{ entry.note }}</div>
+          {% endif %}
+          <div class="col-md-2">
+            <a href="{% url 'reader_redirect' cts_urn %}" target="_blank">
+              read <i class="fa fa-external-link"></i>
+            </a>
+          </div>
+        {% endwith %}
+      </div>
+    {% endfor %}
+  </div>
+{% endfor %}

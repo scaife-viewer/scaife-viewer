@@ -1,0 +1,43 @@
+<div class="row list-actions justify-content-end">
+  {% if user_is_subscribed %}
+    <form accept-charset="UTF-8" action="{% url 'reading_list_unsubscribe' resource_list.secret_key %}" method="post">
+      {% csrf_token %}
+      <div class="list-action-button">
+        <input type="hidden" name="secret_key" value="{{ resource_list.secret_key }}"></input>
+        <button type="submit" class="btn" aria-label="Unsubscribe from this list" title="Unsubscribe">
+          <i class="fa fa-eye"></i>
+          <div>Unsubscribe</div>
+          <div class="subscription-count">{{ count }}</div>
+        </button>
+      </div>
+    </form>
+  {% else %}
+    <form accept-charset="UTF-8" action="{% url 'reading_list_subscribe' resource_list.secret_key %}" method="post">
+      {% csrf_token %}
+      <div class="list-action-button">
+        <input type="hidden" name="secret_key" value="{{ resource_list.secret_key }}"></input>
+        <button type="submit" class="btn" aria-label="Subscribe to this list" title="Subscribe">
+          <i class="fa fa-eye"></i>
+          <div>Subscribe</div>
+          <div class="subscription-count">{{ count }}</div>
+        </button>
+      </div>
+    </form>
+  {% endif %}
+
+  <form accept-charset="UTF-8" action="{% url 'reading_list_clone' resource_list.secret_key %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="secret_key" value="{{ resource_list.secret_key }}"></input>
+    <button type="submit" class="btn" aria-label="Subscribe to this list" title="Subscribe">
+      <i class="fa fa-clone"></i> Clone
+    </button>
+  </form>
+</div>
+
+{% comment %}
+<div class="col-md-1 align-self-end">
+  <a href="{% url 'reading_list_clone' resource_list.secret_key %}">
+    clone <i class="fa fa-external-link"></i>
+  </a>
+</div>
+{% endcomment %}

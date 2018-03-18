@@ -38,7 +38,7 @@ opencensus = "*"
 python-dateutil = "*"
 django-letsencrypt = "*"
 lxml = "<4.2"
-
+django-extra-views = "*"
 
 [dev-packages]
 

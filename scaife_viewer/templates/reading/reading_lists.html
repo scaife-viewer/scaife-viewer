@@ -1,0 +1,55 @@
+{% extends "reading/base.html" %}
+
+{% block head_title %}Reading Lists{% endblock %}
+
+{% block hero %}
+  <h1>Reading Lists</h1>
+{% endblock %}
+
+{% block content %}
+  {% if all_lists %}
+    <p>
+      Show: <b>Public Reading Lists </b>
+      {% if not request.user.is_anonymous %}
+        | <a href="{% url 'user_reading_lists' request.user.pk %}">My Reading Lists</a>
+      {% endif %}
+    </p>
+  {% else %}
+    <p>
+      Show: <a href="{% url 'reading_lists' %}">Public Reading Lists</a> | <b>My Reading Lists</b>
+    </p>
+  {% endif %}
+
+  {% for reading_list in reading_lists %}
+    {% with secret_key=reading_list.secret_key %}
+      <div class="text-group">
+        <h4>
+          <a href="{% url 'reading_list' secret_key %}">
+            {{ reading_list.title }}
+          </a>
+        </h4>
+
+        <div class="row">
+          <div class="col">
+            <h5><tt>{{ secret_key }}</tt></h5>
+          </div>
+          <div class="col-md-2">
+            <a href="{% url 'reading_list' secret_key %}" target="_blank">
+              browse <i class="fa fa-external-link"></i>
+            </a>
+            {% if not all_lists %}
+              <a href="{% url 'reading_list_update' secret_key %}" target="_blank">
+                edit <i class="fa fa-pencil-square-o"></i>
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% endwith %}
+  {% endfor %}
+
+  <div class="reading-list buttons">
+    <a class="btn btn-primary" href="{% url 'reading_list_create' %}">Create</a>
+  </div>
+
+{% endblock %}
