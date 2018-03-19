@@ -18,8 +18,6 @@ ALLOWED_HOSTS = [
     "localhost",
     "scaife.perseus.org",
     "scaife-dev.perseus.org",
-    "scaife.eldarion.com",
-    "scaife-dev.eldarion.com",
 ]
 
 host_domain = os.environ.get("GONDOR_INSTANCE_DOMAIN")
