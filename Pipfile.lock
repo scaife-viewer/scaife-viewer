@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "3b8e9f94463197bf5148d718765be40ff9f5dab38286a05f046446ea0acb1d51"
+            "sha256": "166e35c4f5ba9b451d7c8b9148d79d281d47b67d62e7f729d304cc4c4ac2c1b8"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -290,9 +290,9 @@
         },
         "opencensus": {
             "hashes": [
-                "sha256:805730c2e4aa3029b5762433a68fc39a38b4b5741dd466a4ca5c9fcf93a0640d"
+                "sha256:069ab8a7678280576a5e0928919f238330ff6530be4f250b60774d0474e79ab9"
             ],
-            "version": "==0.1.4"
+            "version": "==0.1.3"
         },
         "partd": {
             "hashes": [

@@ -34,7 +34,7 @@ certifi = "*"
 requests = "*"
 dask = {extras = ["bag"]}
 django-oidc-provider = "*"
-opencensus = "*"
+opencensus = "==0.1.3"
 python-dateutil = "*"
 django-letsencrypt = "*"
 lxml = "<4.2"
