@@ -8,3 +8,4 @@
 - Patrick Altman
 - Jake Wegner
 - Ryan Baumann
+- Katherine "Kati" Michel

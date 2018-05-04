@@ -1,6 +1,6 @@
 <template>
   <widget class="morpheus" v-if="enabled">
-    <span slot="header">Morpheus</span>
+    <span slot="header">Morphology</span>
     <div slot="body">
       <text-loader v-if="loading" size="7px" margin="1px" />
       <div v-else-if="morphBody">
