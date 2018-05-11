@@ -293,4 +293,4 @@ OPENCENSUS_TRACE_PARAMS = {
     "BLACKLIST_PATHS": [],
 }
 
-ELASTICSEARCH_URL = os.environ.get("ELASTICSEARCH_URL", "http://localhost:9200")
+ELASTICSEARCH_HOSTS = os.environ.get("ELASTICSEARCH_HOSTS", "localhost").split(",")
