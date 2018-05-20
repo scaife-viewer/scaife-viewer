@@ -39,7 +39,6 @@
     "jsdom-global": "^3.0.2",
     "loaders.css": "^0.1.2",
     "lodash.debounce": "^4.0.8",
-    "mocha": "^3.5.3",
     "node-sass": "^4.9.0",
     "parse-link-header": "^1.0.1",
     "popper.js": "^1.14.3",
