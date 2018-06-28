@@ -123,8 +123,6 @@ MIDDLEWARE = [
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "scaife_viewer.middleware.PerRequestMiddleware",
 ]
-if TRACING_ENABLED:
-    MIDDLEWARE.append("opencensus.trace.ext.django.middleware.OpencensusMiddleware")
 
 PER_REQUEST_MIDDLEWARE = {
     "default": [
@@ -163,7 +161,6 @@ INSTALLED_APPS = [
     "pinax.webanalytics",
     "raven.contrib.django.raven_compat",
     "oidc_provider",
-    "opencensus.trace.ext.django",
     "letsencrypt",
 
     # project
@@ -283,14 +280,5 @@ if "SENTRY_DSN" in os.environ:
     RAVEN_CONFIG = {
         "dsn": os.environ["SENTRY_DSN"],
     }
-
-OPENCENSUS_TRACE = {
-    "SAMPLER": "opencensus.trace.samplers.AlwaysOnSampler",
-    "EXPORTER": "scaife_viewer.tracing.StackdriverExporter",
-    "PROPAGATOR": "opencensus.trace.propagation.google_cloud_format.GoogleCloudFormatPropagator",
-}
-OPENCENSUS_TRACE_PARAMS = {
-    "BLACKLIST_PATHS": [],
-}
 
 ELASTICSEARCH_HOSTS = os.environ.get("ELASTICSEARCH_HOSTS", "localhost").split(",")
