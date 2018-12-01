@@ -12,6 +12,7 @@ Requirements:
   * pipenv
 * Node 8.6
 * PostgreSQL 9.6
+* Elastic Search
 
 First, set up a database to use for local development:
 
