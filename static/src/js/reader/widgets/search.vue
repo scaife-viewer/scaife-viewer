@@ -30,11 +30,11 @@
 </template>
 
 <script>
-import sv from '../../scaife-viewer';
+import * as sv from '../../scaife-viewer';
 import store from '../../store';
-import widget from '../widget';
-import ReaderNavigationMixin from '../reader-navigation-mixin';
-import TextLoader from '../text-loader';
+import widget from '../widget.vue';
+import ReaderNavigationMixin from '../reader-navigation-mixin.vue';
+import TextLoader from '../text-loader.vue';
 
 const debounce = require('lodash.debounce');
 
@@ -64,11 +64,11 @@ export default {
   },
   created() {
     this.chunkSize = 200;
-    if (this.$store.state.route.query.q) {
-      this.query = this.$store.state.route.query.q;
+    if (this.$route.query.q) {
+      this.query = this.$route.query.q;
     }
-    if (this.$store.state.route.query.qk) {
-      this.queryKind = this.$store.state.route.query.qk;
+    if (this.$route.query.qk) {
+      this.queryKind = this.$route.query.qk;
     }
     if (this.query !== '') {
       this.initialTextSearch();
@@ -107,9 +107,9 @@ export default {
           .then(() => {
             this.$router.push({
               name: 'reader',
-              params: this.$store.state.route.params,
+              params: this.$route.params,
               query: {
-                ...this.$store.state.route.query,
+                ...this.$route.query,
                 q: this.query,
                 qk: this.queryKind,
               },

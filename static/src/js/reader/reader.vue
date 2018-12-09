@@ -107,25 +107,26 @@
 
 <script>
 import store from '../store';
-import Skeleton from './skeleton';
-import PassageHumanReference from './passage-human-reference';
-import PassageRenderText from './passage-render-text';
-import PassageRedirectNotice from './passage-redirect-notice';
-import ReaderLoader from './reader-loader';
-import ReaderNavigationMixin from './reader-navigation-mixin';
-import VersionSelector from './version-selector';
-import WidgetPassageAncestors from './widgets/passage-ancestors';
-import WidgetPassageChildren from './widgets/passage-children';
-import WidgetPassageReference from './widgets/passage-reference';
-import WidgetSearch from './widgets/search';
-import WidgetHighlight from './widgets/highlight';
-import WidgetPassageLinks from './widgets/passage-links';
-import WidgetTextMode from './widgets/text-mode';
-import WidgetTextSize from './widgets/text-size';
-import WidgetMorpheus from './widgets/morpheus';
-import WidgetDvWordList from './widgets/dv-word-list';
-import WidgetTokenList from './widgets/dm-token-list';
-import WidgetChsCommentary from './widgets/chs-commentary';
+import Skeleton from './skeleton.vue';
+import PassageHumanReference from './passage-human-reference.vue';
+import PassageRenderText from './passage-render-text.vue';
+import PassageRedirectNotice from './passage-redirect-notice.vue';
+import ReaderLoader from './reader-loader.vue';
+import ReaderNavigationMixin from './reader-navigation-mixin.vue';
+import { URN } from '../scaife-viewer';
+import VersionSelector from './version-selector.vue';
+import WidgetPassageAncestors from './widgets/passage-ancestors.vue';
+import WidgetPassageChildren from './widgets/passage-children.vue';
+import WidgetPassageReference from './widgets/passage-reference.vue';
+import WidgetSearch from './widgets/search.vue';
+import WidgetHighlight from './widgets/highlight.vue';
+import WidgetPassageLinks from './widgets/passage-links.vue';
+import WidgetTextMode from './widgets/text-mode.vue';
+import WidgetTextSize from './widgets/text-size.vue';
+import WidgetMorpheus from './widgets/morpheus.vue';
+import WidgetDvWordList from './widgets/dv-word-list.vue';
+import WidgetTokenList from './widgets/dm-token-list.vue';
+import WidgetChsCommentary from './widgets/chs-commentary.vue';
 
 const widgets = {
   WidgetPassageAncestors,
@@ -157,14 +158,6 @@ export default {
   mixins: [
     ReaderNavigationMixin,
   ],
-  props: {
-    leftUrn: {
-      required: true,
-    },
-    rightUrn: {
-      required: false,
-    },
-  },
   data() {
     return {
       ready: false,
@@ -202,6 +195,16 @@ export default {
     rightPassageText() {
       return this.$store.state.reader.rightPassageText;
     },
+    leftUrn() {
+      return new URN(this.$route.params.leftUrn);
+    },
+    rightUrn() {
+      const { right } = this.$route.query;
+      if (!right) {
+        return null;
+      }
+      return this.leftUrn.replace({ version: right });
+    },
   },
   watch: {
     $route: 'sync',
@@ -219,7 +222,8 @@ export default {
   methods: {
     sync({ initial = false }) {
       const { leftUrn, rightUrn } = this;
-      return this.$store.dispatch('reader/load', { leftUrn, rightUrn, initial });
+      const { query } = this.$route;
+      return this.$store.dispatch('reader/load', { leftUrn, rightUrn, query, initial });
     },
     handleKeyUp(e) {
       if (e.key === 'ArrowLeft') {

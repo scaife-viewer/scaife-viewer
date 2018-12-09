@@ -85,27 +85,15 @@ body.reader {
 
   .open-left {
     left: 0;
-    i {
-      @include icon(arrow-right);
-    }
   }
   .close-right {
     left: 0;
-    i {
-      @include icon(arrow-right);
-    }
   }
   .open-right {
     right: 0;
-    i {
-      @include icon(arrow-left);
-    }
   }
   .close-left {
     right: 0;
-    i {
-      @include icon(arrow-left);
-    }
   }
 
   #content_body {

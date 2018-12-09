@@ -18,7 +18,7 @@ export default {
       return {
         name: 'reader',
         params: { leftUrn: urn.toString() },
-        query: this.$store.state.route.query,
+        query: this.$route.query,
       };
     },
     toRightPassage(urn) {
@@ -27,8 +27,8 @@ export default {
       }
       return {
         name: 'reader',
-        params: this.$store.state.route.params,
-        query: { ...this.$store.state.route.query, right: urn.version },
+        params: this.$route.params,
+        query: { ...this.$route.query, right: urn.version },
       };
     },
     toRef(reference) {
@@ -37,7 +37,7 @@ export default {
       return {
         name: 'reader',
         params: { leftUrn: urn.toString() },
-        query: this.$store.state.route.query,
+        query: this.$route.query,
       };
     },
     toRemoveLeft() {
@@ -45,7 +45,7 @@ export default {
       return {
         name: 'reader',
         params: { leftUrn: urn.toString() },
-        query: (({ right: deleted, ...o }) => o)(this.$store.state.route.query),
+        query: (({ right: deleted, ...o }) => o)(this.$route.query),
       };
     },
     toRemoveRight() {
@@ -53,7 +53,7 @@ export default {
       return {
         name: 'reader',
         params: { leftUrn: urn.toString() },
-        query: (({ right: deleted, ...o }) => o)(this.$store.state.route.query),
+        query: (({ right: deleted, ...o }) => o)(this.$route.query),
       };
     },
   },

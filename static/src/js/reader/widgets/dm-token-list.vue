@@ -18,7 +18,7 @@
 <script>
 import store from '../../store';
 import { URN } from '../../scaife-viewer';
-import widget from '../widget';
+import widget from '../widget.vue';
 
 export default {
   store,

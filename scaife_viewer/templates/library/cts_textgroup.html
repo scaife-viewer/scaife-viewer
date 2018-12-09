@@ -8,7 +8,7 @@
 
 {% block hero %}
   <h2>
-    <a href="{% url 'library' %}">Library</a>
+    <a href="/library/">Library</a>
     {% for breadcrumb in textgroup.ancestors %}
       <a href="{% url 'api:library_collection' breadcrumb.urn %}">{{ breadcrumb.label }}{% if not forloop.last %} &gt;{% endif %}</a>
     {% endfor %}

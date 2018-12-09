@@ -2,17 +2,18 @@
 
 import ajaxSendMethod from '@/js/ajax';
 import Popper from 'popper.js';
-import 'document-register-element/build/document-register-element';
-import '@/js/app';
 import '@/scss/index.scss';
 import '@/images/perseus_running_man.png';
 import '@/images/perseus_running_man_small.png';
+
+import loadApp from './app';
 
 // for the bootstrap
 window.Popper = Popper;
 require('bootstrap');
 
 $(() => {
+  loadApp();
   $(document).ajaxSend(ajaxSendMethod);
 
   // Topbar active tab support

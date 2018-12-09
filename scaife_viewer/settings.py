@@ -151,6 +151,8 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     "django.contrib.staticfiles",
 
+    "webpack_loader",
+
     # theme
     "bootstrapform",
     "pinax_theme_bootstrap",
@@ -167,6 +169,17 @@ INSTALLED_APPS = [
     "scaife_viewer",
     "scaife_viewer.reading",
 ]
+
+WEBPACK_LOADER = {
+    "DEFAULT": {
+        "CACHE": not DEBUG,
+        "BUNDLE_DIR_NAME": "/",
+        "STATS_FILE": os.path.join(PROJECT_ROOT, "webpack-stats.json"),
+        "POLL_INTERVAL": 0.1,
+        "TIMEOUT": None,
+        "IGNORE": [".*\.hot-update.js", ".+\.map"]
+    }
+}
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

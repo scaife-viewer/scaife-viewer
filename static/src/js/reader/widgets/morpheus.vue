@@ -41,8 +41,8 @@
 
 <script>
 import store from '../../store';
-import TextLoader from '../text-loader';
-import widget from '../widget';
+import TextLoader from '../text-loader.vue';
+import widget from '../widget.vue';
 
 export default {
   store,

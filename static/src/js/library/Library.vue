@@ -65,8 +65,8 @@
 
 <script>
 import store from '../store';
-import LibraryTextGroup from './LibraryTextGroup';
-import LibraryWork from './LibraryWork';
+import LibraryTextGroup from './LibraryTextGroup.vue';
+import LibraryWork from './LibraryWork.vue';
 
 const debounce = require('lodash.debounce');
 

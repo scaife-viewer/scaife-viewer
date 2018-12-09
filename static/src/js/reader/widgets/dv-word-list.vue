@@ -17,7 +17,7 @@
 <script>
 import qs from 'query-string';
 import store from '../../store';
-import widget from '../widget';
+import widget from '../widget.vue';
 
 export default {
   store,
