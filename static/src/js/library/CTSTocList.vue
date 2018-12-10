@@ -24,15 +24,10 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import store from '../store';
-
 export default {
-  store,
-  props: ['textUrl'],
   created() {
     this.loading = true;
-    this.$store.dispatch('loadTocList', this.textUrl)
+    this.$store.dispatch('loadTocList', `/library/${this.$route.params.urn}/json/`)
       .then(() => {
         this.loading = false;
       })
@@ -48,9 +43,9 @@ export default {
     };
   },
   computed: {
-    ...mapState({
-      toc: state => state.library.toc,
-    }),
+    toc() {
+      return this.$stor.state.library.toc;
+    },
   },
 };
 </script>

@@ -45,17 +45,12 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import store from '../store';
-
 const debounce = require('lodash.debounce');
 
 export default {
-  store,
-  props: ['textGroupUrl'],
   created() {
     this.loading = true;
-    this.$store.dispatch('loadWorkList', this.textGroupUrl)
+    this.$store.dispatch('loadWorkList', `/library/${this.$route.params.urn}/json/`)
       .then(() => {
         this.loading = false;
         this.$nextTick(() => {
@@ -81,9 +76,9 @@ export default {
     },
   },
   computed: {
-    ...mapState({
-      works: state => state.library.works,
-    }),
+    works() {
+      return this.$store.state.library.works;
+    }
   },
   methods: {
     clearQuery() {
