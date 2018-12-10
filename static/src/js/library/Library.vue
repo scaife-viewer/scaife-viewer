@@ -64,27 +64,26 @@
 </template>
 
 <script>
-import store from '../store';
+import constants from '../constants';
 import LibraryTextGroup from './LibraryTextGroup.vue';
 import LibraryWork from './LibraryWork.vue';
 
 const debounce = require('lodash.debounce');
 
 export default {
-  store,
   created() {
     this.loading = true;
-    this.$store.dispatch('loadTextGroupList')
+    this.$store.dispatch(constants.LIBRARY_LOAD_TEXT_GROUP_LIST)
       .then(() => {
         this.loading = false;
         this.$nextTick(() => {
           this.$refs['filter-input'].focus();
         });
       })
-      .catch((err) => {
-        this.loading = false;
-        this.error = err.message;
-      });
+      // .catch((err) => {
+      //   this.loading = false;
+      //   this.error = err.message;
+      // });
   },
   data() {
     return {
@@ -126,16 +125,14 @@ export default {
     filter: debounce(
       function f() {
         const query = this.query.trim();
-        let kind = 'TextGroups';
-        if (this.sortKind === 'work') {
-          kind = 'TextGroupWorks';
-        }
+        this.filtered = query !== '';
+
         if (query === '') {
-          this.$store.dispatch(`reset${kind}`);
-          this.filtered = false;
+          const action = this.sortKind === 'work' ? constants.LIBRARY_RESET_TEXT_GROUP_WORKS : constants.LIBRARY_RESET_TEXT_GROUPS;
+          this.$store.dispatch(action);
         } else {
-          this.$store.dispatch(`filter${kind}`, query);
-          this.filtered = true;
+          const action = this.sortKind === 'work' ? constants.LIBRARY_FILTER_TEXT_GROUP_WORKS : constants.LIBRARY_FILTER_TEXT_GROUPS;
+          this.$store.dispatch(action, query);
         }
       },
       250,
@@ -151,7 +148,7 @@ export default {
       });
     },
     sort(kind) {
-      this.$store.commit('setLibrarySort', { kind });
+      this.$store.commit(constants.SET_LIBRARY_SORT, { kind });
     },
   },
   components: {

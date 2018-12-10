@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const HTTP = axios.create({
-  baseURL: '/api/v1/',
+  baseURL: '/',
   xsrfHeaderName: 'X-CSRFToken',
   xsrfCookieName: 'csrftoken',
 });

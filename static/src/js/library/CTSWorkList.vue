@@ -46,11 +46,12 @@
 
 <script>
 const debounce = require('lodash.debounce');
+import constants from '../constants';
 
 export default {
   created() {
     this.loading = true;
-    this.$store.dispatch('loadWorkList', `/library/${this.$route.params.urn}/json/`)
+    this.$store.dispatch(constants.LIBRARY_LOAD_WORK_LIST, this.$route.params.urn)
       .then(() => {
         this.loading = false;
         this.$nextTick(() => {
@@ -88,10 +89,10 @@ export default {
       function f() {
         const query = this.query.trim();
         if (query === '') {
-          this.$store.dispatch('resetWorks');
+          this.$store.dispatch(constants.LIBRARY_RESET_WORKS);
           this.filtered = false;
         } else {
-          this.$store.dispatch('filterWorks', query);
+          this.$store.dispatch(constants.LIBRARY_FILTER_WORKS, query);
           this.filtered = true;
         }
       },

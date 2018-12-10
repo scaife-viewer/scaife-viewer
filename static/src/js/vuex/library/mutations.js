@@ -1,5 +1,7 @@
+import constants from '../../constants';
+
 export default {
-  setTextGroups(state, { textGroups, works, texts }) {
+  [constants.SET_TEXT_GROUPS]: (state, { textGroups, works, texts }) => {
     if (textGroups !== undefined) {
       if (!state.allTextGroups) {
         state.allTextGroups = [...textGroups];
@@ -19,19 +21,19 @@ export default {
       state.textGroupTexts = texts;
     }
   },
-  setTextGroupUrns(state, { textGroupUrns }) {
+  [constants.SET_TEXT_GROUP_URNS]: (state, { textGroupUrns }) => {
     state.textGroupUrns = textGroupUrns;
   },
-  setLibrarySort(state, { kind }) {
+  [constants.SET_LIBRARY_SORT]: (state, { kind }) => {
     state.sortKind = kind;
   },
-  setWorks(state, works) {
+  [constants.SET_WORKS]: (state, works) => {
     if (!state.allWorks) {
       state.allWorks = [...works];
     }
     state.works = works;
   },
-  setToc(state, toc) {
+  [constants.SET_TOC]: (state, toc) => {
     state.toc = toc;
   }
 };

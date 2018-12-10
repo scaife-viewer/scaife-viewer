@@ -24,10 +24,12 @@
 </template>
 
 <script>
+import constants from '../constants';
+
 export default {
   created() {
     this.loading = true;
-    this.$store.dispatch('loadTocList', `/library/${this.$route.params.urn}/json/`)
+    this.$store.dispatch(constants.LIBRARY_LOAD_TOC_LIST, this.$route.params.urn)
       .then(() => {
         this.loading = false;
       })

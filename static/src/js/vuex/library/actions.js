@@ -1,61 +1,86 @@
 import qs from 'query-string';
-import { URN } from '../../scaife-viewer';
+
+import api from '../../api';
+import constants from '../../constants';
+import { transformTextGroupList } from './transforms';
 
 export default {
-  async loadTextGroupList({ commit }) {
-    const url = '/library/json/';
-    const opts = { headers: { Accept: 'application/json' } };
-    const res = await fetch(url, opts);
-    if (!res.ok) {
-      throw new Error(`${res.status} ${res.statusText}`);
-    }
-    const textInventory = await res.json();
-    const textGroups = [];
-    const works = [];
-    const texts = [];
-    const textGroupUrns = {};
+  [constants.LIBRARY_LOAD_TEXT_GROUP_LIST]: ({ commit }) => {
+    return api.getTextGroupList((data) => {
+      const {
+        textGroups,
+        works,
+        texts,
+        textGroupUrns,
+      } = transformTextGroupList(data);
 
-    textInventory.text_groups.forEach((textGroup) => {
-      const tg = {
-        ...textGroup,
-        urn: new URN(textGroup.urn),
-        works: textGroup.works.map(work => ({
-          ...work,
-          urn: new URN(work.urn),
-          texts: work.texts.map(text => ({
-            ...text,
-            urn: new URN(text.urn),
-          })),
-        })),
-      };
-      textGroups.push(tg);
-      textGroupUrns[textGroup.urn] = tg;
+      commit(constants.SET_TEXT_GROUPS, { textGroups, works, texts });
+      commit(constants.SET_TEXT_GROUP_URNS, { textGroupUrns });
     });
-    textInventory.works.forEach((work) => {
-      const w = {
-        ...work,
-        urn: new URN(work.urn),
-        texts: work.texts.map(text => ({
-          ...text,
-          urn: new URN(text.urn),
-        })),
-      };
-      works.push(w);
-      textGroupUrns[work.urn] = w;
-    });
-    textInventory.texts.forEach((text) => {
-      const t = {
-        urn: new URN(text.urn),
-        ...text,
-      };
-      texts.push(t);
-      textGroupUrns[text.urn] = t;
-    });
-
-    commit('setTextGroups', { textGroups, works, texts });
-    commit('setTextGroupUrns', { textGroupUrns });
   },
-  filterTextGroups({ state, commit }, query) {
+
+  [constants.LIBRARY_LOAD_WORK_LIST]: ({ commit }, urn) => {
+    return api.getCollection(urn, (textGroup) => {
+      // To reduce the load on the API, we prepare two vector calls against works
+      // and texts.
+
+      // vector for works
+      let params = qs.stringify({
+        e: textGroup.works.map(work => work.urn.replace(`${textGroup.urn}.`, '')),
+      });
+      api.getLibraryVector(textGroup.urn, params, (vector) => {
+        const workMap = vector.collections;
+
+        const e = [];
+        textGroup.works.forEach(({ urn: workUrn }) => {
+          const work = workMap[workUrn];
+          work.texts.forEach(({ urn: textUrn }) => {
+            e.push(textUrn.replace(`${textGroup.urn}.`, ''));
+          });
+        });
+        params = qs.stringify({ e });
+
+        // vector for texts
+        api.getLibraryVector(textGroup.urn, params, (vector) => {
+          const textMap = vector.collections;
+
+          // finally prepare the works object to store
+          const works = [];
+          textGroup.works.forEach(({ urn: workUrn }) => {
+            const work = workMap[workUrn];
+            works.push({
+              ...work,
+              texts: work.texts.map(({ urn: textUrn }) => textMap[textUrn]),
+            });
+          });
+
+          commit(constants.SET_WORKS, works);
+        });
+      });
+    });
+  },
+
+  // Probably should move this a getter
+  [constants.LIBRARY_FILTER_WORKS]: ({ state, commit }, query) => {
+    if (state.allWorks) {
+      const works = state.allWorks.filter((work) => {
+        return work.label.toLowerCase().indexOf(query.toLowerCase()) !== -1;
+      });
+      commit(constants.SET_WORKS, works);
+    }
+  },
+
+  [constants.LIBRARY_RESET_WORKS]: ({ state, commit }) => {
+    commit(constants.SET_WORKS, [...state.allWorks]);
+  },
+
+  [constants.LIBRARY_LOAD_TOC_LIST]: ({ commit }, urn) => {
+    return api.getCollection(urn, (text) => {
+      commit(constants.SET_TOC, text.toc);
+    });
+  },
+
+  [constants.LIBRARY_FILTER_TEXT_GROUPS]: ({ state, commit }, query) => {
     if (state.allTextGroups) {
       const textGroups = [];
       state.allTextGroups.forEach((textGroup) => {
@@ -71,13 +96,15 @@ export default {
           }
         }
       });
-      commit('setTextGroups', { textGroups });
+      commit(constants.SET_TEXT_GROUPS, { textGroups });
     }
   },
-  resetTextGroups({ state, commit }) {
-    commit('setTextGroups', { textGroups: [...state.allTextGroups] });
+
+  [constants.LIBRARY_RESET_TEXT_GROUPS]: ({ state, commit }) => {
+    commit(constants.SET_TEXT_GROUPS, { textGroups: [...state.allTextGroups] });
   },
-  filterTextGroupWorks({ state, commit }, query) {
+
+  [constants.LIBRARY_FILTER_TEXT_GROUP_WORKS]: ({ state, commit }, query) {
     if (state.allTextGroupWorks) {
       const works = [];
       state.allTextGroupWorks.forEach((work) => {
@@ -90,89 +117,11 @@ export default {
           }
         }
       });
-      commit('setTextGroups', { works });
+      commit(constants.SET_TEXT_GROUPS, { works });
     }
   },
-  resetTextGroupWorks({ state, commit }) {
-    commit('setTextGroups', { works: [...state.allTextGroupWorks] });
-  },
-  async loadWorkList({ commit }, textGroupUrl) {
-    let params;
-    let res;
-    let vector;
 
-    const opts = { headers: { Accept: 'application/json' } };
-    res = await fetch(textGroupUrl, opts);
-    if (!res.ok) {
-      throw new Error(`${res.status} ${res.statusText}`);
-    }
-    const textGroup = await res.json();
-
-    // To reduce the load on the API, we prepare two vector calls against works
-    // and texts.
-
-    // vector for works
-    params = qs.stringify({
-      e: textGroup.works.map(work => work.urn.replace(`${textGroup.urn}.`, '')),
-    });
-    const workVectorUrl = `/library/vector/${textGroup.urn}/?${params}`;
-    res = await fetch(workVectorUrl);
-    if (!res.ok) {
-      throw new Error(`${res.status} ${res.statusText}`);
-    }
-    vector = await res.json();
-    const workMap = vector.collections;
-
-    // vector for texts
-    const e = [];
-    textGroup.works.forEach(({ urn: workUrn }) => {
-      const work = workMap[workUrn];
-      work.texts.forEach(({ urn: textUrn }) => {
-        e.push(textUrn.replace(`${textGroup.urn}.`, ''));
-      });
-    });
-    params = qs.stringify({ e });
-    const textVectorUrl = `/library/vector/${textGroup.urn}/?${params}`;
-    res = await fetch(textVectorUrl);
-    if (!res.ok) {
-      throw new Error(`${res.status} ${res.statusText}`);
-    }
-    vector = await res.json();
-    const textMap = vector.collections;
-
-    // finally prepare the works object to store
-    const works = [];
-    textGroup.works.forEach(({ urn: workUrn }) => {
-      const work = workMap[workUrn];
-      works.push({
-        ...work,
-        texts: work.texts.map(({ urn: textUrn }) => textMap[textUrn]),
-      });
-    });
-
-    commit('setWorks', works);
-  },
-  filterWorks({ state, commit }, query) {
-    if (state.allWorks) {
-      const works = [];
-      state.allWorks.forEach((work) => {
-        if (work.label.toLowerCase().indexOf(query.toLowerCase()) !== -1) {
-          works.push(work);
-        }
-      });
-      commit('setWorks', works);
-    }
-  },
-  resetWorks({ state, commit }) {
-    commit('setWorks', [...state.allWorks]);
-  },
-  async loadTocList({ commit }, textUrl) {
-    const opts = { headers: { Accept: 'application/json' } };
-    const res = await fetch(textUrl, opts);
-    if (!res.ok) {
-      throw new Error(`${res.status} ${res.statusText}`);
-    }
-    const text = await res.json();
-    commit('setToc', text.toc);
+  [constants.LIBRARY_RESET_TEXT_GROUP_WORKS]:({ state, commit }) {
+    commit(constants.SET_TEXT_GROUPS, { works: [...state.allTextGroupWorks] });
   },
 };
