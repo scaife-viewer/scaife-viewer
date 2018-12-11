@@ -1,6 +1,6 @@
 <script>
 import store from '../store';
-import { URN } from '../scaife-viewer';
+import URN from '../urn';
 
 export default {
   store,

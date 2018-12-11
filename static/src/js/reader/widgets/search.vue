@@ -30,8 +30,7 @@
 </template>
 
 <script>
-import * as sv from '../../scaife-viewer';
-import store from '../../store';
+import api from '../../api';
 import widget from '../widget.vue';
 import ReaderNavigationMixin from '../reader-navigation-mixin.vue';
 import TextLoader from '../text-loader.vue';
@@ -47,7 +46,6 @@ function visibleInContainer(container, el) {
 }
 
 export default {
-  store,
   mixins: [
     ReaderNavigationMixin,
   ],
@@ -173,7 +171,7 @@ export default {
             fields: '',
             text: this.passage.urn.upTo('version'),
           };
-          sv.textSearch(params).then(resolve, reject);
+          api.searchText(params, result => resolve(result)).catch( error => reject(error));
         }
       });
     },
@@ -243,8 +241,8 @@ export default {
           passage: passage.urn,
           size: 1,
         };
-        sv.textSearch(params).then(({ results }) => {
-          const { highlights } = results[0];
+        api.searchText(params, result => {
+          const { highlights } = result.results[0];
           this.$store.commit(constants.SET_ANNOTATIONS, {
             tokens: highlights.map(({ w, i }) => `${w}[${i}]`),
             key: 'highlighted',

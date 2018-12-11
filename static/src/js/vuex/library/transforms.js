@@ -1,4 +1,4 @@
-import { URN } from '../../scaife-viewer';
+import URN from '../../urn';
 
 export const transformTextGroupList = (data) => {
   const textGroups = data.text_groups.map((textGroup) => {

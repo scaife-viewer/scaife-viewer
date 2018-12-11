@@ -113,7 +113,7 @@ import PassageRenderText from './passage-render-text.vue';
 import PassageRedirectNotice from './passage-redirect-notice.vue';
 import ReaderLoader from './reader-loader.vue';
 import ReaderNavigationMixin from './reader-navigation-mixin.vue';
-import { URN } from '../scaife-viewer';
+import URN from '../urn';
 import VersionSelector from './version-selector.vue';
 import WidgetPassageAncestors from './widgets/passage-ancestors.vue';
 import WidgetPassageChildren from './widgets/passage-children.vue';

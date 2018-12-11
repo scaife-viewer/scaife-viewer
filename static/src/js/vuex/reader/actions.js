@@ -1,6 +1,6 @@
 import api from '../../api';
 import constants from '../../constants';
-import { URN } from '../../scaife-viewer';
+import URN from '../../urn';
 
 export default {
   [constants.READER_LOAD]: ({ dispatch, commit, state }, {
