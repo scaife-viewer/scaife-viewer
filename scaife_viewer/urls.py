@@ -48,7 +48,7 @@ urlpatterns = [
     path("search/", search, name="search"),
     path("reading/", include("scaife_viewer.reading.urls")),
     path("openid/", include("oidc_provider.urls", namespace="oidc_provider")),
-    path("\.well-known/", include("letsencrypt.urls")),
+    path(".well-known/", include("letsencrypt.urls")),
 
     path("<path:path>/", app, name="app")
 ]
