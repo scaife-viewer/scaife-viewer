@@ -1,9 +1,7 @@
 <script>
-import store from '../store';
 import URN from '../urn';
 
 export default {
-  store,
   methods: {
     toPassage(urn) {
       if (!(urn instanceof URN)) {

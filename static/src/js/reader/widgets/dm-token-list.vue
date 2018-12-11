@@ -20,7 +20,6 @@ import URN from '../../urn';
 import widget from '../widget.vue';
 
 export default {
-  store,
   computed: {
     text() {
       return this.$store.getters['reader/text'];

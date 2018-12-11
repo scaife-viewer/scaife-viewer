@@ -14,11 +14,9 @@
 </template>
 
 <script>
-import store from '../../store';
 import widget from '../widget.vue';
 
 export default {
-  store,
   data() {
     return {
       ctsApiUrl: 'https://scaife-cts.perseus.org/api/cts',

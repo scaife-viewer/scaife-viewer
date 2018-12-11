@@ -26,11 +26,8 @@
 </template>
 
 <script>
-import store from '../store';
-
 export default {
   name: 'Skeleton',
-  store,
   computed: {
     sidebarLeftOpened() {
       return this.$store.state.reader.sidebarLeftOpened;

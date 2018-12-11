@@ -11,13 +11,11 @@
 </template>
 
 <script>
-import store from '../../store';
 import widget from '../widget.vue';
 
 import ReaderNavigationMixin from '../reader-navigation-mixin.vue';
 
 export default {
-  store,
   mixins: [
     ReaderNavigationMixin,
   ],

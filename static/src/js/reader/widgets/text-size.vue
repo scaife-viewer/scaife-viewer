@@ -13,11 +13,9 @@
 
 <script>
 import constants from '../../constants';
-import store from '../../store';
 import widget from '../widget.vue';
 
 export default {
-  store,
   computed: {
     textSize() {
       return this.$store.state.reader.textSize;

@@ -41,12 +41,10 @@
 
 <script>
 import constants from '../../constants';
-import store from '../../store';
 import TextLoader from '../text-loader.vue';
 import widget from '../widget.vue';
 
 export default {
-  store,
   watch: {
     selectedWord: {
       handler: 'fetchData',
