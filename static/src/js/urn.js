@@ -48,7 +48,9 @@ export default class URN {
     return segments.join(':');
   }
 
-  replace({ textGroup, work, version, reference }) {
+  replace({
+    textGroup, work, version, reference,
+  }) {
     const clone = Object.assign(Object.create(Object.getPrototypeOf(this)), this);
     if (textGroup) {
       clone.textGroup = textGroup;

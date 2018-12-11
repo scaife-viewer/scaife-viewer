@@ -1,9 +1,9 @@
 import {
   CTSTocList,
   CTSWorkList,
-  Library
+  Library,
 } from '../library';
-import { Reader } from '../reader';
+import Reader from '../reader';
 
 export default [
   { path: '/library', component: Library, name: 'library' },

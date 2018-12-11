@@ -1,38 +1,32 @@
 import URN from '../../urn';
 
-export const transformTextGroupList = (data) => {
-  const textGroups = data.text_groups.map((textGroup) => {
-    return {
-      ...textGroup,
-      urn: new URN(textGroup.urn),
-      works: textGroup.works.map(work => ({
-        ...work,
-        urn: new URN(work.urn),
-        texts: work.texts.map(text => ({
-          ...text,
-          urn: new URN(text.urn),
-        })),
-      })),
-    };
-  });
-
-  const works = data.works.map((work) => {
-    return {
+const transformTextGroupList = (data) => {
+  const textGroups = data.text_groups.map(textGroup => ({
+    ...textGroup,
+    urn: new URN(textGroup.urn),
+    works: textGroup.works.map(work => ({
       ...work,
       urn: new URN(work.urn),
       texts: work.texts.map(text => ({
         ...text,
         urn: new URN(text.urn),
       })),
-    };
-  });
+    })),
+  }));
 
-  const texts = data.texts.map((text) => {
-    return {
-      urn: new URN(text.urn),
+  const works = data.works.map(work => ({
+    ...work,
+    urn: new URN(work.urn),
+    texts: work.texts.map(text => ({
       ...text,
-    };
-  });
+      urn: new URN(text.urn),
+    })),
+  }));
+
+  const texts = data.texts.map(text => ({
+    urn: new URN(text.urn),
+    ...text,
+  }));
 
   const textGroupUrns = {};
   textGroups.reduce((map, o) => {
@@ -53,3 +47,4 @@ export const transformTextGroupList = (data) => {
   };
 };
 
+export default transformTextGroupList;

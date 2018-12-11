@@ -1,1 +1,3 @@
-export { default as Reader } from './Reader.vue';
+import Reader from './Reader.vue';
+
+export default Reader;

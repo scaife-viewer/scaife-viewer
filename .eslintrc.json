@@ -1,8 +1,8 @@
 {
   "root": true,
   "extends": [
-    "airbnb-base",
-    "plugin:vue/recommended"
+    "plugin:vue/recommended",
+    "airbnb-base"
   ],
   "parserOptions": {
     "sourceType": "module"

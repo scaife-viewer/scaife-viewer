@@ -7,7 +7,7 @@ export default {
   },
   selectedWords(state) {
     const words = [];
-    const { annotations, annotationChange } = state;
+    const { annotations } = state;
     annotations.forEach((o, token) => {
       if (o.selected) {
         const [, w, i] = /^([^[]+)(?:\[(\d+)\])?$/.exec(token);

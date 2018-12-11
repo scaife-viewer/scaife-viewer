@@ -6,7 +6,7 @@ function copyText(text, { urn, metadata }) {
     newText = {
       urn: null,
       metadata: null,
-    }
+    };
   } else {
     newText = { ...text };
   }
@@ -19,7 +19,9 @@ function copyText(text, { urn, metadata }) {
   return newText;
 }
 
-function copyPassage(passage, { urn, metadata, ready, error, redirected }) {
+function copyPassage(passage, {
+  urn, metadata, ready, error, redirected,
+}) {
   let newPassage;
   if (passage === null) {
     newPassage = {
@@ -120,7 +122,9 @@ export default {
     }
   },
 
-  [constants.SET_ANNOTATION]: (state, { token, key, value, singleton }) => {
+  [constants.SET_ANNOTATION]: (state, {
+    token, key, value, singleton,
+  }) => {
     const { annotations } = state;
     if (singleton !== undefined && singleton) {
       annotations.forEach((o) => {

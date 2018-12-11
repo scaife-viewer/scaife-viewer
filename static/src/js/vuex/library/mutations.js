@@ -21,19 +21,23 @@ export default {
       state.textGroupTexts = texts;
     }
   },
+
   [constants.SET_TEXT_GROUP_URNS]: (state, { textGroupUrns }) => {
     state.textGroupUrns = textGroupUrns;
   },
+
   [constants.SET_LIBRARY_SORT]: (state, { kind }) => {
     state.sortKind = kind;
   },
+
   [constants.SET_WORKS]: (state, works) => {
     if (!state.allWorks) {
       state.allWorks = [...works];
     }
     state.works = works;
   },
+
   [constants.SET_TOC]: (state, toc) => {
     state.toc = toc;
-  }
+  },
 };

@@ -16,9 +16,7 @@ export default {
     if (state.versions === null) {
       ps.push(
         api.getCollection(leftUrn.upTo('work'), (work) => {
-          const texts = work.texts.map((text) => {
-            return new URN(text.urn).version;
-          });
+          const texts = work.texts.map(text => new URN(text.urn).version);
           api.getLibraryVector(work.urn, texts, (versions) => {
             commit(constants.SET_VERSIONS, { versions });
           });
@@ -58,8 +56,12 @@ export default {
               ready: true,
             });
             // @@@
-            // const { default: router } = require('../router'); // eslint-disable-line global-require
-            // router.push({ name: 'reader', params: { leftUrn: urn.toString() }, query: rootState.route.query });
+            // const { default: router } = require('../router');
+            // router.push({
+            // name: 'reader',
+            // params: { leftUrn: urn.toString() },
+            // query: rootState.route.query
+            // });
           } else {
             commit(constants.SET_LEFT_PASSAGE, { metadata: passage, ready: true });
           }
@@ -144,8 +146,7 @@ export default {
     dispatch(constants.READER_HIGHLIGHT, { highlight: `@${state.selectedTokenRange.start}-${state.selectedTokenRange.end}` });
   },
 
-  [constants.READER_HIGHLIGHT]: ({ commit, state, rootState }, { highlight, route = true }) => {
-    let { query } = rootState.route;
+  [constants.READER_HIGHLIGHT]: ({ commit, state }, { highlight }) => {
     if (highlight !== null) {
       if (state.mode !== 'clickable') {
         commit(constants.SET_TEXT_MODE, { mode: 'clickable' });
@@ -186,20 +187,20 @@ export default {
         });
       });
       commit(constants.SET_HIGHLIGHT, { highlight });
-      if (route) {
-        query = { ...query, highlight };
-      }
+      // if (route) {
+      //   query = { ...query, highlight };
+      // }
     } else {
       commit(constants.CLEAR_ANNOTATION, { key: 'selected' });
       commit(constants.SET_HIGHLIGHT, null);
-      if (route) {
-        query = (({ highlight: deleted, ...o }) => o)(query);
-      }
+      // if (route) {
+      //   query = (({ highlight: deleted, ...o }) => o)(query);
+      // }
     }
     // @@@ Should set the route, I guess.  Nothing in Vuex should control routing
-    if (route) {
-      // const { default: router } = require('../router'); // eslint-disable-line global-require
-      // router.push({ name: 'reader', params: rootState.route.params, query });
-    }
+    // if (route) {
+    // const { default: router } = require('../router'); // eslint-disable-line global-require
+    // router.push({ name: 'reader', params: rootState.route.params, query });
+    // }
   },
 };

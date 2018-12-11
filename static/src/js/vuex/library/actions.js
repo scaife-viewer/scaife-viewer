@@ -2,70 +2,65 @@ import qs from 'query-string';
 
 import api from '../../api';
 import constants from '../../constants';
-import { transformTextGroupList } from './transforms';
+import transformTextGroupList from './transforms';
 
 export default {
-  [constants.LIBRARY_LOAD_TEXT_GROUP_LIST]: ({ commit }) => {
-    return api.getTextGroupList((data) => {
-      const {
-        textGroups,
-        works,
-        texts,
-        textGroupUrns,
-      } = transformTextGroupList(data);
+  [constants.LIBRARY_LOAD_TEXT_GROUP_LIST]: ({ commit }) => api.getTextGroupList((data) => {
+    const {
+      textGroups,
+      works,
+      texts,
+      textGroupUrns,
+    } = transformTextGroupList(data);
 
-      commit(constants.SET_TEXT_GROUPS, { textGroups, works, texts });
-      commit(constants.SET_TEXT_GROUP_URNS, { textGroupUrns });
+    commit(constants.SET_TEXT_GROUPS, { textGroups, works, texts });
+    commit(constants.SET_TEXT_GROUP_URNS, { textGroupUrns });
+  }),
+
+  [constants.LIBRARY_LOAD_WORK_LIST]: ({ commit }, urn) => api.getCollection(urn, (textGroup) => {
+    // To reduce the load on the API, we prepare two vector calls against works
+    // and texts.
+
+    // vector for works
+    let params = qs.stringify({
+      e: textGroup.works.map(work => work.urn.replace(`${textGroup.urn}.`, '')),
     });
-  },
+    api.getLibraryVector(textGroup.urn, params, (worksVector) => {
+      const workMap = worksVector.collections;
 
-  [constants.LIBRARY_LOAD_WORK_LIST]: ({ commit }, urn) => {
-    return api.getCollection(urn, (textGroup) => {
-      // To reduce the load on the API, we prepare two vector calls against works
-      // and texts.
-
-      // vector for works
-      let params = qs.stringify({
-        e: textGroup.works.map(work => work.urn.replace(`${textGroup.urn}.`, '')),
+      const e = [];
+      textGroup.works.forEach(({ urn: workUrn }) => {
+        const work = workMap[workUrn];
+        work.texts.forEach(({ urn: textUrn }) => {
+          e.push(textUrn.replace(`${textGroup.urn}.`, ''));
+        });
       });
-      api.getLibraryVector(textGroup.urn, params, (vector) => {
-        const workMap = vector.collections;
+      params = qs.stringify({ e });
 
-        const e = [];
+      // vector for texts
+      api.getLibraryVector(textGroup.urn, params, (textsVector) => {
+        const textMap = textsVector.collections;
+
+        // finally prepare the works object to store
+        const works = [];
         textGroup.works.forEach(({ urn: workUrn }) => {
           const work = workMap[workUrn];
-          work.texts.forEach(({ urn: textUrn }) => {
-            e.push(textUrn.replace(`${textGroup.urn}.`, ''));
+          works.push({
+            ...work,
+            texts: work.texts.map(({ urn: textUrn }) => textMap[textUrn]),
           });
         });
-        params = qs.stringify({ e });
 
-        // vector for texts
-        api.getLibraryVector(textGroup.urn, params, (vector) => {
-          const textMap = vector.collections;
-
-          // finally prepare the works object to store
-          const works = [];
-          textGroup.works.forEach(({ urn: workUrn }) => {
-            const work = workMap[workUrn];
-            works.push({
-              ...work,
-              texts: work.texts.map(({ urn: textUrn }) => textMap[textUrn]),
-            });
-          });
-
-          commit(constants.SET_WORKS, works);
-        });
+        commit(constants.SET_WORKS, works);
       });
     });
-  },
+  }),
 
   // Probably should move this a getter
   [constants.LIBRARY_FILTER_WORKS]: ({ state, commit }, query) => {
     if (state.allWorks) {
-      const works = state.allWorks.filter((work) => {
-        return work.label.toLowerCase().indexOf(query.toLowerCase()) !== -1;
-      });
+      const works = state.allWorks
+        .filter(work => work.label.toLowerCase().indexOf(query.toLowerCase()) !== -1);
       commit(constants.SET_WORKS, works);
     }
   },
@@ -74,11 +69,9 @@ export default {
     commit(constants.SET_WORKS, [...state.allWorks]);
   },
 
-  [constants.LIBRARY_LOAD_TOC_LIST]: ({ commit }, urn) => {
-    return api.getCollection(urn, (text) => {
-      commit(constants.SET_TOC, text.toc);
-    });
-  },
+  [constants.LIBRARY_LOAD_TOC_LIST]: ({ commit }, urn) => api.getCollection(urn, (text) => {
+    commit(constants.SET_TOC, text.toc);
+  }),
 
   [constants.LIBRARY_FILTER_TEXT_GROUPS]: ({ state, commit }, query) => {
     if (state.allTextGroups) {
