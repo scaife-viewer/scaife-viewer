@@ -106,7 +106,7 @@
 </template>
 
 <script>
-import store from '../store';
+import constants from '../constants';
 import Skeleton from './skeleton.vue';
 import PassageHumanReference from './passage-human-reference.vue';
 import PassageRenderText from './passage-render-text.vue';
@@ -145,7 +145,6 @@ const widgets = {
 
 export default {
   name: 'Reader',
-  store,
   components: {
     Skeleton,
     PassageHumanReference,
@@ -223,7 +222,7 @@ export default {
     sync({ initial = false }) {
       const { leftUrn, rightUrn } = this;
       const { query } = this.$route;
-      return this.$store.dispatch('reader/load', { leftUrn, rightUrn, query, initial });
+      return this.$store.dispatch(`reader/${constants.READER_LOAD}`, { leftUrn, rightUrn, query, initial });
     },
     handleKeyUp(e) {
       if (e.key === 'ArrowLeft') {

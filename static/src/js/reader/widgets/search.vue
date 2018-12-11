@@ -234,7 +234,7 @@ export default {
       });
     },
     updateHighlights() {
-      this.$store.commit('reader/clearAnnotation', { key: 'highlighted' });
+      this.$store.commit(constants.CLEAR_ANNOTATION, { key: 'highlighted' });
       this.activeResults.forEach(({ passage }) => {
         const params = {
           q: this.query,
@@ -245,7 +245,7 @@ export default {
         };
         sv.textSearch(params).then(({ results }) => {
           const { highlights } = results[0];
-          this.$store.commit('reader/setAnnotations', {
+          this.$store.commit(constants.SET_ANNOTATIONS, {
             tokens: highlights.map(({ w, i }) => `${w}[${i}]`),
             key: 'highlighted',
             value: true,

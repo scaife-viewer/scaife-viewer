@@ -40,6 +40,7 @@
 </template>
 
 <script>
+import constants from '../../constants';
 import store from '../../store';
 import TextLoader from '../text-loader.vue';
 import widget from '../widget.vue';
@@ -92,7 +93,7 @@ export default {
               this.morphBody.forEach(({ hdwd }) => {
                 lemmas.push(hdwd);
               });
-              this.$store.commit('reader/setSelectedLemmas', { lemmas });
+              this.$store.commit(`reader/${constants.READER_SET_SELECTED_LEMMAS}`, { lemmas });
             } else {
               this.reset();
             }
@@ -105,7 +106,7 @@ export default {
     },
     reset() {
       this.morphBody = null;
-      this.$store.commit('reader/setSelectedLemmas', { lemmas: null });
+      this.$store.commit(`reader/${constants.READER_SET_SELECTED_LEMMAS}`, { lemmas: null });
     },
   },
   components: {

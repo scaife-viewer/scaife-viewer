@@ -104,7 +104,7 @@ export default {
     commit(constants.SET_TEXT_GROUPS, { textGroups: [...state.allTextGroups] });
   },
 
-  [constants.LIBRARY_FILTER_TEXT_GROUP_WORKS]: ({ state, commit }, query) {
+  [constants.LIBRARY_FILTER_TEXT_GROUP_WORKS]: ({ state, commit }, query) => {
     if (state.allTextGroupWorks) {
       const works = [];
       state.allTextGroupWorks.forEach((work) => {
@@ -121,7 +121,7 @@ export default {
     }
   },
 
-  [constants.LIBRARY_RESET_TEXT_GROUP_WORKS]:({ state, commit }) {
+  [constants.LIBRARY_RESET_TEXT_GROUP_WORKS]: ({ state, commit }) => {
     commit(constants.SET_TEXT_GROUPS, { works: [...state.allTextGroupWorks] });
   },
 };

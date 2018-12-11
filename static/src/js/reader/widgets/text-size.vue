@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import constants from '../../constants';
 import store from '../../store';
 import widget from '../widget.vue';
 
@@ -24,7 +25,7 @@ export default {
   },
   methods: {
     changeTextSize(size) {
-      this.$store.commit('reader/setTextSize', { size });
+      this.$store.commit(constants.SET_TEXT_SIZE, { size });
     },
   },
   components: {

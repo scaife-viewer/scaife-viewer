@@ -1,3 +1,5 @@
+import constants from '../../constants';
+
 function copyText(text, { urn, metadata }) {
   let newText;
   if (text === null) {
@@ -49,56 +51,67 @@ function copyPassage(passage, { urn, metadata, ready, error, redirected }) {
 }
 
 export default {
-  setTextMode(state, { mode }) {
+  [constants.SET_TEXT_MODE]: (state, { mode }) => {
     state.textMode = mode;
   },
-  setTextSize(state, { size }) {
+
+  [constants.SET_TEXT_SIZE]: (state, { size }) => {
     state.textSize = size;
   },
-  toggleSidebarLeft(state) {
+
+  [constants.READER_TOGGLE_SIDEBAR_LEFT]: (state) => {
     state.sidebarLeftOpened = !state.sidebarLeftOpened;
   },
-  toggleSidebarRight(state) {
+
+  [constants.READER_TOGGLE_SIDEBAR_RIGHT]: (state) => {
     state.sidebarRightOpened = !state.sidebarRightOpened;
   },
-  setVersions(state, { versions }) {
+
+  [constants.SET_VERSIONS]: (state, { versions }) => {
     state.versions = versions;
   },
-  setLeftText(state, payload) {
+
+  [constants.SET_LEFT_TEXT]: (state, payload) => {
     if (payload === null) {
       state.leftText = null;
     } else {
       state.leftText = copyText(state.leftText, payload);
     }
   },
-  setRightText(state, payload) {
+
+  [constants.SET_RIGHT_TEXT]: (state, payload) => {
     if (payload === null) {
       state.rightText = null;
     } else {
       state.rightText = copyText(state.rightText, payload);
     }
   },
-  setLeftPassage(state, payload) {
+
+  [constants.SET_LEFT_PASSAGE]: (state, payload) => {
     if (payload === null) {
       state.leftPassage = null;
     } else {
       state.leftPassage = copyPassage(state.leftPassage, payload);
     }
   },
-  setRightPassage(state, payload) {
+
+  [constants.SET_RIGHT_PASSAGE]: (state, payload) => {
     if (payload === null) {
       state.rightPassage = null;
     } else {
       state.rightPassage = copyPassage(state.rightPassage, payload);
     }
   },
-  setLeftPassageText(state, { text }) {
+
+  [constants.SET_LEFT_PASSAGE_TEXT]: (state, { text }) => {
     state.leftPassageText = text;
   },
-  setRightPassageText(state, { text }) {
+
+  [constants.SET_RIGHT_PASSAGE_TEXT]: (state, { text }) => {
     state.rightPassageText = text;
   },
-  setHighlight(state, payload) {
+
+  [constants.SET_HIGHLIGHT]: (state, payload) => {
     if (payload === null) {
       state.highlight = null;
     } else {
@@ -106,7 +119,8 @@ export default {
       state.highlight = highlight;
     }
   },
-  setAnnotation(state, { token, key, value, singleton }) {
+
+  [constants.SET_ANNOTATION]: (state, { token, key, value, singleton }) => {
     const { annotations } = state;
     if (singleton !== undefined && singleton) {
       annotations.forEach((o) => {
@@ -121,7 +135,8 @@ export default {
     annotations.set(token, ta);
     state.annotationChange += 1;
   },
-  setAnnotations(state, { tokens, key, value }) {
+
+  [constants.SET_ANNOTATION]: (state, { tokens, key, value }) => {
     const { annotations } = state;
     tokens.forEach((token) => {
       let ta = {};
@@ -133,14 +148,16 @@ export default {
     });
     state.annotationChange += 1;
   },
-  clearAnnotation(state, { key }) {
+
+  [constants.CLEAR_ANNOTATION]: (state, { key }) => {
     const { annotations } = state;
     annotations.forEach((o) => {
       delete o[key];
     });
     state.annotationChange += 1;
   },
-  setSelectedTokenRange(state, { start, end }) {
+
+  [constants.SET_SELECTED_TOKEN_RANGE]: (state, { start, end }) => {
     if (start !== undefined) {
       state.selectedTokenRange.start = start;
     }
@@ -148,10 +165,12 @@ export default {
       state.selectedTokenRange.end = end;
     }
   },
-  setSelectedLemmas(state, { lemmas }) {
+
+  [constants.READER_SET_SELECTED_LEMMAS]: (state, { lemmas }) => {
     state.selectedLemmas = lemmas;
   },
-  setError(state, { error }) {
+
+  [constants.SET_ERROR]: (state, { error }) => {
     state.error = error;
   },
 };

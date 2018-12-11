@@ -21,6 +21,11 @@ export default {
       return `${this.w}[${this.i}]`;
     },
   },
+  methods: {
+    readerDispatch(action, params) {
+      this.$store.dispatch(`reader/${action}`, params);
+    }
+  },
   render(h) {
     let selected = false;
     let highlighted = false;
@@ -52,12 +57,12 @@ export default {
             if (clickable) {
               if (e.metaKey) {
                 if (selected) {
-                  store.dispatch('reader/setSelectedToken', { token: null });
+                  this.readerDispatch(constants.READER_SET_SELECTED_TOKEN, { token: null });
                 }
               } else if (e.shiftKey) {
-                store.dispatch('reader/selectTokenRange', { token: idx });
+                this.readerDispatch(constants.READER_SELECT_TOKEN_RANGE, { token: idx });
               } else {
-                store.dispatch('reader/setSelectedToken', { token: idx });
+                this.readerDispatch(constants.READER_SET_SELECTED_TOKEN, { token: idx });
               }
               e.stopPropagation();
             }

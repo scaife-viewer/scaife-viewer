@@ -15,11 +15,9 @@
 </template>
 
 <script>
-import store from '../../store';
 import widget from '../widget.vue';
 
 export default {
-  store,
   computed: {
     textMode() {
       return this.$store.state.reader.textMode;
@@ -27,9 +25,9 @@ export default {
   },
   methods: {
     changeTextMode(mode) {
-      this.$store.dispatch('reader/setSelectedToken', { token: null })
+      this.$store.dispatch(`reader/${constants.READER_SET_SELECTED_TOKEN}`, { token: null })
         .then(() => {
-          this.$store.commit('reader/setTextMode', { mode });
+          this.$store.commit(constants.SET_TEXT_MODE, { mode });
         });
     },
   },

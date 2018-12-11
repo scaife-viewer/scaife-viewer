@@ -43,10 +43,10 @@ export default {
     toggleSidebar(side) {
       switch (side) {
         case 'left':
-          this.$store.commit('reader/toggleSidebarLeft');
+          this.$store.commit(constants.READER_TOGGLE_SIDEBAR_LEFT);
           break;
         case 'right':
-          this.$store.commit('reader/toggleSidebarRight');
+          this.$store.commit(constants.READER_TOGGLE_SIDEBAR_RIGHT);
           break;
         default:
       }
