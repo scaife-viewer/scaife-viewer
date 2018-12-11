@@ -31,7 +31,6 @@
 
 <script>
 import api from '../../api';
-import widget from '../widget.vue';
 import ReaderNavigationMixin from '../reader-navigation-mixin.vue';
 import TextLoader from '../text-loader.vue';
 
@@ -320,7 +319,6 @@ export default {
     },
   },
   components: {
-    widget,
     TextLoader,
   },
 };

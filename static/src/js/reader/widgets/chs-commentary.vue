@@ -17,8 +17,7 @@
 </template>
 
 <script>
-import qs from 'query-string';
-import widget from '../widget.vue';
+import qs from 'query-string';\
 
 export default {
   computed: {
@@ -61,9 +60,6 @@ export default {
       const data = await res.json();
       this.comments = data.data.commentsOn;
     },
-  },
-  components: {
-    widget,
   },
 };
 </script>

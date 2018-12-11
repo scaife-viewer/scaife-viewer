@@ -15,8 +15,6 @@
 </template>
 
 <script>
-import widget from '../widget.vue';
-
 export default {
   computed: {
     textMode() {
@@ -30,9 +28,6 @@ export default {
           this.$store.commit(constants.SET_TEXT_MODE, { mode });
         });
     },
-  },
-  components: {
-    widget,
   },
 };
 </script>

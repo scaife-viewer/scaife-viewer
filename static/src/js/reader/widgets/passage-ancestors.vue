@@ -10,8 +10,6 @@
 </template>
 
 <script>
-import widget from '../widget.vue';
-
 import ReaderNavigationMixin from '../reader-navigation-mixin.vue';
 
 export default {
@@ -22,9 +20,6 @@ export default {
     passage() {
       return this.$store.getters['reader/passage'];
     },
-  },
-  components: {
-    widget,
   },
 };
 </script>

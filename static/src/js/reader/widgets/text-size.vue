@@ -13,7 +13,6 @@
 
 <script>
 import constants from '../../constants';
-import widget from '../widget.vue';
 
 export default {
   computed: {
@@ -25,9 +24,6 @@ export default {
     changeTextSize(size) {
       this.$store.commit(constants.SET_TEXT_SIZE, { size });
     },
-  },
-  components: {
-    widget,
   },
 };
 </script>

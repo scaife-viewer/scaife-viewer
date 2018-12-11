@@ -17,7 +17,6 @@
 
 <script>
 import URN from '../../urn';
-import widget from '../widget.vue';
 
 export default {
   computed: {
@@ -64,9 +63,6 @@ export default {
       const data = await res.json();
       this.tokenList = data.tokens;
     },
-  },
-  components: {
-    widget,
   },
 };
 </script>

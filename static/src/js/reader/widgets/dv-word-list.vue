@@ -16,7 +16,6 @@
 
 <script>
 import qs from 'query-string';
-import widget from '../widget.vue';
 
 export default {
   computed: {
@@ -83,9 +82,6 @@ export default {
         frequency: lemma.work_frequency.toFixed(2),
       }));
     },
-  },
-  components: {
-    widget,
   },
 };
 </script>

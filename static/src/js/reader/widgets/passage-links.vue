@@ -14,8 +14,6 @@
 </template>
 
 <script>
-import widget from '../widget.vue';
-
 export default {
   data() {
     return {
@@ -32,9 +30,6 @@ export default {
     rightPassage() {
       return this.$store.state.reader.rightPassage;
     },
-  },
-  components: {
-    widget,
   },
 };
 </script>

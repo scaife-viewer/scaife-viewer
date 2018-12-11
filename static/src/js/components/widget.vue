@@ -24,6 +24,7 @@
 
 <script>
   export default {
+    name: 'widget',
     data() {
       return {
         open: true,

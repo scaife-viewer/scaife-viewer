@@ -8,8 +8,6 @@
 </template>
 
 <script>
-import widget from '../widget.vue';
-
 export default {
   computed: {
     words() {
@@ -23,9 +21,6 @@ export default {
       });
       return words;
     },
-  },
-  components: {
-    widget,
   },
 };
 </script>

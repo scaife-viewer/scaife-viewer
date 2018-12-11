@@ -42,7 +42,6 @@
 <script>
 import constants from '../../constants';
 import TextLoader from '../text-loader.vue';
-import widget from '../widget.vue';
 
 export default {
   watch: {
@@ -108,7 +107,6 @@ export default {
     },
   },
   components: {
-    widget,
     TextLoader,
   },
 };
