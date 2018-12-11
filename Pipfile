@@ -3,7 +3,7 @@ url = "https://pypi.python.org/simple"
 verify_ssl = true
 
 [requires]
-python_version = "3.6"
+python_version = "3.7.1"
 
 [packages]
 django-user-accounts = "*"
@@ -31,7 +31,7 @@ dask = {extras = ["bag"]}
 django-oidc-provider = "*"
 python-dateutil = "*"
 django-letsencrypt = "*"
-lxml = "<4.2"
+lxml = "*"
 django-webpack-loader = "*"
 
 [dev-packages]
