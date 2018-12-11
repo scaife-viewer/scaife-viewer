@@ -1,6 +1,4 @@
 /* global $ */
-
-import ajaxSendMethod from '@/js/ajax';
 import Popper from 'popper.js';
 import '@/scss/index.scss';
 import '@/images/perseus_running_man.png';
@@ -14,7 +12,6 @@ require('bootstrap');
 
 $(() => {
   loadApp();
-  $(document).ajaxSend(ajaxSendMethod);
 
   // Topbar active tab support
   $('.topbar li').removeClass('active');
