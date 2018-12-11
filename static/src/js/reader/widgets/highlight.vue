@@ -14,8 +14,6 @@
 </template>
 
 <script>
-import widget from '../widget.vue';
-
 export default {
   watch: {
     highlight: 'setInputVal',
@@ -53,9 +51,6 @@ export default {
       const el = e.currentTarget;
       el.select();
     },
-  },
-  components: {
-    widget,
   },
 };
 </script>
