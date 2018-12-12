@@ -19,6 +19,7 @@
     "keykey": "^2.1.1",
     "loaders.css": "^0.1.2",
     "lodash.debounce": "^4.0.8",
+    "parse-link-header": "^1.0.1",
     "popper.js": "^1.14.3",
     "query-string": "^5.1.0",
     "vue": "^2.5.17",
