@@ -40,7 +40,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("account/", include("account.urls")),
     path("", include(api_patterns)),
-    # url(r"^library/$", LibraryView.as_view(format="html"), name="library"),
+    path("library/", LibraryView.as_view(format="html"), name="library"),
     path("library/<str:urn>/", LibraryCollectionView.as_view(format="html"), name="library_collection"),
     path("library/<str:urn>/redirect/", library_text_redirect, name="library_text_redirect"),
     path("reader/urn:<str:urn>/", Reader.as_view(), name="reader"),
