@@ -18,11 +18,8 @@
 
 <script>
 import qs from 'query-string';
-import store from '../../store';
-import widget from '../widget';
 
 export default {
-  store,
   computed: {
     passage() {
       return this.$store.getters['reader/passage'];
@@ -63,9 +60,6 @@ export default {
       const data = await res.json();
       this.comments = data.data.commentsOn;
     },
-  },
-  components: {
-    widget,
   },
 };
 </script>

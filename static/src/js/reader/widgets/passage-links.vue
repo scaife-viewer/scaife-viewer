@@ -14,11 +14,7 @@
 </template>
 
 <script>
-import store from '../../store';
-import widget from '../widget';
-
 export default {
-  store,
   data() {
     return {
       ctsApiUrl: 'https://scaife-cts.perseus.org/api/cts',
@@ -34,9 +30,6 @@ export default {
     rightPassage() {
       return this.$store.state.reader.rightPassage;
     },
-  },
-  components: {
-    widget,
   },
 };
 </script>

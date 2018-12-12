@@ -1,12 +1,14 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
-import library from '@/js/store/library';
-import reader from '@/js/reader/store';
+
+import { library, reader } from './vuex';
 
 Vue.use(Vuex);
 
-const store = new Vuex.Store({
+const debug = process.env.NODE_ENV !== 'production';
+
+export default new Vuex.Store({
   modules: {
     library,
     reader,
@@ -22,6 +24,6 @@ const store = new Vuex.Store({
       storage: window.localStorage,
     }),
   ],
+  strict: true,
+  debug,
 });
-
-export default store;

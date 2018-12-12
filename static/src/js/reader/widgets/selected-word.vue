@@ -8,11 +8,7 @@
 </template>
 
 <script>
-import store from '../../store';
-import widget from '../widget';
-
 export default {
-  store,
   computed: {
     words() {
       const words = [];
@@ -25,9 +21,6 @@ export default {
       });
       return words;
     },
-  },
-  components: {
-    widget,
   },
 };
 </script>

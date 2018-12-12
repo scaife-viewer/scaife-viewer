@@ -45,17 +45,13 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import store from '../store';
-
 const debounce = require('lodash.debounce');
+import constants from '../constants';
 
 export default {
-  store,
-  props: ['textGroupUrl'],
   created() {
     this.loading = true;
-    this.$store.dispatch('loadWorkList', this.textGroupUrl)
+    this.$store.dispatch(constants.LIBRARY_LOAD_WORK_LIST, this.$route.params.urn)
       .then(() => {
         this.loading = false;
         this.$nextTick(() => {
@@ -81,9 +77,9 @@ export default {
     },
   },
   computed: {
-    ...mapState({
-      works: state => state.library.works,
-    }),
+    works() {
+      return this.$store.state.library.works;
+    }
   },
   methods: {
     clearQuery() {
@@ -93,10 +89,10 @@ export default {
       function f() {
         const query = this.query.trim();
         if (query === '') {
-          this.$store.dispatch('resetWorks');
+          this.$store.dispatch(constants.LIBRARY_RESET_WORKS);
           this.filtered = false;
         } else {
-          this.$store.dispatch('filterWorks', query);
+          this.$store.dispatch(constants.LIBRARY_FILTER_WORKS, query);
           this.filtered = true;
         }
       },

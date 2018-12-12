@@ -14,11 +14,7 @@
 </template>
 
 <script>
-import store from '../../store';
-import widget from '../widget';
-
 export default {
-  store,
   watch: {
     highlight: 'setInputVal',
   },
@@ -42,9 +38,9 @@ export default {
     handleKeyUp(e) {
       if (e.keyCode === 13) {
         if (this.value === '') {
-          this.$store.dispatch('reader/highlight', { highlight: null });
+          this.$store.dispatch(`reader/${constants.READER_HIGHLIGHT}`, { highlight: null });
         } else {
-          this.$store.dispatch('reader/highlight', { highlight: this.value });
+          this.$store.dispatch(`reader/${constants.READER_HIGHLIGHT}`, { highlight: this.value });
         }
         e.currentTarget.blur();
       } else {
@@ -55,9 +51,6 @@ export default {
       const el = e.currentTarget;
       el.select();
     },
-  },
-  components: {
-    widget,
   },
 };
 </script>

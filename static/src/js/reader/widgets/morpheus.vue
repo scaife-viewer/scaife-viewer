@@ -40,12 +40,10 @@
 </template>
 
 <script>
-import store from '../../store';
-import TextLoader from '../text-loader';
-import widget from '../widget';
+import constants from '../../constants';
+import TextLoader from '../text-loader.vue';
 
 export default {
-  store,
   watch: {
     selectedWord: {
       handler: 'fetchData',
@@ -92,7 +90,7 @@ export default {
               this.morphBody.forEach(({ hdwd }) => {
                 lemmas.push(hdwd);
               });
-              this.$store.commit('reader/setSelectedLemmas', { lemmas });
+              this.$store.commit(`reader/${constants.READER_SET_SELECTED_LEMMAS}`, { lemmas });
             } else {
               this.reset();
             }
@@ -105,11 +103,10 @@ export default {
     },
     reset() {
       this.morphBody = null;
-      this.$store.commit('reader/setSelectedLemmas', { lemmas: null });
+      this.$store.commit(`reader/${constants.READER_SET_SELECTED_LEMMAS}`, { lemmas: null });
     },
   },
   components: {
-    widget,
     TextLoader,
   },
 };

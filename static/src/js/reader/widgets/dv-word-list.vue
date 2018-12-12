@@ -16,11 +16,8 @@
 
 <script>
 import qs from 'query-string';
-import store from '../../store';
-import widget from '../widget';
 
 export default {
-  store,
   computed: {
     text() {
       return this.$store.getters['reader/text'];
@@ -85,9 +82,6 @@ export default {
         frequency: lemma.work_frequency.toFixed(2),
       }));
     },
-  },
-  components: {
-    widget,
   },
 };
 </script>

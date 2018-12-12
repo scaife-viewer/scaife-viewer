@@ -14,12 +14,9 @@
 </template>
 
 <script>
-import store from '../../store';
-import widget from '../widget';
-import ReaderNavigationMixin from '../reader-navigation-mixin';
+import ReaderNavigationMixin from '../reader-navigation-mixin.vue';
 
 export default {
-  store,
   mixins: [
     ReaderNavigationMixin,
   ],
@@ -54,9 +51,6 @@ export default {
       const el = e.currentTarget;
       el.select();
     },
-  },
-  components: {
-    widget,
   },
 };
 </script>

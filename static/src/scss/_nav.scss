@@ -11,9 +11,6 @@ header {
       }
       button.expand {
         @extend .navbar-toggler;
-        i {
-          @include icon(bars);
-        }
       }
       .nav-container {
         @extend .collapse;
@@ -40,24 +37,6 @@ header {
             @extend .navbar-text;
             padding-left: 0.5rem;
             padding-right: 0.5rem;
-            i {
-              @include icon(user);
-            }
-          }
-          .settings {
-            i {
-              @include icon(cog);
-            }
-          }
-          .logout {
-            i {
-              @include icon(power-off);
-            }
-          }
-          .login {
-            i {
-              @include icon(power-off);
-            }
           }
         }
       }

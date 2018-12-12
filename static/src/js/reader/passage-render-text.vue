@@ -8,13 +8,12 @@
 </template>
 
 <script>
-import store from '../store';
-import TextPart from './text-part';
-import TextLoader from './text-loader';
-import Token from './token';
+import constants from '../constants';
+import TextPart from './text-part.vue';
+import TextLoader from './text-loader.vue';
+import Token from './token.vue';
 
 export default {
-  store,
   props: ['text', 'highlighting'],
   watch: {
     text: 'prepareText',
@@ -62,7 +61,6 @@ export default {
     renderText() {
       let observer = null;
       this.renderedText = {
-        store,
         template: this.text,
         created() {
           const opts = {

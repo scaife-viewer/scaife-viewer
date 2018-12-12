@@ -16,12 +16,9 @@
 </template>
 
 <script>
-import store from '../../store';
-import { URN } from '../../scaife-viewer';
-import widget from '../widget';
+import URN from '../../urn';
 
 export default {
-  store,
   computed: {
     text() {
       return this.$store.getters['reader/text'];
@@ -66,9 +63,6 @@ export default {
       const data = await res.json();
       this.tokenList = data.tokens;
     },
-  },
-  components: {
-    widget,
   },
 };
 </script>

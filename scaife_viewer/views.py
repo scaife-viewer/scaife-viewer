@@ -30,6 +30,10 @@ def profile(request):
     return render(request, "profile.html", {})
 
 
+def app(request, *args, **kwargs):
+    return render(request, "app.html", {})
+
+
 class BaseLibraryView(View):
 
     format = "html"

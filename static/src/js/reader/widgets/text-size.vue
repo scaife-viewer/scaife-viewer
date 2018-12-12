@@ -12,11 +12,9 @@
 </template>
 
 <script>
-import store from '../../store';
-import widget from '../widget';
+import constants from '../../constants';
 
 export default {
-  store,
   computed: {
     textSize() {
       return this.$store.state.reader.textSize;
@@ -24,11 +22,8 @@ export default {
   },
   methods: {
     changeTextSize(size) {
-      this.$store.commit('reader/setTextSize', { size });
+      this.$store.commit(constants.SET_TEXT_SIZE, { size });
     },
-  },
-  components: {
-    widget,
   },
 };
 </script>

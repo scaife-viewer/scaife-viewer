@@ -8,7 +8,7 @@
 
 {% block hero %}
   <h2>
-    <a href="{% url 'library' %}">Library</a>
+    <a href="/library/">Library</a>
     {% for breadcrumb in textgroup.ancestors %}
       <a href="{% url 'api:library_collection' breadcrumb.urn %}">{{ breadcrumb.label }}{% if not forloop.last %} &gt;{% endif %}</a>
     {% endfor %}
@@ -18,5 +18,5 @@
 {% endblock %}
 
 {% block content %}
-  <sv-cts-work-list text-group-url="{% url 'api:library_collection' textgroup.urn %}"></sv-cts-work-list>
+  <div id="app" data-urn="{{ textgroup.urn }}" data-type="textgroup"></div>
 {% endblock %}

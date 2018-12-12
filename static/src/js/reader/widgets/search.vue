@@ -30,11 +30,9 @@
 </template>
 
 <script>
-import sv from '../../scaife-viewer';
-import store from '../../store';
-import widget from '../widget';
-import ReaderNavigationMixin from '../reader-navigation-mixin';
-import TextLoader from '../text-loader';
+import api from '../../api';
+import ReaderNavigationMixin from '../reader-navigation-mixin.vue';
+import TextLoader from '../text-loader.vue';
 
 const debounce = require('lodash.debounce');
 
@@ -47,7 +45,6 @@ function visibleInContainer(container, el) {
 }
 
 export default {
-  store,
   mixins: [
     ReaderNavigationMixin,
   ],
@@ -64,11 +61,11 @@ export default {
   },
   created() {
     this.chunkSize = 200;
-    if (this.$store.state.route.query.q) {
-      this.query = this.$store.state.route.query.q;
+    if (this.$route.query.q) {
+      this.query = this.$route.query.q;
     }
-    if (this.$store.state.route.query.qk) {
-      this.queryKind = this.$store.state.route.query.qk;
+    if (this.$route.query.qk) {
+      this.queryKind = this.$route.query.qk;
     }
     if (this.query !== '') {
       this.initialTextSearch();
@@ -107,9 +104,9 @@ export default {
           .then(() => {
             this.$router.push({
               name: 'reader',
-              params: this.$store.state.route.params,
+              params: this.$route.params,
               query: {
-                ...this.$store.state.route.query,
+                ...this.$route.query,
                 q: this.query,
                 qk: this.queryKind,
               },
@@ -173,7 +170,7 @@ export default {
             fields: '',
             text: this.passage.urn.upTo('version'),
           };
-          sv.textSearch(params).then(resolve, reject);
+          api.searchText(params, result => resolve(result)).catch( error => reject(error));
         }
       });
     },
@@ -234,7 +231,7 @@ export default {
       });
     },
     updateHighlights() {
-      this.$store.commit('reader/clearAnnotation', { key: 'highlighted' });
+      this.$store.commit(constants.CLEAR_ANNOTATION, { key: 'highlighted' });
       this.activeResults.forEach(({ passage }) => {
         const params = {
           q: this.query,
@@ -243,9 +240,9 @@ export default {
           passage: passage.urn,
           size: 1,
         };
-        sv.textSearch(params).then(({ results }) => {
-          const { highlights } = results[0];
-          this.$store.commit('reader/setAnnotations', {
+        api.searchText(params, result => {
+          const { highlights } = result.results[0];
+          this.$store.commit(constants.SET_ANNOTATIONS, {
             tokens: highlights.map(({ w, i }) => `${w}[${i}]`),
             key: 'highlighted',
             value: true,
@@ -322,7 +319,6 @@ export default {
     },
   },
   components: {
-    widget,
     TextLoader,
   },
 };
