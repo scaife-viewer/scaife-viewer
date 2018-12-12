@@ -27,14 +27,10 @@ Install the Node and Python dependencies:
     npm install
     pipenv install --dev
 
-To run commands in the Python environment, you can use `pipenv shell` and carry on, but I find it has some nasty side-affects. So, to activate the pipenv environment in your current shell:
-
-    source "$(pipenv --venv)/bin/activate"
-
 Setup the database:
 
-    python manage.py migrate
-    python manage.py loaddata sites
+    pipenv run python manage.py migrate
+    pipenv run python manage.py loaddata sites
 
 Seed the text inventory to speed up local development:
 
