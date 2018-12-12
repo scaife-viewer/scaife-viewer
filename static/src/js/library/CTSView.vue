@@ -17,7 +17,6 @@ export default {
     computed: {
         isToc() {
             const urn = new URN(this.$route.params.urn);
-            console.log(this.$route.params.urn, urn);
             return urn.work !== null;
         }
     }
