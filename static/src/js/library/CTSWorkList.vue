@@ -49,6 +49,7 @@ const debounce = require('lodash.debounce');
 import constants from '../constants';
 
 export default {
+  name: 'cts-work-list',
   created() {
     this.loading = true;
     this.$store.dispatch(constants.LIBRARY_LOAD_WORK_LIST, this.$route.params.urn)
@@ -61,6 +62,7 @@ export default {
       .catch((err) => {
         this.loading = false;
         this.error = err.message;
+        throw err;
       });
   },
   data() {

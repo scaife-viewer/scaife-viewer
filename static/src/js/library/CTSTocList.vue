@@ -27,6 +27,7 @@
 import constants from '../constants';
 
 export default {
+  name: 'cts-toc-list',
   created() {
     this.loading = true;
     this.$store.dispatch(constants.LIBRARY_LOAD_TOC_LIST, this.$route.params.urn)
@@ -46,7 +47,7 @@ export default {
   },
   computed: {
     toc() {
-      return this.$stor.state.library.toc;
+      return this.$store.state.library.toc;
     },
   },
 };
