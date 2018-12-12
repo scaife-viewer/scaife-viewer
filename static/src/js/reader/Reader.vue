@@ -168,7 +168,8 @@ export default {
       return this.$store.state.reader.error;
     },
     versions() {
-      return this.$store.state.reader.versions;
+      const { versions } = this.$storey.state.reader;
+      return versions && Object.keys(versions.collections).map(key => versions.collections[key]);
     },
     canSelectVersions() {
       return !this.rightPassage && this.versions && this.versions.length > 1;
