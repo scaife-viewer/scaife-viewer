@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import constants from '../constants';
+
 export default {
   name: 'Skeleton',
   computed: {
@@ -40,10 +42,10 @@ export default {
     toggleSidebar(side) {
       switch (side) {
         case 'left':
-          this.$store.commit(constants.READER_TOGGLE_SIDEBAR_LEFT);
+          this.$store.commit(`reader/${constants.READER_TOGGLE_SIDEBAR_LEFT}`);
           break;
         case 'right':
-          this.$store.commit(constants.READER_TOGGLE_SIDEBAR_RIGHT);
+          this.$store.commit(`reader/${constants.READER_TOGGLE_SIDEBAR_RIGHT}`);
           break;
         default:
       }
