@@ -1,18 +1,6 @@
 <template>
   <div class="toc-list">
-    <template v-if="loading">
-      <div class="ball-grid-pulse page-loader">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-    </template>
+    <page-loader v-if="loading" />
     <div v-else-if="error" class="text-center"><b>Error</b>: {{ error }}</div>
     <div v-else>
       <h2>Table of Contents</h2>
