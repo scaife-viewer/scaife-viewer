@@ -8,9 +8,9 @@ See [Ways to Contribute](https://github.com/scaife-viewer/scaife-viewer/wiki/Way
 
 Requirements:
 
-* Python 3.6
+* Python 3.7.1
   * pipenv
-* Node 8.6
+* Node 10.7
 * PostgreSQL 9.6
 * Elastic Search
 
@@ -40,11 +40,15 @@ Seed the text inventory to speed up local development:
 
     curl -s "https://scaife-cts-dev.perseus.org/api/cts?request=GetCapabilities" > ti.xml
 
-You should now be set to run the development server:
+You should now be set to run the static build pipeline and hot module reloading:
 
-    npm run dev
+    npm start
 
-Browse to http://localhost:3000/.
+In another terminal, start runserver:
+
+    pipenv run python manage.py runserver
+
+Browse to http://localhost:8000/.
 
 Note that, although running Scaife locally, this is relying on the Nautilus server at https://scaife-cts-dev.perseus.org to retrieve texts.
 
