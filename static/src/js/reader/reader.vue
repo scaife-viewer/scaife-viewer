@@ -31,14 +31,15 @@
             </template>
           </div>
           <version-selector v-if="!rightPassage && versions.length > 1" :versions="versions" :to="toRightPassage">
-            <i class="fa fa-columns"></i>
+            <icon name="columns"></icon>
             add parallel version
           </version-selector>
           <div id="overall" class="overall" :dir="text.metadata.rtl ? 'rtl' : 'ltr'">
             <div class="pg-left">
               <router-link v-if="passage.metadata.prev" :to="toRef(passage.metadata.prev.ref)">
                 <span>
-                  <i :class="['fa', {'fa-chevron-left': !text.metadata.rtl, 'fa-chevron-right': text.metadata.rtl}]"></i>
+                  <icon name="chevron-right" v-if="text.metadata.rtl"></icon>
+                  <icon name="chevron-left" v-else></icon>
                 </span>
               </router-link>
             </div>
@@ -84,7 +85,8 @@
             <div class="pg-right">
               <router-link v-if="passage.metadata.next" :to="toRef(passage.metadata.next.ref)">
                 <span>
-                  <i :class="['fa', {'fa-chevron-left': text.metadata.rtl, 'fa-chevron-right': !text.metadata.rtl}]"></i>
+                  <icon name="chevron-left" v-if="text.metadata.rtl"></icon>
+                  <icon name="chevron-right" v-else></icon>
                 </span>
               </router-link>
             </div>

@@ -3,8 +3,9 @@
     <h4>
       <div class="toggle">
         <span class="open-toggle" v-if="!filtered" @click.prevent="toggle">
-          <i :class="['fa', open ? 'fa-chevron-down' : 'fa-chevron-right']"></i>
-        </span>
+            <icon name="chevron-down" v-if="open"></icon>
+            <icon name="chevron-right" v-else></icon>
+          </span>
       </div>
       <div class="label">
         <a :href="textGroup.url">{{ textGroup.label }}</a>

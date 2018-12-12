@@ -4,12 +4,14 @@
       <h2>
         <span @click.prevent="toggle">
           <span class="open-toggle">
-            <i :class="['fa', open ? 'fa-chevron-down' : 'fa-chevron-right']"></i>
+            <icon name="chevron-down" v-if="open"></icon>
+            <icon name="chevron-right" v-else></icon>
           </span>
           <slot name="header"></slot>
         </span>
         <span v-if="open" class="fixed-toggle" @click.prevent="toggleFix">
-          <i :class="['fa', fixed ? 'fa-expand' : 'fa-compress']"></i>
+          <icon name="expand" v-if="fixed"></icon>
+          <icon name="compress" v-else></icon>
         </span>
       </h2>
       <div v-if="open" class="sticky-body">

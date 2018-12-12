@@ -26,7 +26,7 @@
             ref="filter-input"
           >
           <div class="input-group-append" v-if="filtered">
-            <button class="btn btn-outline-secondary" type="button" @click="clearQuery"><i class="fa fa-times"></i></button>
+            <button class="btn btn-outline-secondary" type="button" @click="clearQuery"><icon name="times"></icon></button>
           </div>
         </div>
       </div>

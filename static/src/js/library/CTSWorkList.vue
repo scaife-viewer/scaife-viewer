@@ -21,7 +21,7 @@
             ref="filter-input"
           >
           <div class="input-group-append" v-if="filtered">
-            <button class="btn btn-outline-secondary" type="button" @click="clearQuery"><i class="fa fa-times"></i></button>
+            <button class="btn btn-outline-secondary" type="button" @click="clearQuery"><icon name="times"></icon></button>
           </div>
         </div>
       </div>
@@ -35,7 +35,7 @@
               <p class="card-text">{{ text.description }}</p>
             </div>
             <div class="card-footer">
-              <a :href="text.first_passage.url"><i class="fa fa-book"></i> Read ({{ text.human_lang }})</a>
+              <a :href="text.first_passage.url"><icon name="book"></icon> Read ({{ text.human_lang }})</a>
             </div>
           </div>
         </div>
