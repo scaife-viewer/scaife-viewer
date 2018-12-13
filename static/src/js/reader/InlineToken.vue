@@ -1,3 +1,7 @@
+<template>
+  <span :class="[t, { c: clickable, selected, highlighted }]" @click.prevent="onClick">
+  </span>
+</template>
 <script>
 // This component has a render() method instead of a <template> section because
 // it is being loaded at runtime rather than pre-compiled.
@@ -15,6 +19,24 @@ export default {
     idx() {
       return `${this.w}[${this.i}]`;
     },
+    textMode() {
+      return this.$store.state.reader.textMode;
+    },
+    annotations() {
+      return this.$store.state.reader.annotations;
+    },
+    annotation() {
+      return this.annotations.get(this.idx);
+    },
+    clickable() {
+      return this.$parent.visible && this.highlighting && this.textMode === 'clickable';
+    },
+    selected() {
+      return this.annotation && this.annotation.selected;
+    },
+    highlighted() {
+      return this.annotation && this.annotation.highlighted;
+    }
   },
   render(h) {
     let selected = false;
