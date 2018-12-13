@@ -178,6 +178,7 @@ export default {
         selectedTokens.push(highlight.substr(1));
         singleton = true;
       }
+      console.log('selected Tokens', selectedTokens);
       selectedTokens.forEach((token) => {
         commit(constants.SET_ANNOTATION, {
           token,

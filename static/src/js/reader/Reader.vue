@@ -30,7 +30,7 @@
               <h3><passage-human-reference :metadata="leftPassage.metadata" /></h3>
             </template>
           </div>
-          <version-selector v-if="!rightPassage && versions.length > 1" :versions="versions" :to="toRightPassage">
+          <version-selector v-if="canSelectVersions" :versions="versions" :to="toRightPassage">
             <icon name="columns"></icon>
             add parallel version
           </version-selector>
@@ -169,6 +169,9 @@ export default {
     },
     versions() {
       return this.$store.state.reader.versions;
+    },
+    canSelectVersions() {
+      return !this.rightPassage && this.versions && this.versions.length > 1;
     },
     text() {
       return this.$store.getters['reader/text'];
