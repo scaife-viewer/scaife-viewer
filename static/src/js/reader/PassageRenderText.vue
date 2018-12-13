@@ -11,7 +11,7 @@
 import constants from '../constants';
 import TextPart from './TextPart.vue';
 import TextLoader from './TextLoader.vue';
-import Token from './Token.vue';
+import InlineToken from './InlineToken.vue';
 
 export default {
   name: 'passage-render-text',
@@ -96,7 +96,7 @@ export default {
         },
         components: {
           TextPart,
-          t: Token,
+          t: InlineToken,
         },
       };
     },
