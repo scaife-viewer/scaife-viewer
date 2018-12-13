@@ -8,9 +8,9 @@ See [Ways to Contribute](https://github.com/scaife-viewer/scaife-viewer/wiki/Way
 
 Requirements:
 
-* Python 3.6
+* Python 3.7.1
   * pipenv
-* Node 8.6
+* Node 10.7
 * PostgreSQL 9.6
 * Elasticsearch 6
 
@@ -27,24 +27,24 @@ Install the Node and Python dependencies:
     npm install
     pipenv install --dev
 
-To run commands in the Python environment, you can use `pipenv shell` and carry on, but I find it has some nasty side-affects. So, to activate the pipenv environment in your current shell:
-
-    source "$(pipenv --venv)/bin/activate"
-
 Setup the database:
 
-    python manage.py migrate
-    python manage.py loaddata sites
+    pipenv run python manage.py migrate
+    pipenv run python manage.py loaddata sites
 
 Seed the text inventory to speed up local development:
 
     curl -s "https://scaife-cts-dev.perseus.org/api/cts?request=GetCapabilities" > ti.xml
 
-You should now be set to run the development server:
+You should now be set to run the static build pipeline and hot module reloading:
 
-    npm run dev
+    npm start
 
-Browse to http://localhost:3000/.
+In another terminal, start runserver:
+
+    pipenv run python manage.py runserver
+
+Browse to http://localhost:8000/.
 
 Note that, although running Scaife locally, this is relying on the Nautilus server at https://scaife-cts-dev.perseus.org to retrieve texts.
 
