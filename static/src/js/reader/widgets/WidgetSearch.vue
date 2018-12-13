@@ -1,5 +1,5 @@
 <template>
-  <widget class="search">
+  <base-widget class="search">
     <span slot="header">
       Text Search
       <span v-if="query && totalCount !== null" class="result-count">({{ totalCount }})</span>
@@ -26,13 +26,13 @@
         </template>
       </div>
     </div>
-  </widget>
+  </base-widget>
 </template>
 
 <script>
 import api from '../../api';
-import ReaderNavigationMixin from '../reader-navigation-mixin.vue';
-import TextLoader from '../text-loader.vue';
+import ReaderNavigationMixin from '../../mixins/ReaderNavigationMixin.vue';
+import TextLoader from '../TextLoader.vue';
 
 const debounce = require('lodash.debounce');
 
@@ -45,6 +45,7 @@ function visibleInContainer(container, el) {
 }
 
 export default {
+  name: 'widget-search',
   mixins: [
     ReaderNavigationMixin,
   ],

@@ -1,5 +1,5 @@
 <template>
-  <widget class="chs-commentary" v-if="show">
+  <base-widget class="chs-commentary" v-if="show">
     <span slot="header">CHS Commentary</span>
     <div slot="body">
       <p class="no-comment" v-if="!comments || comments.length === 0">
@@ -13,13 +13,14 @@
         </div>
       </div>
     </div>
-  </widget>
+  </base-widget>
 </template>
 
 <script>
 import qs from 'query-string';
 
 export default {
+  name: 'widget-chs-commentary',
   computed: {
     passage() {
       return this.$store.getters['reader/passage'];

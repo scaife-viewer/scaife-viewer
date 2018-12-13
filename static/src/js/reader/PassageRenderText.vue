@@ -9,11 +9,12 @@
 
 <script>
 import constants from '../constants';
-import TextPart from './text-part.vue';
-import TextLoader from './text-loader.vue';
-import Token from './token.vue';
+import TextPart from './TextPart.vue';
+import TextLoader from './TextLoader.vue';
+import Token from './Token.vue';
 
 export default {
+  name: 'passage-render-text',
   props: ['text', 'highlighting'],
   watch: {
     text: 'prepareText',

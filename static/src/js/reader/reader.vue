@@ -99,7 +99,7 @@
           <widget-highlight />
           <widget-morpheus />
           <widget-token-list />
-          <widget-dv-word-list />
+          <widget-word-list />
           <widget-chs-commentary />
         </template>
       </skeleton>
@@ -109,25 +109,25 @@
 
 <script>
 import constants from '../constants';
-import Skeleton from './skeleton.vue';
-import PassageHumanReference from './passage-human-reference.vue';
-import PassageRenderText from './passage-render-text.vue';
-import PassageRedirectNotice from './passage-redirect-notice.vue';
-import ReaderNavigationMixin from './reader-navigation-mixin.vue';
+import Skeleton from './Skeleton.vue';
+import PassageHumanReference from './PassageHumanReference.vue';
+import PassageRenderText from './PassageRenderText.vue';
+import PassageRedirectNotice from './PassageRedirectNotice.vue';
+import ReaderNavigationMixin from '../mixins/ReaderNavigationMixin.vue';
 import URN from '../urn';
-import VersionSelector from './version-selector.vue';
-import WidgetPassageAncestors from './widgets/passage-ancestors.vue';
-import WidgetPassageChildren from './widgets/passage-children.vue';
-import WidgetPassageReference from './widgets/passage-reference.vue';
-import WidgetSearch from './widgets/search.vue';
-import WidgetHighlight from './widgets/highlight.vue';
-import WidgetPassageLinks from './widgets/passage-links.vue';
-import WidgetTextMode from './widgets/text-mode.vue';
-import WidgetTextSize from './widgets/text-size.vue';
-import WidgetMorpheus from './widgets/morpheus.vue';
-import WidgetDvWordList from './widgets/dv-word-list.vue';
-import WidgetTokenList from './widgets/dm-token-list.vue';
-import WidgetChsCommentary from './widgets/chs-commentary.vue';
+import VersionSelector from './VersionSelector.vue';
+import WidgetPassageAncestors from './widgets/WidgetPassageAncestors.vue';
+import WidgetPassageChildren from './widgets/WidgetPassageChildren.vue';
+import WidgetPassageReference from './widgets/WidgetPassageReference.vue';
+import WidgetSearch from './widgets/WidgetSearch.vue';
+import WidgetHighlight from './widgets/WidgetHighlight.vue';
+import WidgetPassageLinks from './widgets/WidgetPassageLinks.vue';
+import WidgetTextMode from './widgets/WidgetTextMode.vue';
+import WidgetTextSize from './widgets/WidgetTextSize.vue';
+import WidgetMorpheus from './widgets/WidgetMorpheus.vue';
+import WidgetWordList from './widgets/WidgetWordList.vue';
+import WidgetTokenList from './widgets/WidgetTokenList.vue';
+import WidgetCHSCommentary from './widgets/WidgetCHSCommentary.vue';
 
 const widgets = {
   WidgetPassageAncestors,
@@ -139,9 +139,9 @@ const widgets = {
   WidgetTextSize,
   WidgetHighlight,
   WidgetMorpheus,
-  WidgetDvWordList,
+  WidgetWordList,
   WidgetTokenList,
-  WidgetChsCommentary,
+  'widget-chs-commentary': WidgetCHSCommentary,
 };
 
 export default {

@@ -1,5 +1,5 @@
 <template>
-  <widget class="passage-reference">
+  <base-widget class="passage-reference">
     <span slot="header">Passage Reference</span>
     <div slot="body">
       <input
@@ -10,13 +10,14 @@
         class="form-control form-control-sm"
       >
     </div>
-  </widget>
+  </base-widget>
 </template>
 
 <script>
-import ReaderNavigationMixin from '../reader-navigation-mixin.vue';
+import ReaderNavigationMixin from '../../mixins/ReaderNavigationMixin.vue';
 
 export default {
+  name: 'widget-passage-reference',
   mixins: [
     ReaderNavigationMixin,
   ],

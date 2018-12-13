@@ -1,5 +1,5 @@
 <template>
-  <div :class="['textpart']">
+  <div class="textpart">
     <router-link v-if="reference" class="a" :to="toRef(this.reference)"><div>{{ n }}</div></router-link>
     <div class="b">
       <slot></slot>
@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import ReaderNavigationMixin from './reader-navigation-mixin.vue';
+import ReaderNavigationMixin from '../mixins/ReaderNavigationMixin.vue';
 
 export default {
   name: 'TextPart',

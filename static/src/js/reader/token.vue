@@ -1,6 +1,10 @@
+<template>
+  <span :class="[t, { c: clickable, selected, highlighted }]" @click.prevent="onClick">
+  </span>
+</template>
 <script>
 export default {
-  name: 'Token',
+  name: 'token',
   props: {
     t: {
       type: String,
@@ -20,57 +24,43 @@ export default {
     idx() {
       return `${this.w}[${this.i}]`;
     },
+    textMode() {
+      return this.$store.state.reader.textMode;
+    },
+    annotations() {
+      return this.$store.state.reader.annotations;
+    },
+    annotation() {
+      return this.annotations.get(this.idx);
+    },
+    clickable() {
+      return this.$parent.visible && this.highlighting && this.textMode === 'clickable';
+    },
+    selected() {
+      return this.annotation && this.annotation.selected;
+    },
+    highlighted() {
+      return this.annotation && this.annotation.highlighted;
+    }
   },
   methods: {
     readerDispatch(action, params) {
       this.$store.dispatch(`reader/${action}`, params);
-    }
-  },
-  render(h) {
-    let selected = false;
-    let highlighted = false;
-    let clickable = false;
-    const {
-      t, idx, highlighting,
-      $parent: p,
-      $store: store,
-    } = this;
-    const { visible } = p;
-    if (visible && highlighting) {
-      const { textMode, annotations, annotationChange } = store.state.reader;
-      if (textMode === 'clickable') {
-        clickable = true;
-      }
-      if (annotations.has(idx)) {
-        ({ selected, highlighted } = annotations.get(idx));
+    },
+    onClick(e) {
+      if (this.clickable) {
+        if (e.metaKey) {
+          if (this.selected) {
+            this.readerDispatch(constants.READER_SET_SELECTED_TOKEN, { token: null });
+          }
+        } else if (e.shiftKey) {
+          this.readerDispatch(constants.READER_SELECT_TOKEN_RANGE, { token: this.idx });
+        } else {
+          this.readerDispatch(constants.READER_SET_SELECTED_TOKEN, { token: this.idx });
+        }
+        e.stopPropagation();
       }
     }
-    return h(
-      'span',
-      {
-        class: [
-          t,
-          { c: clickable, selected, highlighted },
-        ],
-        on: {
-          click(e) {
-            if (clickable) {
-              if (e.metaKey) {
-                if (selected) {
-                  this.readerDispatch(constants.READER_SET_SELECTED_TOKEN, { token: null });
-                }
-              } else if (e.shiftKey) {
-                this.readerDispatch(constants.READER_SELECT_TOKEN_RANGE, { token: idx });
-              } else {
-                this.readerDispatch(constants.READER_SET_SELECTED_TOKEN, { token: idx });
-              }
-              e.stopPropagation();
-            }
-          },
-        },
-      },
-      this.$slots.default,
-    );
   },
 };
 </script>

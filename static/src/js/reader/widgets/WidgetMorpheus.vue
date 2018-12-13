@@ -1,5 +1,5 @@
 <template>
-  <widget class="morpheus" v-if="enabled">
+  <base-widget class="morpheus" v-if="enabled">
     <span slot="header">Morphology</span>
     <div slot="body">
       <text-loader v-if="loading" size="7px" margin="1px" />
@@ -36,14 +36,15 @@
       <p v-else-if="selectedWord" class="no-results">No results found.</p>
       <p v-else class="instructions">In <span class="mode">HIGHLIGHT</span> text mode, select a word to get morphological analysis (Greek and Latin only).</p>
     </div>
-  </widget>
+  </base-widget>
 </template>
 
 <script>
 import constants from '../../constants';
-import TextLoader from '../text-loader.vue';
+import TextLoader from '../TextLoader.vue';
 
 export default {
+  name: 'widget-morpheus',
   watch: {
     selectedWord: {
       handler: 'fetchData',

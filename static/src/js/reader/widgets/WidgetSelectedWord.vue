@@ -1,14 +1,15 @@
 <template>
-  <widget class="selected-word" v-if="words && words.length > 0">
+  <base-widget class="selected-word" v-if="words && words.length > 0">
     <span slot="header">Selected Word</span>
     <div slot="body">
       <p v-for="word in words" :key="`${word.w}[${word.i}]`">{{ word.w }}[{{ word.i }}]</p>
     </div>
-  </widget>
+  </base-widget>
 </template>
 
 <script>
 export default {
+  name: 'widget-selected-word',
   computed: {
     words() {
       const words = [];

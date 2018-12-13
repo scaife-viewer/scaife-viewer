@@ -1,5 +1,5 @@
 <template>
-  <widget class="text-mode">
+  <base-widget class="text-mode">
     <span slot="header">Text Mode</span>
     <div slot="body">
       <div class="mode">
@@ -11,11 +11,14 @@
         <span v-if="textMode === 'clickable'">click and shift-click on words to highlight</span>
       </div>
     </div>
-  </widget>
+  </base-widget>
 </template>
 
 <script>
+import constants from '../../constants';
+
 export default {
+  name: 'widget-text-mode',
   computed: {
     textMode() {
       return this.$store.state.reader.textMode;
@@ -25,7 +28,7 @@ export default {
     changeTextMode(mode) {
       this.$store.dispatch(`reader/${constants.READER_SET_SELECTED_TOKEN}`, { token: null })
         .then(() => {
-          this.$store.commit(constants.SET_TEXT_MODE, { mode });
+          this.$store.commit(`reader/${constants.SET_TEXT_MODE}`, { mode });
         });
     },
   },
