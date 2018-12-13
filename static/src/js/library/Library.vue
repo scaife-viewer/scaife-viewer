@@ -1,18 +1,6 @@
 <template>
   <div class="library-component">
-    <template v-if="loading">
-      <div class="ball-grid-pulse page-loader">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-    </template>
+    <page-loader v-if="loading" />
     <div v-else-if="error" class="text-center"><b>Error</b>: {{ error }}</div>
     <template v-else>
       <h2>Text Groups and Works</h2>

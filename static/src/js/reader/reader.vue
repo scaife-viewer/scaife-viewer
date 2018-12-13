@@ -2,7 +2,7 @@
   <div>
     <template v-if="!ready">
       <div class="wrapper">
-        <reader-loader v-show="showLoader" />
+        <page-loader v-show="showLoader" />
       </div>
     </template>
     <div v-else-if="error" class="wrapper" :style="{ margin: 'auto' }">
@@ -113,7 +113,6 @@ import Skeleton from './skeleton.vue';
 import PassageHumanReference from './passage-human-reference.vue';
 import PassageRenderText from './passage-render-text.vue';
 import PassageRedirectNotice from './passage-redirect-notice.vue';
-import ReaderLoader from './reader-loader.vue';
 import ReaderNavigationMixin from './reader-navigation-mixin.vue';
 import URN from '../urn';
 import VersionSelector from './version-selector.vue';
@@ -152,7 +151,6 @@ export default {
     PassageHumanReference,
     PassageRenderText,
     PassageRedirectNotice,
-    ReaderLoader,
     VersionSelector,
     ...widgets,
   },
