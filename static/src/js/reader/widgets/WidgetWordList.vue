@@ -1,5 +1,5 @@
 <template>
-  <widget class="word-list" v-if="enabled && show">
+  <base-widget class="word-list" v-if="enabled && show">
     <span slot="header">Word List</span>
     <div slot="sticky">
       <p v-if="!usedFallbackApi" class="legend">Number in parentheses is frequency per 10k in this work.</p>
@@ -11,13 +11,14 @@
         <span v-if="word.frequency" class="fr">({{ word.frequency }})</span>
       </p>
     </div>
-  </widget>
+  </base-widget>
 </template>
 
 <script>
 import qs from 'query-string';
 
 export default {
+  name: 'widget-word-list',
   computed: {
     text() {
       return this.$store.getters['reader/text'];

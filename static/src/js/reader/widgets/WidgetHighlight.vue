@@ -1,5 +1,5 @@
 <template>
-  <widget class="highlight">
+  <base-widget class="highlight">
     <span slot="header">Highlight</span>
     <div slot="body">
       <input
@@ -10,11 +10,14 @@
         class="form-control form-control-sm"
       >
     </div>
-  </widget>
+  </base-widget>
 </template>
 
 <script>
+import constants from '../../constants';
+
 export default {
+  name: 'widget-highlight',
   watch: {
     highlight: 'setInputVal',
   },

@@ -1,30 +1,20 @@
 <script>
+// This component has a render() method instead of a <template> section because
+// it is being loaded at runtime rather than pre-compiled.
+import constants from '../constants';
+
 export default {
-  name: 'Token',
+  name: 'inline-token',
   props: {
-    t: {
-      type: String,
-      required: true,
-    },
-    w: {
-      type: String,
-      required: true,
-    },
-    i: {
-      type: String,
-      required: true,
-    },
+    t: { type: String, required: true, },
+    w: { type: String, required: true, },
+    i: { type: String, required: true, },
   },
   inject: ['highlighting'],
   computed: {
     idx() {
       return `${this.w}[${this.i}]`;
     },
-  },
-  methods: {
-    readerDispatch(action, params) {
-      this.$store.dispatch(`reader/${action}`, params);
-    }
   },
   render(h) {
     let selected = false;
@@ -57,12 +47,12 @@ export default {
             if (clickable) {
               if (e.metaKey) {
                 if (selected) {
-                  this.readerDispatch(constants.READER_SET_SELECTED_TOKEN, { token: null });
+                  store.dispatch(`reader/${constants.READER_SET_SELECTED_TOKEN}`, { token: null });
                 }
               } else if (e.shiftKey) {
-                this.readerDispatch(constants.READER_SELECT_TOKEN_RANGE, { token: idx });
+                store.dispatch(`reader/${constants.READER_SELECT_TOKEN_RANGE}`, { token: idx });
               } else {
-                this.readerDispatch(constants.READER_SET_SELECTED_TOKEN, { token: idx });
+                store.dispatch(`reader/${constants.READER_SET_SELECTED_TOKEN}`, { token: idx });
               }
               e.stopPropagation();
             }

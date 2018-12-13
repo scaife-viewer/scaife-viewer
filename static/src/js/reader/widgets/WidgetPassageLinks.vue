@@ -1,5 +1,5 @@
 <template>
-  <widget class="passage-links">
+  <base-widget class="passage-links">
     <span slot="header">CTS URN</span>
     <div slot="body">
       <template v-if="rightPassage">
@@ -10,11 +10,12 @@
         <p><tt><a :href="`${ctsApiUrl}?request=GetPassage&amp;urn=${passage.urn}`">{{ passage.urn.toString() }}</a></tt></p>
       </template>
     </div>
-  </widget>
+  </base-widget>
 </template>
 
 <script>
 export default {
+  name: 'widget-passage-links',
   data() {
     return {
       ctsApiUrl: 'https://scaife-cts.perseus.org/api/cts',

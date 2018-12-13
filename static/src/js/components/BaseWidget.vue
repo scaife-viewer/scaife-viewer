@@ -26,7 +26,7 @@
 
 <script>
   export default {
-    name: 'widget',
+    name: 'base-widget',
     data() {
       return {
         open: true,

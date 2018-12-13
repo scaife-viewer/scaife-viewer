@@ -140,7 +140,7 @@ export default {
     state.annotationChange += 1;
   },
 
-  [constants.SET_ANNOTATION]: (state, { tokens, key, value }) => {
+  [constants.SET_ANNOTATIONS]: (state, { tokens, key, value }) => {
     const { annotations } = state;
     tokens.forEach((token) => {
       let ta = {};

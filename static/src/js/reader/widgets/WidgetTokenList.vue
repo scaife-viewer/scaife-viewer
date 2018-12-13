@@ -1,5 +1,5 @@
 <template>
-  <widget class="token-list" v-if="enabled && show">
+  <base-widget class="token-list" v-if="enabled && show">
     <span slot="header">Token List</span>
     <div slot="body">
       <table>
@@ -12,13 +12,14 @@
         </template>
       </table>
     </div>
-  </widget>
+  </base-widget>
 </template>
 
 <script>
 import URN from '../../urn';
 
 export default {
+  name: 'widget-token-list',
   computed: {
     text() {
       return this.$store.getters['reader/text'];
