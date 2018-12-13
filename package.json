@@ -4,7 +4,6 @@
   "version": "0.0.1",
   "scripts": {
     "start": "HOT_RELOAD=1 webpack-dev-server --mode development",
-    "debug": "vue-devtools",
     "lint": "eslint .",
     "build": "NODE_ENV=production webpack --mode production",
     "heroku-postbuild": "npm run build"
