@@ -123,11 +123,13 @@ div.text {
     cursor: pointer;
   }
   span.w.selected, span.w.highlighted {
-    padding: 0 0.1em 0.1em 0.15em;
+    border-style: solid;
+    border-width: 0 0.1em 0.1em 0.15em;
     margin: 0 -0.1em -0.1em -0.15em;
   }
   span.w.selected {
     background-color: $selected-color;
+    border-color: $selected-color;
   }
   span.w.highlighted {
     background-color: $highlight-color;
