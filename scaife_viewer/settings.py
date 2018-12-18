@@ -294,4 +294,11 @@ if "SENTRY_DSN" in os.environ:
         "dsn": os.environ["SENTRY_DSN"],
     }
 
+
+if "FORCE_SCRIPT_NAME" in os.environ:
+	    FORCE_SCRIPT_NAME = os.environ["FORCE_SCRIPT_NAME"]
+	    STATIC_URL = f"{FORCE_SCRIPT_NAME}{STATIC_URL}"
+	    WHITENOISE_STATIC_PREFIX = "static/"
+
+
 ELASTICSEARCH_HOSTS = os.environ.get("ELASTICSEARCH_HOSTS", "localhost").split(",")
