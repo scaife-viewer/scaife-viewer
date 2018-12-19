@@ -65,3 +65,31 @@ To prepare messages:
 If you need to add a language; add it to `LANGUAGES` in settings.py and run:
 
     python manage.py makemessages --locale <lang>
+
+
+## Hosting Off-Root
+
+If you need to host at a place other than root, for example, if you need to have
+a proxy serve at some path off your domain like http://yourdomain.com/perseus/,
+you'll need to do the following:
+
+1. Set the environment variable, `FORCE_SCRIPT_NAME` to point to your script:
+
+```
+    export FORCE_SCRIPT_NAME=/perseus  # this front slash is important
+```
+
+2. Make sure this is set prior to runing `npm run build` as well as prior to and
+   part of your wsgi startup environment.
+
+3. Then, you just set your proxy to point to the location of where your wsgi
+   server is running.  For example, if you are running wsgi on port 8000 you can
+   have this snippet inside your nginx config for the server:
+
+```
+    location /perseus/ {
+        proxy_pass        http://localhost:8000/;
+    }
+```
+
+That should be all you need to do.
