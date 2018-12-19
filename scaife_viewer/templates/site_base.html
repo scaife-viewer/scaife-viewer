@@ -38,7 +38,7 @@
             {% block nav %}
               <ul class="navbar-nav mr-auto">
                 {% block nav_items %}
-                  <li class="nav-item"><a class="nav-link" href="/library/">Browse Library</a></li>
+                  <li class="nav-item"><a class="nav-link" href="{% url 'library' %}">Browse Library</a></li>
                   <li class="nav-item"><a class="nav-link" href="{% url 'search' %}">Text Search</a></li>
                 {% endblock %}
               </ul>
