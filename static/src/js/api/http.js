@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseURL = process.env.FORCE_SCRIPT_NAME || '';
+const baseURL = process.env.FORCE_SCRIPT_NAME || '/';
 
 const HTTP = axios.create({
   baseURL,

@@ -5,7 +5,7 @@ import routes from './routes';
 
 Vue.use(Router);
 
-let base = process.env.FORCE_SCRIPT_NAME || '';
+let base = process.env.FORCE_SCRIPT_NAME || '/';
 
 // From vue-router docs:
 // The base URL of the app. For example, if the entire single page application
