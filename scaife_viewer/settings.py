@@ -295,8 +295,8 @@ if "SENTRY_DSN" in os.environ:
     }
 
 
-if "FORCE_SCRIPT_NAME" in os.environ:
-    FORCE_SCRIPT_NAME = os.environ["FORCE_SCRIPT_NAME"]
+FORCE_SCRIPT_NAME = os.environ.get("FORCE_SCRIPT_NAME")
+if FORCE_SCRIPT_NAME:
     STATIC_URL = f"{FORCE_SCRIPT_NAME}{STATIC_URL}"
     WHITENOISE_STATIC_PREFIX = "static/"
 
