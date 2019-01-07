@@ -8,16 +8,19 @@ jobs:
     - checkout
     - run:
         name: Install Python dependencies
-        command: |
-          pipenv install --dev
+        command: pipenv install --dev
     - run:
         name: Run isort
-        command: |
-          pipenv run isort -c scaife_viewer/**/*.py
+        command: pipenv run isort -c **/*.py
     - run:
         name: Run flake8
-        command: |
-          pipenv run flake8 scaife_viewer
+        command: pipenv run flake8 scaife_viewer
+    - run:
+        name: Install static dependencies
+        command: npm i
+    - run:
+        name: Run eslint
+        command: npm run lint
   deploy:
     docker:
     - image: buildpack-deps:trusty-scm

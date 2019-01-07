@@ -4,6 +4,7 @@
     "plugin:vue/recommended",
     "airbnb-base"
   ],
+	"parser": "babel-eslint",
   "parserOptions": {
     "sourceType": "module"
   },
