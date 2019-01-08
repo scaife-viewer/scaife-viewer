@@ -3,7 +3,7 @@ url = "https://pypi.python.org/simple"
 verify_ssl = true
 
 [requires]
-python_version = "3.7.1"
+python_version = "3.7.2"
 
 [packages]
 django-user-accounts = "*"
