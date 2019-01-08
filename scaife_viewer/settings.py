@@ -272,11 +272,7 @@ CACHES = {
 
 resolver = os.environ.get("CTS_RESOLVER", "api")
 if resolver == "api":
-<<<<<<< HEAD
-    CTS_API_ENDPOINT = os.environ.get("CTS_API_ENDPOINT", "https://scaife-cts-dev.perseus.org/api/cts")
-=======
     CTS_API_ENDPOINT = os.environ.get("CTS_API_ENDPOINT", "http://localhost:8000/api/cts")
->>>>>>> Add upper and lower panels
     CTS_RESOLVER = {
         "type": "api",
         "kwargs": {
