@@ -6,6 +6,7 @@ export default {
   [constants.READER_LOAD]: ({ dispatch, commit, state }, {
     leftUrn,
     rightUrn,
+    lowerUrn,
     query,
     initial,
   }) => {
@@ -114,6 +115,51 @@ export default {
     } else if (state.rightText) {
       commit(constants.SET_RIGHT_PASSAGE, null);
     }
+
+    if (lowerUrn) {
+      const lowerTextUrn = lowerUrn.upTo('version');
+      if (!state.lowerText || state.lowerText.urn.toString() !== lowerTextUrn.toString()) {
+        ps.push(
+          api.getCollection(lowerTextUrn, (text) => {
+            commit(constants.SET_LOWER_TEXT, { urn: lowerTextUrn, metadata: text });
+          }).catch((err) => {
+            commit(constants.SET_ERROR, { error: err.message });
+          }),
+        );
+      }
+
+      if (!state.lowerPassage || state.lowerPassage.urn.toString() !== lowerUrn.toString()) {
+        commit(constants.SET_LOWER_PASSAGE_TEXT, { text: null });
+        commit(constants.SET_LOWER_PASSAGE, {
+          urn: lowerUrn,
+          ready: false,
+          error: '',
+          redirected: null,
+        });
+        ps.push(
+          api.getPassage(lowerUrn, (passage) => {
+            const urn = new URN(passage.urn);
+            commit(constants.SET_LOWER_PASSAGE_TEXT, { text: passage.text_html });
+            delete passage.text_html;
+            commit(constants.SET_LOWER_PASSAGE, { urn });
+            if (lowerUrn.reference !== urn.reference) {
+              commit(constants.SET_LOWER_PASSAGE, {
+                metadata: passage,
+                redirected: { previousUrn: lowerUrn },
+                ready: true,
+              });
+            } else {
+              commit(constants.SET_LOWER_PASSAGE, { metadata: passage, ready: true });
+            }
+          }).catch((err) => {
+            commit(constants.SET_LOWER_PASSAGE, { error: err.message });
+          }),
+        );
+      }
+    } else if (state.lowerText) {
+      commit(constants.SET_LOWER_PASSAGE, null);
+    }
+
     return Promise.all(ps).then(() => {
       if (query.highlight && query.highlight !== state.highlight) {
         dispatch(constants.READER_HIGHLIGHT, {

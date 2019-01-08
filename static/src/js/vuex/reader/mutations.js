@@ -89,6 +89,14 @@ export default {
     }
   },
 
+  [constants.SET_LOWER_TEXT]: (state, payload) => {
+    if (payload === null) {
+      state.lowerText = null;
+    } else {
+      state.lowerText = copyText(state.lowerText, payload);
+    }
+  },
+
   [constants.SET_LEFT_PASSAGE]: (state, payload) => {
     if (payload === null) {
       state.leftPassage = null;
@@ -105,12 +113,24 @@ export default {
     }
   },
 
+  [constants.SET_LOWER_PASSAGE]: (state, payload) => {
+    if (payload === null) {
+      state.lowerPassage = null;
+    } else {
+      state.lowerPassage = copyPassage(state.lowerPassage, payload);
+    }
+  },
+
   [constants.SET_LEFT_PASSAGE_TEXT]: (state, { text }) => {
     state.leftPassageText = text;
   },
 
   [constants.SET_RIGHT_PASSAGE_TEXT]: (state, { text }) => {
     state.rightPassageText = text;
+  },
+
+  [constants.SET_LOWER_PASSAGE_TEXT]: (state, { text }) => {
+    state.lowerPassageText = text;
   },
 
   [constants.SET_HIGHLIGHT]: (state, payload) => {
