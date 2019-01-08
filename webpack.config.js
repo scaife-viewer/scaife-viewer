@@ -60,16 +60,14 @@ const plugins = [
   new CopyWebpackPlugin([
     { from: './static/src/images/**/*', to: path.resolve('./static/dist/images/[name].[ext]'), toType: 'template' },
   ]),
+  new webpack.EnvironmentPlugin([
+    'NODE_ENV',
+    'FORCE_SCRIPT_NAME',
+  ]),
 ];
 
 if (devMode) {
   styleRule.use = ['css-hot-loader', ...styleRule.use];
-} else {
-  plugins.push(
-    new webpack.EnvironmentPlugin([
-      'NODE_ENV',
-    ]),
-  );
 }
 
 module.exports = {
