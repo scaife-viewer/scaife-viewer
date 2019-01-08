@@ -10,8 +10,8 @@
 <script>
 import constants from '../constants';
 import TextPart from './TextPart.vue';
-import TextLoader from './TextLoader.vue';
 import InlineToken from './InlineToken.vue';
+import RefLower from './RefLower.vue';
 
 export default {
   name: 'passage-render-text',
@@ -95,6 +95,7 @@ export default {
           },
         },
         components: {
+          RefLower,
           TextPart,
           t: InlineToken,
         },

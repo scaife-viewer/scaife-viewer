@@ -228,12 +228,18 @@
   </xsl:template>
 
   <xsl:template match="t:quote">
-    <xsl:element name="blockquote">
       <xsl:apply-templates/>
-    </xsl:element>
   </xsl:template>
 
-  <xsl:template match="t:figure" />
+  <xsl:template match="t:figure">
+<div>Figure here!
+<!--<figure>
+<xsl:element name="img">
+      <xsl:attribute name="src"><xsl:value-of select="./graphic/@url"/></xsl:attribute>
+      <figcaption><em><xsl:value-of select="./head"/></em></figcaption>
+    </xsl:element>
+</figure>--></div>
+</xsl:template>
 
   <xsl:template match="t:lg">
     <div class="lg"><xsl:apply-templates/></div>
@@ -255,11 +261,23 @@
     <div class="milestone"><xsl:value-of select="@n"/></div>
   </xsl:template>
 
-  <xsl:template match="t:p">
-    <p>
+  <xsl:template match="t:ab">
+          <p>
       <xsl:apply-templates/>
     </p>
-  </xsl:template>
+   </xsl:template>
+
+<xsl:template match="t:foreign[1]">
+<xsl:choose>
+        <xsl:when test="preceding-sibling::t:ref[1][@cRef]"><strong><xsl:value-of select="."/></strong>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="."/></xsl:otherwise>
+</xsl:choose>
+   </xsl:template>
+
+
+
 
   <xsl:template match="text()">
     <xsl:variable name="node" select="." />
@@ -305,7 +323,6 @@
   </xsl:template>
 
   <xsl:template match="t:lb">
-    <br/>
   </xsl:template>
 
   <xsl:template match="t:ex">
@@ -321,7 +338,13 @@
   </xsl:template>
 
   <xsl:template match="t:bibl">
-    <xsl:element name="cite">
+  <xsl:choose>
+        <xsl:when test="t:author">
+        </xsl:when>
+ <xsl:when test="t:title">
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:element name="cite">
       <xsl:if test="@n">
         <xsl:attribute name="data-ref">
           <xsl:value-of select="@n" />
@@ -329,6 +352,8 @@
       </xsl:if>
       <xsl:value-of select="." />
     </xsl:element>
+</xsl:otherwise>
+</xsl:choose>
   </xsl:template>
 
   <xsl:template match="t:gap">
@@ -400,6 +425,17 @@
     </a>
   </xsl:template>
 
+  <xsl:template match="t:ab/t:ref[@cRef]">
+    <span class="cRef">◉</span><xsl:text> </xsl:text><xsl:apply-templates/>
+  </xsl:template>
+
+  <xsl:template match="t:ab/t:ref[@target]">
+    <xsl:element name="ref-lower">
+      <xsl:attribute name="urn"><xsl:value-of select="@target"/></xsl:attribute>
+      <xsl:apply-templates/>
+    </xsl:element>
+  </xsl:template>
+
   <xsl:template match="t:choice">
     <span class="choice">
       <xsl:attribute name="title">
@@ -408,6 +444,42 @@
       <xsl:value-of select="orig" /><xsl:text> </xsl:text>
     </span>
   </xsl:template>
+
+<xsl:template match="t:hi">
+    <xsl:choose>
+        <xsl:when test="@rend='#bold'or @rend='bold'">
+          <strong><xsl:value-of select="."/></strong>
+        </xsl:when>
+          <xsl:when test="@rend='italic'">
+          <em><xsl:value-of select="."/></em>
+        </xsl:when>
+        <xsl:when test="@rend='underline'">
+          <u><xsl:value-of select="."/></u>
+        </xsl:when>
+      <xsl:when test="@rend='subscript'">
+          <sub><xsl:value-of select="."/></sub>
+        </xsl:when>
+    <xsl:when test="@rend='superscript'">
+          <sup><xsl:value-of select="."/></sup>
+        </xsl:when>
+    <xsl:when test="@rend='smallcaps'">
+          <small><xsl:value-of select="."/></small>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="."/>
+        </xsl:otherwise>
+      </xsl:choose>
+  </xsl:template>
+
+<!--<xsl:template match="t:ab>
+    <xsl:element name="text-part">
+      <xsl:attribute name="class">ab<xsl:attribute>
+     <xsl:apply-templates/>
+    </xsl:element>
+  </xsl:template> -->
+
+
+
 
   <xsl:template match="t:unclear">
     <span class="unclear"><xsl:value-of select="." /></span>
@@ -427,6 +499,7 @@
         <xsl:text>translation lang_</xsl:text>
         <xsl:value-of select="@xml:lang"/>
       </xsl:attribute>
+
 
       <xsl:apply-templates/>
 
