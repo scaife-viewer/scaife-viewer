@@ -31,6 +31,7 @@
 
 <script>
 import api from '../../api';
+import constants from '../../constants';
 import ReaderNavigationMixin from '../../mixins/ReaderNavigationMixin.vue';
 import TextLoader from '../TextLoader.vue';
 

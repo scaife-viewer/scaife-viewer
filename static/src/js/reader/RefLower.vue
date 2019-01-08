@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import ReaderNavigationMixin from './reader-navigation-mixin.vue';
+import ReaderNavigationMixin from '../mixins/ReaderNavigationMixin.vue';
 
 export default {
   name: 'RefLower',

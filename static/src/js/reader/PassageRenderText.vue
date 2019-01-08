@@ -9,6 +9,7 @@
 
 <script>
 import constants from '../constants';
+import TextLoader from './TextLoader.vue';
 import TextPart from './TextPart.vue';
 import InlineToken from './InlineToken.vue';
 import RefLower from './RefLower.vue';
