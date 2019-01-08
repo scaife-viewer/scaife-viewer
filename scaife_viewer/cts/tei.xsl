@@ -262,22 +262,17 @@
   </xsl:template>
 
   <xsl:template match="t:ab">
-          <p>
+    <p>
       <xsl:apply-templates/>
     </p>
-   </xsl:template>
+  </xsl:template>
 
-<xsl:template match="t:foreign[1]">
-<xsl:choose>
-        <xsl:when test="preceding-sibling::t:ref[1][@cRef]"><strong><xsl:value-of select="."/></strong>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="."/></xsl:otherwise>
-</xsl:choose>
-   </xsl:template>
-
-
-
+  <xsl:template match="t:foreign[1]">
+    <xsl:choose>
+      <xsl:when test="preceding-sibling::t:ref[1][@cRef]"><strong><xsl:value-of select="."/></strong></xsl:when>
+      <xsl:otherwise><xsl:value-of select="."/></xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
   <xsl:template match="text()">
     <xsl:variable name="node" select="." />
@@ -338,22 +333,20 @@
   </xsl:template>
 
   <xsl:template match="t:bibl">
-  <xsl:choose>
-        <xsl:when test="t:author">
-        </xsl:when>
- <xsl:when test="t:title">
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:element name="cite">
-      <xsl:if test="@n">
-        <xsl:attribute name="data-ref">
-          <xsl:value-of select="@n" />
-        </xsl:attribute>
-      </xsl:if>
-      <xsl:value-of select="." />
-    </xsl:element>
-</xsl:otherwise>
-</xsl:choose>
+    <xsl:choose>
+      <xsl:when test="t:author"></xsl:when>
+      <xsl:when test="t:title"></xsl:when>
+      <xsl:otherwise>
+        <xsl:element name="cite">
+          <xsl:if test="@n">
+            <xsl:attribute name="data-ref">
+              <xsl:value-of select="@n" />
+            </xsl:attribute>
+          </xsl:if>
+          <xsl:value-of select="." />
+        </xsl:element>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="t:gap">
@@ -445,7 +438,7 @@
     </span>
   </xsl:template>
 
-<xsl:template match="t:hi">
+  <xsl:template match="t:hi">
     <xsl:choose>
         <xsl:when test="@rend='#bold'or @rend='bold'">
           <strong><xsl:value-of select="."/></strong>
