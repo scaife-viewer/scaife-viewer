@@ -38,7 +38,6 @@ export default {
         params: this.$route.params,
         query: { ...this.$route.query, lower: urn.toString() },
       };
-      console.log(x);
       return x;
     },
     toRef(reference) {
