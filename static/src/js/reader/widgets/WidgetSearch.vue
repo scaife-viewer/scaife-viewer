@@ -257,13 +257,14 @@ export default {
       return idx === this.results.length - 1;
     },
     activeItemElement() {
-      const el = this.$refs.items.querySelector('li > a.active');
+      const el = this.$refs.items && this.$refs.items.querySelector('li > a.active');
       if (el) {
         return el;
       }
       return null;
     },
     scrollToActive() {
+      console.log(this.$refs);
       const activeEl = this.activeItemElement();
       if (activeEl) {
         const container = this.$refs.body.parentElement;
