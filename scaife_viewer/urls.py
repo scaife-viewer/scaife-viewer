@@ -43,7 +43,7 @@ urlpatterns = [
     path("library/", LibraryView.as_view(format="html"), name="library"),
     path("library/<str:urn>/", LibraryCollectionView.as_view(format="html"), name="library_collection"),
     path("library/<str:urn>/redirect/", library_text_redirect, name="library_text_redirect"),
-    path("reader/urn:<str:urn>/", Reader.as_view(), name="reader"),
+    path("reader/<str:urn>/", Reader.as_view(), name="reader"),
     path("profile/", profile, name="profile"),
     path("search/", search, name="search"),
     path("reading/", include("scaife_viewer.reading.urls")),
