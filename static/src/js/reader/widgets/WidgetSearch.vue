@@ -264,7 +264,6 @@ export default {
       return null;
     },
     scrollToActive() {
-      console.log(this.$refs);
       const activeEl = this.activeItemElement();
       if (activeEl) {
         const container = this.$refs.body.parentElement;
