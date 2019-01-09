@@ -233,7 +233,8 @@ export default {
       });
     },
     updateHighlights() {
-      this.$store.commit(constants.CLEAR_ANNOTATION, { key: 'highlighted' });
+      // This should be in an action that is dispatched
+      this.$store.commit(`reader/${constants.CLEAR_ANNOTATION}`, { key: 'highlighted' });
       this.activeResults.forEach(({ passage }) => {
         const params = {
           q: this.query,
