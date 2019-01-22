@@ -2,7 +2,7 @@ version: 2
 jobs:
   qa:
     docker:
-    - image: circleci/python:3.7-node
+    - image: circleci/python:3.6-node
     working_directory: ~/repo
     steps:
     - checkout
