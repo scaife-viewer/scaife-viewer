@@ -179,4 +179,18 @@ div.text {
       }
     }
   }
+  .cRef {
+    color: purple;
+    &:hover {
+      color: lighten(purple, 20%);
+      cursor: pointer;
+    }
+  }
+  .ref-lower {
+    color: lighten(purple, 10%);
+    &:hover {
+      color: lighten(purple, 30%);
+      cursor: pointer;
+    }
+  }
 }

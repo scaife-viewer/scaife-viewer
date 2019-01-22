@@ -49,8 +49,20 @@ body.reader {
   }
 
   .overall {
-    display: flex;
-    justify-content: center;
+    .upper {
+      max-height: 35vh;
+      display: flex;
+      justify-content: center;
+      overflow-y: auto;
+    }
+    .lower {
+      border-top: 1px solid $gray-300;
+      padding-top: 10px;
+      max-height: 50vh;
+      display: flex;
+      justify-content: center;
+      overflow-y: auto;
+    }
   }
 
   .pg-left, .pg-right {

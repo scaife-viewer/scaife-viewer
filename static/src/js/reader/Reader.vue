@@ -35,20 +35,46 @@
             add parallel version
           </version-selector>
           <div id="overall" class="overall" :dir="text.metadata.rtl ? 'rtl' : 'ltr'">
-            <div class="pg-left">
-              <router-link v-if="passage.metadata.prev" :to="toRef(passage.metadata.prev.ref)">
-                <span>
-                  <icon name="chevron-right" v-if="text.metadata.rtl"></icon>
-                  <icon name="chevron-left" v-else></icon>
-                </span>
-              </router-link>
-            </div>
-            <template v-if="rightUrn">
-              <div class="left">
-                <version-selector :versions="versions" :to="toPassage" :remove="toRemoveLeft">
-                  {{ leftText.metadata.label }}
-                  <div class="metadata">{{ leftText.metadata.human_lang }} {{ leftText.metadata.kind }}</div>
-                </version-selector>
+            <div class="upper">
+              <div class="pg-left">
+                <router-link v-if="passage.metadata.prev" :to="toRef(passage.metadata.prev.ref)">
+                  <span>
+                    <icon name="chevron-right" v-if="text.metadata.rtl"></icon>
+                    <icon name="chevron-left" v-else></icon>
+                  </span>
+                </router-link>
+              </div>
+              <template v-if="rightUrn">
+                <div class="left">
+                  <version-selector :versions="versions" :to="toPassage" :remove="toRemoveLeft">
+                    {{ leftText.metadata.label }}
+                    <div class="metadata">{{ leftText.metadata.human_lang }} {{ leftText.metadata.kind }}</div>
+                  </version-selector>
+                  <div v-if="leftPassage.error" class="alert text-danger" role="alert">
+                    Failed to load <b>{{ leftPassage.urn.toString() }}</b>: {{ leftPassage.error }}
+                  </div>
+                  <template v-else>
+                    <passage-redirect-notice v-if="leftPassage.redirected" :passage="leftPassage" />
+                    <passage-render-text :text="leftPassageText" :highlighting="true" />
+                  </template>
+                </div>
+                <div class="right">
+                  <template v-if="rightText.metadata">
+                    <version-selector :versions="versions" :to="toRightPassage" :remove="toRemoveRight">
+                      {{ rightText.metadata.label }}
+                      <div class="metadata">{{ rightText.metadata.human_lang }} {{ rightText.metadata.kind }}</div>
+                    </version-selector>
+                    <div v-if="rightPassage.error" class="alert text-danger" role="alert">
+                      Failed to load <b>{{ rightPassage.urn.toString() }}</b>: {{ rightPassage.error }}
+                    </div>
+                    <template v-else>
+                      <passage-redirect-notice v-if="rightPassage.redirected" :passage="rightPassage" />
+                      <passage-render-text :text="rightPassageText" :highlighting="false" />
+                    </template>
+                  </template>
+                </div>
+              </template>
+              <div v-else>
                 <div v-if="leftPassage.error" class="alert text-danger" role="alert">
                   Failed to load <b>{{ leftPassage.urn.toString() }}</b>: {{ leftPassage.error }}
                 </div>
@@ -57,38 +83,17 @@
                   <passage-render-text :text="leftPassageText" :highlighting="true" />
                 </template>
               </div>
-              <div class="right">
-                <template v-if="rightText.metadata">
-                  <version-selector :versions="versions" :to="toRightPassage" :remove="toRemoveRight">
-                    {{ rightText.metadata.label }}
-                    <div class="metadata">{{ rightText.metadata.human_lang }} {{ rightText.metadata.kind }}</div>
-                  </version-selector>
-                  <div v-if="rightPassage.error" class="alert text-danger" role="alert">
-                    Failed to load <b>{{ rightPassage.urn.toString() }}</b>: {{ rightPassage.error }}
-                  </div>
-                  <template v-else>
-                    <passage-redirect-notice v-if="rightPassage.redirected" :passage="rightPassage" />
-                    <passage-render-text :text="rightPassageText" :highlighting="false" />
-                  </template>
-                </template>
+              <div class="pg-right">
+                <router-link v-if="passage.metadata.next" :to="toRef(passage.metadata.next.ref)">
+                  <span>
+                    <icon name="chevron-left" v-if="text.metadata.rtl"></icon>
+                    <icon name="chevron-right" v-else></icon>
+                  </span>
+                </router-link>
               </div>
-            </template>
-            <div v-else>
-              <div v-if="leftPassage.error" class="alert text-danger" role="alert">
-                Failed to load <b>{{ leftPassage.urn.toString() }}</b>: {{ leftPassage.error }}
-              </div>
-              <template v-else>
-                <passage-redirect-notice v-if="leftPassage.redirected" :passage="leftPassage" />
-                <passage-render-text :text="leftPassageText" :highlighting="true" />
-              </template>
             </div>
-            <div class="pg-right">
-              <router-link v-if="passage.metadata.next" :to="toRef(passage.metadata.next.ref)">
-                <span>
-                  <icon name="chevron-left" v-if="text.metadata.rtl"></icon>
-                  <icon name="chevron-right" v-else></icon>
-                </span>
-              </router-link>
+            <div class="lower" v-if="lowerPassageText">
+              <passage-render-text :text="lowerPassageText" :highlighting="false" />
             </div>
           </div>
         </template>
@@ -183,6 +188,9 @@ export default {
     rightText() {
       return this.$store.state.reader.rightText;
     },
+    lowerText() {
+      return this.$store.state.reader.lowerText;
+    },
     passage() {
       return this.$store.getters['reader/passage'];
     },
@@ -192,11 +200,17 @@ export default {
     rightPassage() {
       return this.$store.state.reader.rightPassage;
     },
+    lowerPassage() {
+      return this.$store.state.reader.lowerPassage;
+    },
     leftPassageText() {
       return this.$store.state.reader.leftPassageText;
     },
     rightPassageText() {
       return this.$store.state.reader.rightPassageText;
+    },
+    lowerPassageText() {
+      return this.$store.state.reader.lowerPassageText;
     },
     leftUrn() {
       return new URN(this.$route.params.leftUrn);
@@ -208,6 +222,13 @@ export default {
       }
       return this.leftUrn.replace({ version: right });
     },
+    lowerUrn() {
+      const { lower } = this.$route.query;
+      if (!lower) {
+        return null;
+      }
+      return new URN(lower);
+    }
   },
   watch: {
     $route: 'sync',
@@ -224,9 +245,9 @@ export default {
   },
   methods: {
     sync({ initial = false }) {
-      const { leftUrn, rightUrn } = this;
+      const { leftUrn, rightUrn, lowerUrn } = this;
       const { query } = this.$route;
-      return this.$store.dispatch(`reader/${constants.READER_LOAD}`, { leftUrn, rightUrn, query, initial });
+      return this.$store.dispatch(`reader/${constants.READER_LOAD}`, { leftUrn, rightUrn, lowerUrn, query, initial });
     },
     handleKeyUp(e) {
       if (e.key === 'ArrowLeft') {

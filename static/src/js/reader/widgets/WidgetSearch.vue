@@ -31,6 +31,7 @@
 
 <script>
 import api from '../../api';
+import constants from '../../constants';
 import ReaderNavigationMixin from '../../mixins/ReaderNavigationMixin.vue';
 import TextLoader from '../TextLoader.vue';
 
@@ -232,7 +233,8 @@ export default {
       });
     },
     updateHighlights() {
-      this.$store.commit(constants.CLEAR_ANNOTATION, { key: 'highlighted' });
+      // This should be in an action that is dispatched
+      this.$store.commit(`reader/${constants.CLEAR_ANNOTATION}`, { key: 'highlighted' });
       this.activeResults.forEach(({ passage }) => {
         const params = {
           q: this.query,
@@ -255,7 +257,7 @@ export default {
       return idx === this.results.length - 1;
     },
     activeItemElement() {
-      const el = this.$refs.items.querySelector('li > a.active');
+      const el = this.$refs.items && this.$refs.items.querySelector('li > a.active');
       if (el) {
         return el;
       }
