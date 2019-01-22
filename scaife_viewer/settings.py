@@ -119,8 +119,8 @@ TEMPLATES = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "django.middleware.common.CommonMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
+    "django.middleware.common.CommonMiddleware",
     "scaife_viewer.middleware.PerRequestMiddleware",
 ]
 
