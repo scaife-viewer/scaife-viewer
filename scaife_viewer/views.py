@@ -4,7 +4,12 @@ import os
 from urllib.parse import urlencode
 
 from django.core.paginator import Paginator
-from django.http import Http404, HttpResponse, JsonResponse, HttpResponseBadRequest
+from django.http import (
+    Http404,
+    HttpResponse,
+    HttpResponseBadRequest,
+    JsonResponse
+)
 from django.shortcuts import redirect, render
 from django.views import View
 from django.views.generic.base import TemplateView
