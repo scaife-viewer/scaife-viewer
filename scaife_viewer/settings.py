@@ -119,8 +119,8 @@ TEMPLATES = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "django.middleware.common.CommonMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
+    "django.middleware.common.CommonMiddleware",
     "scaife_viewer.middleware.PerRequestMiddleware",
 ]
 
@@ -297,8 +297,8 @@ if "SENTRY_DSN" in os.environ:
 
 FORCE_SCRIPT_NAME = os.environ.get("FORCE_SCRIPT_NAME")
 if FORCE_SCRIPT_NAME:
+    # prepend FORCE_SCRIPT_NAME to STATIC_URL
     STATIC_URL = f"{FORCE_SCRIPT_NAME}{STATIC_URL}"
-    WHITENOISE_STATIC_PREFIX = "static/"
 
 
 ELASTICSEARCH_HOSTS = os.environ.get("ELASTICSEARCH_HOSTS", "localhost").split(",")

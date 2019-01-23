@@ -8,7 +8,7 @@ See [Ways to Contribute](https://github.com/scaife-viewer/scaife-viewer/wiki/Way
 
 Requirements:
 
-* Python 3.7.1
+* Python 3.6.x
   * pipenv
 * Node 10.7
 * PostgreSQL 9.6

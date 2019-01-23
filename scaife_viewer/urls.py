@@ -5,13 +5,13 @@ from django.urls import include, path
 from django.contrib import admin
 
 from .views import (
-    app,
     LibraryCollectionVectorView,
     LibraryCollectionView,
     LibraryPassageView,
     LibraryView,
     Reader,
     about,
+    app,
     home,
     library_text_redirect,
     morpheus,
