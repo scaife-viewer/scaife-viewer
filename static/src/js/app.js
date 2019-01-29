@@ -11,6 +11,9 @@ Vue.config.productionTip = false;
 
 export default () => {
   if (document.getElementById('app')) {
+    Vue.component('Icon', (resolve) => {
+      require(['./components/Icon.vue'], resolve);
+    });
     globalComponents.forEach(component => Vue.component(component.name, component));
 
     /* eslint-disable no-new */

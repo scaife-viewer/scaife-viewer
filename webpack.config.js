@@ -72,14 +72,11 @@ if (devMode) {
 
 module.exports = {
   context: __dirname,
-  entry: [
-    '@babel/polyfill',
-    './static/src/js/index.js',
-  ],
+  entry: './static/src/js/index.js',
   output: {
     path: path.resolve('./static/dist/'),
     filename: '[name]-[hash].js',
-    publicPath: hotReload ? 'http://localhost:8080/' : '',
+    publicPath: hotReload ? 'http://localhost:8080/' : '/site_media/static/',
   },
   devtool: devMode ? 'cheap-eval-source-map' : 'source-map',
   devServer: {

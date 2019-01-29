@@ -27,6 +27,7 @@
     "import/extensions": ["error", "always", {
       "js": "never",
       "vue": "never"
-    }]
+    }],
+    "import/no-dynamic-require": false,
   }
 }
