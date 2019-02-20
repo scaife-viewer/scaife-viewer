@@ -27,6 +27,7 @@ curl \
     https://storage.googleapis.com/scaife-indexer-us-central1/text-20180208_001.txt > /var/lib/scaife-viewer/morphology/text.txt
 
 export CTS_RESOLVER=local
+export USE_CLOUD_INDEXER=1
 python manage.py indexer \
     --pusher=pubsub \
     --pubsub-project="${GCP_PROJECT}" \
