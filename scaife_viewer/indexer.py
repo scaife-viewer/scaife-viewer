@@ -296,7 +296,7 @@ class PubSubPusher:
             return
 
         if future and not future.done():
-            print(f'Publishing messages to PubSub')
+            print("Publishing messages to PubSub")
             # Block until the last message has been published
             # https://github.com/googleapis/google-cloud-python/blob/69ec9fea1026c00642ca55ca18110b7ef5a09675/pubsub/docs/publisher/index.rst#futures
             future.result()
