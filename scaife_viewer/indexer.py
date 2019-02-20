@@ -156,6 +156,12 @@ class Indexer:
                 raise
             if not self.dry_run:
                 self.pusher.push(doc)
+
+        if isinstance(self.pusher, DirectPusher) and self.pusher.docs and not self.dry_run:
+            # we need to ensure the deque is cleared if less than
+            # `chunk_size`
+            self.pusher.commit_docs()
+
         return words
 
     def count_words(self, tokens) -> int:
