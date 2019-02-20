@@ -38,23 +38,43 @@ class Indexer:
             morphology = Morphology.load(path)
             print("Morphology loaded")
 
+    def get_urn_obj(self):
+        if not self.urn_prefix:
+            return None
+        return cts.URN(self.urn_prefix)
+
+    def get_urn_prefix_filter(self, urn_obj):
+        if not urn_obj:
+            return None
+        if urn_obj.reference:
+            up_to = cts.URN.NO_PASSAGE
+        elif urn_obj.version:
+            up_to = cts.URN.VERSION
+        elif urn_obj.work:
+            up_to = cts.URN.WORK
+        elif urn_obj.textgroup:
+            up_to = cts.URN.TEXTGROUP
+        elif urn_obj.namespace:
+            up_to = cts.URN.NAMESPACE
+        else:
+            raise ValueError(f'Could not derive prefix filter from "{urn_obj}"')
+
+        value = urn_obj.upTo(up_to)
+        print(f"Applying URN prefix filter: {value}")
+        return value
+
     def index(self):
         cts.TextInventory.load()
         print("Text inventory loaded")
-        if self.urn_prefix:
-            urn_prefix = cts.URN(self.urn_prefix)
-            print(f"Applying URN prefix filter: {urn_prefix.upTo(cts.URN.NO_PASSAGE)}")
-        else:
-            urn_prefix = None
+        urn_obj = self.get_urn_obj()
+        prefix_filter = self.get_urn_prefix_filter(urn_obj)
         texts = dask.bag.from_sequence(
-            self.texts(
-                urn_prefix.upTo(cts.URN.NO_PASSAGE) if urn_prefix else None
-            )
+            self.texts(prefix_filter)
         )
         passages = texts.map(self.passages_from_text).flatten()
-        if urn_prefix and urn_prefix.reference:
-            print(f"Applying URN reference filter: {urn_prefix.reference}")
-            passages = passages.filter(lambda p: p["urn"] == str(urn_prefix))
+        if urn_obj and urn_obj.reference:
+            print(f"Applying URN reference filter: {urn_obj.reference}")
+            passages = passages.filter(lambda p: p.urn == str(urn_obj))
         if self.limit is not None:
             passages = passages.take(self.limit, npartitions=-1)
         else:
