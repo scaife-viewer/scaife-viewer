@@ -271,8 +271,10 @@ CACHES = {
 }
 
 resolver = os.environ.get("CTS_RESOLVER", "api")
+
+# CTS_API_ENDPOINT is for the Nautilus server
 if resolver == "api":
-    CTS_API_ENDPOINT = os.environ.get("CTS_API_ENDPOINT", "http://localhost:8000/api/cts")
+    CTS_API_ENDPOINT = os.environ.get("CTS_API_ENDPOINT", "https://scaife-cts.perseus.org/api/cts")
     CTS_RESOLVER = {
         "type": "api",
         "kwargs": {
