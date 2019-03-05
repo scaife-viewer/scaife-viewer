@@ -34,9 +34,26 @@ Setup the database:
     pipenv run python manage.py migrate
     pipenv run python manage.py loaddata sites
 
-Seed the text inventory to speed up local development:
+Seed the text inventory, for the library view, to speed up local development:
 
     curl -s "https://scaife-cts-dev.perseus.org/api/cts?request=GetCapabilities" > ti.xml
+
+Note that, this only grabs the title and name of the text, not the actual passage. For example:
+
+```xml
+<work urn="urn:cts:greekLit:tlg0062.tlg006" xml:lang="grc" groupUrn="urn:cts:greekLit:tlg0062">
+  <title xml:lang="lat">Muscae encomium</title>
+    <edition urn="urn:cts:greekLit:tlg0062.tlg006.1st1K-grc1" xml:lang="grc" workUrn="urn:cts:greekLit:tlg0062.tlg006">
+    <label xml:lang="eng">The Fly</label>
+    <description xml:lang="eng">Lucian of Samosata, The Fly, Lucian vol. 1, Harmon, Harvard, 1961</description>
+    <online>
+      <citationMapping>
+        <citation xpath="/tei:div[@n='?']" scope="/tei:TEI/tei:text/tei:body/tei:div" label="section"></citation>
+      </citationMapping>
+    </online>
+  </edition>
+</work>
+```
 
 You should now be set to run the static build pipeline and hot module reloading:
 
