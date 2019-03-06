@@ -110,3 +110,13 @@ you'll need to do the following:
 ```
 
 That should be all you need to do.
+
+## Docker
+
+Built with Docker Engine v18.09.2.
+
+Run:
+
+    docker-compose -f docker-compose-dev.yml up -d --build
+    npm install
+    npm start
