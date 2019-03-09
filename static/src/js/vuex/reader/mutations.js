@@ -197,4 +197,11 @@ export default {
   [constants.SET_ERROR]: (state, { error }) => {
     state.error = error;
   },
+
+  [constants.SET_SEARCH_QUERY]: (state, { query }) => {
+    state.searchQuery = query;
+  },
+  [constants.SET_SEARCH_TYPE]: (state, { type }) => {
+    state.searchType = type;
+  },
 };

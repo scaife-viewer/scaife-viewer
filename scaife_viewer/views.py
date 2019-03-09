@@ -229,6 +229,9 @@ def library_text_redirect(request, urn):
 
 
 def search(request):
+    return render(request, "search.html", {})
+
+def search_text(request):
     q = request.GET.get("q", "")
     try:
         page_num = int(request.GET.get("p", 1))
@@ -236,7 +239,7 @@ def search(request):
         page_num = 1
     kind = request.GET.get("kind", "form")
     results = []
-    ctx = {
+    data = {
         "q": q,
         "results": results,
         "kind": kind,
@@ -253,11 +256,11 @@ def search(request):
         }
         sq = SearchQuery(q, **kwargs)
         paginator = Paginator(sq, 10)
-        ctx.update({
+        data.update({
             "paginator": paginator,
             "page": paginator.page(page_num),
         })
-    return render(request, "search.html", ctx)
+    return JsonResponse(data)
 
 
 def search_json(request):

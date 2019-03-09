@@ -17,7 +17,8 @@ from .views import (
     morpheus,
     profile,
     search,
-    search_json
+    search_json,
+    search_text
 )
 
 
@@ -29,6 +30,7 @@ api_patterns = (
         path("library/passage/<str:urn>/text/", LibraryPassageView.as_view(format="text"), name="library_passage_text"),
         path("library/<str:urn>/json/", LibraryCollectionView.as_view(format="json"), name="library_collection"),
         path("search/json/", search_json, name="search"),
+        path("search/text/", search_text, name="search_text"),
         path("morpheus/", morpheus, name="morpheus"),
     ],
     "api",

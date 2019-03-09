@@ -19,4 +19,5 @@ export default {
   selectedLemmas: null,
   error: '',
   selectedTokenRange: { start: null, end: null },
+  searchType: 'form',
 };
