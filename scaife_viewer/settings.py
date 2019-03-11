@@ -293,5 +293,5 @@ OPENCENSUS_TRACE_PARAMS = {
     "BLACKLIST_PATHS": [],
 }
 
-ELASTICSEARCH_HOSTS = os.environ.get("ELASTICSEARCH_HOSTS", "localhost").split(",")
+ELASTICSEARCH_HOSTS = os.environ.get("ELASTICSEARCH_HOSTS", "localhost:9200").split(",")
 USE_CLOUD_INDEXER = bool(int(os.environ.get("USE_CLOUD_INDEXER", "0")))
