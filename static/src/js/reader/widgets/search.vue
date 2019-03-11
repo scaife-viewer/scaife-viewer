@@ -133,12 +133,14 @@ export default {
       };
       return this.textSearch(opts)
         .then((res) => {
-          if (!res || res.results.length === 0) {
+          if (!res || !res.results.length) {
             this.totalCount = 0;
             this.loading = false;
           } else {
-            this.firstOffset = res.pivot.start_offset;
-            this.lastOffset = res.pivot.end_offset;
+            if (res.results.length > 1) {
+              this.firstOffset = res.pivot.start_offset;
+              this.lastOffset = res.pivot.end_offset;
+            }
             this.totalCount = res.total_count;
             this.results = this.markActive(res.results);
             this.loading = false;
