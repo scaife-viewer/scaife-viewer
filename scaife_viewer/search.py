@@ -10,11 +10,15 @@ from elasticsearch.helpers import scan as scanner
 from . import cts
 
 
-es = Elasticsearch(
-    hosts=settings.ELASTICSEARCH_HOSTS,
-    sniff_on_start=True,
-    sniff_on_connection_fail=True,
-)
+def default_es_client_config():
+    return dict(
+        hosts=settings.ELASTICSEARCH_HOSTS,
+        sniff_on_start=True,
+        sniff_on_connection_fail=True,
+    )
+
+
+es = Elasticsearch(**default_es_client_config())
 
 
 class SearchQuery:

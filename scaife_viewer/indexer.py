@@ -1,8 +1,10 @@
 import json
-from collections import deque, Counter
+from collections import Counter, deque
 from itertools import zip_longest
 from operator import attrgetter
 from typing import Iterable, List, NamedTuple
+
+from django.conf import settings
 
 import dask.bag
 import elasticsearch
@@ -10,8 +12,8 @@ import elasticsearch.helpers
 from anytree.iterators import PreOrderIter
 
 from . import cts
+from .search import default_es_client_config
 from .morphology import Morphology
-
 
 morphology = None
 
@@ -227,7 +229,7 @@ class DirectPusher:
     @property
     def es(self):
         if not hasattr(self, "_es"):
-            self._es = elasticsearch.Elasticsearch()
+            self._es = elasticsearch.Elasticsearch(**default_es_client_config())
         return self._es
 
     @property
