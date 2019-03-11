@@ -15,6 +15,8 @@ services:
       - DEBUG=1
       - DATABASE_URL=postgres://scaife:scaife@postgres:5432/postgres
       - ELASTICSEARCH_HOSTS=elasticsearch
+      - CTS_RESOLVER=local
+      - CTS_LOCAL_DATA_PATH=data
     depends_on:
       - postgres
       - elasticsearch
@@ -27,8 +29,25 @@ services:
       - POSTGRES_USER=scaife
       - POSTGRES_PASSWORD=scaife
 
+  # elasticsearch:
+  #   image: docker.elastic.co/elasticsearch/elasticsearch:6.6.1
+  #   container_name: elasticsearch
+  #   environment:
+  #     - cluster.name=docker-cluster
+  #     - bootstrap.memory_lock=true
+  #     - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+  #   ulimits:
+  #     memlock:
+  #       soft: -1
+  #       hard: -1
+  #   ports:
+  #     - 9200:9200
+
+
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.6.1
+    build:
+      context: ./
+      dockerfile: Dockerfile-elastic
     container_name: elasticsearch
     environment:
       - cluster.name=docker-cluster

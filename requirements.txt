@@ -1,6 +1,6 @@
 anytree==2.4.3
 certifi==2018.11.29
-dask==1.1.0
+dask[bag]==1.1.0
 dj-database-url==0.5.0
 Django==2.1.5
 django-letsencrypt==3.0.1

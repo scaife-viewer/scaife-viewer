@@ -50,7 +50,6 @@ class BaseLibraryView(View):
         }.get(self.format, "html")
         return to_response()
 
-
 class LibraryConditionMixin(ConditionMixin):
 
     def get_last_modified(self, request, *args, **kwargs):
