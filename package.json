@@ -4,6 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "start": "HOT_RELOAD=1 webpack-dev-server --mode development",
+    "start:docker": "HOT_RELOAD=1 webpack-dev-server --mode development --host 0.0.0.0",
     "lint": "eslint .",
     "build": "NODE_ENV=production webpack --mode production",
     "heroku-postbuild": "npm run build"

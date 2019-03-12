@@ -6,15 +6,18 @@ The Scaife Viewer is the new reading environment for the Perseus Digital Library
 
 See [Ways to Contribute](https://github.com/scaife-viewer/scaife-viewer/wiki/Ways-to-Contribute).
 
-## Getting Started
-
-Requirements:
+## Requirements
 
 * Python 3.6.x
-  * pipenv
 * Node 10.7
 * PostgreSQL 9.6
 * Elasticsearch 6
+
+## Getting Started
+
+First, decide if you want to use Docker...
+
+### Without Docker
 
 First, set up a database to use for local development:
 
@@ -24,19 +27,19 @@ This assumes your local PostgreSQL is configured to allow your user to create da
 
     createuser --username=postgres --superuser $(whoami)
 
-Install the Node and Python dependencies:
+Create and activate a Python vitrual environment, and then install the Node and Python dependencies:
 
     npm install
-    pipenv install --dev
+    pip install -r requirements-dev.txt
 
 Setup the database:
 
-    pipenv run python manage.py migrate
-    pipenv run python manage.py loaddata sites
+   python manage.py migrate
+   python manage.py loaddata sites
 
 Seed the text inventory, for the library view, to speed up local development:
 
-    curl -s "https://scaife-cts-dev.perseus.org/api/cts?request=GetCapabilities" > ti.xml
+    curl -s "https://scaife-cts-dev.perseus.org/api/cts?request=GetCapabilities" > data/ti.xml
 
 Note that, this only grabs the title and name of the text, not the actual passage. For example:
 
@@ -59,13 +62,23 @@ You should now be set to run the static build pipeline and hot module reloading:
 
     npm start
 
-In another terminal, start runserver:
+In another terminal, activate the virtual env and start runserver:
 
-    pipenv run python manage.py runserver
+    python manage.py runserver
 
 Browse to http://localhost:8000/.
 
 Note that, although running Scaife locally, this is relying on the Nautilus server at https://scaife-cts-dev.perseus.org to retrieve texts.
+
+## With Docker
+
+Built with Docker Engine v18.09.2.
+
+Run:
+
+    docker-compose -f docker-compose-dev.yml up -d --build
+    npm install
+    npm start
 
 
 ## Translations
@@ -112,13 +125,3 @@ you'll need to do the following:
 ```
 
 That should be all you need to do.
-
-## Docker
-
-Built with Docker Engine v18.09.2.
-
-Run:
-
-    docker-compose -f docker-compose-dev.yml up -d --build
-    npm install
-    npm start
