@@ -21,11 +21,5 @@ COPY requirements.txt /usr/src/app/requirements.txt
 COPY requirements-dev.txt /usr/src/app/requirements-dev.txt
 RUN pip install -r requirements-dev.txt
 
-# copy entrypoint.sh
-COPY ./entrypoint.sh /usr/src/app/entrypoint.sh
-
 # copy project
 COPY . /usr/src/app/
-
-# run entrypoint.sh
-ENTRYPOINT ["/usr/src/app/entrypoint.sh"]

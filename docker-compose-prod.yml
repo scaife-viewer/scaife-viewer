@@ -5,17 +5,15 @@ services:
   scaife-viewer:
     build:
       context: ./
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile-prod
     container_name: scaife-viewer
-    volumes:
-      - .:/usr/src/app/
     entrypoint: /usr/src/app/entrypoint.sh
-    command: python manage.py runserver 0.0.0.0:8000
+    command: sh -c "python manage.py collectstatic --noinput && python manage.py runserver 0.0.0.0:8000"
     ports:
-      - 8001:8000
+      - 8000:8000
     environment:
       - SECRET_KEY=-!%+c%7ur9r#hpj3(9c_-u8nj7#*7+v+t(%-ks9(qj3mbq6f)=
-      - DEBUG=1
+      - DEBUG=0
       - DATABASE_URL=postgres://scaife:scaife@postgres:5432/postgres
       - ELASTICSEARCH_HOSTS=elasticsearch
     depends_on:
@@ -43,13 +41,3 @@ services:
         hard: -1
     ports:
       - 9200:9200
-
-  scaife-webpack:
-    build:
-      context: ./
-      dockerfile: Dockerfile-webpack
-    container_name: scaife-webpack
-    volumes:
-      - .:/usr/src/app/
-    ports:
-      - 8080:8080
