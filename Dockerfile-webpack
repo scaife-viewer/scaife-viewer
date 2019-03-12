@@ -1,0 +1,16 @@
+# pull official base image
+FROM node:10.15.3-alpine
+
+# set working directory
+WORKDIR /usr/src/app
+
+# install npm dependencies
+COPY package.json /usr/src/app/package.json
+RUN npm install
+RUN npm rebuild node-sass
+
+# copy project
+COPY . /usr/src/app/
+
+# start webpack
+CMD npm run start:docker

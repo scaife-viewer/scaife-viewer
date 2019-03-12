@@ -281,7 +281,7 @@ if resolver == "api":
             "endpoint": CTS_API_ENDPOINT,
         },
     }
-    CTS_LOCAL_TEXT_INVENTORY = "ti.xml" if DEBUG else None
+    CTS_LOCAL_TEXT_INVENTORY = "data/ti.xml" if DEBUG else None
 elif resolver == "local":
     CTS_LOCAL_DATA_PATH = os.environ["CTS_LOCAL_DATA_PATH"]
     CTS_RESOLVER = {
