@@ -76,10 +76,7 @@ Built with Docker Engine v18.09.2.
 
 Run:
 
-    docker-compose -f docker-compose-dev.yml up -d --build
-    npm install
-    npm start
-
+    docker-compose up -d --build
 
 ## Translations
 

@@ -6,7 +6,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-    image: test
+    container_name: scaife-viewer
     volumes:
       - .:/usr/src/app/
     command: python manage.py runserver 0.0.0.0:8000
@@ -43,11 +43,12 @@ services:
     ports:
       - 9200:9200
 
-  webpack:
+  scaife-webpack:
     build:
       context: ./
       dockerfile: Dockerfile-webpack
-    ports:
-      - 8080:8080
+    container_name: scaife-webpack
     volumes:
       - .:/usr/src/app/
+    ports:
+      - 8080:8080

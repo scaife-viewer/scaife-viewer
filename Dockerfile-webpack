@@ -5,8 +5,9 @@ FROM node:10.15.3-alpine
 WORKDIR /usr/src/app
 
 # install npm dependencies
+COPY package-lock.json /usr/src/app/package-lock.json
 COPY package.json /usr/src/app/package.json
-RUN npm install
+RUN npm ci
 RUN npm rebuild node-sass
 
 # copy project
