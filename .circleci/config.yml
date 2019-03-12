@@ -2,19 +2,36 @@ version: 2
 jobs:
   qa:
     docker:
-    - image: circleci/python:3.6-node
-    working_directory: ~/repo
+        - image: docker:18.09.3
     steps:
-    - checkout
-    - run:
-        name: Build images and spin up containers
-        command: docker-compose up -d --build
-    - run:
-        name: Run flake8
-        command: docker-compose exec scaife-viewer flake8 scaife_viewer
-    - run:
-        name: Run eslint
-        command: docker-compose exec scaife-webpack npm run lint
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Install Docker Compose
+          command: |
+            apk add --no-cache 'py2-pip'
+            pip install 'docker-compose==1.23.2'
+      - restore_cache:
+          keys:
+            - v1-docker-{{ .Branch }}
+      - run:
+          name: Load Docker layers cache
+          command: |
+            set +o pipefail
+            docker load -i ~/docker-layers.tar | true
+      - run:
+          name: Build Docker images
+          command: docker-compose -f docker-compose-prod.yml -p $CIRCLE_PROJECT_REPONAME build
+      - run:
+          name: Save Docker layers cache
+          command: |
+            DOCKER_IMAGES=$(docker images --format "{{.Repository}}" --filter=reference="${CIRCLE_PROJECT_REPONAME}_*")
+            DOCKER_LAYERS=$(for image in $DOCKER_IMAGES; do docker history $image -q | grep -v missing; done)
+            docker save -o ~/docker-layers.tar $DOCKER_LAYERS
+      - save_cache:
+          key: v1-docker-{{ .Branch }}-{{ epoch }}
+          paths:
+            - ~/docker-layers.tar
   deploy:
     docker:
     - image: buildpack-deps:trusty-scm
