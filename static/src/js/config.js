@@ -7,9 +7,9 @@ const debug = process.env.NODE_ENV !== 'production';
 
 export default function createStore() {
   return {
-      modules: {
-        library,
-        reader,
+    modules: {
+      library,
+      reader,
     },
     plugins: [
       createPersistedState({
