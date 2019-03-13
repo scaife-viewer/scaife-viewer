@@ -70,13 +70,25 @@ Browse to http://localhost:8000/.
 
 Note that, although running Scaife locally, this is relying on the Nautilus server at https://scaife-cts-dev.perseus.org to retrieve texts.
 
+### Tests
+
+You can run the Vue unit tests, via:
+
+    npm run unit
+
 ## With Docker
 
 Built with Docker Engine v18.09.2.
 
-Run:
+Build the images and spin up the containers:
 
     docker-compose up -d --build
+
+Browse to http://localhost:8001/.
+
+Run the unit tests:
+
+    docker-compose exec scaife-webpack npm run unit
 
 ## Translations
 
