@@ -17,8 +17,10 @@ export default {
     if (state.versions === null) {
       ps.push(
         api.getCollection(leftUrn.upTo('work'), (work) => {
-          const texts = work.texts.map(text => new URN(text.urn).version);
-          api.getLibraryVector(work.urn, texts, (versions) => {
+          const params = {
+            e: work.texts.map(text => new URN(text.urn).version),
+          };
+          api.getLibraryVector(work.urn, params, (versions) => {
             commit(constants.SET_VERSIONS, { versions });
           });
         }),
