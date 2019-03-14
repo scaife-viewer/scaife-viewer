@@ -1,4 +1,4 @@
-/* global describe, beforeEach, expect, it, jest */
+/* global describe, expect, it  */
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 
@@ -20,7 +20,7 @@ describe('WidgetTextSize.vue', () => {
     });
     const mediumSpan = wrapper.findAll('span').at(3);
 
-    expect(wrapper.text()).toContain('Text Size Αα Αα Αα Αα Αα');
+    expect(wrapper.text()).toBe('Text Size Αα Αα Αα Αα Αα');
     expect(mediumSpan.html()).toBe('<span class="text-size-control text-md active">Αα</span>');
     expect(store.state.reader.textSize).toBe('md');
   });

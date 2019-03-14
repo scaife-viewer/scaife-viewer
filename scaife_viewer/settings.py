@@ -81,7 +81,7 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
 
-STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
+STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
 
 if "SECRET_KEY" in os.environ:
     SECRET_KEY = os.environ["SECRET_KEY"]
@@ -304,3 +304,4 @@ if FORCE_SCRIPT_NAME:
 
 
 ELASTICSEARCH_HOSTS = os.environ.get("ELASTICSEARCH_HOSTS", "localhost").split(",")
+USE_CLOUD_INDEXER = bool(int(os.environ.get("USE_CLOUD_INDEXER", "0")))
