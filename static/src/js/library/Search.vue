@@ -41,58 +41,87 @@
           <label for="kind-lemma">Lemma (Greek only)</label>
         </div>
       </form>
-      <!-- <div class="row">
+      <div v-if="showSearchResults" class="row">
         <div class="col-sm-3">
-          {% if page.object_list.filtered_text_groups %}
-            <h5>Text Groups{% if request.GET.tg %} <a href="?{% query tg='' p='' %}"><small>clear</small></a>{% endif %}</h5>
-            <div class="list-group">
-              {% for ftg in page.object_list.filtered_text_groups %}
-                <a href="?{% query tg=ftg.text_group.urn p='' %}" class="list-group-item d-flex justify-content-between align-items-center">
-                  {{ ftg.text_group.label }}
-                  <span class="badge badge-primary badge-pill">{{ ftg.count }}</span>
-                </a>
-              {% endfor %}
-            </div>
-          {% endif %}
+          <h5>Text Groups</h5>
+          <div class="list-group">
+            <a href="#" class="list-group-item d-flex justify-content-between align-items-center">
+              <span>Sample</span>
+              <span class="badge badge-primary badge-pill">20</span>
+            </a>
+          </div>
         </div>
         <div class="col-sm-9">
-          {% if error %}
-            <div class="alert alert-danger" role="alert">
-              DEV ERROR: {{ error.reason }}
-              <pre>{{ error.response }}</pre>
-            </div>
-          {% endif %}
-          {% if paginator.count %}
-            {% include "_search_pagination.html" %}
+          <div class="search-pagination">
             <div>
-              {% for result in page.object_list %}
-                <div class="result">
-                  {% with passage=result.passage %}
-                    <div class="passage-heading">
-                      <h2>
-                        <a href="{{ result.link }}?q={{ q }}&amp;qk={{ kind }}">
-                          {% for breadcrumb in passage.text.ancestors %}
-                            {{ breadcrumb.label }},
-                          {% endfor %}
-                          {{ passage.refs.start.human_reference }}{% if passage.refs.end %} to {{ passage.refs.end.human_reference }}{% endif %} ({{ passage.refs.start.reference }}{% if passage.refs.end %} &ndash; {{ passage.refs.end.reference }}{% endif %})
-                        </a>
-                      </h2>
-                    </div>
-                  {% endwith %}
-                  <div class="content">
-                    {% for c in result.content %}
-                      <p>{{ c|safe }}</p>
-                    {% endfor %}
-                  </div>
-                </div>
-              {% endfor %}
+              Showing <b>{{ start_index }}</b>&ndash;<b>{{ end_index }}</b> of <b>{{ total_results }}</b>
             </div>
-            {% include "_search_pagination.html" %}
-          {% elif q %}
-            <div>No results found for <b>{{ q }}</b>.</div>
-          {% endif %}
+            <!-- previous -->
+            <div>
+              <span v-if="page_num > 1">
+                <a href="#"><i class="fa fa-step-backward"></i></a>
+                <a href="#"><i class="fa fa-backward"></i></a>
+              </span>
+              <span v-else>
+                <span class="text-muted"><i class="fa fa-step-backward"></i></span>
+                <span class="text-muted"><i class="fa fa-backward"></i></span>
+              </span>
+              <!-- current -->
+              <span class="current">
+                page <b>{{ page_num }}</b> of <b>{{ total_pages }}</b>
+              </span>
+              <!-- next -->
+              <span v-if="page_num + 1 <= total_pages">
+                <span v-on:click="showNextPage"><i class="fa fa-forward" style="cursor:pointer;color:#B45141;"></i></span>
+                <a href="#"><i class="fa fa-step-forward"></i></a>
+              </span>
+              <span v-else>
+                <span class="text-muted"><i class="fa fa-forward"></i></span>
+                <span class="text-muted"><i class="fa fa-step-forward"></i></span>
+              </span>
+            </div>
+          </div>
+          <div>
+            <div class="result" v-for="result in results" :key="result.passage.url">
+              <div class="passage-heading">
+                <h2><a href="#">something</a></h2>
+              </div>
+              <div class="content">
+                <p>something</p>
+              </div>
+            </div>
+          </div>
+          <div class="search-pagination">
+            <div>
+              Showing <b>{{ start_index }}</b>&ndash;<b>{{ end_index }}</b> of <b>{{ total_results }}</b>
+            </div>
+            <!-- previous -->
+            <div>
+              <span v-if="page_num > 1">
+                <a href="#"><i class="fa fa-step-backward"></i></a>
+                <a href="#"><i class="fa fa-backward"></i></a>
+              </span>
+              <span v-else>
+                <span class="text-muted"><i class="fa fa-step-backward"></i></span>
+                <span class="text-muted"><i class="fa fa-backward"></i></span>
+              </span>
+              <!-- current -->
+              <span class="current">
+                page <b>{{ page_num }}</b> of <b>{{ total_pages }}</b>
+              </span>
+              <!-- next -->
+              <span v-if="page_num + 1 <= total_pages">
+                <a href="#"><i class="fa fa-forward"></i></a>
+                <a href="#"><i class="fa fa-step-forward"></i></a>
+              </span>
+              <span v-else>
+                <span class="text-muted"><i class="fa fa-forward"></i></span>
+                <span class="text-muted"><i class="fa fa-step-forward"></i></span>
+              </span>
+            </div>
+          </div>
         </div>
-      </div> -->
+      </div>
     </div>
   </section>
 </template>
@@ -103,6 +132,17 @@ import api from '../api';
 
 export default {
   name: 'search-view',
+  data() {
+    return {
+      page_num: 1,
+      showSearchResults: false,
+      start_index: 1,
+      end_index: 10,
+      total_pages: 0,
+      total_results: 0,
+      results: []
+    };
+  },
   computed: {
     searchQuery() {
       return this.$store.state.reader.searchQuery;
@@ -124,10 +164,39 @@ export default {
         // move to an action
         const params = {
           kind: this.$store.state.reader.searchType,
-          q: query
+          q: query,
+          page_num: this.page_num,
+          start_index: 1,
+          end_index: 10
         }
         api.searchText(params, 'search/text/', result => {
-          console.log(result)
+          this.showSearchResults = true;
+          this.total_pages = result.total_pages;
+          this.total_results = result.total_results;
+          this.results = result.results;
+        });
+      }
+    },
+    showNextPage() {
+      const query = this.$store.state.reader.searchQuery;
+      if (query !== '') {
+        // move to an action
+        const params = {
+          kind: this.$store.state.reader.searchType,
+          q: query,
+          page_num: 2,
+          start_index: this.start_index + 10,
+          end_index: this.end_index + 10,
+        }
+        api.searchText(params, 'search/text/', result => {
+          this.showSearchResults = true;
+          this.total_pages = result.total_pages;
+          this.total_results = result.total_results;
+          this.results = result.results;
+          this.page_num += 1;
+          this.start_index +=10;
+          this.end_index += 10,
+          this.$forceUpdate();
         });
       }
     }
