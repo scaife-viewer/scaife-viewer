@@ -50,6 +50,7 @@ class BaseLibraryView(View):
         }.get(self.format, "html")
         return to_response()
 
+
 class LibraryConditionMixin(ConditionMixin):
 
     def get_last_modified(self, request, *args, **kwargs):
@@ -229,6 +230,7 @@ def library_text_redirect(request, urn):
 
 def search(request):
     return render(request, "search.html", {})
+
 
 def search_text(request):
     q = request.GET.get("q", "")
