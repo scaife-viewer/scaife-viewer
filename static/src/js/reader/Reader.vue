@@ -59,7 +59,7 @@
                   </template>
                 </div>
                 <div class="right">
-                  <template v-if="rightText.metadata">
+                  <template v-if="rightText && rightText.metadata">
                     <version-selector :versions="versions" :to="toRightPassage" :remove="toRemoveRight">
                       {{ rightText.metadata.label }}
                       <div class="metadata">{{ rightText.metadata.human_lang }} {{ rightText.metadata.kind }}</div>
