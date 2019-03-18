@@ -1,5 +1,3 @@
-import qs from 'query-string';
-
 import api from '../../api';
 import constants from '../../constants';
 import transformTextGroupList from './transforms';
@@ -22,9 +20,9 @@ export default {
     // and texts.
 
     // vector for works
-    let params = qs.stringify({
+    let params = {
       e: textGroup.works.map(work => work.urn.replace(`${textGroup.urn}.`, '')),
-    });
+    };
     api.getLibraryVector(textGroup.urn, params, (worksVector) => {
       const workMap = worksVector.collections;
 
@@ -35,7 +33,7 @@ export default {
           e.push(textUrn.replace(`${textGroup.urn}.`, ''));
         });
       });
-      params = qs.stringify({ e });
+      params = { e };
 
       // vector for texts
       api.getLibraryVector(textGroup.urn, params, (textsVector) => {

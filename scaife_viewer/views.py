@@ -116,7 +116,7 @@ class LibraryCollectionView(LibraryConditionMixin, BaseLibraryView):
 class LibraryCollectionVectorView(LibraryConditionMixin, View):
 
     def get(self, request, urn):
-        entries = request.GET.getlist("e")
+        entries = request.GET.getlist("e[]")
         try:
             cts.collection(urn)
         except cts.CollectionDoesNotExist:
