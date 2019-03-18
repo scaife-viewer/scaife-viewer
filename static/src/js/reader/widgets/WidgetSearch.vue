@@ -247,7 +247,7 @@ export default {
         };
         api.searchText(params, result => {
           const { highlights } = result.results[0];
-          this.$store.commit(constants.SET_ANNOTATIONS, {
+          this.$store.commit(`reader/${constants.SET_ANNOTATIONS}`, {
             tokens: highlights.map(({ w, i }) => `${w}[${i}]`),
             key: 'highlighted',
             value: true,
