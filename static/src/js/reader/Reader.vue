@@ -35,7 +35,7 @@
             add parallel version
           </version-selector>
           <div id="overall" class="overall" :dir="text.metadata.rtl ? 'rtl' : 'ltr'">
-            <div class="upper">
+            <div :class="lowerPassageText ? 'upper' : 'upper-lower'">
               <div class="pg-left">
                 <router-link v-if="passage.metadata.prev" :to="toRef(passage.metadata.prev.ref)">
                   <span>
