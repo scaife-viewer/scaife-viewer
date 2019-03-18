@@ -133,6 +133,7 @@ div.text {
   }
   span.w.highlighted {
     background-color: $highlight-color;
+    border-color: $highlight-color;
   }
   span.w.selected.highlighted {
     background-color: mix($highlight-color, $selected-color);
