@@ -157,6 +157,23 @@ export default {
     }
     ta[key] = value;
     annotations.set(token, ta);
+
+    if (singleton !== undefined && singleton && key === 'selected') {
+      // set all selected keys to false
+      const c = { ...state.annotationsHash };
+      Object.keys(state.annotationsHash).forEach((k) => {
+        c[k].selected = false;
+      });
+      state.annotationsHash = { ...c };
+    }
+    state.annotationsHash = {
+      ...state.annotationsHash,
+      [token]: {
+        ...state.annotationsHash[token],
+        [key]: value,
+      },
+    };
+
     state.annotationChange += 1;
   },
 
