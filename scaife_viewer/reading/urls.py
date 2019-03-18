@@ -1,8 +1,8 @@
-from django.conf.urls import url
+from django.urls import path
 
 from .views import logs
 
 
 urlpatterns = [
-    url(r"^logs/$", logs, name="reading_logs"),
+    path("logs/", logs, name="reading_logs"),
 ]

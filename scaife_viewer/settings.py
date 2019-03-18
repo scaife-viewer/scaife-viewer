@@ -81,7 +81,7 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
 
-STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
+STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
 
 if "SECRET_KEY" in os.environ:
     SECRET_KEY = os.environ["SECRET_KEY"]
@@ -119,12 +119,10 @@ TEMPLATES = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "django.middleware.common.CommonMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
+    "django.middleware.common.CommonMiddleware",
     "scaife_viewer.middleware.PerRequestMiddleware",
 ]
-if TRACING_ENABLED:
-    MIDDLEWARE.append("opencensus.trace.ext.django.middleware.OpencensusMiddleware")
 
 PER_REQUEST_MIDDLEWARE = {
     "default": [
@@ -153,6 +151,8 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     "django.contrib.staticfiles",
 
+    "webpack_loader",
+
     # theme
     "bootstrapform",
     "pinax_theme_bootstrap",
@@ -163,13 +163,23 @@ INSTALLED_APPS = [
     "pinax.webanalytics",
     "raven.contrib.django.raven_compat",
     "oidc_provider",
-    "opencensus.trace.ext.django",
     "letsencrypt",
 
     # project
     "scaife_viewer",
     "scaife_viewer.reading",
 ]
+
+WEBPACK_LOADER = {
+    "DEFAULT": {
+        "CACHE": not DEBUG,
+        "BUNDLE_DIR_NAME": "/",
+        "STATS_FILE": os.path.join(PROJECT_ROOT, "webpack-stats.json"),
+        "POLL_INTERVAL": 0.1,
+        "TIMEOUT": None,
+        "IGNORE": [".*.hot-update.js", ".+.map"]
+    }
+}
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -284,13 +294,11 @@ if "SENTRY_DSN" in os.environ:
         "dsn": os.environ["SENTRY_DSN"],
     }
 
-OPENCENSUS_TRACE = {
-    "SAMPLER": "opencensus.trace.samplers.AlwaysOnSampler",
-    "EXPORTER": "scaife_viewer.tracing.StackdriverExporter",
-    "PROPAGATOR": "opencensus.trace.propagation.google_cloud_format.GoogleCloudFormatPropagator",
-}
-OPENCENSUS_TRACE_PARAMS = {
-    "BLACKLIST_PATHS": [],
-}
+
+FORCE_SCRIPT_NAME = os.environ.get("FORCE_SCRIPT_NAME")
+if FORCE_SCRIPT_NAME:
+    # prepend FORCE_SCRIPT_NAME to STATIC_URL
+    STATIC_URL = f"{FORCE_SCRIPT_NAME}{STATIC_URL}"
+
 
 ELASTICSEARCH_HOSTS = os.environ.get("ELASTICSEARCH_HOSTS", "localhost").split(",")

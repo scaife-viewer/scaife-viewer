@@ -1,15 +1,23 @@
 {
-    "presets": [
-      "env",
-      "stage-2"
-    ],
-    "plugins": [
-        "transform-runtime",
-        "transform-object-rest-spread"
-     ],
-    "comments": false,
-    "ignore": [
-      "node_modules/",
-      "dist/"
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "browsers": [
+            "> 1%",
+            "last 2 versions",
+            "not ie <= 8"
+          ]
+        }
+      }
     ]
-  }
+  ],
+  "ignore": [
+    "node_modules/",
+    "dist/"
+  ],
+  "plugins": [
+    "@babel/plugin-proposal-object-rest-spread"
+  ]
+}

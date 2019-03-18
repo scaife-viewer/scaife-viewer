@@ -1,0 +1,59 @@
+<template>
+  <base-widget class="highlight">
+    <span slot="header">Highlight</span>
+    <div slot="body">
+      <input
+        v-model="value"
+        v-on:keyup="handleKeyUp"
+        v-on:click="handleClick"
+        type="text"
+        class="form-control form-control-sm"
+      >
+    </div>
+  </base-widget>
+</template>
+
+<script>
+import constants from '../../constants';
+
+export default {
+  name: 'widget-highlight',
+  watch: {
+    highlight: 'setInputVal',
+  },
+  mounted() {
+    this.setInputVal();
+  },
+  computed: {
+    highlight() {
+      return this.$store.state.reader.highlight;
+    },
+  },
+  data() {
+    return {
+      value: '',
+    };
+  },
+  methods: {
+    setInputVal() {
+      this.value = this.highlight;
+    },
+    handleKeyUp(e) {
+      if (e.keyCode === 13) {
+        if (this.value === '') {
+          this.$store.dispatch(`reader/${constants.READER_HIGHLIGHT}`, { highlight: null });
+        } else {
+          this.$store.dispatch(`reader/${constants.READER_HIGHLIGHT}`, { highlight: this.value });
+        }
+        e.currentTarget.blur();
+      } else {
+        e.stopPropagation();
+      }
+    },
+    handleClick(e) {
+      const el = e.currentTarget;
+      el.select();
+    },
+  },
+};
+</script>

@@ -4,7 +4,12 @@ import os
 from urllib.parse import urlencode
 
 from django.core.paginator import Paginator
-from django.http import Http404, HttpResponse, JsonResponse, HttpResponseBadRequest
+from django.http import (
+    Http404,
+    HttpResponse,
+    HttpResponseBadRequest,
+    JsonResponse
+)
 from django.shortcuts import redirect, render
 from django.views import View
 from django.views.generic.base import TemplateView
@@ -28,6 +33,10 @@ def about(request):
 
 def profile(request):
     return render(request, "profile.html", {})
+
+
+def app(request, *args, **kwargs):
+    return render(request, "app.html", {})
 
 
 class BaseLibraryView(View):
@@ -107,7 +116,7 @@ class LibraryCollectionView(LibraryConditionMixin, BaseLibraryView):
 class LibraryCollectionVectorView(LibraryConditionMixin, View):
 
     def get(self, request, urn):
-        entries = request.GET.getlist("e")
+        entries = request.GET.getlist("e[]")
         try:
             cts.collection(urn)
         except cts.CollectionDoesNotExist:

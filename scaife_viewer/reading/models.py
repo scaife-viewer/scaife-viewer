@@ -7,7 +7,7 @@ from .. import cts
 
 
 class ReadingLog(models.Model):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     urn = models.CharField(max_length=250)
     timestamp = models.DateTimeField(default=timezone.now)
 

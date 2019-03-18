@@ -1,5 +1,5 @@
 import json
-from collections import deque, Counter
+from collections import Counter, deque
 from itertools import zip_longest
 from operator import attrgetter
 from typing import Iterable, List, NamedTuple
