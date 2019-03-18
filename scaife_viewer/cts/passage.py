@@ -198,7 +198,7 @@ class TEIRenderer:
 
     @lru_cache()
     def render(self):
-        xsl_path = os.path.join(os.path.dirname(__file__), "tei.xsl")
+        xsl_path = os.path.join(os.path.dirname(__file__), settings.XSL_STYLESHEET_PATH)
         with open(xsl_path) as f:
             func_ns = "urn:python-funcs"
             transform = etree.XSLT(
