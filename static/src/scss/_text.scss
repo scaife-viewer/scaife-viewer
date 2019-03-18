@@ -145,6 +145,9 @@ div.text {
       }
       display: block;
       color: transparent;
+      div:first-of-type {
+        top: 0px;
+      }
       div {
         position: sticky;
         top: 20px;
