@@ -15,6 +15,7 @@ export default {
   lowerPassageText: null,
   highlight: null,
   annotations: new Map(),
+  annotationsHash: {},
   annotationChange: 0,
   selectedLemmas: null,
   error: '',

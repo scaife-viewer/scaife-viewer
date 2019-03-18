@@ -133,6 +133,7 @@ div.text {
   }
   span.w.highlighted {
     background-color: $highlight-color;
+    border-color: $highlight-color;
   }
   span.w.selected.highlighted {
     background-color: mix($highlight-color, $selected-color);
@@ -145,6 +146,9 @@ div.text {
       }
       display: block;
       color: transparent;
+      div:first-of-type {
+        top: 0px;
+      }
       div {
         position: sticky;
         top: 20px;

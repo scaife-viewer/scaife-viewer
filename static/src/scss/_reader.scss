@@ -49,8 +49,12 @@ body.reader {
   }
 
   .overall {
+    .upper-lower {
+      display: flex;
+      justify-content: center;
+    }
     .upper {
-      max-height: 35vh;
+      max-height: 40vh;
       display: flex;
       justify-content: center;
       overflow-y: auto;
@@ -58,7 +62,7 @@ body.reader {
     .lower {
       border-top: 1px solid $gray-300;
       padding-top: 10px;
-      max-height: 50vh;
+      max-height: 40vh;
       display: flex;
       justify-content: center;
       overflow-y: auto;
@@ -124,6 +128,7 @@ body.reader {
     color: $gray-600;
     background: $white;
     border: none;
+    flex: 0 1 auto;
     &:hover {
       color: $black;
     }

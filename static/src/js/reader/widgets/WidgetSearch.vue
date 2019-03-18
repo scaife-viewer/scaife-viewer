@@ -236,6 +236,8 @@ export default {
     },
     updateHighlights() {
       // This should be in an action that is dispatched
+      // @@@ when moved to an action, we'll need to rewrite `SET_ANNOTATIONS`
+      // to use store.annotationsHash
       this.$store.commit(`reader/${constants.CLEAR_ANNOTATION}`, { key: 'highlighted' });
       this.activeResults.forEach(({ passage }) => {
         const params = {
@@ -247,7 +249,7 @@ export default {
         };
         api.searchText(params, result => {
           const { highlights } = result.results[0];
-          this.$store.commit(constants.SET_ANNOTATIONS, {
+          this.$store.commit(`reader/${constants.SET_ANNOTATIONS}`, {
             tokens: highlights.map(({ w, i }) => `${w}[${i}]`),
             key: 'highlighted',
             value: true,

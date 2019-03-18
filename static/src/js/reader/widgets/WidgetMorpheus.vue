@@ -43,6 +43,8 @@
 import constants from '../../constants';
 import TextLoader from '../TextLoader.vue';
 
+const baseURL = `${process.env.FORCE_SCRIPT_NAME}`;
+
 export default {
   name: 'widget-morpheus',
   watch: {
@@ -61,12 +63,17 @@ export default {
     enabled() {
       return this.text.metadata.lang === 'grc' || this.text.metadata.lang === 'lat';
     },
+    selectedWords2() {
+      return this.$store.getters['reader/selectedWords2'];
+    },
+    selectedWords() {
+      return this.$store.getters['reader/selectedWords'];
+    },
     selectedWord() {
-      const selectedWords = this.$store.getters['reader/selectedWords'];
-      if (selectedWords.length === 0) {
+      if (this.selectedWords2.length === 0) {
         return null;
       }
-      return selectedWords[0];
+      return this.selectedWords2[0];
     },
     text() {
       const text = this.$store.getters['reader/text'];
@@ -79,7 +86,7 @@ export default {
       const lang = this.text.metadata.lang;
       if (word) {
         this.loading = true;
-        const url = `/morpheus/?word=${word.w}&lang=${lang}`;
+        const url = `${baseURL}/morpheus/?word=${word.w}&lang=${lang}`;
         const headers = new Headers({
           Accept: 'application/json',
         });
