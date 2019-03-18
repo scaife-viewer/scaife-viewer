@@ -270,7 +270,7 @@ CACHES = {
     },
 }
 
-XSL_STYLESHEET_PATH = os.environ.get("XSL_STYLESHEET_PATH", os.path.join(PROJECT_ROOT, "cts/tei.xsl"))
+XSL_STYLESHEET_PATH = os.environ.get("XSL_STYLESHEET_PATH", os.path.join(PACKAGE_ROOT, "cts/tei.xsl"))
 
 resolver = os.environ.get("CTS_RESOLVER", "api")
 if resolver == "api":
