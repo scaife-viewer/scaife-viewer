@@ -3,6 +3,8 @@ import unicodedata
 from collections import defaultdict
 from functools import lru_cache
 
+from django.conf import settings
+
 import anytree
 import regex
 from lxml import etree
