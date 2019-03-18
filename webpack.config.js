@@ -60,10 +60,10 @@ const plugins = [
   new CopyWebpackPlugin([
     { from: './static/src/images/**/*', to: path.resolve('./static/dist/images/[name].[ext]'), toType: 'template' },
   ]),
-  new webpack.EnvironmentPlugin([
-    'NODE_ENV',
-    'FORCE_SCRIPT_NAME',
-  ]),
+  new webpack.EnvironmentPlugin({
+    NODE_ENV: 'development',
+    FORCE_SCRIPT_NAME: '',
+  }),
 ];
 
 if (devMode) {

@@ -35,7 +35,7 @@
             add parallel version
           </version-selector>
           <div id="overall" class="overall" :dir="text.metadata.rtl ? 'rtl' : 'ltr'">
-            <div class="upper">
+            <div :class="lowerPassageText ? 'upper' : 'upper-lower'">
               <div class="pg-left">
                 <router-link v-if="passage.metadata.prev" :to="toRef(passage.metadata.prev.ref)">
                   <span>
@@ -59,7 +59,7 @@
                   </template>
                 </div>
                 <div class="right">
-                  <template v-if="rightText.metadata">
+                  <template v-if="rightText && rightText.metadata">
                     <version-selector :versions="versions" :to="toRightPassage" :remove="toRemoveRight">
                       {{ rightText.metadata.label }}
                       <div class="metadata">{{ rightText.metadata.human_lang }} {{ rightText.metadata.kind }}</div>
