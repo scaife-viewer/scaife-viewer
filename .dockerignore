@@ -1,3 +1,4 @@
 node_modules/
 static/dist/
+deploy/
 webpack-stats.json

@@ -1,0 +1,15 @@
+version: '3.2'
+
+services:
+
+  scaife-viewer:
+    build:
+      context: ../
+      dockerfile: Dockerfile
+    container_name: scaife-viewer
+    command: gunicorn --preload scaife_viewer.wsgi
+    ports:
+      - ${SCAIFE_VIEWER_PORT:-8000}:8000
+    env_file:
+      .env
+
