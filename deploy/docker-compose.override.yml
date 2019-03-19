@@ -1,0 +1,24 @@
+version: '3.2'
+
+services:
+  scaife-viewer:
+    build:
+      context: ../
+      dockerfile: Dockerfile-dev
+    container_name: scaife-viewer
+    entrypoint: /opt/scaife-viewer/src/deploy/entrypoint.sh
+    command: python manage.py runserver 0.0.0.0:8000
+    environment:
+      - DEBUG=1
+    volumes:
+      - ..:/opt/scaife-viewer/src/
+
+  sv-webpack:
+    build:
+      context: ../
+      dockerfile: Dockerfile-webpack
+    container_name: sv-webpack
+    volumes:
+      - ..:/opt/scaife-viewer/src/
+    ports:
+      - 8080:8080
