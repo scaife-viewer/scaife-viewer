@@ -4,6 +4,7 @@ COPY package.json package-lock.json ./
 RUN npm ci
 COPY webpack.config.js .babelrc ./
 COPY ./static static
+ARG FORCE_SCRIPT_NAME
 RUN npm run build
 
 FROM python:3.6-alpine3.7 AS build
