@@ -52,74 +52,32 @@
           </div>
         </div>
         <div class="col-sm-9">
-          <div class="search-pagination">
-            <div>
-              Showing <b>{{ start_index }}</b>&ndash;<b>{{ end_index }}</b> of <b>{{ total_results }}</b>
-            </div>
-            <!-- previous -->
-            <div>
-              <span v-if="page_num > 1">
-                <a href="#"><i class="fa fa-step-backward"></i></a>
-                <a href="#"><i class="fa fa-backward"></i></a>
-              </span>
-              <span v-else>
-                <span class="text-muted"><i class="fa fa-step-backward"></i></span>
-                <span class="text-muted"><i class="fa fa-backward"></i></span>
-              </span>
-              <!-- current -->
-              <span class="current">
-                page <b>{{ page_num }}</b> of <b>{{ total_pages }}</b>
-              </span>
-              <!-- next -->
-              <span v-if="page_num + 1 <= total_pages">
-                <span v-on:click="showNextPage"><i class="fa fa-forward" style="cursor:pointer;color:#B45141;"></i></span>
-                <a href="#"><i class="fa fa-step-forward"></i></a>
-              </span>
-              <span v-else>
-                <span class="text-muted"><i class="fa fa-forward"></i></span>
-                <span class="text-muted"><i class="fa fa-step-forward"></i></span>
-              </span>
-            </div>
-          </div>
+          <search-pagination
+            :start_index=start_index
+            :end_index=end_index
+            :total_results=total_results
+            :page_num=page_num
+            :total_pages=total_pages
+            :showNextPrevPage=showNextPrevPage
+          />
           <div>
-            <div class="result" v-for="result in results" :key="result.passage.url">
+            <div class="result" v-for="result in results" :key="result.url">
               <div class="passage-heading">
-                <h2><a href="#">something</a></h2>
+                <h2><a :href="result.url">{{ result.url }}</a></h2>
               </div>
               <div class="content">
-                <p>something</p>
+                <p v-html="result.content"></p>
               </div>
             </div>
           </div>
-          <div class="search-pagination">
-            <div>
-              Showing <b>{{ start_index }}</b>&ndash;<b>{{ end_index }}</b> of <b>{{ total_results }}</b>
-            </div>
-            <!-- previous -->
-            <div>
-              <span v-if="page_num > 1">
-                <a href="#"><i class="fa fa-step-backward"></i></a>
-                <a href="#"><i class="fa fa-backward"></i></a>
-              </span>
-              <span v-else>
-                <span class="text-muted"><i class="fa fa-step-backward"></i></span>
-                <span class="text-muted"><i class="fa fa-backward"></i></span>
-              </span>
-              <!-- current -->
-              <span class="current">
-                page <b>{{ page_num }}</b> of <b>{{ total_pages }}</b>
-              </span>
-              <!-- next -->
-              <span v-if="page_num + 1 <= total_pages">
-                <a href="#"><i class="fa fa-forward"></i></a>
-                <a href="#"><i class="fa fa-step-forward"></i></a>
-              </span>
-              <span v-else>
-                <span class="text-muted"><i class="fa fa-forward"></i></span>
-                <span class="text-muted"><i class="fa fa-step-forward"></i></span>
-              </span>
-            </div>
-          </div>
+          <search-pagination
+            :start_index=start_index
+            :end_index=end_index
+            :total_results=total_results
+            :page_num=page_num
+            :total_pages=total_pages
+            :showNextPrevPage=showNextPrevPage
+          />
         </div>
       </div>
     </div>
@@ -129,6 +87,7 @@
 <script>
 import constants from '../constants';
 import api from '../api';
+import SearchPagination from './SearchPagination.vue';
 
 export default {
   name: 'search-view',
@@ -140,7 +99,7 @@ export default {
       end_index: 10,
       total_pages: 0,
       total_results: 0,
-      results: []
+      results: [],
     };
   },
   computed: {
@@ -177,29 +136,45 @@ export default {
         });
       }
     },
-    showNextPage() {
+    showNextPrevPage(direction) {
       const query = this.$store.state.reader.searchQuery;
       if (query !== '') {
+        let newPageNum = this.page_num + 1;
+        let newStartIndex = this.start_index + 10;
+        let newEndIndex = this.end_index + 10;
+        if (direction === 'prev') {
+          newPageNum = this.page_num - 1;
+          newStartIndex = this.start_index - 10;
+          newEndIndex = this.end_index - 10;
+          if (parseInt(this.page_num) === parseInt(this.total_pages)) {
+            newEndIndex = (newStartIndex + 10) - 1;
+          }
+        }
         // move to an action
         const params = {
           kind: this.$store.state.reader.searchType,
           q: query,
-          page_num: 2,
-          start_index: this.start_index + 10,
-          end_index: this.end_index + 10,
+          page_num: newPageNum,
+          start_index: newStartIndex,
+          end_index: newEndIndex,
         }
         api.searchText(params, 'search/text/', result => {
           this.showSearchResults = true;
           this.total_pages = result.total_pages;
           this.total_results = result.total_results;
           this.results = result.results;
-          this.page_num += 1;
-          this.start_index +=10;
-          this.end_index += 10,
-          this.$forceUpdate();
+          this.page_num = newPageNum;
+          this.start_index = newStartIndex;
+          this.end_index = newEndIndex;
+          if (parseInt(newPageNum) === parseInt(this.total_pages)) {
+            this.end_index = result.total_results;
+          }
         });
       }
     }
+  },
+  components: {
+    SearchPagination,
   },
 };
 </script>
