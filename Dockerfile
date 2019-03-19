@@ -23,6 +23,7 @@ ENV PYTHONPATH /opt/scaife-viewer/src/
 ENV PATH="/opt/scaife-viewer/bin:${PATH}" VIRTUAL_ENV="/opt/scaife-viewer"
 WORKDIR /opt/scaife-viewer/src/
 COPY --from=static /opt/scaife-viewer/src/static/dist /opt/scaife-viewer/src/static/dist
+COPY --from=static /opt/scaife-viewer/src/webpack-stats.json /opt/scaife-viewer/src/webpack-stats.json
 COPY --from=build /opt/scaife-viewer/ /opt/scaife-viewer/
 RUN set -x \
     && runDeps="$( \
