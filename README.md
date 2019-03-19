@@ -101,3 +101,39 @@ you'll need to do the following:
 ```
 
 That should be all you need to do.
+
+
+## Deploying via Docker
+
+A sample docker-compose configuration is available at `deploy/docker-compose.yml`.
+
+Copy `.env.example` and customize environment variables for your deployment:
+
+```
+cp deploy/.env.example cp deploy/.env
+```
+
+To build the Docker image and bring up the `scaife-viewer` service in the background:
+```
+docker-compose -f deploy/docker-compose.yml up --build -d
+```
+
+Tail `scaife-viewer` logs via:
+```
+docker-compose -f deploy/docker-compose.yml logs --follow
+```
+
+To host the application off-root using docker-compose, you'll need to build the Docker image with with the `FORCE_SCRIPT_NAME` build arg:
+```
+docker-compose -f deploy/docker-compose.yml build --build-arg FORCE_SCRIPT_NAME=/<your-off-root-path>
+```
+
+You'll also need to ensure that `FORCE_SCRIPT_NAME` exists in `deploy/.env`:
+```
+echo "FORCE_SCRIPT_NAME=/<your-off-root-path>" >> deploy/.env
+```
+
+Then, bring up the scaife-viewer service:
+```
+docker-compose -f deploy/docker-compose.yml up -d
+```
