@@ -107,17 +107,17 @@ Copy `.env.example` and customize environment variables for your deployment:
 cp deploy/.env.example cp deploy/.env
 ```
 
-To build the Docker image and bring up the `scaife-viewer` service in the background:
+To build the Docker image and bring up the `scaife-viewer`, `sv-postgres` and `sv-elasticsearch` services in the background:
 ```
 docker-compose -f deploy/docker-compose.yml up --build -d
 ```
 
-Tail `scaife-viewer` logs via:
+Tail logs via:
 ```
 docker-compose -f deploy/docker-compose.yml logs --follow
 ```
 
-To host the application off-root using docker-compose, you'll need to build the Docker image with with the `FORCE_SCRIPT_NAME` build arg:
+To host the application off-root using docker-compose, you'll need to ensure that the `scaife-viewer` Docker image is built with the `FORCE_SCRIPT_NAME` build arg:
 ```
 docker-compose -f deploy/docker-compose.yml build --build-arg FORCE_SCRIPT_NAME=/<your-off-root-path>
 ```
@@ -127,7 +127,7 @@ You'll also need to ensure that `FORCE_SCRIPT_NAME` exists in `deploy/.env`:
 echo "FORCE_SCRIPT_NAME=/<your-off-root-path>" >> deploy/.env
 ```
 
-Then, bring up the scaife-viewer service:
+Then, bring up all services:
 ```
 docker-compose -f deploy/docker-compose.yml up -d
 ```
