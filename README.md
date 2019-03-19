@@ -12,7 +12,7 @@ Requirements:
 
 * Python 3.6.x
   * pipenv
-* Node 10.7
+* Node 11.7
 * PostgreSQL 9.6
 * Elasticsearch 6
 
