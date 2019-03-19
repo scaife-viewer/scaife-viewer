@@ -1,4 +1,5 @@
 node_modules/
 static/dist/
-deploy/
+deploy/.env
+deploy/docker-compose.yml
 webpack-stats.json
