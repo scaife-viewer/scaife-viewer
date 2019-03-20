@@ -41,7 +41,7 @@
 
 <script>
 import constants from '../../constants';
-import TextLoader from '../TextLoader.vue';
+import TextLoader from '../../components/TextLoader.vue';
 
 export default {
   name: 'widget-morpheus',

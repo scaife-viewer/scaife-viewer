@@ -33,7 +33,7 @@
 import api from '../../api';
 import constants from '../../constants';
 import ReaderNavigationMixin from '../../mixins/ReaderNavigationMixin.vue';
-import TextLoader from '../TextLoader.vue';
+import TextLoader from '../../components/TextLoader.vue';
 
 const debounce = require('lodash.debounce');
 

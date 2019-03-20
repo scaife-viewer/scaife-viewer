@@ -235,13 +235,8 @@ def search(request):
 def search_text(request):
     q = request.GET.get("q", "")
     page_num = int(request.GET.get("page_num"))
-    start_index = int(request.GET.get("start_index"))
-    end_index = int(request.GET.get("end_index"))
     data = {
-        "q": q,
-        "page_num": page_num,
-        "start_index": start_index,
-        "end_index": end_index
+        "q": q
     }
     if q:
         results = []
@@ -253,17 +248,31 @@ def search_text(request):
         sq = SearchQuery(q, **kwargs)
         paginator = Paginator(sq, 10)
         # TODO: refactor!!
-        for result in paginator.object_list:
+        """
+        TODO: add ref
+          {% for breadcrumb in passage.text.ancestors %}
+          {{ breadcrumb.label }},
+          {% endfor %}
+          {{ passage.refs.start.human_reference }}
+          {% if passage.refs.end %} to {{ passage.refs.end.human_reference }}{% endif %}
+          ({{ passage.refs.start.reference }}{% if passage.refs.end %} &ndash; {{ passage.refs.end.reference }}{% endif %})
+        """
+        page = paginator.page(page_num)
+        for result in page.object_list:
             results.append({
               "url": result.link,
               "content": result.content[0]
             })
-        start_index = page_num
-        end_index = page_num + 10
         data["results"] = results
-        import math
-        data["total_pages"] =  math.ceil(len(results) / 10)
-        data["total_results"] =  len(results)
+        data["count"] = paginator.count
+        data["page"] = {
+            "number": page.number,
+            "start_index": page.start_index(),
+            "end_index": page.end_index(),
+            "has_previous": page.has_previous(),
+            "has_next": page.has_next(),
+            "num_pages": page.paginator.num_pages
+        }
     print(data)
     return JsonResponse(data)
 

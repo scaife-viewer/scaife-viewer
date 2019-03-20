@@ -18,7 +18,7 @@
           </div>
         </div>
       </div>
-      <form class="search-form" v-on:submit.prevent="onSubmit">
+      <form class="search-form" v-on:submit.prevent="handleSearch">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Search..." :value="searchQuery" @input="handleSearchQueryChange">
           <input
@@ -41,8 +41,12 @@
           <label for="kind-lemma">Lemma (Greek only)</label>
         </div>
       </form>
+      <text-loader v-if="loading" size="7px" margin="1px" />
       <div v-if="showSearchResults" class="row">
-        <div class="col-sm-3">
+        <div v-if="!results.length" class="col-sm-12 text-center">
+          <p class="no-results">No results found. Please try again.</p>
+        </div>
+        <div v-if="results.length" class="col-sm-3">
           <h5>Text Groups</h5>
           <div class="list-group">
             <a href="#" class="list-group-item d-flex justify-content-between align-items-center">
@@ -51,17 +55,20 @@
             </a>
           </div>
         </div>
-        <div class="col-sm-9">
+        <div v-if="results.length" class="col-sm-9">
           <search-pagination
-            :start_index=start_index
-            :end_index=end_index
-            :total_results=total_results
-            :page_num=page_num
-            :total_pages=total_pages
-            :showNextPrevPage=showNextPrevPage
+            :startIndex=startIndex
+            :endIndex=endIndex
+            :totalResults=totalResults
+            :pageNum=pageNum
+            :totalPages=totalPages
+            :hasNext=hasNext
+            :hasPrev=hasPrev
+            :handlePrevNext=handlePrevNext
           />
           <div>
-            <div class="result" v-for="result in results" :key="result.url">
+            <text-loader v-if="secondLoading" size="7px" margin="1px" />
+            <div class="result" v-if="!secondLoading" v-for="result in results" :key="result.url">
               <div class="passage-heading">
                 <h2><a :href="result.url">{{ result.url }}</a></h2>
               </div>
@@ -71,12 +78,14 @@
             </div>
           </div>
           <search-pagination
-            :start_index=start_index
-            :end_index=end_index
-            :total_results=total_results
-            :page_num=page_num
-            :total_pages=total_pages
-            :showNextPrevPage=showNextPrevPage
+            :startIndex=startIndex
+            :endIndex=endIndex
+            :totalResults=totalResults
+            :pageNum=pageNum
+            :totalPages=totalPages
+            :hasNext=hasNext
+            :hasPrev=hasPrev
+            :handlePrevNext=handlePrevNext
           />
         </div>
       </div>
@@ -88,93 +97,95 @@
 import constants from '../constants';
 import api from '../api';
 import SearchPagination from './SearchPagination.vue';
+import TextLoader from '../components/TextLoader.vue';
 
 export default {
+  // TODO: add global state mgmt
   name: 'search-view',
   data() {
     return {
-      page_num: 1,
-      showSearchResults: false,
-      start_index: 1,
-      end_index: 10,
-      total_pages: 0,
-      total_results: 0,
+      searchQuery: '',
+      pageNum: 1,
+      startIndex: null,
+      endIndex: null,
+      totalPages: null,
+      totalResults: null,
       results: [],
+      loading: false,
+      secondLoading: false,
+      showSearchResults: false,
+      hasNext: false,
+      hasPrev: false,
     };
   },
   computed: {
-    searchQuery() {
-      return this.$store.state.reader.searchQuery;
-    },
+    // searchQuery() {
+    //   return this.$store.state.reader.searchQuery;
+    // },
     searchType() {
       return this.$store.state.reader.searchType;
     },
   },
   methods: {
     handleSearchQueryChange(e) {
-      this.$store.commit(`reader/${constants.SET_SEARCH_QUERY}`, { query:  e.target.value });
+      this.searchQuery = e.target.value;
+      // this.$store.commit(`reader/${constants.SET_SEARCH_QUERY}`, { query:  e.target.value });
     },
     handleTypeChange(e) {
       this.$store.commit(`reader/${constants.SET_SEARCH_TYPE}`, { type:  e.target.name });
     },
-    onSubmit() {
-      const query = this.$store.state.reader.searchQuery;
+    handleSearch() {
+      const query = this.searchQuery;
       if (query !== '') {
-        // move to an action
+        this.loading = true;
+        this.showSearchResults = false;
         const params = {
           kind: this.$store.state.reader.searchType,
           q: query,
-          page_num: this.page_num,
-          start_index: 1,
-          end_index: 10
+          page_num: this.pageNum,
         }
         api.searchText(params, 'search/text/', result => {
           this.showSearchResults = true;
-          this.total_pages = result.total_pages;
-          this.total_results = result.total_results;
+          this.totalPages = result.page.num_pages;
+          this.pageNum = result.page.number;
+          this.startIndex = result.page.start_index;
+          this.endIndex = result.page.end_index;
+          this.hasNext = result.page.has_next;
+          this.hasPrev = result.page.has_previous;
+          this.totalResults = result.count;
+          this.totalPages = result.num_pages;
           this.results = result.results;
+          this.loading = false;
         });
       }
     },
-    showNextPrevPage(direction) {
-      const query = this.$store.state.reader.searchQuery;
+    handlePrevNext(newPageNum) {
+      const query = this.searchQuery;
       if (query !== '') {
-        let newPageNum = this.page_num + 1;
-        let newStartIndex = this.start_index + 10;
-        let newEndIndex = this.end_index + 10;
-        if (direction === 'prev') {
-          newPageNum = this.page_num - 1;
-          newStartIndex = this.start_index - 10;
-          newEndIndex = this.end_index - 10;
-          if (parseInt(this.page_num) === parseInt(this.total_pages)) {
-            newEndIndex = (newStartIndex + 10) - 1;
-          }
-        }
-        // move to an action
+        this.secondLoading = true;
         const params = {
           kind: this.$store.state.reader.searchType,
           q: query,
           page_num: newPageNum,
-          start_index: newStartIndex,
-          end_index: newEndIndex,
         }
         api.searchText(params, 'search/text/', result => {
-          this.showSearchResults = true;
-          this.total_pages = result.total_pages;
-          this.total_results = result.total_results;
+          this.totalPages = result.page.num_pages;
+          this.pageNum = result.page.number;
+          this.startIndex = result.page.start_index;
+          this.endIndex = result.page.end_index;
+          this.hasNext = result.page.has_next;
+          this.hasPrev = result.page.has_previous;
+          this.totalResults = result.count;
+          this.totalPages = result.num_pages;
           this.results = result.results;
-          this.page_num = newPageNum;
-          this.start_index = newStartIndex;
-          this.end_index = newEndIndex;
-          if (parseInt(newPageNum) === parseInt(this.total_pages)) {
-            this.end_index = result.total_results;
-          }
+          this.secondLoading = false;
         });
       }
-    }
+    },
   },
   components: {
     SearchPagination,
+    TextLoader
   },
 };
 </script>
