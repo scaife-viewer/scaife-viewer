@@ -1,5 +1,5 @@
 import json
-from collections import deque, Counter
+from collections import Counter, deque
 from itertools import zip_longest
 from operator import attrgetter
 from typing import Iterable, List, NamedTuple
@@ -8,8 +8,6 @@ import dask.bag
 import elasticsearch
 import elasticsearch.helpers
 from anytree.iterators import PreOrderIter
-
-from django.conf import settings
 
 from . import cts
 from .morphology import Morphology
@@ -40,43 +38,23 @@ class Indexer:
             morphology = Morphology.load(path)
             print("Morphology loaded")
 
-    def get_urn_obj(self):
-        if not self.urn_prefix:
-            return None
-        return cts.URN(self.urn_prefix)
-
-    def get_urn_prefix_filter(self, urn_obj):
-        if not urn_obj:
-            return None
-        if urn_obj.reference:
-            up_to = cts.URN.NO_PASSAGE
-        elif urn_obj.version:
-            up_to = cts.URN.VERSION
-        elif urn_obj.work:
-            up_to = cts.URN.WORK
-        elif urn_obj.textgroup:
-            up_to = cts.URN.TEXTGROUP
-        elif urn_obj.namespace:
-            up_to = cts.URN.NAMESPACE
-        else:
-            raise ValueError(f'Could not derive prefix filter from "{urn_obj}"')
-
-        value = urn_obj.upTo(up_to)
-        print(f"Applying URN prefix filter: {value}")
-        return value
-
     def index(self):
         cts.TextInventory.load()
         print("Text inventory loaded")
-        urn_obj = self.get_urn_obj()
-        prefix_filter = self.get_urn_prefix_filter(urn_obj)
+        if self.urn_prefix:
+            urn_prefix = cts.URN(self.urn_prefix)
+            print(f"Applying URN prefix filter: {urn_prefix.upTo(cts.URN.NO_PASSAGE)}")
+        else:
+            urn_prefix = None
         texts = dask.bag.from_sequence(
-            self.texts(prefix_filter)
+            self.texts(
+                urn_prefix.upTo(cts.URN.NO_PASSAGE) if urn_prefix else None
+            )
         )
         passages = texts.map(self.passages_from_text).flatten()
-        if urn_obj and urn_obj.reference:
-            print(f"Applying URN reference filter: {urn_obj.reference}")
-            passages = passages.filter(lambda p: p.urn == str(urn_obj))
+        if urn_prefix and urn_prefix.reference:
+            print(f"Applying URN reference filter: {urn_prefix.reference}")
+            passages = passages.filter(lambda p: p["urn"] == str(urn_prefix))
         if self.limit is not None:
             passages = passages.take(self.limit, npartitions=-1)
         else:
@@ -136,7 +114,6 @@ class Indexer:
     def indexer(self, chunk: Iterable[SortedPassage]):
         from raven.contrib.django.raven_compat.models import client as sentry
         words = []
-        result = None
         for p in chunk:
             urn = p.urn
             try:
@@ -158,10 +135,7 @@ class Indexer:
                 sentry.captureException()
                 raise
             if not self.dry_run:
-                result = self.pusher.push(doc)
-
-        self.pusher.finalize(result, self.dry_run)
-
+                self.pusher.push(doc)
         return words
 
     def count_words(self, tokens) -> int:
@@ -229,11 +203,7 @@ class DirectPusher:
     @property
     def es(self):
         if not hasattr(self, "_es"):
-            self._es = elasticsearch.Elasticsearch(
-                hosts=settings.ELASTICSEARCH_HOSTS,
-                sniff_on_start=True,
-                sniff_on_connection_fail=True,
-            )
+            self._es = elasticsearch.Elasticsearch()
         return self._es
 
     @property
@@ -256,15 +226,6 @@ class DirectPusher:
         docs = ({"_id": doc["urn"], **metadata, **doc} for doc in self.docs)
         elasticsearch.helpers.bulk(self.es, docs)
         self.docs.clear()
-
-    def finalize(self, result, dry_run):
-        if dry_run:
-            return
-
-        # we need to ensure the deque is cleared if less than
-        # `chunk_size`
-        self.commit_docs()
-        print("Committing documents to ElasticSearch")
 
     def __getstate__(self):
         s = self.__dict__.copy()
@@ -290,22 +251,7 @@ class PubSubPusher:
         return self._publisher
 
     def push(self, doc):
-        """
-        Returns a Future
-
-        https://github.com/googleapis/google-cloud-python/blob/master/pubsub/docs/publisher/index.rst#futures
-        """
-        return self.publisher.publish(self.topic_path, json.dumps(doc).encode("utf-8"))
-
-    def finalize(self, future, dry_run):
-        if dry_run:
-            return
-
-        if future and not future.done():
-            print("Publishing messages to PubSub")
-            # Block until the last message has been published
-            # https://github.com/googleapis/google-cloud-python/blob/69ec9fea1026c00642ca55ca18110b7ef5a09675/pubsub/docs/publisher/index.rst#futures
-            future.result()
+        self.publisher.publish(self.topic_path, json.dumps(doc).encode("utf-8"))
 
     def __getstate__(self):
         s = self.__dict__.copy()

@@ -1,5 +1,0 @@
-data/bodin/__cts__.xml
-data/bodin/livrep/__cts__.xml
-data/bodin/livrep/bodin.livrep.perseus-eng1.xml
-data/bodin/livrep/bodin.livrep.perseus-fre1.xml
-data/bodin/livrep/bodin.livrep.perseus-lat1.xml

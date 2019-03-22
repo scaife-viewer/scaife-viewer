@@ -1,0 +1,40 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+
+[requires]
+python_version = "3.6"
+
+[packages]
+django-user-accounts = "*"
+pinax-webanalytics = "*"
+pinax-eventlog = "*"
+django = "*"
+pinax-theme-bootstrap = "*"
+mycapytain = "*"
+gunicorn = "*"
+whitenoise = "*"
+"psycopg2" = "*"
+dj-database-url = "*"
+raven = "*"
+python-mimeparse = "*"
+google-auth = "*"
+wrapt = "*"
+anytree = "*"
+honcho = "*"
+elasticsearch = ">=6.0.0"
+google-cloud-pubsub = "*"
+regex = "*"
+certifi = "*"
+requests = "*"
+dask = {extras = ["bag"]}
+django-oidc-provider = "*"
+python-dateutil = "*"
+django-letsencrypt = "*"
+lxml = "*"
+django-webpack-loader = "*"
+
+[dev-packages]
+"flake8" = "*"
+isort = "*"
+"flake8-quotes" = "*"

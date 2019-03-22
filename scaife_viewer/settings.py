@@ -81,7 +81,7 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
 
-STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
+STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
 
 if "SECRET_KEY" in os.environ:
     SECRET_KEY = os.environ["SECRET_KEY"]
@@ -271,17 +271,15 @@ CACHES = {
 }
 
 resolver = os.environ.get("CTS_RESOLVER", "api")
-
-# CTS_API_ENDPOINT is for the Nautilus server
 if resolver == "api":
-    CTS_API_ENDPOINT = os.environ.get("CTS_API_ENDPOINT", "https://scaife-cts.perseus.org/api/cts")
+    CTS_API_ENDPOINT = os.environ.get("CTS_API_ENDPOINT", "https://scaife-cts-dev.perseus.org/api/cts")
     CTS_RESOLVER = {
         "type": "api",
         "kwargs": {
             "endpoint": CTS_API_ENDPOINT,
         },
     }
-    CTS_LOCAL_TEXT_INVENTORY = "data/ti.xml" if DEBUG else None
+    CTS_LOCAL_TEXT_INVENTORY = "ti.xml" if DEBUG else None
 elif resolver == "local":
     CTS_LOCAL_DATA_PATH = os.environ["CTS_LOCAL_DATA_PATH"]
     CTS_RESOLVER = {
@@ -304,4 +302,3 @@ if FORCE_SCRIPT_NAME:
 
 
 ELASTICSEARCH_HOSTS = os.environ.get("ELASTICSEARCH_HOSTS", "localhost").split(",")
-USE_CLOUD_INDEXER = bool(int(os.environ.get("USE_CLOUD_INDEXER", "0")))

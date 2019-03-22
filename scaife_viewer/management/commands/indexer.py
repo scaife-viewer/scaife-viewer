@@ -2,7 +2,6 @@ import time
 from decimal import Decimal
 
 from django.core.management.base import BaseCommand
-from django.conf import settings
 
 from ...cloud import CloudJob
 from ...indexer import DirectPusher, Indexer, PubSubPusher
@@ -43,12 +42,8 @@ class IndexerCommand(BaseCommand):
         print(f"Finished in {elapsed}s")
 
 
-if settings.USE_CLOUD_INDEXER:
-    class Command(CloudJob, IndexerCommand):
-        pass
-else:
-    class Command(IndexerCommand):
-        pass
+class Command(CloudJob, IndexerCommand):
+    pass
 
 
 class Timer:
