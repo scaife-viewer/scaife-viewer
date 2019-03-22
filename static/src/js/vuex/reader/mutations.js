@@ -214,4 +214,8 @@ export default {
   [constants.SET_ERROR]: (state, { error }) => {
     state.error = error;
   },
+
+  [constants.SET_TEXT_WIDTH]: (state, { width }) => {
+    state.textWidth = width;
+  },
 };

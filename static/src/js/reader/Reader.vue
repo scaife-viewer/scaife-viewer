@@ -101,6 +101,7 @@
           <widget-passage-links />
           <widget-text-mode />
           <widget-text-size />
+          <widget-text-width />
           <widget-highlight />
           <widget-morpheus />
           <widget-token-list />
@@ -133,6 +134,7 @@ import WidgetMorpheus from './widgets/WidgetMorpheus.vue';
 import WidgetWordList from './widgets/WidgetWordList.vue';
 import WidgetTokenList from './widgets/WidgetTokenList.vue';
 import WidgetCHSCommentary from './widgets/WidgetCHSCommentary.vue';
+import WidgetTextWidth from './widgets/WidgetTextWidth.vue';
 
 const widgets = {
   WidgetPassageAncestors,
@@ -146,6 +148,7 @@ const widgets = {
   WidgetMorpheus,
   WidgetWordList,
   WidgetTokenList,
+  WidgetTextWidth,
   'widget-chs-commentary': WidgetCHSCommentary,
 };
 

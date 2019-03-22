@@ -20,6 +20,7 @@ export default new Vuex.Store({
         'reader.sidebarRightOpened',
         'reader.textSize',
         'reader.textMode',
+        'reader.textWidth',
       ],
       storage: window.localStorage,
     }),
