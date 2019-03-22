@@ -9,7 +9,6 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 
 describe('WidgetTextSize.vue', () => {
-
   const store = new Vuex.Store(createStore());
 
   it('sets the correct default data', () => {

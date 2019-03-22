@@ -13,7 +13,6 @@ localVue.use(VueRouter);
 
 
 describe('WidgetSearch.vue', () => {
-
   const config = createStore();
   const store = new Vuex.Store(config);
 
@@ -80,7 +79,7 @@ describe('WidgetSearch.vue', () => {
                 start: {
                   reference: '3.7',
                   human_reference: 'Book 3 Chapter 7',
-                }
+                },
               },
               ancestors: [
                 { reference: '3' },
