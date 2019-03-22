@@ -16,7 +16,12 @@ Requirements:
 * PostgreSQL 9.6
 * Elasticsearch 6
 
-First, set up a database to use for local development:
+First, install and run Elasticsearch on port 9200. If you're on a Mac, we recommend using brew for this:
+
+    brew install elasticsearch
+    brew services start elasticsearch
+
+Then, set up a postgres database to use for local development:
 
     createdb scaife-viewer
 
@@ -42,8 +47,9 @@ You should now be set to run the static build pipeline and hot module reloading:
 
     npm start
 
-In another terminal, start runserver:
+In another terminal, collect the static files and then start runserver:
 
+    pipenv run python manage.py collectstatic --noinput
     pipenv run python manage.py runserver
 
 Browse to http://localhost:8000/.
