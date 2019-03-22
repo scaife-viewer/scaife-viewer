@@ -153,7 +153,7 @@ export default {
           this.hasNext = result.page.has_next;
           this.hasPrev = result.page.has_previous;
           this.totalResults = result.count;
-          this.totalPages = result.num_pages;
+          this.totalPages = result.page.num_pages;
           this.results = result.results;
           this.loading = false;
         });
