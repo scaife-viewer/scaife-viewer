@@ -20,6 +20,7 @@ import requests
 from . import cts
 from .http import ConditionMixin
 from .search import SearchQuery
+from .search_new import simple_search
 from .utils import apify, encode_link_header, link_passage
 
 
@@ -279,7 +280,9 @@ def search(request):
             "kind": kind,
         }
         sq = SearchQuery(q, **kwargs)
-        paginator = Paginator(sq, 10)
+        sq_new = simple_search(q, **kwargs)
+        print(sq_new)
+        paginator = Paginator(sq_new, 10)
         ctx.update({
             "paginator": paginator,
             "page": paginator.page(page_num),
