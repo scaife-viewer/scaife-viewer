@@ -6,7 +6,7 @@ The Scaife Viewer is the new reading environment for the Perseus Digital Library
 
 See [Ways to Contribute](https://github.com/scaife-viewer/scaife-viewer/wiki/Ways-to-Contribute).
 
-## Getting Started
+## Getting Started with Local Development
 
 Requirements:
 
@@ -136,4 +136,18 @@ echo "FORCE_SCRIPT_NAME=/<your-off-root-path>" >> deploy/.env
 Then, bring up all services:
 ```
 docker-compose -f deploy/docker-compose.yml up -d
+```
+
+## Using Docker for development
+
+The project also includes `Dockerfile-dev` and `Dockerfile-webpack` images which can be used with Docker Compose to faciliate development:
+
+```
+docker-compose -f deploy/docker-compose.yml -f deploy/docker-compose.override.yml up --build
+```
+
+To run only the `scaife-viewer` and `sv-webpack` services:
+
+```
+docker-compose -f deploy/docker-compose.yml -f deploy/docker-compose.override.yml up --build scaife-viewer sv-webpack
 ```
