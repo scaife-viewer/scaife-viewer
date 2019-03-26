@@ -1,7 +1,7 @@
 from operator import itemgetter
 
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 import regex
 from elasticsearch import Elasticsearch

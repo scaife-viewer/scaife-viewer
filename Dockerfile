@@ -1,9 +1,12 @@
-FROM node:8.10-alpine AS static
+FROM node:11.7-alpine AS static
 WORKDIR /opt/scaife-viewer/src/
-COPY package.json package-lock.json .babelrc .postcssrc.js ./
-RUN npm install
+COPY package.json package-lock.json ./
+RUN npm ci
+COPY webpack.config.js .babelrc .eslintrc.json ./
 COPY ./static static
-RUN npm run build:prod
+ARG FORCE_SCRIPT_NAME
+RUN npm run lint
+RUN npm run build
 
 FROM python:3.6-alpine3.7 AS build
 WORKDIR /opt/scaife-viewer/src/
@@ -15,6 +18,7 @@ RUN set -x \
     && apk --no-cache add \
         build-base curl git libxml2-dev libxslt-dev postgresql-dev linux-headers \
     && pipenv install --deploy
+RUN pip install flake8 flake8-quotes isort
 
 FROM python:3.6-alpine3.7
 ENV PYTHONUNBUFFERED 1
@@ -22,6 +26,7 @@ ENV PYTHONPATH /opt/scaife-viewer/src/
 ENV PATH="/opt/scaife-viewer/bin:${PATH}" VIRTUAL_ENV="/opt/scaife-viewer"
 WORKDIR /opt/scaife-viewer/src/
 COPY --from=static /opt/scaife-viewer/src/static/dist /opt/scaife-viewer/src/static/dist
+COPY --from=static /opt/scaife-viewer/src/webpack-stats.json /opt/scaife-viewer/src/webpack-stats.json
 COPY --from=build /opt/scaife-viewer/ /opt/scaife-viewer/
 RUN set -x \
     && runDeps="$( \
@@ -34,4 +39,6 @@ RUN set -x \
         $runDeps \
         curl
 COPY . /opt/scaife-viewer/src/
+RUN flake8 scaife_viewer
+RUN isort -c **/*.py
 RUN python manage.py collectstatic --noinput

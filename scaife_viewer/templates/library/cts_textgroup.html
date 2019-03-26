@@ -18,5 +18,5 @@
 {% endblock %}
 
 {% block content %}
-  <sv-cts-work-list text-group-url="{% url 'api:library_collection' textgroup.urn %}"></sv-cts-work-list>
+  <div id="app" data-urn="{{ textgroup.urn }}" data-type="textgroup"></div>
 {% endblock %}

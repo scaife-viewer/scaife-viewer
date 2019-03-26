@@ -1,8 +1,11 @@
 {
   "root": true,
-  "extends": "airbnb-base",
-  "parser": "babel-eslint",
+  "extends": [
+    "plugin:vue/recommended",
+    "airbnb-base"
+  ],
   "parserOptions": {
+    "parser": "babel-eslint",
     "sourceType": "module"
   },
   "env": {
@@ -14,7 +17,7 @@
   "settings": {
     "import/resolver": {
       "webpack": {
-        "config": "static/webpack.common.js"
+        "config": "webpack.config.js"
       }
     }
   },

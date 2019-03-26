@@ -1,0 +1,46 @@
+version: '3.2'
+
+services:
+
+  scaife-viewer:
+    build:
+      context: ../
+      dockerfile: Dockerfile
+    container_name: scaife-viewer
+    entrypoint: /opt/scaife-viewer/src/deploy/entrypoint.sh
+    command: gunicorn --preload scaife_viewer.wsgi
+    ports:
+      - ${SCAIFE_VIEWER_PORT:-8000}:8000
+    env_file:
+      .env
+
+  sv-postgres:
+    container_name: sv-postgres
+    image: postgres:9.6-alpine
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_USER=scaife
+      - POSTGRES_PASSWORD=scaife
+    volumes:
+      - sv-postgres-data:/var/lib/postgresql/data
+
+  sv-elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.2.4
+    container_name: sv-elasticsearch
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 9200:9200
+    volumes:
+      - sv-elasticsearch-data:/usr/share/elasticsearch/data
+
+volumes:
+  sv-postgres-data:
+  sv-elasticsearch-data:

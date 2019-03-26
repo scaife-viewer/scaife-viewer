@@ -123,14 +123,17 @@ div.text {
     cursor: pointer;
   }
   span.w.selected, span.w.highlighted {
-    padding: 0 0.1em 0.1em 0.15em;
+    border-style: solid;
+    border-width: 0 0.1em 0.1em 0.15em;
     margin: 0 -0.1em -0.1em -0.15em;
   }
   span.w.selected {
     background-color: $selected-color;
+    border-color: $selected-color;
   }
   span.w.highlighted {
     background-color: $highlight-color;
+    border-color: $highlight-color;
   }
   span.w.selected.highlighted {
     background-color: mix($highlight-color, $selected-color);
@@ -143,6 +146,9 @@ div.text {
       }
       display: block;
       color: transparent;
+      div:first-of-type {
+        top: 0px;
+      }
       div {
         position: sticky;
         top: 20px;
@@ -175,6 +181,20 @@ div.text {
       > .a {
         color: $gray-600;
       }
+    }
+  }
+  .cRef {
+    color: purple;
+    &:hover {
+      color: lighten(purple, 20%);
+      cursor: pointer;
+    }
+  }
+  .ref-lower {
+    color: lighten(purple, 10%);
+    &:hover {
+      color: lighten(purple, 30%);
+      cursor: pointer;
     }
   }
 }

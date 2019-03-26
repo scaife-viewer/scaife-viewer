@@ -49,8 +49,24 @@ body.reader {
   }
 
   .overall {
-    display: flex;
-    justify-content: center;
+    .upper-lower {
+      display: flex;
+      justify-content: center;
+    }
+    .upper {
+      max-height: 40vh;
+      display: flex;
+      justify-content: center;
+      overflow-y: auto;
+    }
+    .lower {
+      border-top: 1px solid $gray-300;
+      padding-top: 10px;
+      max-height: 40vh;
+      display: flex;
+      justify-content: center;
+      overflow-y: auto;
+    }
   }
 
   .pg-left, .pg-right {
@@ -112,6 +128,7 @@ body.reader {
     color: $gray-600;
     background: $white;
     border: none;
+    flex: 0 1 auto;
     &:hover {
       color: $black;
     }
