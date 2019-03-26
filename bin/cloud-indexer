@@ -33,4 +33,5 @@ python manage.py indexer \
     --pusher=pubsub \
     --pubsub-project="${GCP_PROJECT}" \
     --pubsub-topic="search-indexer-${SCAIFE_INSTANCE}-documents" \
+    --morphology-path=/var/lib/scaife-viewer/morphology \
     $@
