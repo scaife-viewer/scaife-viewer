@@ -10,3 +10,4 @@ service-accounts/
 .DS_Store
 repos/
 webpack-stats.json
+deploy/.env
