@@ -2,6 +2,7 @@ from operator import itemgetter
 
 from django.conf import settings
 from django.urls import reverse
+from django.utils.functional import SimpleLazyObject
 
 import regex
 from elasticsearch import Elasticsearch
@@ -18,7 +19,11 @@ def default_es_client_config():
     )
 
 
-es = Elasticsearch(**default_es_client_config())
+def get_es_client():
+    return Elasticsearch(**default_es_client_config())
+
+
+es = SimpleLazyObject(get_es_client)
 
 
 class SearchQuery:
