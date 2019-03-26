@@ -33,7 +33,7 @@
 import api from '../../api';
 import constants from '../../constants';
 import ReaderNavigationMixin from '../../mixins/ReaderNavigationMixin.vue';
-import TextLoader from '../TextLoader.vue';
+import TextLoader from '../../components/TextLoader.vue';
 
 const debounce = require('lodash.debounce');
 
@@ -174,7 +174,7 @@ export default {
             fields: '',
             text: this.passage.urn.upTo('version'),
           };
-          api.searchText(params, result => resolve(result)).catch( error => reject(error));
+          api.searchText(params, 'search/json/', result => resolve(result)).catch( error => reject(error));
         }
       });
     },
@@ -247,7 +247,7 @@ export default {
           passage: passage.urn,
           size: 1,
         };
-        api.searchText(params, result => {
+        api.searchText(params, 'search/json/', result => {
           const { highlights } = result.results[0];
           this.$store.commit(`reader/${constants.SET_ANNOTATIONS}`, {
             tokens: highlights.map(({ w, i }) => `${w}[${i}]`),
