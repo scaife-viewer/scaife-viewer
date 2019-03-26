@@ -18,6 +18,7 @@ RUN set -x \
     && apk --no-cache add \
         build-base curl git libxml2-dev libxslt-dev postgresql-dev linux-headers \
     && pipenv install --deploy
+RUN pip install flake8 flake8-quotes isort
 
 FROM python:3.6-alpine3.7
 ENV PYTHONUNBUFFERED 1
@@ -38,4 +39,6 @@ RUN set -x \
         $runDeps \
         curl
 COPY . /opt/scaife-viewer/src/
+RUN flake8 scaife_viewer
+RUN isort -c **/*.py
 RUN python manage.py collectstatic --noinput
