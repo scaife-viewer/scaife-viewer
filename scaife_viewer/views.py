@@ -1,3 +1,4 @@
+import math
 import datetime
 import json
 import os
@@ -19,7 +20,6 @@ import requests
 
 from . import cts
 from .http import ConditionMixin
-from .search import SearchQuery
 from .search_new import simple_search
 from .utils import apify, encode_link_header, link_passage
 
@@ -230,17 +230,17 @@ def library_text_redirect(request, urn):
 
 
 def search(request):
+    return render(request, "search.html")
+
+
+def search_text(request):
     q = request.GET.get("q", "")
-    try:
-        page_num = int(request.GET.get("p", 1))
-    except ValueError:
-        page_num = 1
     kind = request.GET.get("kind", "form")
-    results = []
-    ctx = {
+    page_num = int(request.GET.get("page_num"))
+    data = {
         "q": q,
-        "results": results,
         "kind": kind,
+        "page_num": page_num
     }
     if q:
         scope = {}
@@ -251,16 +251,45 @@ def search(request):
             "scope": scope,
             "aggregate_field": "text_group",
             "kind": kind,
+            "offset": (page_num - 1) * 10
         }
-        sq = SearchQuery(q, **kwargs)
-        sq_new = simple_search(q, **kwargs)
-        print(sq_new)
-        paginator = Paginator(sq_new, 10)
-        ctx.update({
-            "paginator": paginator,
-            "page": paginator.page(page_num),
+        search_results = simple_search(q, **kwargs)
+        total_count = int(search_results["total_count"])
+        num_pages = math.ceil(total_count / 10)
+        page = {
+            "number": page_num,
+            "start_index": (page_num * 10) - 9,
+            "end_index": (page_num * 10),
+            "has_previous": True,
+            "has_next": True,
+            "num_pages": num_pages
+        }
+        data.update({
+          "results": search_results["results"],
+          "text_groups": search_results["text_groups"],
+          "total_count": total_count,
+          "page": page
         })
-    return render(request, "search.html", ctx)
+        """
+        data = {
+            "q": str,
+            "data": {
+                "results": [{
+                    "passage: <cts.Passage>
+                    "link": str
+                    "content": str
+                }],
+                "buckets": [
+                    {
+                      "text_group": <cts.TextGroup>,
+                      "count": int
+                    }
+                ],
+                "total_count": int
+            },
+            kind': 'form'
+        """
+    return JsonResponse(data)
 
 
 def search_json(request):
