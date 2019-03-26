@@ -270,6 +270,8 @@ CACHES = {
     },
 }
 
+XSL_STYLESHEET_PATH = os.environ.get("XSL_STYLESHEET_PATH", os.path.join(PACKAGE_ROOT, "cts/tei.xsl"))
+
 resolver = os.environ.get("CTS_RESOLVER", "api")
 if resolver == "api":
     CTS_API_ENDPOINT = os.environ.get("CTS_API_ENDPOINT", "https://scaife-cts-dev.perseus.org/api/cts")
