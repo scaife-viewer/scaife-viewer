@@ -2,9 +2,10 @@ FROM node:11.7-alpine AS static
 WORKDIR /opt/scaife-viewer/src/
 COPY package.json package-lock.json ./
 RUN npm ci
-COPY webpack.config.js .babelrc ./
+COPY webpack.config.js .babelrc .eslintrc.json ./
 COPY ./static static
 ARG FORCE_SCRIPT_NAME
+RUN npm run lint
 RUN npm run build
 
 FROM python:3.6-alpine3.7 AS build
