@@ -293,8 +293,6 @@ class PubSubPusher:
         return self.publisher.publish(self.topic_path, json.dumps(doc).encode("utf-8"))
 
     def finalize(self, future, dry_run):
-        return
-        """
         if dry_run:
             return
 
@@ -303,7 +301,6 @@ class PubSubPusher:
             # Block until the last message has been published
             # https://github.com/googleapis/google-cloud-python/blob/69ec9fea1026c00642ca55ca18110b7ef5a09675/pubsub/docs/publisher/index.rst#futures
             future.result()
-        """
 
     def __getstate__(self):
         s = self.__dict__.copy()
