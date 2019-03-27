@@ -255,13 +255,22 @@ def search_text(request):
         }
         search_results = simple_search(q, **kwargs)
         total_count = int(search_results["total_count"])
-        num_pages = math.ceil(total_count / 10)
+        num_pages = int(math.ceil(total_count / 10))
+        has_previous = False
+        if page_num > 1:
+            has_previous = True
+        has_next = False
+        if page_num < num_pages:
+            has_next = True
+        end_index = page_num * 10
+        if page_num == num_pages:
+            end_index = total_count
         page = {
             "number": page_num,
             "start_index": (page_num * 10) - 9,
-            "end_index": (page_num * 10),
-            "has_previous": True,
-            "has_next": True,
+            "end_index": end_index,
+            "has_previous": has_previous,
+            "has_next": has_next,
             "num_pages": num_pages
         }
         data.update({

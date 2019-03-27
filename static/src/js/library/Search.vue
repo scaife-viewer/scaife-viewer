@@ -164,7 +164,7 @@ export default {
         const params = {
           kind: this.searchType,
           q: query,
-          page_num: this.pageNum,
+          page_num: 1,
         }
         api.searchText(params, 'search/text/', result => {
           this.showSearchResults = true;
