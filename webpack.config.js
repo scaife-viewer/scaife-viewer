@@ -85,7 +85,11 @@ module.exports = {
   devServer: {
     hot: true,
     quiet: false,
+    host: devMode ? '0.0.0.0' : 'localhost',
     headers: { 'Access-Control-Allow-Origin': '*' },
+    watchOptions: {
+      poll: 1000,
+    },
   },
   module: { rules: [vueRule, jsRule, styleRule, assetRule] },
   externals: { jquery: 'jQuery' },
