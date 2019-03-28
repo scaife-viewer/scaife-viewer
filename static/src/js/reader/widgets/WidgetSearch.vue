@@ -136,7 +136,7 @@ export default {
             this.totalCount = 0;
             this.loading = false;
           } else {
-            if (res.results.length > 1 && res.pivot) {
+            if (res.pivot) {
               this.firstOffset = res.pivot.start_offset;
               this.lastOffset = res.pivot.end_offset;
             }
