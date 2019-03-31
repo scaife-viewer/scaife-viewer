@@ -6,10 +6,10 @@
     <!-- previous -->
     <div>
       <span v-if="hasPrev">
-        <span v-on:click="handlePrevNext(1)">
+        <span v-on:click="handleSearch(1)">
           <i class="fa fa-step-backward" style="cursor:pointer;color:#B45141;"></i>
         </span>
-        <span v-on:click="handlePrevNext(pageNum - 1)">
+        <span v-on:click="handleSearch(pageNum - 1)">
           <i class="fa fa-backward" style="cursor:pointer;color:#B45141;"></i>
         </span>
       </span>
@@ -23,10 +23,10 @@
       </span>
       <!-- next -->
       <span v-if="hasNext">
-        <span v-on:click="handlePrevNext(pageNum + 1)">
+        <span v-on:click="handleSearch(pageNum + 1)">
           <i class="fa fa-forward" style="cursor:pointer;color:#B45141;"></i>
         </span>
-        <span v-on:click="handlePrevNext(totalPages)">
+        <span v-on:click="handleSearch(totalPages)">
           <i class="fa fa-step-forward" style="cursor:pointer;color:#B45141;"></i>
         </span>
       </span>
@@ -42,7 +42,7 @@
 export default {
   props: [
     'startIndex', 'endIndex', 'totalResults', 'pageNum',
-    'totalPages', 'hasPrev', 'hasNext', 'handlePrevNext'
+    'totalPages', 'hasPrev', 'hasNext', 'handleSearch'
   ],
 };
 </script>

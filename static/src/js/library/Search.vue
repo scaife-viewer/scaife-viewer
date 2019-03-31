@@ -18,7 +18,7 @@
           </div>
         </div>
       </div>
-      <form class="search-form" v-on:submit.prevent="handleSearch">
+      <form class="search-form" v-on:submit.prevent="handleSearch(0)">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Search..." :value="searchQuery" @input="handleSearchQueryChange">
           <input
@@ -46,11 +46,11 @@
         <div v-if="!results.length && !textGroups.length" class="col-sm-12 text-center">
           <p class="no-results">No results found. Please try again.</p>
         </div>
-        <div v-if="textGroups.length" class="col-sm-3">
+        <div v-if="textGroups.length" class="col-md-3 d-none d-md-block">
           <h5 v-if="showClear">
             <span>Text Groups</span>
             &nbsp;
-            <small style="cursor:pointer;color:#B45141;" v-on:click="handleSearch">clear</small>
+            <small style="cursor:pointer;color:#B45141;" v-on:click="handleSearch(0)">clear</small>
           </h5>
           <h5 v-if="!showClear">Text Groups</h5>
           <div class="list-group">
@@ -59,14 +59,14 @@
               :key="ftg.text_group.urn"
               class="list-group-item d-flex justify-content-between align-items-center"
               style="cursor:pointer;color:#B45141;"
-              v-on:click="handleViewTextGroup(ftg.text_group.urn)"
+              v-on:click="handleSearch(1, ftg.text_group.urn)"
             >
               <span>{{ ftg.text_group.label }}</span>
               <span class="badge badge-primary badge-pill">{{ ftg.count }}</span>
             </a>
           </div>
         </div>
-        <div v-if="results.length" class="col-sm-9">
+        <div v-if="results.length" class="col-md-9">
           <search-pagination
             :startIndex=startIndex
             :endIndex=endIndex
@@ -75,7 +75,7 @@
             :totalPages=totalPages
             :hasNext=hasNext
             :hasPrev=hasPrev
-            :handlePrevNext=handlePrevNext
+            :handleSearch=handleSearch
           />
           <div>
             <text-loader v-if="secondLoading" size="7px" margin="1px" />
@@ -90,15 +90,19 @@
                     <span v-if="result.passage.refs.end">
                       to {{ result.passage.refs.end.human_reference }}
                     </span>
-                    <span>{{ result.passage.refs.start.reference }}</span>
+                    <span v-if="!result.passage.refs.end">
+                      ({{ result.passage.refs.start.reference }})
+                    </span>
                     <span v-if="result.passage.refs.end">
-                      to &ndash; {{ result.passage.refs.end.reference }}
+                      ({{ result.passage.refs.start.reference }} to &ndash; {{ result.passage.refs.end.reference }})
                     </span>
                   </a>
                 </h2>
               </div>
               <div class="content">
-                <p v-html="result.content"></p>
+                <p v-for="result in result.content" :key="result">
+                  <span v-html="result"></span>
+                </p>
               </div>
             </div>
           </div>
@@ -110,7 +114,7 @@
             :totalPages=totalPages
             :hasNext=hasNext
             :hasPrev=hasPrev
-            :handlePrevNext=handlePrevNext
+            :handleSearch=handleSearch
           />
         </div>
       </div>
@@ -125,12 +129,11 @@ import SearchPagination from './SearchPagination.vue';
 import TextLoader from '../components/TextLoader.vue';
 
 export default {
-  // TODO: add global state mgmt
   name: 'search-view',
   data() {
     return {
       searchQuery: '',
-      pageNum: 1,
+      pageNum: null,
       startIndex: null,
       endIndex: null,
       totalPages: null,
@@ -143,28 +146,43 @@ export default {
       hasNext: false,
       hasPrev: false,
       searchType: 'form',
-      showClear: false
+      showClear: false,
+      tg: null,
     };
   },
   methods: {
     handleSearchQueryChange(e) {
       this.searchQuery = e.target.value;
-      // this.$store.commit(`reader/${constants.SET_SEARCH_QUERY}`, { query:  e.target.value });
     },
     handleTypeChange(e) {
       this.searchType = e.target.name;
-      // this.$store.commit(`reader/${constants.SET_SEARCH_TYPE}`, { type:  e.target.name });
     },
-    handleSearch() {
+    handleSearch(pageNum, urn=null) {
       const query = this.searchQuery;
       if (query !== '') {
-        this.loading = true;
-        this.showSearchResults = false;
-        this.showClear = false;
+        if (pageNum) {
+          this.secondLoading = true;
+          this.showClear = false;
+        } else {
+          this.loading = true;
+          this.showSearchResults = false;
+          this.showClear = false;
+          this.tg = null;
+          pageNum = 1;
+        }
+        if (urn) {
+          this.showClear = true;
+          this.results = [];
+          this.tg = urn;
+        }
+        if (this.tg) {
+          this.showClear = true;
+        }
         const params = {
           kind: this.searchType,
           q: query,
-          page_num: 1,
+          page_num: pageNum,
+          tg: this.tg,
         }
         api.searchText(params, 'search/text/', result => {
           this.showSearchResults = true;
@@ -177,51 +195,13 @@ export default {
           this.totalResults = result.total_count;
           this.results = result.results;
           this.textGroups = result.text_groups
+          this.secondLoading = false;
           this.loading = false;
+          if (this.tg) {
+            this.showClear = true;
+          }
         });
       }
-    },
-    handlePrevNext(newPageNum) {
-      this.secondLoading = true;
-      const params = {
-        kind: this.searchType,
-        q: this.searchQuery,
-        page_num: newPageNum,
-      }
-      api.searchText(params, 'search/text/', result => {
-        this.totalPages = result.page.num_pages;
-        this.pageNum = result.page.number;
-        this.startIndex = result.page.start_index;
-        this.endIndex = result.page.end_index;
-        this.hasNext = result.page.has_next;
-        this.hasPrev = result.page.has_previous;
-        this.totalResults = result.total_count;
-        this.results = result.results;
-        this.secondLoading = false;
-      });
-    },
-    handleViewTextGroup(urn) {
-      this.loading = true;
-      this.showClear = true;
-      this.results = [];
-      const params = {
-        kind: this.searchType,
-        q: this.searchQuery,
-        page_num: 1,
-        tg: urn
-      }
-      api.searchText(params, 'search/text/', result => {
-        this.totalPages = result.page.num_pages;
-        this.pageNum = result.page.number;
-        this.startIndex = result.page.start_index;
-        this.endIndex = result.page.end_index;
-        this.hasNext = result.page.has_next;
-        this.hasPrev = result.page.has_previous;
-        this.totalResults = result.total_count;
-        this.results = result.results;
-        this.textGroups = result.text_groups
-        this.loading = false;
-      });
     },
   },
   components: {

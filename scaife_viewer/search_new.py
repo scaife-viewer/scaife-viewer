@@ -16,14 +16,7 @@ es = Elasticsearch(
 )
 
 
-
-# TODO: refactor into a class!
-def simple_search(q, scope=None, aggregate_field=None, kind="form", size=10, offset=0, sort_by=None):
-    highlight_fields = {"content": {}}
-    query_fields = ["content"]
-    if kind == "lemma":
-        highlight_fields = {"lemma_content": {}}
-        query_fields = ["lemma_content"]
+def create_query(q, query_fields, scope):
     sq = {
         "simple_query_string": {
             "query": q,
@@ -32,14 +25,24 @@ def simple_search(q, scope=None, aggregate_field=None, kind="form", size=10, off
         }
     }
     if scope:
-        q = {
+        body = {
             "bool": {
                 "must": sq,
                 "filter": {"term": scope},
             },
         }
     else:
-        q = sq
+        body = sq
+    return body
+
+
+def get_search_results(q, scope=None, aggregate_field=None, kind="form", fragments=1000, size=10, offset=0):
+    highlight_fields = {"content": {}}
+    query_fields = ["content"]
+    if kind == "lemma":
+        highlight_fields = {"lemma_content": {}}
+        query_fields = ["lemma_content"]
+    query_dict = create_query(q, query_fields, scope)
     query_args = {}
     if aggregate_field:
         query_args = {
@@ -50,17 +53,15 @@ def simple_search(q, scope=None, aggregate_field=None, kind="form", size=10, off
                 },
             },
         }
-    sort = {}
-    if sort_by:
-        sort = [{"sort_idx": "asc"}]
+    sort = [{"sort_idx": "asc"}]
     body = {
         "highlight": {
-            "type": "fvh",
-            "number_of_fragments": 1000,
-            "fragment_size": 50,
+            "type": "plain",
+            "number_of_fragments": fragments,
+            "fragment_size": 60,
             "fields": highlight_fields,
         },
-        "query": q,
+        "query": query_dict,
         "aggs": query_args,
         "sort": sort
     }
@@ -75,9 +76,9 @@ def simple_search(q, scope=None, aggregate_field=None, kind="form", size=10, off
     final = []
     for hit in results["hits"]["hits"]:
         cts_passage = cts.passage(hit["_id"])
-        highlight_kind = hit["highlight"].get("content", [""])[0]
+        highlight_kind = hit["highlight"].get("content", [""])
         if kind == "lemma":
-            highlight_kind = hit["highlight"].get("lemma_content", [""])[0]
+            highlight_kind = hit["highlight"].get("lemma_content", [""])
         final.append(
             {
               "passage": apify(cts_passage, with_content=False),
@@ -90,6 +91,23 @@ def simple_search(q, scope=None, aggregate_field=None, kind="form", size=10, off
         "text_groups": text_groups,
         "total_count": results["hits"]["total"]
     }
+
+
+def scan(q, kind, scope):
+    query_fields = ["content"]
+    if kind == "lemma":
+        query_fields = ["lemma_content"]
+    query_dict = create_query(q, query_fields, scope)
+    return scanner(
+        es,
+        query={
+            "query": query_dict,
+            "sort": [{"sort_idx": "asc"}],
+            "_source": False,
+        },
+        preserve_order=bool('document'),
+        raise_on_error=False,
+    )
 
 
 def create_buckets(data):
