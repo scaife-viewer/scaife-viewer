@@ -1,4 +1,3 @@
-import math
 import datetime
 import json
 import os
@@ -20,8 +19,9 @@ import requests
 
 from . import cts
 from .http import ConditionMixin
-from .search_new import simple_search
-from .utils import apify, encode_link_header, link_passage
+from .search_new import get_search_results, scan
+from .search import SearchQuery
+from .utils import apify, encode_link_header, link_passage, get_pagination_info
 
 
 def home(request):
@@ -253,26 +253,9 @@ def search_text(request):
             "kind": kind,
             "offset": (page_num - 1) * 10
         }
-        search_results = simple_search(q, **kwargs)
+        search_results = get_search_results(q, **kwargs)
         total_count = int(search_results["total_count"])
-        num_pages = int(math.ceil(total_count / 10))
-        has_previous = False
-        if page_num > 1:
-            has_previous = True
-        has_next = False
-        if page_num < num_pages:
-            has_next = True
-        end_index = page_num * 10
-        if page_num == num_pages:
-            end_index = total_count
-        page = {
-            "number": page_num,
-            "start_index": (page_num * 10) - 9,
-            "end_index": end_index,
-            "has_previous": has_previous,
-            "has_next": has_next,
-            "num_pages": num_pages
-        }
+        page = get_pagination_info(total_count, page_num)
         data.update({
           "results": search_results["results"],
           "text_groups": search_results["text_groups"],
@@ -281,22 +264,56 @@ def search_text(request):
         })
         """
         data = {
-            "q": str,
-            "data": {
-                "results": [{
-                    "passage: <cts.Passage>
-                    "link": str
-                    "content": str
-                }],
-                "buckets": [
-                    {
-                      "text_group": <cts.TextGroup>,
-                      "count": int
-                    }
-                ],
-                "total_count": int
+            "kind": "form",
+            "page": {
+              "end_index": 10
+              "has_next": True
+              "has_previous": False
+              "num_pages": 307
+              "number": 1
+              "start_index": 1
             },
-            kind': 'form'
+            "page_num": 1,
+            "q": "love",
+            "results": [
+              {
+                "content": "sitting near him , as his rival in <em>love</em> — when he heard my question",
+                "link": "/reader/urn:cts:greekLit:tlg0059.tlg016.perseus-eng2:132/",
+                "passage": {
+                  "ancestors": [],
+                  "children": [],
+                  "json_url": "/library/passage/urn:cts:greekLit:tlg0059.tlg016.perseus-eng2:132/json/",
+                  "refs": {
+                    start: {
+                      reference: "132",
+                      human_reference: " 132"
+                    }
+                  },
+                  "text": {
+                    "ancestors": [
+                      {
+                        "json_url": "/library/urn:cts:greekLit:tlg0059/json/",
+                        "label": "Plato",
+                        "text_url": "/library/passage/urn:cts:greekLit:tlg0059/text/",
+                        "url": "/library/urn:cts:greekLit:tlg0059/",
+                        "urn": "urn:cts:greekLit:tlg0059"
+                      }
+                    ],
+                    "human_lang": "English",
+                    "json_url": "/library/urn:cts:greekLit:tlg0059.tlg016.perseus-eng2/json/",
+                    "kind": "translation",
+                    "label": "Lovers",
+                    "lang": "eng",
+                    "text_url": "/library/passage/urn:cts:greekLit:tlg0059.tlg016.perseus-eng2/text/",
+                    "url": "/library/urn:cts:greekLit:tlg0059.tlg016.perseus-eng2/",
+                    "urn": "urn:cts:greekLit:tlg0059.tlg016.perseus-eng2",
+                  },
+                  "url": "/reader/urn:cts:greekLit:tlg0059.tlg016.perseus-eng2:132/",
+                  "urn": "urn:cts:greekLit:tlg0059.tlg016.perseus-eng2:132"
+                }
+              }
+            ],
+            "total_count": 3065
         """
     return JsonResponse(data)
 
