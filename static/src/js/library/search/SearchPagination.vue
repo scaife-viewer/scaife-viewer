@@ -40,6 +40,7 @@
 
 <script>
 export default {
+  name: 'search-pagination',
   props: [
     'startIndex', 'endIndex', 'totalResults', 'pageNum',
     'totalPages', 'hasPrev', 'hasNext', 'handleSearch'
