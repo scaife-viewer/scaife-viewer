@@ -21,6 +21,9 @@ jobs:
     - run:
         name: Run eslint
         command: npm run lint
+    - run:
+        name: Run jest tests
+        command: npm run unit
   deploy:
     docker:
     - image: buildpack-deps:trusty-scm
