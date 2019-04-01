@@ -3,6 +3,8 @@ import unicodedata
 from collections import defaultdict
 from functools import lru_cache
 
+from django.conf import settings
+
 import anytree
 import regex
 from lxml import etree
@@ -198,7 +200,7 @@ class TEIRenderer:
 
     @lru_cache()
     def render(self):
-        xsl_path = os.path.join(os.path.dirname(__file__), "tei.xsl")
+        xsl_path = os.path.join(os.path.dirname(__file__), settings.XSL_STYLESHEET_PATH)
         with open(xsl_path) as f:
             func_ns = "urn:python-funcs"
             transform = etree.XSLT(
