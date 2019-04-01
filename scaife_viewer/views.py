@@ -19,9 +19,9 @@ import requests
 
 from . import cts
 from .http import ConditionMixin
-from .search_new import get_search_results, scan
 from .search import SearchQuery
-from .utils import apify, encode_link_header, link_passage, get_pagination_info
+from .search_new import get_search_results
+from .utils import apify, encode_link_header, get_pagination_info, link_passage
 
 
 def home(request):
