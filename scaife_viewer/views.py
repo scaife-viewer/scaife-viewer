@@ -310,9 +310,9 @@ def search_text(request):
                   "children": [],
                   "json_url": "/library/passage/urn:cts:greekLit:tlg0059.tlg016.perseus-eng2:132/json/",
                   "refs": {
-                    start: {
-                      reference: "132",
-                      human_reference: " 132"
+                    "start": {
+                      "reference": "132",
+                      "human_reference": " 132"
                     }
                   },
                   "text": {
