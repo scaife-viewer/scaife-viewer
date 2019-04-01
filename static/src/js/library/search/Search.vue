@@ -46,26 +46,13 @@
         <div v-if="!results.length && !textGroups.length" class="col-sm-12 text-center">
           <p class="no-results">No results found. Please try again.</p>
         </div>
-        <div v-if="textGroups.length" class="col-md-3 d-none d-md-block">
-          <h5 v-if="showClear">
-            <span>Text Groups</span>
-            &nbsp;
-            <small style="cursor:pointer;color:#B45141;" v-on:click="handleSearch(0)">clear</small>
-          </h5>
-          <h5 v-if="!showClear">Text Groups</h5>
-          <div class="list-group">
-            <a
-              v-for="ftg in textGroups"
-              :key="ftg.text_group.urn"
-              class="list-group-item d-flex justify-content-between align-items-center"
-              style="cursor:pointer;color:#B45141;"
-              v-on:click="handleSearch(1, ftg.text_group.urn)"
-            >
-              <span>{{ ftg.text_group.label }}</span>
-              <span class="badge badge-primary badge-pill">{{ ftg.count }}</span>
-            </a>
-          </div>
-        </div>
+          <search-text-groups
+            :textGroups=textGroups
+            :handleSearch=handleSearch
+            :showClear=showClear
+            :showTextGroups=showTextGroups
+            :handleshowTextGroupsChange=handleshowTextGroupsChange
+          />
         <div v-if="results.length" class="col-md-9">
           <search-pagination
             :startIndex=startIndex
@@ -123,10 +110,11 @@
 </template>
 
 <script>
-import constants from '../constants';
-import api from '../api';
+import constants from '../../constants';
+import api from '../../api';
 import SearchPagination from './SearchPagination.vue';
-import TextLoader from '../components/TextLoader.vue';
+import SearchTextGroups from './SearchTextGroups.vue';
+import TextLoader from '../../components/TextLoader.vue';
 
 export default {
   name: 'search-view',
@@ -148,6 +136,7 @@ export default {
       searchType: 'form',
       showClear: false,
       tg: null,
+      showTextGroups: false
     };
   },
   methods: {
@@ -156,6 +145,9 @@ export default {
     },
     handleTypeChange(e) {
       this.searchType = e.target.name;
+    },
+    handleshowTextGroupsChange() {
+      this.showTextGroups = !this.showTextGroups;
     },
     handleSearch(pageNum, urn=null) {
       const query = this.searchQuery;
@@ -169,6 +161,7 @@ export default {
           this.showClear = false;
           this.tg = null;
           pageNum = 1;
+          this.showTextGroups = false;
         }
         if (urn) {
           this.showClear = true;
@@ -206,6 +199,7 @@ export default {
   },
   components: {
     SearchPagination,
+    SearchTextGroups,
     TextLoader
   },
 };
