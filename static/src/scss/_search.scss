@@ -61,5 +61,6 @@ body.search {
   .search-pagination {
     @extend .d-flex, .justify-content-between;
     margin-bottom: 20px;
+    padding-top: 10px;
   }
 }
