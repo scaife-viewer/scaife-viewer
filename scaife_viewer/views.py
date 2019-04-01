@@ -3,7 +3,6 @@ import json
 import os
 from urllib.parse import urlencode
 
-from django.core.paginator import Paginator
 from django.http import (
     Http404,
     HttpResponse,
@@ -257,10 +256,10 @@ def search_text(request):
         total_count = int(search_results["total_count"])
         page = get_pagination_info(total_count, page_num)
         data.update({
-          "results": search_results["results"],
-          "text_groups": search_results["text_groups"],
-          "total_count": total_count,
-          "page": page
+            "results": search_results["results"],
+            "text_groups": search_results["text_groups"],
+            "total_count": total_count,
+            "page": page
         })
         """
         data = {

@@ -3,7 +3,6 @@ from operator import itemgetter
 from django.conf import settings
 from django.urls import reverse
 
-import regex
 from elasticsearch import Elasticsearch
 from elasticsearch.helpers import scan as scanner
 
@@ -81,9 +80,9 @@ def get_search_results(q, scope=None, aggregate_field=None, kind="form", fragmen
             highlight_kind = hit["highlight"].get("lemma_content", [""])
         final.append(
             {
-              "passage": apify(cts_passage, with_content=False),
-              "link": reverse("reader", kwargs={"urn":  cts_passage.urn}),
-              "content": highlight_kind
+                "passage": apify(cts_passage, with_content=False),
+                "link": reverse("reader", kwargs={"urn": cts_passage.urn}),
+                "content": highlight_kind
             }
         )
     return {
@@ -105,7 +104,7 @@ def scan(q, kind, scope):
             "sort": [{"sort_idx": "asc"}],
             "_source": False,
         },
-        preserve_order=bool('document'),
+        preserve_order=bool("document"),
         raise_on_error=False,
     )
 
