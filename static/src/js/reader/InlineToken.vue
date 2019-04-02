@@ -24,6 +24,7 @@ export default {
       t, idx, highlighting,
       $parent: p,
       $store: store,
+      $router: router
     } = this;
     const { visible } = p;
     if (visible && highlighting) {
@@ -45,15 +46,18 @@ export default {
         on: {
           click(e) {
             if (clickable) {
+              let value = idx;
               if (e.metaKey) {
                 if (selected) {
-                  store.dispatch(`reader/${constants.READER_SET_SELECTED_TOKEN}`, { token: null });
+                  value = null;
                 }
-              } else if (e.shiftKey) {
-                store.dispatch(`reader/${constants.READER_SELECT_TOKEN_RANGE}`, { token: idx });
-              } else {
-                store.dispatch(`reader/${constants.READER_SET_SELECTED_TOKEN}`, { token: idx });
               }
+              store.dispatch(`reader/${constants.READER_SET_SELECTED_TOKEN}`, { token: value });
+              router.replace({
+                query: {
+                  highlight: value
+                }
+              });
               e.stopPropagation();
             }
           },
