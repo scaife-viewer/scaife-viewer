@@ -139,6 +139,16 @@ export default {
       showTextGroups: false
     };
   },
+  mounted() {
+    const queryParams = this.$route.query;
+    if (Object.entries(queryParams).length !== 0 && queryParams.constructor === Object) {
+      this.searchQuery = queryParams.q;
+      this.searchType = queryParams.kind || 'form';
+      this.pageNum = queryParams.p;
+      this.tg = queryParams.tg;
+      this.handleSearch(this.pageNum, this.tg);
+    }
+  },
   methods: {
     handleSearchQueryChange(e) {
       this.searchQuery = e.target.value;
@@ -193,6 +203,15 @@ export default {
           if (this.tg) {
             this.showClear = true;
           }
+          // update url state
+          this.$router.replace({
+            query: {
+              q: this.searchQuery,
+              kind: this.searchType,
+              p: this.pageNum,
+              tg: this.tg
+            }
+          });
         });
       }
     },
