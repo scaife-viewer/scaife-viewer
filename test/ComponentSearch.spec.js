@@ -5,6 +5,7 @@ import VueRouter from 'vue-router';
 
 import Search from '../static/src/js/library/search/Search.vue';
 import createStore from '../static/src/js/config';
+import searchResultsJson from './fixtures/search-results.json';
 
 const localVue = createLocalVue();
 const router = new VueRouter();
@@ -51,5 +52,29 @@ describe('Search.vue', () => {
       loading: false,
     });
     expect(wrapper.text()).toContain('No results found. Please try again.');
+  });
+
+  it('displays the search results correctly if results are found', () => {
+    const wrapper = shallowMount(Search, {
+      store,
+      localVue,
+      stubs: { BaseWidget: true },
+      router,
+    });
+    wrapper.setData({
+      showSearchResults: true,
+      totalPages: 1,
+      pageNum: 1,
+      startIndex: 1,
+      endIndex: 10,
+      hasNext: false,
+      hasPrev: false,
+      totalResults: 4,
+      results: searchResultsJson,
+      textGroups: [],
+      secondLoading: false,
+      loading: false,
+    });
+    expect(wrapper.text()).toContain('The Six Books of a Commonweale');
   });
 });
