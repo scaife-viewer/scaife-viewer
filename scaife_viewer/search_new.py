@@ -21,6 +21,7 @@ es = Elasticsearch(
 #     sniff_on_connection_fail=True,
 # )
 
+
 def create_query(q, query_fields, scope):
     sq = {
         "simple_query_string": {
