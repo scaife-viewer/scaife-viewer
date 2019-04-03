@@ -110,7 +110,11 @@ class LibraryCollectionView(LibraryConditionMixin, BaseLibraryView):
 
     def as_json(self):
         collection = self.get_collection()
-        return JsonResponse(apify(collection))
+        try:
+            return JsonResponse(apify(collection))
+        except ValueError as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
 
 
 class LibraryCollectionVectorView(LibraryConditionMixin, View):
