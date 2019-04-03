@@ -8,7 +8,12 @@ export default {
     .then(r => cb(r.data))
     .catch((err) => {
       if (err.response && err.response.data && err.response.data.error) {
-        throw new Error(err.response.data.error);
+        const { error } = err.response.data;
+        if (error.includes('refsDecl')) {
+          throw new Error('There is a problem with the XML for this document that prevents it from being shown.');
+        } else {
+          throw new Error(err.response.data.error);
+        }
       } else {
         throw new Error(err);
       }
