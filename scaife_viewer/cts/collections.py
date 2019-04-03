@@ -188,9 +188,8 @@ class Text(Collection):
             for reff in reffs:
                 tree.add(reff)
             return tree
-        except Exception as e:
+        except Exception:
             raise ValueError(f"{self.urn} has an invalid refDecl")
-
 
     def first_passage(self):
         chunk = next(self.toc().chunks(), None)
