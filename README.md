@@ -56,6 +56,11 @@ Browse to http://localhost:8000/.
 
 Note that, although running Scaife locally, this is relying on the Nautilus server at https://scaife-cts-dev.perseus.org to retrieve texts.
 
+## Tests
+
+You can run the Vue unit tests, via:
+
+    npm run unit
 
 ## Translations
 
