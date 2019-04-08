@@ -163,7 +163,7 @@ export default {
       const query = this.searchQuery;
       if (query !== '') {
         if (pageNum) {
-          this.secondLoading = true;
+          this.loading = true;
           this.showClear = false;
         } else {
           this.loading = true;
