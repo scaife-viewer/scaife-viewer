@@ -158,6 +158,7 @@ class LibraryPassageView(LibraryConditionMixin, View):
         to_response = {
             "json": self.as_json,
             "text": self.as_text,
+            "xml": self.as_xml,
         }.get(self.format, "json")
         return to_response()
 
@@ -190,6 +191,12 @@ class LibraryPassageView(LibraryConditionMixin, View):
         return HttpResponse(
             f"{self.passage.content}\n",
             content_type="text/plain; charset=utf-8",
+        )
+
+    def as_xml(self):
+        return HttpResponse(
+            f"{self.passage.xml}",
+            content_type="application/xml",
         )
 
 
