@@ -99,10 +99,10 @@
         </template>
         <template slot="right">
           <widget-passage-links />
-          <widget-passage-exports />
           <widget-text-mode />
           <widget-text-size />
           <widget-highlight />
+          <widget-passage-exports />
           <widget-morpheus />
           <widget-token-list />
           <widget-word-list />
