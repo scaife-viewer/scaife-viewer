@@ -1,5 +1,5 @@
 <template>
-  <div v-if="textGroups.length" class="col-md-3">
+  <span>
     <!-- hidden on sm and xs -->
     <div class="d-none d-md-block">
       <h5 v-if="showClear">
@@ -46,7 +46,7 @@
         </a>
       </div>
     </div>
-  </div>
+  </span>
 </template>
 
 <script>

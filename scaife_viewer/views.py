@@ -2,6 +2,7 @@ import datetime
 import json
 import os
 from urllib.parse import urlencode
+from collections import OrderedDict
 
 from django.http import (
     Http404,
@@ -19,7 +20,7 @@ import requests
 from . import cts
 from .http import ConditionMixin
 from .search import SearchQuery
-from .search_new import get_search_results
+from .search_new import get_search_results, scan
 from .utils import apify, encode_link_header, get_pagination_info, link_passage
 
 
@@ -244,15 +245,54 @@ def search_text(request):
     if q:
         scope = {}
         text_group_urn = request.GET.get("tg")
+        urn_filter = request.GET.get("urn")
         if text_group_urn:
             scope["text_group"] = text_group_urn
-        kwargs = {
-            "scope": scope,
-            "aggregate_field": "text_group",
-            "kind": kind,
-            "offset": (page_num - 1) * 10
-        }
-        search_results = get_search_results(q, **kwargs)
+            urn_groups = {}
+            results = scan(q, kind, scope)
+            count = 0
+            for hit in results:
+                cts_passage = cts.passage(hit["_id"])
+                urn = apify(cts_passage, with_content=False)["text"]["ancestors"][1]
+                key = urn["urn"]
+                if urn_filter:
+                    if urn_filter in key:
+                        if key not in urn_groups:
+                            urn_groups[key] = {
+                              "label": urn["label"],
+                              "count": 1
+                            }
+                        else:
+                            urn_groups[key]["count"] += 1
+                        count += 1
+                else:
+                    if key not in urn_groups:
+                        urn_groups[key] = {
+                          "label": urn["label"],
+                          "count": 1
+                        }
+                    else:
+                        urn_groups[key]["count"] += 1
+                    count += 1
+            data.update({
+                "urn_groups": OrderedDict(sorted(urn_groups.items(), key=lambda k: k[1]["count"], reverse=True))
+            })
+            kwargs = {
+                "scope": scope,
+                "aggregate_field": "text_group",
+                "kind": kind,
+                "size": count,
+                "urn": urn_filter
+            }
+            search_results = get_search_results(q, **kwargs)
+        else:
+            kwargs = {
+                "scope": scope,
+                "aggregate_field": "text_group",
+                "kind": kind,
+                "offset": (page_num - 1) * 10
+            }
+            search_results = get_search_results(q, **kwargs)
         total_count = int(search_results["total_count"])
         page = get_pagination_info(total_count, page_num)
         data.update({

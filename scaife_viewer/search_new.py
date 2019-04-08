@@ -42,7 +42,7 @@ def create_query(q, query_fields, scope):
     return body
 
 
-def get_search_results(q, scope=None, aggregate_field=None, kind="form", fragments=1000, size=10, offset=0):
+def get_search_results(q, scope=None, aggregate_field=None, kind="form", fragments=1000, size=10, offset=0, urn=None):
     highlight_fields = {"content": {}}
     query_fields = ["content"]
     if kind == "lemma":
@@ -80,18 +80,34 @@ def get_search_results(q, scope=None, aggregate_field=None, kind="form", fragmen
     )
     text_groups = create_buckets(results["aggregations"]["filtered_text_group"]["buckets"])
     final = []
-    for hit in results["hits"]["hits"]:
-        cts_passage = cts.passage(hit["_id"])
-        highlight_kind = hit["highlight"].get("content", [""])
-        if kind == "lemma":
-            highlight_kind = hit["highlight"].get("lemma_content", [""])
-        final.append(
-            {
-                "passage": apify(cts_passage, with_content=False),
-                "link": reverse("reader", kwargs={"urn": cts_passage.urn}),
-                "content": highlight_kind
-            }
-        )
+    if urn:
+        for hit in results["hits"]["hits"]:
+            cts_passage = cts.passage(hit["_id"])
+            highlight_kind = hit["highlight"].get("content", [""])
+            if kind == "lemma":
+                highlight_kind = hit["highlight"].get("lemma_content", [""])
+            string_passage = apify(cts_passage, with_content=False)
+            if urn in string_passage["url"]:
+                final.append(
+                    {
+                        "passage": string_passage,
+                        "link": reverse("reader", kwargs={"urn": cts_passage.urn}),
+                        "content": highlight_kind
+                    }
+                )
+    else:
+        for hit in results["hits"]["hits"]:
+            cts_passage = cts.passage(hit["_id"])
+            highlight_kind = hit["highlight"].get("content", [""])
+            if kind == "lemma":
+                highlight_kind = hit["highlight"].get("lemma_content", [""])
+            final.append(
+                {
+                    "passage": apify(cts_passage, with_content=False),
+                    "link": reverse("reader", kwargs={"urn": cts_passage.urn}),
+                    "content": highlight_kind
+                }
+            )
     return {
         "results": final,
         "text_groups": text_groups,

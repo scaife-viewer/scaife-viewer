@@ -46,6 +46,7 @@
         <div v-if="!results.length && !textGroups.length" class="col-sm-12 text-center">
           <p class="no-results">No results found. Please try again.</p>
         </div>
+        <div v-if="textGroups.length" class="col-md-3">
           <search-text-groups
             :textGroups=textGroups
             :handleSearch=handleSearch
@@ -53,6 +54,12 @@
             :showTextGroups=showTextGroups
             :handleshowTextGroupsChange=handleshowTextGroupsChange
           />
+          <search-urn-groups
+            v-if="Object.keys(urnGroups).length"
+            :urnGroups=urnGroups
+            :handleSearch=handleSearch
+          />
+        </div>
         <div v-if="results.length" class="col-md-9">
           <search-pagination
             :startIndex=startIndex
@@ -114,6 +121,7 @@ import constants from '../../constants';
 import api from '../../api';
 import SearchPagination from './SearchPagination.vue';
 import SearchTextGroups from './SearchTextGroups.vue';
+import SearchUrnGroups from './SearchUrnGroups.vue';
 import TextLoader from '../../components/TextLoader.vue';
 
 export default {
@@ -136,7 +144,8 @@ export default {
       searchType: 'form',
       showClear: false,
       tg: null,
-      showTextGroups: false
+      showTextGroups: false,
+      urnGroups: []
     };
   },
   mounted() {
@@ -159,12 +168,13 @@ export default {
     handleshowTextGroupsChange() {
       this.showTextGroups = !this.showTextGroups;
     },
-    handleSearch(pageNum, urn=null) {
+    handleSearch(pageNum, tg=null, urn=null) {
       const query = this.searchQuery;
       if (query !== '') {
         if (pageNum) {
-          this.secondLoading = true;
+          this.loading = true;
           this.showClear = false;
+          this.urnGroups = []
         } else {
           this.loading = true;
           this.showSearchResults = false;
@@ -172,11 +182,12 @@ export default {
           this.tg = null;
           pageNum = 1;
           this.showTextGroups = false;
+          this.urnGroups = {}
         }
-        if (urn) {
+        if (tg) {
           this.showClear = true;
           this.results = [];
-          this.tg = urn;
+          this.tg = tg;
         }
         if (this.tg) {
           this.showClear = true;
@@ -186,6 +197,7 @@ export default {
           q: query,
           page_num: pageNum,
           tg: this.tg,
+          urn: urn
         }
         api.searchText(params, 'search/text/', result => {
           this.showSearchResults = true;
@@ -202,6 +214,7 @@ export default {
           this.loading = false;
           if (this.tg) {
             this.showClear = true;
+            this.urnGroups = result.urn_groups
           }
           // update url state
           this.$router.replace({
@@ -219,6 +232,7 @@ export default {
   components: {
     SearchPagination,
     SearchTextGroups,
+    SearchUrnGroups,
     TextLoader
   },
 };
