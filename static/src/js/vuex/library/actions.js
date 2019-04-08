@@ -75,9 +75,7 @@ export default {
     api.getLibraryVector(work.urn, params, (textsVector) => {
       const textMap = textsVector.collections;
       const versions = work.texts.map(({ urn: textUrn }) => textMap[textUrn]);
-      console.log('Calling SET_VERSIONS');
       commit(constants.SET_VERSIONS, versions);
-      console.log('Called SET_VERSIONS');
     });
   }),
 

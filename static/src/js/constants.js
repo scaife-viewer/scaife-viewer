@@ -20,7 +20,6 @@ export default keykey(
   'SET_LIBRARY_SORT',
   'SET_ERROR',
   'SET_HIGHLIGHT',
-  'SET_VERSIONS',
   'SET_LEFT_TEXT',
   'SET_LEFT_PASSAGE_TEXT',
   'SET_LEFT_PASSAGE',
