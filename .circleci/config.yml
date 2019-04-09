@@ -24,6 +24,9 @@ jobs:
     - run:
         name: Run jest tests
         command: npm run unit
+    - run:
+        name: Run webpack build
+        command: npm run build
   deploy:
     docker:
     - image: buildpack-deps:trusty-scm
