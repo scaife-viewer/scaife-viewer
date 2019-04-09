@@ -56,6 +56,11 @@ Browse to http://localhost:8000/.
 
 Note that, although running Scaife locally, this is relying on the Nautilus server at https://scaife-cts-dev.perseus.org to retrieve texts.
 
+## Tests
+
+You can run the Vue unit tests, via:
+
+    npm run unit
 
 ## Translations
 
@@ -140,7 +145,15 @@ docker-compose -f deploy/docker-compose.yml up -d
 
 ## Using Docker for development
 
-The project also includes `Dockerfile-dev` and `Dockerfile-webpack` images which can be used with Docker Compose to faciliate development:
+The project also includes `Dockerfile-dev` and `Dockerfile-webpack` images which can be used with Docker Compose to facilitate development.
+
+First, copy `.env.example` and customize environment variables for development:
+
+```
+cp deploy/.env.example cp deploy/.env
+```
+
+Then build the images and spin up the containers:
 
 ```
 docker-compose -f deploy/docker-compose.yml -f deploy/docker-compose.override.yml up --build

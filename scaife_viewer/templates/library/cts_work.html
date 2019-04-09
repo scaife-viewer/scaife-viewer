@@ -18,20 +18,5 @@
 {% endblock %}
 
 {% block content %}
-  <h2>Versions</h2>
-
-  <div class="card-deck">
-    {% for text in work.texts %}
-      <div class="version-card">
-        <div class="card-body">
-          <p class="text-subtype">{{ text.kind }}</p>
-          <h4 class="card-title"><a href="{% url 'library_collection' text.urn %}">{{ text.label }}</a></h4>
-          <p class="card-text">{{ text.description }}</p>
-        </div>
-        <div class="card-footer">
-          <a href="{% url 'reader' text.first_passage.urn %}"><i class="fa fa-book"></i> Read ({{ text.human_lang }})</a>
-        </div>
-      </div>
-    {% endfor %}
-  </div>
+  <div id="app" data-urn="{{ work.urn }}" data-type="work"></div>
 {% endblock %}

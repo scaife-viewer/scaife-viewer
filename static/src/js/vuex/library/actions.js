@@ -67,6 +67,18 @@ export default {
     commit(constants.SET_WORKS, [...state.allWorks]);
   },
 
+
+  [constants.LIBRARY_LOAD_VERSION_LIST]: ({ commit }, urn) => api.getCollection(urn, (work) => {
+    const params = {
+      e: work.texts.map(text => text.urn.replace(`${work.urn}.`, '')),
+    };
+    api.getLibraryVector(work.urn, params, (textsVector) => {
+      const textMap = textsVector.collections;
+      const versions = work.texts.map(({ urn: textUrn }) => textMap[textUrn]);
+      commit(constants.SET_VERSIONS, versions);
+    });
+  }),
+
   [constants.LIBRARY_LOAD_TOC_LIST]: ({ commit }, urn) => api.getCollection(urn, (text) => {
     commit(constants.SET_TOC, text.toc);
   }),

@@ -37,6 +37,10 @@ export default {
     state.works = works;
   },
 
+  [constants.SET_VERSIONS]: (state, versions) => {
+    state.versions = versions;
+  },
+
   [constants.SET_TOC]: (state, toc) => {
     state.toc = toc;
   },

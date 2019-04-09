@@ -91,6 +91,32 @@
     }
   }
 }
+
+.widget.passage-exports {
+  div.body {
+    font-size: 14px;
+    line-height: 16px;
+    p {
+      margin-left: 22px;
+      display: flex;
+      .side {
+        @extend .badge;
+        color: $gray-600;
+        background: $gray-100;
+        margin-right: 0.5em;
+      }
+      margin-bottom: 0.5rem;
+      .links {
+        font-style: italic;
+        color: $gray-600;
+        a {
+          font-style: normal;
+        }
+      }
+    }
+  }
+}
+
 .widget.selected-word {
   div.body {
     font-family: 'Noto Serif';
