@@ -24,6 +24,8 @@ export default {
   methods: {
     changeTextSize(size) {
       this.$store.commit(`reader/${constants.SET_TEXT_SIZE}`, { size });
+      // on text size change, reset width to normal
+      this.$store.commit(`reader/${constants.SET_TEXT_WIDTH}`, { width: 'normal' });
     },
   },
 };

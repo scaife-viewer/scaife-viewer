@@ -3,6 +3,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 
 import WidgetTextSize from '../static/src/js/reader/widgets/WidgetTextSize.vue';
+import WidgetTextWidth from '../static/src/js/reader/widgets/WidgetTextWidth.vue';
 import createStore from '../static/src/js/config';
 
 const localVue = createLocalVue();
@@ -38,23 +39,62 @@ describe('WidgetTextSize.vue', () => {
     expect(mediumSpan.html()).toBe('<span class="text-size-control text-md active">Αα</span>');
     expect(largeSpan.html()).toBe('<span class="text-size-control text-lg">Αα</span>');
     expect(store.state.reader.textSize).toBe('md');
+    // default text width should be "normal"
+    expect(store.state.reader.textWidth).toBe('normal');
 
     largeSpan.trigger('click');
     expect(smallSpan.html()).toBe('<span class="text-size-control text-sm">Αα</span>');
     expect(mediumSpan.html()).toBe('<span class="text-size-control text-md">Αα</span>');
     expect(largeSpan.html()).toBe('<span class="text-size-control text-lg active">Αα</span>');
     expect(store.state.reader.textSize).toBe('lg');
+    // default text width should be "normal"
+    expect(store.state.reader.textWidth).toBe('normal');
 
     smallSpan.trigger('click');
     expect(smallSpan.html()).toBe('<span class="text-size-control text-sm active">Αα</span>');
     expect(mediumSpan.html()).toBe('<span class="text-size-control text-md">Αα</span>');
     expect(largeSpan.html()).toBe('<span class="text-size-control text-lg">Αα</span>');
     expect(store.state.reader.textSize).toBe('sm');
+    // default text width should be "normal"
+    expect(store.state.reader.textWidth).toBe('normal');
 
     mediumSpan.trigger('click');
     expect(smallSpan.html()).toBe('<span class="text-size-control text-sm">Αα</span>');
     expect(mediumSpan.html()).toBe('<span class="text-size-control text-md active">Αα</span>');
     expect(largeSpan.html()).toBe('<span class="text-size-control text-lg">Αα</span>');
     expect(store.state.reader.textSize).toBe('md');
+    // default text width should be "normal"
+    expect(store.state.reader.textWidth).toBe('normal');
+  });
+
+  it('when the "textSize" is changed "textWidth" is changed to "normal"', () => {
+    const textSizeWrapper = shallowMount(WidgetTextSize, {
+      store,
+      localVue,
+      stubs: { BaseWidget: true },
+    });
+    const textWidthWrapper = shallowMount(WidgetTextWidth, {
+      store,
+      localVue,
+      stubs: { BaseWidget: true },
+    });
+
+    const smallSpan = textSizeWrapper.findAll('span').at(2);
+    const largeSpan = textSizeWrapper.findAll('span').at(4);
+
+    const narrowSpan = textWidthWrapper.findAll('span').at(1);
+    const wideSpan = textWidthWrapper.findAll('span').at(3);
+
+    expect(store.state.reader.textWidth).toBe('normal');
+
+    wideSpan.trigger('click');
+    expect(store.state.reader.textWidth).toBe('wide');
+    largeSpan.trigger('click');
+    expect(store.state.reader.textWidth).toBe('normal');
+
+    narrowSpan.trigger('click');
+    expect(store.state.reader.textWidth).toBe('narrow');
+    smallSpan.trigger('click');
+    expect(store.state.reader.textWidth).toBe('normal');
   });
 });
