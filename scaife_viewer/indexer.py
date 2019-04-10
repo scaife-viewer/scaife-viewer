@@ -1,4 +1,6 @@
 import json
+import multiprocessing
+import os
 from collections import Counter, deque
 from itertools import zip_longest
 from operator import attrgetter
@@ -17,6 +19,15 @@ from .search import default_es_client_config
 
 
 morphology = None
+DASK_CONFIG_NUM_WORKERS = os.environ.get("DASK_CONFIG_NUM_WORKERS", multiprocessing.cpu_count() - 1)
+
+
+def compute_kwargs(**params):
+    kwargs = {
+        "num_workers": DASK_CONFIG_NUM_WORKERS
+    }
+    kwargs.update(params)
+    return kwargs
 
 
 class SortedPassage(NamedTuple):
@@ -81,9 +92,9 @@ class Indexer:
         if self.limit is not None:
             passages = passages.take(self.limit, npartitions=-1)
         else:
-            passages = passages.compute()
+            passages = passages.compute(**compute_kwargs())
         print(f"Indexing {len(passages)} passages")
-        word_counts = dask.bag.from_sequence(passages).map_partitions(self.indexer).compute()
+        word_counts = dask.bag.from_sequence(passages).map_partitions(self.indexer).compute(**compute_kwargs())
         total_word_counts = Counter()
         for (lang, count) in word_counts:
             total_word_counts[lang] += count
