@@ -14,8 +14,6 @@ from . import cts
 def default_es_client_config():
     return dict(
         hosts=settings.ELASTICSEARCH_HOSTS,
-        sniff_on_start=True,
-        sniff_on_connection_fail=True,
     )
 
 
