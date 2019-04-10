@@ -17,7 +17,7 @@ jobs:
         command: pipenv run flake8 scaife_viewer
     - run:
         name: Install static dependencies
-        command: npm i
+        command: npm ci
     - run:
         name: Run eslint
         command: npm run lint
