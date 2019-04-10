@@ -305,3 +305,4 @@ if FORCE_SCRIPT_NAME:
 
 ELASTICSEARCH_HOSTS = os.environ.get("ELASTICSEARCH_HOSTS", "localhost:9200").split(",")
 USE_CLOUD_INDEXER = bool(int(os.environ.get("USE_CLOUD_INDEXER", "0")))
+ELASTICSEARCH_INDEX_NAME = os.environ.get("ELASTICSEARCH_INDEX_NAME", "scaife-viewer")
