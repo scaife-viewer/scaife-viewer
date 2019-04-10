@@ -183,9 +183,13 @@ class Text(Collection):
         citation = self.metadata.citation
         depth = len(citation)
         tree = RefTree(self.urn, citation)
-        for reff in default_resolver().getReffs(self.urn, level=depth):
-            tree.add(reff)
-        return tree
+        try:
+            reffs = default_resolver().getReffs(self.urn, level=depth)
+            for reff in reffs:
+                tree.add(reff)
+            return tree
+        except Exception:
+            raise ValueError(f"{self.urn} has an invalid refsDecl")
 
     def first_passage(self):
         chunk = next(self.toc().chunks(), None)

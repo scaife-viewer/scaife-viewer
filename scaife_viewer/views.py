@@ -110,7 +110,27 @@ class LibraryCollectionView(LibraryConditionMixin, BaseLibraryView):
 
     def as_json(self):
         collection = self.get_collection()
-        return JsonResponse(apify(collection))
+        try:
+            return JsonResponse(apify(collection))
+        except ValueError as e:
+            """"
+            TODO: good idea to refactor this to send back consistent error
+            messages and codes that the client is aware of
+
+            Example 1:
+
+              {
+                "error_code": 1,
+                "msg": "Malformed XML"
+              }
+
+            Example 2:
+              {
+                "error_code": 2,
+                "msg": "Invalid refsDecl"
+              }
+            """
+            return JsonResponse({"error": str(e)}, status=500)
 
 
 class LibraryCollectionVectorView(LibraryConditionMixin, View):
