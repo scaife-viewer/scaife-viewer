@@ -184,6 +184,10 @@ class Indexer:
         return n
 
     def lemma_content(self, passage, tokens) -> str:
+        token_limit = 10000
+        if len(tokens) > token_limit:
+            print(f"more than {token_limit} tokens detected for {passage.urn}: {len(tokens)}")
+            return
         if morphology is None:
             return ""
         short_key = morphology.short_keys.get(str(passage.text.urn))
