@@ -136,7 +136,7 @@ class Indexer:
         try:
             toc = text.toc()
         except Exception as e:
-            print(f"{text.urn} toc error: {e}")
+            print(f"toc error: {e} [urn={text.urn}]")
         else:
             leaves = PreOrderIter(toc.root, filter_=attrgetter("is_leaf"))
             for i, node in enumerate(leaves):
@@ -155,10 +155,10 @@ class Indexer:
             try:
                 passage = cts.passage(urn)
             except cts.PassageDoesNotExist:
-                print(f"Passage {urn} does not exist")
+                print(f"Passage does not exist [urn={urn}]")
                 continue
             except Exception as e:
-                print(f"Error {e}")
+                print(f"Error {e} [urn={urn}]")
                 continue
             try:
                 # tokenized once and passed around as an optimization
@@ -251,7 +251,6 @@ class DirectPusher:
     def __init__(self, chunk_size=500):
         self.chunk_size = chunk_size
         self.index_name = settings.ELASTICSEARCH_INDEX_NAME
-        print(self.index_name)
         self.es.indices.create(index=self.index_name, ignore=400)
 
     @property
