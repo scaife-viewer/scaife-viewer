@@ -19,7 +19,7 @@ from .search import default_es_client_config
 
 
 morphology = None
-DASK_CONFIG_NUM_WORKERS = os.environ.get("DASK_CONFIG_NUM_WORKERS", multiprocessing.cpu_count() - 1)
+DASK_CONFIG_NUM_WORKERS = int(os.environ.get("DASK_CONFIG_NUM_WORKERS", multiprocessing.cpu_count() - 1))
 
 
 def compute_kwargs(**params):
