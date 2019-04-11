@@ -192,10 +192,10 @@ class Indexer:
         if short_key is None:
             return ""
 
-        token_limit = 10000
-        if len(tokens) > token_limit:
-            print(f"more than {token_limit} tokens detected for {passage.urn}: {len(tokens)}")
-            return
+        token_limit = 50000
+        limit_exceeded = len(tokens) > token_limit
+        if limit_exceeded:
+            print(f"more than {token_limit} tokens detected [urn={passage.urn}] [count={len(tokens)}]")
 
         thibault = [token["w"] for token in tokens]
         giuseppe = []
@@ -207,10 +207,13 @@ class Indexer:
             form = morphology.forms[int(form_key) - 1]
             giuseppe.append((form.form, form.lemma))
         missing = chr(0xfffd)
-        return " ".join([
+        content = " ".join([
             {None: missing}.get(w, w)
             for w in align_text(thibault, giuseppe)
         ])
+        if limit_exceeded:
+            print("lemma content generated [urn={passage.urn}]")
+        return content
 
     def passage_to_doc(self, passage, sort_idx, tokens, word_stats):
         language, word_count = word_stats
@@ -247,12 +250,14 @@ class DirectPusher:
     def __init__(self, chunk_size=500):
         self.chunk_size = chunk_size
         self.index_name = settings.ELASTICSEARCH_INDEX_NAME
+        print(self.index_name)
         self.es.indices.create(index=self.index_name, ignore=400)
 
     @property
     def es(self):
         if not hasattr(self, "_es"):
             self._es = elasticsearch.Elasticsearch(**default_es_client_config())
+            print(str(default_es_client_config()))
         return self._es
 
     @property
