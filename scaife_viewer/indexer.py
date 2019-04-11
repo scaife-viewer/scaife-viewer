@@ -230,6 +230,7 @@ class Indexer:
             "sort_idx": sort_idx,
             "lemma_content": self.lemma_content(passage, tokens),
             "content": " ".join([token["w"] for token in tokens]),
+            "raw_content": passage.content,
             "language": language,
             "word_count": word_count
         }
