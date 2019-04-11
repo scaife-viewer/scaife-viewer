@@ -123,6 +123,7 @@ class Indexer:
                         "urn:cts:greekLit:tlg4015.tlg007.opp-grc1",
                         "urn:cts:greekLit:tlg4015.tlg008.opp-grc1",
                         "urn:cts:greekLit:tlg4015.tlg009.opp-grc1",
+                        "urn:cts:greekLit:tlg4016.tlg003.opp-grc2",
                     }
                     if str(text.urn) in exclude:
                         continue
