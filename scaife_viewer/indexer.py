@@ -212,7 +212,7 @@ class Indexer:
             for w in align_text(thibault, giuseppe)
         ])
         if limit_exceeded:
-            print("lemma content generated [urn={passage.urn}]")
+            print(f"lemma content generated [urn={passage.urn}]")
         return content
 
     def passage_to_doc(self, passage, sort_idx, tokens, word_stats):
