@@ -3,11 +3,14 @@
     <span slot="header">CTS URN</span>
     <div slot="body">
       <template v-if="rightPassage">
-        <p><span class="side">L</span> <tt><a :href="`${ctsApiUrl}?request=GetPassage&amp;urn=${rightPassage.urn}`">{{ leftPassage.urn.toString() }}</a></tt></p>
-        <p><span class="side">R</span> <tt><a :href="`${ctsApiUrl}?request=GetPassage&amp;urn=${rightPassage.urn}`">{{ rightPassage.urn.toString() }}</a></tt></p>
+        <p v-if="ctsApiUrl"><span class="side">L</span> <tt><a :href="`${ctsApiUrl}?request=GetPassage&amp;urn=${leftPassage.urn}`">{{ leftPassage.urn.toString() }}</a></tt></p>
+        <p v-else><span class="side">L</span> <tt>{{ leftPassage.urn.toString() }}</tt></p>
+        <p v-if="ctsApiUrl"><span class="side">R</span> <tt><a :href="`${ctsApiUrl}?request=GetPassage&amp;urn=${rightPassage.urn}`">{{ rightPassage.urn.toString() }}</a></tt></p>
+        <p v-else><span class="side">R</span> <tt>{{ rightPassage.urn.toString() }}</tt></p>
       </template>
       <template v-else>
-        <p><tt><a :href="`${ctsApiUrl}?request=GetPassage&amp;urn=${passage.urn}`">{{ passage.urn.toString() }}</a></tt></p>
+        <p v-if="ctsApiUrl"><tt><a :href="`${ctsApiUrl}?request=GetPassage&amp;urn=${passage.urn}`">{{ passage.urn.toString() }}</a></tt></p>
+        <p v-else><tt>{{ passage.urn.toString() }}</tt></p>
       </template>
     </div>
   </base-widget>
@@ -16,12 +19,10 @@
 <script>
 export default {
   name: 'widget-passage-links',
-  data() {
-    return {
-      ctsApiUrl: 'https://scaife-cts.perseus.org/api/cts',
-    };
-  },
   computed: {
+    ctsApiUrl() {
+      return process.env.CTS_API_ENDPOINT
+    },
     passage() {
       return this.$store.getters['reader/passage'];
     },
