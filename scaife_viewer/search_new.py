@@ -11,15 +11,10 @@ from .utils import apify
 
 
 es = Elasticsearch(
-    hosts=settings.ELASTICSEARCH_HOSTS
+    hosts=settings.ELASTICSEARCH_HOSTS,
+    sniff_on_start=settings.ELASTICSEARCH_SNIFF_ON_START,
+    sniff_on_connection_fail=settings.ELASTICSEARCH_SNIFF_ON_CONNECTION_FAIL,
 )
-
-# TODO: add sniff_on_start and sniff_on_connection_fail to environment variables
-# es = Elasticsearch(
-#     hosts=settings.ELASTICSEARCH_HOSTS,
-#     sniff_on_start=True,
-#     sniff_on_connection_fail=True,
-# )
 
 
 def create_query(q, query_fields, scope):
