@@ -17,10 +17,16 @@ jobs:
         command: pipenv run flake8 scaife_viewer
     - run:
         name: Install static dependencies
-        command: npm i
+        command: npm ci
     - run:
         name: Run eslint
         command: npm run lint
+    - run:
+        name: Run jest tests
+        command: npm run unit
+    - run:
+        name: Run webpack build
+        command: npm run build
   deploy:
     docker:
     - image: buildpack-deps:trusty-scm

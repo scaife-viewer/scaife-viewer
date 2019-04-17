@@ -8,6 +8,7 @@ export default {
   allTextGroupTexts: null,
   sortKind: 'text-group',
   works: [],
+  versions: [],
   allWorks: null,
   toc: [],
 };

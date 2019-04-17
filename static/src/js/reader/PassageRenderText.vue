@@ -1,5 +1,5 @@
 <template>
-  <div :class="['text', `text-${textSize}`]" @mousedown="handleMouseDown">
+  <div :class="['text', `text-${textSize}`, `text-width-${textWidth}`  ]" @mousedown="handleMouseDown">
     <component
       :class="{'text-loading': text === null, 'text-loaded': text !== null}"
       :is="renderedText"
@@ -28,6 +28,9 @@ export default {
   computed: {
     textSize() {
       return this.$store.state.reader.textSize;
+    },
+    textWidth() {
+      return this.$store.state.reader.textWidth;
     },
   },
   provide() {

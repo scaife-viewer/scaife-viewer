@@ -110,7 +110,27 @@ class LibraryCollectionView(LibraryConditionMixin, BaseLibraryView):
 
     def as_json(self):
         collection = self.get_collection()
-        return JsonResponse(apify(collection))
+        try:
+            return JsonResponse(apify(collection))
+        except ValueError as e:
+            """"
+            TODO: good idea to refactor this to send back consistent error
+            messages and codes that the client is aware of
+
+            Example 1:
+
+              {
+                "error_code": 1,
+                "msg": "Malformed XML"
+              }
+
+            Example 2:
+              {
+                "error_code": 2,
+                "msg": "Invalid refsDecl"
+              }
+            """
+            return JsonResponse({"error": str(e)}, status=500)
 
 
 class LibraryCollectionVectorView(LibraryConditionMixin, View):
@@ -158,6 +178,7 @@ class LibraryPassageView(LibraryConditionMixin, View):
         to_response = {
             "json": self.as_json,
             "text": self.as_text,
+            "xml": self.as_xml,
         }.get(self.format, "json")
         return to_response()
 
@@ -190,6 +211,12 @@ class LibraryPassageView(LibraryConditionMixin, View):
         return HttpResponse(
             f"{self.passage.content}\n",
             content_type="text/plain; charset=utf-8",
+        )
+
+    def as_xml(self):
+        return HttpResponse(
+            f"{self.passage.xml}",
+            content_type="application/xml",
         )
 
 

@@ -27,6 +27,7 @@ api_patterns = (
         path("library/vector/<str:urn>/", LibraryCollectionVectorView.as_view(), name="library_collection_vector"),
         path("library/passage/<str:urn>/json/", LibraryPassageView.as_view(format="json"), name="library_passage"),
         path("library/passage/<str:urn>/text/", LibraryPassageView.as_view(format="text"), name="library_passage_text"),
+        path("library/passage/<str:urn>/xml/", LibraryPassageView.as_view(format="xml"), name="library_passage_xml"),
         path("library/<str:urn>/json/", LibraryCollectionView.as_view(format="json"), name="library_collection"),
         path("search/json/", search_json, name="search"),
         path("morpheus/", morpheus, name="morpheus"),

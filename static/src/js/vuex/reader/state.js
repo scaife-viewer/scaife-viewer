@@ -20,4 +20,5 @@ export default {
   selectedLemmas: null,
   error: '',
   selectedTokenRange: { start: null, end: null },
+  textWidth: 'normal',
 };
