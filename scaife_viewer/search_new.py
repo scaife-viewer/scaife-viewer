@@ -38,8 +38,8 @@ def create_query(q, query_fields, scope):
 
 
 def get_search_results(q, scope=None, aggregate_field=None, kind="form", fragments=1000, size=10, offset=0):
-    highlight_fields = {"content": {}}
-    query_fields = ["content"]
+    highlight_fields = {"raw_content": {}}
+    query_fields = ["raw_content"]
     if kind == "lemma":
         highlight_fields = {"lemma_content": {}}
         query_fields = ["lemma_content"]
@@ -77,7 +77,7 @@ def get_search_results(q, scope=None, aggregate_field=None, kind="form", fragmen
     final = []
     for hit in results["hits"]["hits"]:
         cts_passage = cts.passage(hit["_id"])
-        highlight_kind = hit["highlight"].get("content", [""])
+        highlight_kind = hit["highlight"].get("raw_content", [""])
         if kind == "lemma":
             highlight_kind = hit["highlight"].get("lemma_content", [""])
         final.append(
@@ -95,7 +95,7 @@ def get_search_results(q, scope=None, aggregate_field=None, kind="form", fragmen
 
 
 def scan(q, kind, scope):
-    query_fields = ["content"]
+    query_fields = ["raw_content"]
     if kind == "lemma":
         query_fields = ["lemma_content"]
     query_dict = create_query(q, query_fields, scope)
