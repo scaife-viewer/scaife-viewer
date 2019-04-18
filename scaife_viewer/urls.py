@@ -17,7 +17,7 @@ from .views import (
     morpheus,
     profile,
     search,
-    search_json,
+    search_json
 )
 
 
