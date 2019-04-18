@@ -187,7 +187,7 @@ export default {
           page_num: pageNum,
           tg: this.tg,
         }
-        api.searchText(params, 'search/text/', result => {
+        api.searchText(params, 'library/search/json/', result => {
           this.showSearchResults = true;
           this.totalPages = result.page.num_pages;
           this.pageNum = result.page.number;
