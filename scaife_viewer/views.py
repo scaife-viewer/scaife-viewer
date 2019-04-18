@@ -259,16 +259,21 @@ def search(request):
     return render(request, "search.html")
 
 
-def search_text(request):
+def search_json(request):
+    search_type = request.GET.get("type")
     q = request.GET.get("q", "")
     kind = request.GET.get("kind", "form")
-    page_num = int(request.GET.get("page_num"))
-    data = {
-        "q": q,
-        "kind": kind,
-        "page_num": page_num
-    }
-    if q:
+    if not search_type:
+        return JsonResponse({"error": "Provide a search type - 'library' or 'reader'."}, status=400)
+    if not q:
+        return JsonResponse({"error": "Provide a search query."}, status=400)
+    if search_type == "library" and kind == "form":
+        page_num = int(request.GET.get("page_num"))
+        data = {
+            "q": q,
+            "kind": kind,
+            "page_num": page_num
+        }
         scope = {}
         text_group_urn = request.GET.get("tg")
         if text_group_urn:
@@ -288,69 +293,11 @@ def search_text(request):
             "total_count": total_count,
             "page": page
         })
-        """
-        data = {
-            "kind": "form",
-            "page": {
-              "end_index": 10
-              "has_next": True
-              "has_previous": False
-              "num_pages": 307
-              "number": 1
-              "start_index": 1
-            },
-            "page_num": 1,
-            "q": "love",
-            "results": [
-              {
-                "content": "sitting near him , as his rival in <em>love</em> — when he heard my question",
-                "link": "/reader/urn:cts:greekLit:tlg0059.tlg016.perseus-eng2:132/",
-                "passage": {
-                  "ancestors": [],
-                  "children": [],
-                  "json_url": "/library/passage/urn:cts:greekLit:tlg0059.tlg016.perseus-eng2:132/json/",
-                  "refs": {
-                    "start": {
-                      "reference": "132",
-                      "human_reference": " 132"
-                    }
-                  },
-                  "text": {
-                    "ancestors": [
-                      {
-                        "json_url": "/library/urn:cts:greekLit:tlg0059/json/",
-                        "label": "Plato",
-                        "text_url": "/library/passage/urn:cts:greekLit:tlg0059/text/",
-                        "url": "/library/urn:cts:greekLit:tlg0059/",
-                        "urn": "urn:cts:greekLit:tlg0059"
-                      }
-                    ],
-                    "human_lang": "English",
-                    "json_url": "/library/urn:cts:greekLit:tlg0059.tlg016.perseus-eng2/json/",
-                    "kind": "translation",
-                    "label": "Lovers",
-                    "lang": "eng",
-                    "text_url": "/library/passage/urn:cts:greekLit:tlg0059.tlg016.perseus-eng2/text/",
-                    "url": "/library/urn:cts:greekLit:tlg0059.tlg016.perseus-eng2/",
-                    "urn": "urn:cts:greekLit:tlg0059.tlg016.perseus-eng2",
-                  },
-                  "url": "/reader/urn:cts:greekLit:tlg0059.tlg016.perseus-eng2:132/",
-                  "urn": "urn:cts:greekLit:tlg0059.tlg016.perseus-eng2:132"
-                }
-              }
-            ],
-            "total_count": 3065
-        """
-    return JsonResponse(data)
-
-
-def search_json(request):
-    q = request.GET.get("q", "")
-    size = int(request.GET.get("size", "10"))
-    offset = int(request.GET.get("offset", "0"))
-    pivot = request.GET.get("pivot")
-    data = {"results": []}
-    if q:
+    else:
+        size = int(request.GET.get("size", "10"))
+        offset = int(request.GET.get("offset", "0"))
+        pivot = request.GET.get("pivot")
+        data = {"results": []}
         scope = {}
         text_group_urn = request.GET.get("text_group")
         work_urn = request.GET.get("work")
