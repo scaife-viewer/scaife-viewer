@@ -69,7 +69,7 @@
             <div class="result" v-if="!secondLoading" v-for="result in results" :key="result.link">
               <div class="passage-heading">
                 <h2>
-                  <a :href="''+result.link+'?q='+searchQuery+'&amp;qk='+searchType+''">
+                  <a :href="createPassageLink(result.link)">
                     <span v-for="breadcrumb in result.passage.text.ancestors" :key="breadcrumb.label">
                       {{ breadcrumb.label }},
                     </span>
@@ -215,6 +215,9 @@ export default {
         });
       }
     },
+    createPassageLink(link) {
+      return `${link}?q='${this.searchQuery}&amp;qk=${this.searchType}`;
+    }
   },
   components: {
     SearchPagination,
