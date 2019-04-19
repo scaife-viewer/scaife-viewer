@@ -37,7 +37,7 @@ def create_query(q, query_fields, scope):
     return body
 
 
-def get_search_results(q, scope=None, aggregate_field=None, kind="form", fragments=1000, size=10, offset=0):
+def get_search_results(q, search_type, scope, sort_by, aggregate_field=None, kind="form", fragments=1000, size=10, offset=0):
     highlight_fields = {"raw_content": {}}
     query_fields = ["raw_content"]
     if kind == "lemma":
