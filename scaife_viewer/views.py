@@ -19,8 +19,12 @@ import requests
 from . import cts
 from .http import ConditionMixin
 from .search import SearchQuery
-from .search_new import get_search_results
-from .utils import apify, encode_link_header, get_pagination_info, link_passage
+from .utils import (
+    apify,
+    encode_link_header,
+    get_pagination_info,
+    link_passage,
+)
 
 
 def home(request):
@@ -260,49 +264,76 @@ def search(request):
 
 
 def search_json(request):
+
+    # get params from query string
     search_type = request.GET.get("type")
     q = request.GET.get("q", "")
     kind = request.GET.get("kind", "form")
+    size = int(request.GET.get("size", "10"))
+
+    # validate params
     if not search_type:
         return JsonResponse({"error": "Provide a search type - 'library' or 'reader'."}, status=400)
     if not q:
         return JsonResponse({"error": "Provide a search query."}, status=400)
-    if search_type == "library" and kind == "form":
+
+    scope = {}
+    data = {"results": []}
+
+    if search_type == "library":
+
+        text_group_urn = request.GET.get("tg")
         page_num = int(request.GET.get("page_num"))
-        data = {
+
+        data.update({
             "q": q,
             "kind": kind,
-            "page_num": page_num
-        }
-        scope = {}
-        text_group_urn = request.GET.get("tg")
+            "page_num": page_num,
+            "type": search_type,
+        })
+
         if text_group_urn:
             scope["text_group"] = text_group_urn
+
         kwargs = {
+            "search_type": search_type,
             "scope": scope,
+            "sort_by": "document",
             "aggregate_field": "text_group",
             "kind": kind,
+            "fragments": 10000,
             "offset": (page_num - 1) * 10
         }
-        search_results = get_search_results(q, **kwargs)
-        total_count = int(search_results["total_count"])
+        sq = SearchQuery(q, **kwargs)
+        total_count = sq.count()
         page = get_pagination_info(total_count, page_num)
+        results = sq.search_window(size=size, offset=((page_num - 1) * 10))
+
+        for result in results:
+            r = {
+                "passage": apify(result["passage"], with_content=False),
+            }
+            if kind == "form":
+                r["content"] = result["raw_content"]
+            else:
+                r["content"] = result["content"]
+            data["results"].append(r)
+
         data.update({
-            "results": search_results["results"],
-            "text_groups": search_results["text_groups"],
+            "text_groups": results.filtered_text_groups(),
             "total_count": total_count,
-            "page": page
+            "page": page,
         })
+
     else:
-        size = int(request.GET.get("size", "10"))
+
         offset = int(request.GET.get("offset", "0"))
         pivot = request.GET.get("pivot")
-        data = {"results": []}
-        scope = {}
         text_group_urn = request.GET.get("text_group")
         work_urn = request.GET.get("work")
         text_urn = request.GET.get("text")
         passage_urn = request.GET.get("passage")
+
         if text_group_urn:
             scope["text_group"] = text_group_urn
         elif work_urn:
@@ -311,12 +342,15 @@ def search_json(request):
             scope["text.urn"] = text_urn
         elif passage_urn:
             scope["urn"] = passage_urn
+
         query_kwargs = {
+            "search_type": search_type,
             "scope": scope,
             "sort_by": "document",
-            "kind": request.GET.get("kind", "form"),
+            "kind": kind,
         }
         sq = SearchQuery(q, **query_kwargs)
+
         if "text.urn" in scope and pivot:
             urn = cts.URN(pivot)
             urn_start = f"{urn.upTo(cts.URN.NO_PASSAGE)}:{urn.reference.start}"
@@ -330,8 +364,10 @@ def search_json(request):
                     }
                     offset = start_offset
                     break
+
         data["total_count"] = sq.count()
         fields = set(request.GET.get("fields", "content,highlights").split(","))
+
         for result in sq.search_window(size=size, offset=offset):
             r = {
                 "passage": apify(result["passage"], with_content=False),
@@ -344,6 +380,7 @@ def search_json(request):
                     for w, i in result["highlights"]
                 ]
             data["results"].append(r)
+
     return JsonResponse(data)
 
 

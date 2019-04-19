@@ -66,10 +66,10 @@
           />
           <div>
             <text-loader v-if="secondLoading" size="7px" margin="1px" />
-            <div class="result" v-if="!secondLoading" v-for="result in results" :key="result.link">
+            <div class="result" v-if="!secondLoading" v-for="result in results" :key="result.passage.url">
               <div class="passage-heading">
                 <h2>
-                  <a :href="createPassageLink(result.link)">
+                  <a :href="createPassageLink(result.passage.url)">
                     <span v-for="breadcrumb in result.passage.text.ancestors" :key="breadcrumb.label">
                       {{ breadcrumb.label }},
                     </span>
@@ -217,7 +217,7 @@ export default {
       }
     },
     createPassageLink(link) {
-      return `${link}?q='${this.searchQuery}&amp;qk=${this.searchType}`;
+      return `${link}?q=${this.searchQuery}&qk=${this.searchType}`;
     }
   },
   components: {

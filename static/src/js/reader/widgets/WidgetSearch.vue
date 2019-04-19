@@ -168,6 +168,7 @@ export default {
           const params = {
             q: this.query,
             kind: this.queryKind,
+            type: 'reader',
             size,
             offset,
             pivot,
@@ -243,6 +244,7 @@ export default {
         const params = {
           q: this.query,
           kind: this.queryKind,
+          type: 'reader',
           fields: 'highlights',
           passage: passage.urn,
           size: 1,
