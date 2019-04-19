@@ -293,7 +293,6 @@ def search_json(request):
         kwargs = {
             "search_type": search_type,
             "scope": scope,
-            "sort_by": "document",
             "aggregate_field": "text_group",
             "kind": kind,
             "fragments": 10000,
