@@ -65,7 +65,7 @@ class SearchQuery:
         if self.kind == "lemma":
             fields = ["lemma_content"]
         elif self.kind == "form":
-            if self.search_type == 'library':
+            if self.search_type == "library":
                 fields = ["raw_content"]
             else:
                 fields = ["content"]
@@ -91,7 +91,7 @@ class SearchQuery:
         if self.kind == "lemma":
             fields = {"lemma_content": {}}
         elif self.kind == "form":
-            if self.search_type == 'library':
+            if self.search_type == "library":
                 fields = {"raw_content": {}}
             else:
                 fields = {"content": {}}
