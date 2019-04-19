@@ -19,12 +19,7 @@ import requests
 from . import cts
 from .http import ConditionMixin
 from .search import SearchQuery
-from .utils import (
-    apify,
-    encode_link_header,
-    get_pagination_info,
-    link_passage,
-)
+from .utils import apify, encode_link_header, get_pagination_info, link_passage
 
 
 def home(request):
