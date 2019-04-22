@@ -5,7 +5,6 @@ import VueRouter from 'vue-router';
 
 import Search from '../static/src/js/library/search/Search.vue';
 import createStore from '../static/src/js/config';
-import searchResultsJson from './fixtures/search-results.json';
 
 const localVue = createLocalVue();
 const router = new VueRouter();
