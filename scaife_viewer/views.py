@@ -265,6 +265,7 @@ def search_json(request):
     q = request.GET.get("q", "")
     kind = request.GET.get("kind", "form")
     size = int(request.GET.get("size", "10"))
+    text_group_urn = request.GET.get("text_group")
 
     # validate params
     if not search_type:
@@ -277,7 +278,6 @@ def search_json(request):
 
     if search_type == "library":
 
-        text_group_urn = request.GET.get("tg")
         page_num = int(request.GET.get("page_num"))
 
         data.update({
@@ -323,7 +323,6 @@ def search_json(request):
 
         offset = int(request.GET.get("offset", "0"))
         pivot = request.GET.get("pivot")
-        text_group_urn = request.GET.get("text_group")
         work_urn = request.GET.get("work")
         text_urn = request.GET.get("text")
         passage_urn = request.GET.get("passage")
