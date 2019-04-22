@@ -12,8 +12,8 @@ from . import cts
 
 es = Elasticsearch(
     hosts=settings.ELASTICSEARCH_HOSTS,
-    sniff_on_start=True,
-    sniff_on_connection_fail=True,
+    sniff_on_start=settings.ELASTICSEARCH_SNIFF_ON_START,
+    sniff_on_connection_fail=settings.ELASTICSEARCH_SNIFF_ON_CONNECTION_FAIL,
 )
 
 
