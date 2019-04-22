@@ -49,32 +49,8 @@ describe('Search.vue', () => {
       results: [],
       textGroups: [],
       secondLoading: false,
-      loading: false,
+      firstLoading: false,
     });
     expect(wrapper.text()).toContain('No results found. Please try again.');
-  });
-
-  it('displays the search results correctly if results are found', () => {
-    const wrapper = shallowMount(Search, {
-      store,
-      localVue,
-      stubs: { BaseWidget: true },
-      router,
-    });
-    wrapper.setData({
-      showSearchResults: true,
-      totalPages: 1,
-      pageNum: 1,
-      startIndex: 1,
-      endIndex: 10,
-      hasNext: false,
-      hasPrev: false,
-      totalResults: 4,
-      results: searchResultsJson,
-      textGroups: [],
-      secondLoading: false,
-      loading: false,
-    });
-    expect(wrapper.text()).toContain('The Six Books of a Commonweale');
   });
 });

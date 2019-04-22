@@ -41,19 +41,19 @@
           <label for="kind-lemma">Lemma (Greek only)</label>
         </div>
       </form>
-      <text-loader v-if="loading" size="7px" margin="1px" />
+      <text-loader v-if="firstLoading" size="7px" margin="1px" />
       <div v-if="showSearchResults" class="row">
         <div v-if="!results.length && !textGroups.length" class="col-sm-12 text-center">
           <p class="no-results">No results found. Please try again.</p>
         </div>
-          <search-text-groups
-            :textGroups=textGroups
-            :handleSearch=handleSearch
-            :showClear=showClear
-            :showTextGroups=showTextGroups
-            :handleshowTextGroupsChange=handleshowTextGroupsChange
-          />
-        <div v-if="results.length" class="col-md-9">
+        <search-text-groups
+          :textGroups=textGroups
+          :handleSearch=handleSearch
+          :showClear=showClear
+          :showTextGroups=showTextGroups
+          :handleshowTextGroupsChange=handleshowTextGroupsChange
+        />
+        <div v-if="results.length || textGroups.length" class="col-md-9">
           <search-pagination
             :startIndex=startIndex
             :endIndex=endIndex
@@ -64,34 +64,13 @@
             :hasPrev=hasPrev
             :handleSearch=handleSearch
           />
+          <text-loader v-if="secondLoading" size="7px" margin="1px" />
           <div>
-            <text-loader v-if="secondLoading" size="7px" margin="1px" />
-            <div class="result" v-if="!secondLoading" v-for="result in results" :key="result.passage.url">
-              <div class="passage-heading">
-                <h2>
-                  <a :href="createPassageLink(result.passage.url)">
-                    <span v-for="breadcrumb in result.passage.text.ancestors" :key="breadcrumb.label">
-                      {{ breadcrumb.label }},
-                    </span>
-                    <span>{{ result.passage.refs.start.human_reference }}</span>
-                    <span v-if="result.passage.refs.end">
-                      to {{ result.passage.refs.end.human_reference }}
-                    </span>
-                    <span v-if="!result.passage.refs.end">
-                      ({{ result.passage.refs.start.reference }})
-                    </span>
-                    <span v-if="result.passage.refs.end">
-                      ({{ result.passage.refs.start.reference }} to &ndash; {{ result.passage.refs.end.reference }})
-                    </span>
-                  </a>
-                </h2>
-              </div>
-              <div class="content">
-                <p v-for="result in result.content" :key="result">
-                  <span v-html="result"></span>
-                </p>
-              </div>
-            </div>
+            <search-results
+              :secondLoading=secondLoading
+              :results=results
+              :createPassageLink=createPassageLink
+            />
           </div>
           <search-pagination
             :startIndex=startIndex
@@ -114,6 +93,7 @@ import constants from '../../constants';
 import api from '../../api';
 import SearchPagination from './SearchPagination.vue';
 import SearchTextGroups from './SearchTextGroups.vue';
+import SearchResults from './SearchResults.vue';
 import TextLoader from '../../components/TextLoader.vue';
 
 export default {
@@ -128,7 +108,7 @@ export default {
       totalResults: null,
       results: [],
       textGroups: [],
-      loading: false,
+      firstLoading: false,
       secondLoading: false,
       showSearchResults: false,
       hasNext: false,
@@ -163,10 +143,14 @@ export default {
       const query = this.searchQuery;
       if (query !== '') {
         if (pageNum) {
-          this.loading = true;
+          if (!this.results.length) {
+            this.firstLoading = true;
+          } else {
+            this.secondLoading = true;
+          }
           this.showClear = false;
         } else {
-          this.loading = true;
+          this.firstLoading = true;
           this.showSearchResults = false;
           this.showClear = false;
           this.tg = null;
@@ -185,7 +169,7 @@ export default {
           kind: this.searchType,
           q: query,
           page_num: pageNum,
-          tg: this.tg,
+          text_group: this.tg,
           type: 'library',
         }
         api.searchText(params, 'search/json/', result => {
@@ -200,7 +184,7 @@ export default {
           this.results = result.results;
           this.textGroups = result.text_groups
           this.secondLoading = false;
-          this.loading = false;
+          this.firstLoading = false;
           if (this.tg) {
             this.showClear = true;
           }
@@ -217,13 +201,14 @@ export default {
       }
     },
     createPassageLink(link) {
-      return `${link}?q=${this.searchQuery}&qk=${this.searchType}`;
+      return `${link}?q=${this.searchQuery}&amp;qk=${this.searchType}`;
     }
   },
   components: {
     SearchPagination,
     SearchTextGroups,
-    TextLoader
+    SearchResults,
+    TextLoader,
   },
 };
 </script>
