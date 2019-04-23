@@ -231,7 +231,6 @@ class Indexer:
         language, word_count = word_stats
         urn = str(passage.urn)
         if lemma_content:
-            print("lemma content")
             lc = self.lemma_content(passage, tokens)
 
             if LEMMA_CONTENT_DIR:
@@ -245,7 +244,6 @@ class Indexer:
                 "lemma_content": lc
             }
         else:
-            print("no lemma content")
             return {
                 "urn": str(passage.urn),
                 "text_group": str(passage.text.urn.upTo(cts.URN.TEXTGROUP)),
