@@ -102,7 +102,7 @@ class Indexer:
             passages = passages.compute(**compute_kwargs())
         print(f"Indexing {len(passages)} passages")
         indexer_kwargs = dict(
-            lemma_content=LEMMA_CONTENT and bool(self.morphology_path)
+            lemma_content=LEMMA_CONTENT and bool(morphology)
         )
         # @@@ revisit partitions based on `DASK_CONFIG_NUM_WORKERS`; also partitions sorted by
         # token size for consistent memory usage
