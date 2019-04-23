@@ -20,6 +20,7 @@ from .search import default_es_client_config
 
 morphology = None
 DASK_CONFIG_NUM_WORKERS = int(os.environ.get("DASK_CONFIG_NUM_WORKERS", multiprocessing.cpu_count() - 1))
+LEMMA_CONTENT = bool(int(os.environ.get("LEMMA_CONTENT", 0)))
 
 
 def compute_kwargs(**params):
@@ -85,6 +86,11 @@ class Indexer:
         texts = dask.bag.from_sequence(
             self.texts(prefix_filter)
         )
+
+        if LEMMA_CONTENT:
+            # only retrieve greek texts
+            texts = texts.filter(lambda t: t.lang == "grc")
+
         passages = texts.map(self.passages_from_text).flatten()
         if urn_obj and urn_obj.reference:
             print(f"Applying URN reference filter: {urn_obj.reference}")
@@ -94,7 +100,12 @@ class Indexer:
         else:
             passages = passages.compute(**compute_kwargs())
         print(f"Indexing {len(passages)} passages")
-        word_counts = dask.bag.from_sequence(passages).map_partitions(self.indexer).compute(**compute_kwargs())
+        indexer_kwargs = dict(
+            lemma_content=LEMMA_CONTENT and bool(self.morphology_path)
+        )
+        # @@@ revisit partitions based on `DASK_CONFIG_NUM_WORKERS`; also partitions sorted by
+        # token size for consistent memory usage
+        word_counts = dask.bag.from_sequence(passages).map_partitions(self.indexer, **indexer_kwargs).compute(**compute_kwargs())
         total_word_counts = Counter()
         for (lang, count) in word_counts:
             total_word_counts[lang] += count
@@ -146,7 +157,7 @@ class Indexer:
                 ))
         return passages
 
-    def indexer(self, chunk: Iterable[SortedPassage]):
+    def indexer(self, chunk: Iterable[SortedPassage], lemma_content=True):
         from raven.contrib.django.raven_compat.models import client as sentry
         words = []
         result = None
@@ -165,7 +176,7 @@ class Indexer:
                 tokens = passage.tokenize(whitespace=False)
                 stats = (str(passage.text.lang), self.count_words(tokens))
                 words.append(stats)
-                doc = self.passage_to_doc(passage, p.sort_idx, tokens, stats)
+                doc = self.passage_to_doc(passage, p.sort_idx, tokens, stats, lemma_content)
             except MemoryError:
                 return words
             except Exception:
@@ -215,25 +226,33 @@ class Indexer:
             print(f"lemma content generated [urn={passage.urn}]")
         return content
 
-    def passage_to_doc(self, passage, sort_idx, tokens, word_stats):
+    def passage_to_doc(self, passage, sort_idx, tokens, word_stats, lemma_content):
         language, word_count = word_stats
-        return {
-            "urn": str(passage.urn),
-            "text_group": str(passage.text.urn.upTo(cts.URN.TEXTGROUP)),
-            "work": str(passage.text.urn.upTo(cts.URN.WORK)),
-            "text": {
-                "urn": str(passage.text.urn),
-                "label": passage.text.label,
-                "description": passage.text.description,
-            },
-            "reference": str(passage.reference),
-            "sort_idx": sort_idx,
-            "lemma_content": self.lemma_content(passage, tokens),
-            "content": " ".join([token["w"] for token in tokens]),
-            "raw_content": passage.content,
-            "language": language,
-            "word_count": word_count
-        }
+        urn = str(passage.urn)
+        if lemma_content:
+            print("lemma content")
+            return {
+                "urn": urn,
+                "lemma_content": self.lemma_content(passage, tokens)
+            }
+        else:
+            print("no lemma content")
+            return {
+                "urn": str(passage.urn),
+                "text_group": str(passage.text.urn.upTo(cts.URN.TEXTGROUP)),
+                "work": str(passage.text.urn.upTo(cts.URN.WORK)),
+                "text": {
+                    "urn": str(passage.text.urn),
+                    "label": passage.text.label,
+                    "description": passage.text.description,
+                },
+                "reference": str(passage.reference),
+                "sort_idx": sort_idx,
+                "content": " ".join([token["w"] for token in tokens]),
+                "raw_content": passage.content,
+                "language": language,
+                "word_count": word_count
+            }
 
 
 def consume(it):
