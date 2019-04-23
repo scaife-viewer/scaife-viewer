@@ -21,6 +21,7 @@ from .search import default_es_client_config
 morphology = None
 DASK_CONFIG_NUM_WORKERS = int(os.environ.get("DASK_CONFIG_NUM_WORKERS", multiprocessing.cpu_count() - 1))
 LEMMA_CONTENT = bool(int(os.environ.get("LEMMA_CONTENT", 0)))
+LEMMA_CONTENT_DIR = os.environ.get("LEMMA_CONTENT_DIR")
 
 
 def compute_kwargs(**params):
@@ -231,9 +232,17 @@ class Indexer:
         urn = str(passage.urn)
         if lemma_content:
             print("lemma content")
+            lc = self.lemma_content(passage, tokens)
+
+            if LEMMA_CONTENT_DIR:
+                passage_slug = str(passage.urn).replace(":", "~")
+                path = os.path.join(LEMMA_CONTENT_DIR, passage_slug)
+                with open(path, "w") as f:
+                    f.write(lc)
+
             return {
                 "urn": urn,
-                "lemma_content": self.lemma_content(passage, tokens)
+                "lemma_content": lc
             }
         else:
             print("no lemma content")
