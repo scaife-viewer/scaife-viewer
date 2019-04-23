@@ -1,6 +1,10 @@
 steps:
 - name: gcr.io/cloud-builders/docker
   args:
+  - pull
+  - gcr.io/$PROJECT_ID/scaife-viewer:foo || true
+- name: gcr.io/cloud-builders/docker
+  args:
   - build
   - --tag
   - gcr.io/$PROJECT_ID/scaife-viewer:$COMMIT_SHA
