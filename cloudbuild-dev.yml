@@ -2,14 +2,21 @@ steps:
 - name: gcr.io/cloud-builders/docker
   args:
   - pull
-  - gcr.io/$PROJECT_ID/scaife-viewer:foo || true
+  - gcr.io/$PROJECT_ID/scaife-viewer:$BRANCH_NAME
+  - "||"
+  - "true"
 - name: gcr.io/cloud-builders/docker
   args:
   - build
+  - --cache-from
+  - gcr.io/$PROJECT_ID/scaife-viewer:$BRANCH_NAME
+  - --tag
+  - gcr.io/$PROJECT_ID/scaife-viewer:$BRANCH_NAME
   - --tag
   - gcr.io/$PROJECT_ID/scaife-viewer:$COMMIT_SHA
   - "."
 images:
 - gcr.io/$PROJECT_ID/scaife-viewer:$COMMIT_SHA
+- gcr.io/$PROJECT_ID/scaife-viewer:$BRANCH_NAME
 options:
   machineType: N1_HIGHCPU_8
