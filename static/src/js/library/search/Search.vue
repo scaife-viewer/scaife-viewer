@@ -46,13 +46,25 @@
         <div v-if="!results.length && !textGroups.length" class="col-sm-12 text-center">
           <p class="no-results">No results found. Please try again.</p>
         </div>
-        <search-text-groups
-          :textGroups=textGroups
-          :handleSearch=handleSearch
-          :showClear=showClear
-          :showTextGroups=showTextGroups
-          :handleshowTextGroupsChange=handleshowTextGroupsChange
-        />
+        <div v-if="textGroups.length" class="col-md-3">
+          <search-text-groups
+            :textGroups=textGroups
+            :handleSearch=handleSearch
+            :showClearTextGroup=showClearTextGroup
+            :showTextGroups=showTextGroups
+            :handleShowTextGroupsChange=handleShowTextGroupsChange
+            :clearWorkGroups=clearWorkGroups
+          />
+          <search-work-groups
+            v-if="workGroups.length"
+            :workGroups=workGroups
+            :handleSearch=handleSearch
+            :showClearWorkGroup=showClearWorkGroup
+            :showWorkGroups=showWorkGroups
+            :handleShowWorkGroupsChange=handleShowWorkGroupsChange
+            :textGroup=textGroup
+          />
+        </div>
         <div v-if="results.length || textGroups.length" class="col-md-9">
           <search-pagination
             :startIndex=startIndex
@@ -93,6 +105,7 @@ import constants from '../../constants';
 import api from '../../api';
 import SearchPagination from './SearchPagination.vue';
 import SearchTextGroups from './SearchTextGroups.vue';
+import SearchWorkGroups from './SearchWorkGroups.vue';
 import SearchResults from './SearchResults.vue';
 import TextLoader from '../../components/TextLoader.vue';
 
@@ -108,15 +121,18 @@ export default {
       totalResults: null,
       results: [],
       textGroups: [],
+      workGroups: [],
       firstLoading: false,
       secondLoading: false,
       showSearchResults: false,
       hasNext: false,
       hasPrev: false,
       searchType: 'form',
-      showClear: false,
-      tg: null,
-      showTextGroups: false
+      showClearTextGroup: false,
+      showClearWorkGroup: false,
+      textGroup: null,
+      showTextGroups: false,
+      showWorkGroups: false
     };
   },
   mounted() {
@@ -125,8 +141,9 @@ export default {
       this.searchQuery = queryParams.q;
       this.searchType = queryParams.kind || 'form';
       this.pageNum = queryParams.p;
-      this.tg = queryParams.tg;
-      this.handleSearch(this.pageNum, this.tg);
+      this.textGroup = queryParams.tg;
+      this.workGroup = queryParams.wg;
+      this.handleSearch(this.pageNum, this.textGroup, this.workGroup);
     }
   },
   methods: {
@@ -136,10 +153,17 @@ export default {
     handleTypeChange(e) {
       this.searchType = e.target.name;
     },
-    handleshowTextGroupsChange() {
+    handleShowTextGroupsChange() {
       this.showTextGroups = !this.showTextGroups;
+      this.showWorkGroups = !this.showWorkGroups;
     },
-    handleSearch(pageNum, urn=null) {
+    handleShowWorkGroupsChange() {
+      this.showWorkGroups = !this.showWorkGroups;
+    },
+    clearWorkGroups() {
+      this.workGroups = [];
+    },
+    handleSearch(pageNum, textGroup=null, workGroup=null) {
       const query = this.searchQuery;
       if (query !== '') {
         if (pageNum) {
@@ -148,31 +172,42 @@ export default {
           } else {
             this.secondLoading = true;
           }
-          this.showClear = false;
+          this.showClearTextGroup = false;
+          this.showClearWorkGroup = false;
         } else {
           this.firstLoading = true;
           this.showSearchResults = false;
-          this.showClear = false;
-          this.tg = null;
+          this.showClearTextGroup = false;
+          this.showClearWorkGroup = false;
+          this.textGroup = null;
+          this.workGroup = null;
           pageNum = 1;
           this.showTextGroups = false;
+          this.showWorkGroups = false;
         }
-        if (urn) {
-          this.showClear = true;
+        if (textGroup) {
+          this.showClearTextGroup = true;
           this.results = [];
-          this.tg = urn;
+          this.textGroup = textGroup;
         }
-        if (this.tg) {
-          this.showClear = true;
+        if (workGroup) {
+          this.showClearWorkGroup = true;
+          this.results = [];
+          this.workGroup = workGroup;
+        }
+        if (this.textGroup) {
+          this.showClearTextGroup = true;
         }
         const params = {
           kind: this.searchType,
           q: query,
           page_num: pageNum,
-          text_group: this.tg,
+          text_group: this.textGroup,
+          work_group: this.workGroup,
           type: 'library',
         }
         api.searchText(params, 'search/json/', result => {
+          console.log(result)
           this.showSearchResults = true;
           this.totalPages = result.page.num_pages;
           this.pageNum = result.page.number;
@@ -182,20 +217,30 @@ export default {
           this.hasPrev = result.page.has_previous;
           this.totalResults = result.total_count;
           this.results = result.results;
-          this.textGroups = result.text_groups
+          this.textGroups = result.text_groups;
           this.secondLoading = false;
           this.firstLoading = false;
-          if (this.tg) {
-            this.showClear = true;
+          if (this.textGroup) {
+            this.showClearTextGroup = true;
+            this.workGroups = result.work_groups;
+          }
+          if (this.workGroup) {
+            this.showClearWorkGroup = true;
           }
           // update url state
+          const urlState = {
+            q: this.searchQuery,
+            kind: this.searchType,
+            p: this.pageNum
+          }
+          if (this.textGroup) {
+            urlState.tg = this.textGroup;
+          }
+          if (this.workGroup) {
+            urlState.wg = this.workGroup;
+          }
           this.$router.replace({
-            query: {
-              q: this.searchQuery,
-              kind: this.searchType,
-              p: this.pageNum,
-              tg: this.tg
-            }
+            query: urlState,
           });
         });
       }
@@ -207,6 +252,7 @@ export default {
   components: {
     SearchPagination,
     SearchTextGroups,
+    SearchWorkGroups,
     SearchResults,
     TextLoader,
   },

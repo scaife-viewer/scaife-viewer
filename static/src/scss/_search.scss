@@ -63,4 +63,16 @@ body.search {
     margin-bottom: 20px;
     padding-top: 10px;
   }
+
+}
+
+.search-text-groups, .search-work-groups {
+  margin-bottom: 20px;
+
+  .small-link-container {
+    text-align: center;
+  }
+  .small-link-text {
+    cursor:pointer;color:#B45141;
+  }
 }
