@@ -92,7 +92,7 @@ you'll need to do the following:
     export FORCE_SCRIPT_NAME=/perseus  # this front slash is important
 ```
 
-2. Make sure this is set prior to runing `npm run build` as well as prior to and
+2. Make sure this is set prior to running `npm run build` as well as prior to and
    part of your wsgi startup environment.
 
 3. Then, you just set your proxy to point to the location of where your wsgi
@@ -109,6 +109,8 @@ That should be all you need to do.
 
 
 ## Deploying via Docker
+
+> In order to invalidate the client-side cache, be sure to bump the `API_VERSION` in `webpack.config.js` prior to each deploy.
 
 A sample docker-compose configuration is available at `deploy/docker-compose.yml`.
 

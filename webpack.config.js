@@ -64,6 +64,7 @@ const plugins = [
     NODE_ENV: 'development',
     FORCE_SCRIPT_NAME: '',
     CTS_API_ENDPOINT: 'https://scaife-cts-dev.perseus.org/api/cts',
+    API_VERSION: 1,
   }),
 ];
 

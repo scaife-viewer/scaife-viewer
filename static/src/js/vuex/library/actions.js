@@ -3,18 +3,37 @@ import constants from '../../constants';
 import transformTextGroupList from './transforms';
 
 export default {
-  [constants.LIBRARY_LOAD_TEXT_GROUP_LIST]: ({ commit }) => api.getTextGroupList((data) => {
+  [constants.LIBRARY_LOAD_TEXT_GROUP_LIST]: ({ commit }) => {
+    const currentVersion = process.env.API_VERSION;
+    const version = localStorage.getItem('libraryDataVersion');
+    const libraryData = JSON.parse(localStorage.getItem('libraryData'));
+
+    if (!version || parseInt(version, 10) < parseInt(currentVersion, 10) || !libraryData) {
+      return api.getTextGroupList((data) => {
+        localStorage.setItem('libraryData', JSON.stringify(data));
+        localStorage.setItem('libraryDataVersion', currentVersion);
+        const {
+          textGroups,
+          works,
+          texts,
+          textGroupUrns,
+        } = transformTextGroupList(data);
+
+        commit(constants.SET_TEXT_GROUPS, { textGroups, works, texts });
+        commit(constants.SET_TEXT_GROUP_URNS, { textGroupUrns });
+      });
+    }
     const {
       textGroups,
       works,
       texts,
       textGroupUrns,
-    } = transformTextGroupList(data);
+    } = transformTextGroupList(libraryData);
 
     commit(constants.SET_TEXT_GROUPS, { textGroups, works, texts });
     commit(constants.SET_TEXT_GROUP_URNS, { textGroupUrns });
-  }),
-
+    return true;
+  },
   [constants.LIBRARY_LOAD_WORK_LIST]: ({ commit }, urn) => api.getCollection(urn, (textGroup) => {
     // To reduce the load on the API, we prepare two vector calls against works
     // and texts.
