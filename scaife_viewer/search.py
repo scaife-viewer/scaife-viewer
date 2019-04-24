@@ -20,14 +20,14 @@ es = Elasticsearch(
 class SearchQuery:
 
     def __init__(
-        self, q, search_type, scope=None, sort_by=None, aggregate_field=None,
+        self, q, search_type, scope=None, sort_by=None, aggregate_fields=None,
         kind="form", fragments=0, size=10, offset=0
     ):
         self.q = q
         self.search_type = search_type
         self.scope = {} if scope is None else scope
         self.sort_by = sort_by
-        self.aggregate_field = aggregate_field
+        self.aggregate_fields = aggregate_fields
         self.kind = kind
         self.fragments = fragments
         self.size = size
@@ -47,18 +47,10 @@ class SearchQuery:
             return {"sort": [{"sort_idx": "asc"}]}
 
     def query_aggs(self):
-        if not self.aggregate_field:
-            return {}
-        return {
-            "aggs": {
-                f"filtered_{self.aggregate_field}": {
-                    "terms": {
-                        "field": self.aggregate_field,
-                        "size": 300,
-                    },
-                },
-            },
-        }
+        aggs = {}
+        if self.aggregate_fields:
+            aggs["aggs"] = self.aggregate_fields
+        return aggs
 
     def query(self):
         q = {}
@@ -165,9 +157,9 @@ class SearchResultSet:
     def result(self, hit):
         return SearchResult(hit)
 
-    def filtered_text_groups(self):
+    def filtered_aggs(self, aggregate_type):
         buckets = []
-        for bucket in self.response["aggregations"]["filtered_text_group"]["buckets"]:
+        for bucket in self.response["aggregations"][aggregate_type]["buckets"]:
             buckets.append({
                 "text_group": cts.collection(bucket["key"]).as_json(),
                 "count": bucket["doc_count"],

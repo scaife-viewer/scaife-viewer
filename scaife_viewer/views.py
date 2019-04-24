@@ -276,6 +276,7 @@ def search_json(request):
     kind = request.GET.get("kind", "form")
     size = int(request.GET.get("size", "10"))
     text_group_urn = request.GET.get("text_group")
+    work_group_urn = request.GET.get("work_group")
 
     # validate params
     if not search_type:
@@ -286,9 +287,18 @@ def search_json(request):
     scope = {}
     data = {"results": []}
 
+    # conduct search
     if search_type == "library":
 
         page_num = int(request.GET.get("page_num"))
+        aggregate_fields = {
+            "filtered_text_group": {
+                "terms": {
+                    "field": "text_group",
+                    "size": 300,
+                }
+            }
+        }
 
         data.update({
             "q": q,
@@ -299,16 +309,30 @@ def search_json(request):
 
         if text_group_urn:
             scope["text_group"] = text_group_urn
+            aggregate_fields["filtered_work"] = {
+                "terms": {
+                    "field": "work",
+                    "size": 300,
+                }
+            }
+
+        if work_group_urn:
+            scope = {}
+            scope["work"] = work_group_urn
 
         kwargs = {
             "search_type": search_type,
             "scope": scope,
-            "aggregate_field": "text_group",
+            "aggregate_fields": aggregate_fields,
             "kind": kind,
             "fragments": 10000,
             "offset": (page_num - 1) * 10
         }
-        sq = SearchQuery(q, **kwargs)
+        try:
+            sq = SearchQuery(q, **kwargs)
+        except Exception as e:
+            print(e)
+
         total_count = sq.count()
         page = get_pagination_info(total_count, page_num)
         results = sq.search_window(size=size, offset=((page_num - 1) * 10))
@@ -324,7 +348,8 @@ def search_json(request):
             data["results"].append(r)
 
         data.update({
-            "text_groups": results.filtered_text_groups(),
+            "text_groups": results.filtered_aggs("filtered_text_group"),
+            "work_groups": results.filtered_aggs("filtered_work") if text_group_urn else None,
             "total_count": total_count,
             "page": page,
         })
