@@ -91,9 +91,10 @@ class LibraryInfoView(View):
 
     def get(self, request, **kwargs):
         payload = {
-          "api_version": settings.LIBRARY_VIEW_API_VERSION
+            "api_version": settings.LIBRARY_VIEW_API_VERSION
         }
         return JsonResponse(payload)
+
 
 class LibraryCollectionView(LibraryConditionMixin, BaseLibraryView):
 
