@@ -141,6 +141,7 @@ echo "FORCE_SCRIPT_NAME=/<your-off-root-path>" >> deploy/.env
 ```
 
 Then, bring up all services:
+
 ```
 docker-compose -f deploy/docker-compose.yml up -d
 ```
@@ -165,4 +166,17 @@ To run only the `scaife-viewer` and `sv-webpack` services:
 
 ```
 docker-compose -f deploy/docker-compose.yml -f deploy/docker-compose.override.yml up --build scaife-viewer sv-webpack
+```
+
+If you come across this error:
+
+```
+Node Sass could not find a binding for your current environment
+```
+
+Bring down the containers, and then spin them back up:
+
+```
+docker-compose -f deploy/docker-compose.yml -f deploy/docker-compose.override.yml down -v
+docker-compose -f deploy/docker-compose.yml -f deploy/docker-compose.override.yml up --build
 ```

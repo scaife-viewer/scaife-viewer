@@ -63,10 +63,13 @@ export default {
     this.loading = true;
     this.$store.dispatch(constants.LIBRARY_LOAD_TEXT_GROUP_LIST)
       .then(() => {
-        this.loading = false;
-        this.$nextTick(() => {
-          this.$refs['filter-input'].focus();
-        });
+        // delay for vuex store update
+        setTimeout(()=> {
+          this.loading = false;
+          this.$nextTick(() => {
+            this.$refs['filter-input'].focus();
+          });
+        }, 100)
       })
       // .catch((err) => {
       //   this.loading = false;
