@@ -3,6 +3,7 @@ import json
 import os
 from urllib.parse import urlencode
 
+from django.conf import settings
 from django.http import (
     Http404,
     HttpResponse,
@@ -12,7 +13,6 @@ from django.http import (
 from django.shortcuts import redirect, render
 from django.views import View
 from django.views.generic.base import TemplateView
-from django.conf import settings
 
 import dateutil.parser
 import requests
