@@ -17,7 +17,7 @@ export default {
             const version = {
               version: res.api_version,
               date: new Date(),
-            }
+            };
             localStorage.setItem('libraryDataVersion', JSON.stringify(version));
           } catch (e) {
             if (utils.isQuotaExceeded(e)) {
@@ -45,7 +45,7 @@ export default {
       commit(constants.SET_TEXT_GROUPS, { textGroups, works, texts });
       commit(constants.SET_TEXT_GROUP_URNS, { textGroupUrns });
       return true;
-    })
+    });
   },
   [constants.LIBRARY_LOAD_WORK_LIST]: ({ commit }, urn) => api.getCollection(urn, (textGroup) => {
     // To reduce the load on the API, we prepare two vector calls against works
