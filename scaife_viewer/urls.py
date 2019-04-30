@@ -7,9 +7,9 @@ from django.contrib import admin
 from .views import (
     LibraryCollectionVectorView,
     LibraryCollectionView,
+    LibraryInfoView,
     LibraryPassageView,
     LibraryView,
-    LibraryInfoView,
     Reader,
     about,
     app,
