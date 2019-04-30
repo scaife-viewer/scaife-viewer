@@ -9,6 +9,7 @@ BASE_DIR = PACKAGE_ROOT
 
 DEBUG = bool(int(os.environ.get("DEBUG", "1")))
 TRACING_ENABLED = bool(int(os.environ.get("TRACING_ENABLED", not DEBUG)))
+LIBRARY_VIEW_API_VERSION = int(os.environ.get("LIBRARY_VIEW_API_VERSION", 0))
 
 DATABASES = {
     "default": dj_database_url.config(default="postgres://localhost/scaife-viewer")

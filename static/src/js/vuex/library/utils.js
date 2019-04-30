@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 function isQuotaExceeded(error) {
   let quotaExceeded = false;
   if (error) {
@@ -19,6 +21,22 @@ function isQuotaExceeded(error) {
   return quotaExceeded;
 }
 
+function isCacheValid(apiVersion, currentVersion) {
+  if (!apiVersion || !currentVersion) {
+    return false;
+  }
+  if (currentVersion.version && currentVersion.date) {
+    if (parseInt(apiVersion, 10) > parseInt(currentVersion.version, 10)) {
+      return false;
+    }
+    if (dayjs().isAfter(dayjs(currentVersion.date).add(1, 'day'))) {
+      return false;
+    }
+  }
+  return true;
+}
+
 export default {
   isQuotaExceeded,
+  isCacheValid,
 };
