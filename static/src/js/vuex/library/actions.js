@@ -1,6 +1,7 @@
 import api from '../../api';
 import constants from '../../constants';
 import transformTextGroupList from './transforms';
+import utils from './utils';
 
 export default {
   [constants.LIBRARY_LOAD_TEXT_GROUP_LIST]: ({ commit }) => {
@@ -10,8 +11,15 @@ export default {
 
     if (!version || parseInt(version, 10) < parseInt(currentVersion, 10) || !libraryData) {
       return api.getTextGroupList((data) => {
-        localStorage.setItem('libraryData', JSON.stringify(data));
-        localStorage.setItem('libraryDataVersion', currentVersion);
+        // add data to localStorage
+        try {
+          localStorage.setItem('libraryData', JSON.stringify(data));
+          localStorage.setItem('libraryDataVersion', currentVersion);
+        } catch (e) {
+          if (utils.isQuotaExceeded(e)) {
+            console.log('localStorage is full!');
+          }
+        }
         const {
           textGroups,
           works,
