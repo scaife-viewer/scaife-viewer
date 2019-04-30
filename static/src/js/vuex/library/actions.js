@@ -17,7 +17,7 @@ export default {
           localStorage.setItem('libraryDataVersion', currentVersion);
         } catch (e) {
           if (utils.isQuotaExceeded(e)) {
-            console.log('localStorage is full!');
+            console.error('localStorage is full!'); // eslint-disable-line no-console
           }
         }
         const {

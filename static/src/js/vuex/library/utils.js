@@ -1,5 +1,4 @@
 function isQuotaExceeded(error) {
-  console.log(error)
   let quotaExceeded = false;
   if (error) {
     if (error.code) {
