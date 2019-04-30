@@ -16,6 +16,7 @@
     "@fortawesome/vue-fontawesome": "^0.1.5",
     "axios": "^0.18.0",
     "bootstrap": "^4.2.1",
+    "dayjs": "^1.8.13",
     "json-schema": "^0.2.3",
     "keykey": "^2.1.1",
     "loaders.css": "^0.1.2",

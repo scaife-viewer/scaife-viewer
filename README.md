@@ -110,8 +110,6 @@ That should be all you need to do.
 
 ## Deploying via Docker
 
-> In order to invalidate the client-side cache, be sure to bump the `API_VERSION` in `webpack.config.js` prior to each deploy.
-
 A sample docker-compose configuration is available at `deploy/docker-compose.yml`.
 
 Copy `.env.example` and customize environment variables for your deployment:
@@ -180,3 +178,7 @@ Bring down the containers, and then spin them back up:
 docker-compose -f deploy/docker-compose.yml -f deploy/docker-compose.override.yml down -v
 docker-compose -f deploy/docker-compose.yml -f deploy/docker-compose.override.yml up --build
 ```
+
+## API Library Cache
+
+The client-side currently caches the results of `library/json/`. The cache is automatically invalidated every 24 hours. You can manually invalidate it by bumping the `LIBRARY_VIEW_API_VERSION` environment variable.

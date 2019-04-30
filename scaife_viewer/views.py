@@ -12,6 +12,7 @@ from django.http import (
 from django.shortcuts import redirect, render
 from django.views import View
 from django.views.generic.base import TemplateView
+from django.conf import settings
 
 import dateutil.parser
 import requests
@@ -85,6 +86,14 @@ class LibraryView(LibraryConditionMixin, BaseLibraryView):
         }
         return JsonResponse(payload)
 
+
+class LibraryInfoView(View):
+
+    def get(self, request, **kwargs):
+        payload = {
+          "api_version": settings.LIBRARY_VIEW_API_VERSION
+        }
+        return JsonResponse(payload)
 
 class LibraryCollectionView(LibraryConditionMixin, BaseLibraryView):
 

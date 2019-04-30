@@ -9,6 +9,7 @@ from .views import (
     LibraryCollectionView,
     LibraryPassageView,
     LibraryView,
+    LibraryInfoView,
     Reader,
     about,
     app,
@@ -24,6 +25,7 @@ from .views import (
 api_patterns = (
     [
         path("library/json/", LibraryView.as_view(format="json"), name="library"),
+        path("library/json/info", LibraryInfoView.as_view(), name="library_info"),
         path("library/vector/<str:urn>/", LibraryCollectionVectorView.as_view(), name="library_collection_vector"),
         path("library/passage/<str:urn>/json/", LibraryPassageView.as_view(format="json"), name="library_passage"),
         path("library/passage/<str:urn>/text/", LibraryPassageView.as_view(format="text"), name="library_passage_text"),
