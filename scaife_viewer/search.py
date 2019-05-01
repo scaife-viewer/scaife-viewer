@@ -21,7 +21,7 @@ class SearchQuery:
 
     def __init__(
         self, q, search_type, scope=None, sort_by=None, aggregate_field=None,
-        kind="form", fragments=5, size=10, offset=0
+        kind="form", fragments=0, size=10, offset=0
     ):
         self.q = q
         self.search_type = search_type
