@@ -220,7 +220,7 @@ class TEIRenderer:
                 }
             )
             try:
-                return str(transform(self.tei))
+                return str(transform(self.tei)).replace("\n", "")
             except Exception:
                 for error in transform.error_log:
                     print(error.message, error.line)
