@@ -22,16 +22,14 @@ function isQuotaExceeded(error) {
 }
 
 function isCacheValid(apiVersion, currentVersion) {
-  if (!apiVersion || !currentVersion) {
+  if (!apiVersion || !currentVersion || !currentVersion.version || !currentVersion.date) {
     return false;
   }
-  if (currentVersion.version && currentVersion.date) {
-    if (parseInt(apiVersion, 10) > parseInt(currentVersion.version, 10)) {
-      return false;
-    }
-    if (dayjs().isAfter(dayjs(currentVersion.date).add(1, 'day'))) {
-      return false;
-    }
+  if (parseInt(apiVersion, 10) > parseInt(currentVersion.version, 10)) {
+    return false;
+  }
+  if (dayjs().isAfter(dayjs(currentVersion.date).add(1, 'day'))) {
+    return false;
   }
   return true;
 }
