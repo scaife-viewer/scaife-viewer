@@ -12,19 +12,26 @@ from . import cts
 
 es = Elasticsearch(
     hosts=settings.ELASTICSEARCH_HOSTS,
-    sniff_on_start=True,
-    sniff_on_connection_fail=True,
+    sniff_on_start=settings.ELASTICSEARCH_SNIFF_ON_START,
+    sniff_on_connection_fail=settings.ELASTICSEARCH_SNIFF_ON_CONNECTION_FAIL,
 )
 
 
 class SearchQuery:
 
-    def __init__(self, q, scope=None, sort_by=None, aggregate_field=None, kind="form"):
+    def __init__(
+        self, q, search_type, scope=None, sort_by=None, aggregate_field=None,
+        kind="form", fragments=5, size=10, offset=0
+    ):
         self.q = q
+        self.search_type = search_type
         self.scope = {} if scope is None else scope
         self.sort_by = sort_by
         self.aggregate_field = aggregate_field
         self.kind = kind
+        self.fragments = fragments
+        self.size = size
+        self.offset = offset
         self.total_count = None
 
     def query_index(self):
@@ -57,8 +64,11 @@ class SearchQuery:
         q = {}
         if self.kind == "lemma":
             fields = ["lemma_content"]
-        else:
-            fields = ["content"]
+        elif self.kind == "form":
+            if self.search_type == "library":
+                fields = ["raw_content"]
+            else:
+                fields = ["content"]
         sq = {
             "simple_query_string": {
                 "query": self.q,
@@ -80,12 +90,16 @@ class SearchQuery:
     def query_highlight(self):
         if self.kind == "lemma":
             fields = {"lemma_content": {}}
-        else:
-            fields = {"content": {}}
+        elif self.kind == "form":
+            if self.search_type == "library":
+                fields = {"raw_content": {}}
+            else:
+                fields = {"content": {}}
         return {
             "highlight": {
                 "type": "fvh",
-                "number_of_fragments": 0,
+                "number_of_fragments": self.fragments,
+                "fragment_size": 60,
                 "fields": fields,
             }
         }
@@ -104,7 +118,8 @@ class SearchQuery:
         }
 
     def search_window(self, **kwargs):
-        return SearchResultSet(es.search(**self.search_kwargs(**kwargs)))
+        results = es.search(**self.search_kwargs(**kwargs))
+        return SearchResultSet(results, self.search_type, self.kind)
 
     def __iter__(self):
         return iter(self.search_window())
@@ -138,8 +153,10 @@ class SearchQuery:
 
 class SearchResultSet:
 
-    def __init__(self, response):
+    def __init__(self, response, search_type, kind):
         self.response = response
+        self.search_type = search_type
+        self.kind = kind
 
     def __iter__(self):
         for hit in self.response["hits"]["hits"]:
@@ -152,7 +169,7 @@ class SearchResultSet:
         buckets = []
         for bucket in self.response["aggregations"]["filtered_text_group"]["buckets"]:
             buckets.append({
-                "text_group": cts.collection(bucket["key"]),
+                "text_group": cts.collection(bucket["key"]).as_json(),
                 "count": bucket["doc_count"],
             })
         return sorted(buckets, key=itemgetter("count"), reverse=True)
@@ -164,6 +181,7 @@ class SearchResult:
         self.hit = hit
         self.passage = cts.passage(hit["_id"])
         self.link_urn = self.passage.urn  # @@@ consider dynamically chunking and giving a better passage URN
+        self.raw_content = hit["highlight"].get("raw_content", [""])
         self.content_highlights = hit["highlight"].get("content", [""])[0]
         self.lemma_highlights = hit["highlight"].get("lemma_content", [""])[0]
         self.highlighter = Highlighter(

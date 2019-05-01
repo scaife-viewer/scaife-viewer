@@ -23,6 +23,12 @@ export default {
   },
   mounted() {
     this.setInputVal();
+    const queryParams = this.$route.query;
+    if (Object.entries(queryParams).length !== 0 && queryParams.constructor === Object) {
+      if (queryParams.highlight) {
+        this.$store.dispatch(`reader/${constants.READER_HIGHLIGHT}`, { highlight: queryParams.highlight });
+      }
+    }
   },
   computed: {
     highlight() {
@@ -46,6 +52,11 @@ export default {
           this.$store.dispatch(`reader/${constants.READER_HIGHLIGHT}`, { highlight: this.value });
         }
         e.currentTarget.blur();
+        this.$router.replace({
+          query: {
+            highlight: this.value,
+          }
+        });
       } else {
         e.stopPropagation();
       }

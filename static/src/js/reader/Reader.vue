@@ -101,7 +101,9 @@
           <widget-passage-links />
           <widget-text-mode />
           <widget-text-size />
+          <widget-text-width />
           <widget-highlight />
+          <widget-passage-exports />
           <widget-morpheus />
           <widget-token-list />
           <widget-word-list />
@@ -127,12 +129,14 @@ import WidgetPassageReference from './widgets/WidgetPassageReference.vue';
 import WidgetSearch from './widgets/WidgetSearch.vue';
 import WidgetHighlight from './widgets/WidgetHighlight.vue';
 import WidgetPassageLinks from './widgets/WidgetPassageLinks.vue';
+import WidgetPassageExports from './widgets/WidgetPassageExports.vue';
 import WidgetTextMode from './widgets/WidgetTextMode.vue';
 import WidgetTextSize from './widgets/WidgetTextSize.vue';
 import WidgetMorpheus from './widgets/WidgetMorpheus.vue';
 import WidgetWordList from './widgets/WidgetWordList.vue';
 import WidgetTokenList from './widgets/WidgetTokenList.vue';
 import WidgetCHSCommentary from './widgets/WidgetCHSCommentary.vue';
+import WidgetTextWidth from './widgets/WidgetTextWidth.vue';
 
 const widgets = {
   WidgetPassageAncestors,
@@ -140,12 +144,14 @@ const widgets = {
   WidgetPassageReference,
   WidgetSearch,
   WidgetPassageLinks,
+  WidgetPassageExports,
   WidgetTextMode,
   WidgetTextSize,
   WidgetHighlight,
   WidgetMorpheus,
   WidgetWordList,
   WidgetTokenList,
+  WidgetTextWidth,
   'widget-chs-commentary': WidgetCHSCommentary,
 };
 

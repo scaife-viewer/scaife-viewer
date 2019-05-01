@@ -6,7 +6,8 @@
     "start": "HOT_RELOAD=1 webpack-dev-server --mode development",
     "lint": "eslint .",
     "build": "NODE_ENV=production webpack --mode production",
-    "heroku-postbuild": "npm run build"
+    "heroku-postbuild": "npm run build",
+    "unit": "jest"
   },
   "dependencies": {
     "@babel/polyfill": "^7.2.5",
@@ -15,6 +16,7 @@
     "@fortawesome/vue-fontawesome": "^0.1.5",
     "axios": "^0.18.0",
     "bootstrap": "^4.2.1",
+    "dayjs": "^1.8.13",
     "json-schema": "^0.2.3",
     "keykey": "^2.1.1",
     "loaders.css": "^0.1.2",
@@ -34,9 +36,11 @@
     "@babel/plugin-transform-runtime": "^7.2.0",
     "@babel/preset-env": "^7.3.1",
     "@sentry/webpack-plugin": "^1.6.1",
-    "@vue/test-utils": "^1.0.0-beta.28",
+    "@vue/test-utils": "^1.0.0-beta.29",
     "autoprefixer": "^9.4.6",
+    "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
+    "babel-jest": "^24.5.0",
     "babel-loader": "^8.0.5",
     "browserslist": "^4.4.1",
     "clean-webpack-plugin": "^1.0.1",
@@ -51,6 +55,7 @@
     "eslint-plugin-vue": "^5.1.0",
     "file-loader": "^3.0.1",
     "imports-loader": "^0.8.0",
+    "jest": "^24.5.0",
     "mini-css-extract-plugin": "^0.5.0",
     "node-sass": "^4.11.0",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
@@ -58,6 +63,7 @@
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.0",
     "terser-webpack-plugin": "^1.2.1",
+    "vue-jest": "^3.0.4",
     "vue-loader": "^15.5.1",
     "vue-style-loader": "^4.1.2",
     "vue-template-compiler": "^2.5.22",
@@ -70,5 +76,16 @@
   "engines": {
     "node": "^11.7.0",
     "npm": "^6.5.0"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "vue"
+    ],
+    "transform": {
+      "^.+\\.js$": "./node_modules/babel-jest",
+      ".*\\.(vue)$": "./node_modules/vue-jest"
+    }
   }
 }

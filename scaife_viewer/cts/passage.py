@@ -78,6 +78,13 @@ class Passage:
         text = self.textual_node().export(Mimetypes.PLAINTEXT)
         return unicodedata.normalize("NFC", text)
 
+    @property
+    def xml(self):
+        """
+        Returns the passage as XML
+        """
+        return self.textual_node().export(Mimetypes.XML.TEI)
+
     def next(self):
         reference = self.textual_node().nextId
         if reference:
