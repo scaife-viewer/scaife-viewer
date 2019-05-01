@@ -3,6 +3,7 @@ import json
 import os
 from urllib.parse import urlencode
 
+from django.conf import settings
 from django.http import (
     Http404,
     HttpResponse,
@@ -82,6 +83,15 @@ class LibraryView(LibraryConditionMixin, BaseLibraryView):
             "text_groups": [apify(text_group) for text_group in text_groups],
             "works": [apify(work) for work in works],
             "texts": [apify(text, with_toc=False) for text in texts],
+        }
+        return JsonResponse(payload)
+
+
+class LibraryInfoView(View):
+
+    def get(self, request, **kwargs):
+        payload = {
+            "api_version": settings.LIBRARY_VIEW_API_VERSION
         }
         return JsonResponse(payload)
 
