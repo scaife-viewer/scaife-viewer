@@ -1,0 +1,107 @@
+[
+  {
+    "text_group": {
+      "urn": "urn:cts:greekLit:tlg0059.tlg011",
+      "label": "Symposium",
+      "texts": [
+        {
+          "urn": "urn:cts:greekLit:tlg0059.tlg011.perseus-grc2"
+        },
+        {
+          "urn": "urn:cts:greekLit:tlg0059.tlg011.perseus-eng2"
+        }
+      ]
+    },
+    "count": 38
+  },
+  {
+    "text_group": {
+      "urn": "urn:cts:greekLit:tlg0059.tlg030",
+      "label": "Republic",
+      "texts": [
+        {
+          "urn": "urn:cts:greekLit:tlg0059.tlg030.perseus-grc2"
+        },
+        {
+          "urn": "urn:cts:greekLit:tlg0059.tlg030.perseus-eng2"
+        }
+      ]
+    },
+    "count": 35
+  },
+  {
+    "text_group": {
+      "urn": "urn:cts:greekLit:tlg0059.tlg012",
+      "label": "Phaedrus",
+      "texts": [
+        {
+          "urn": "urn:cts:greekLit:tlg0059.tlg012.perseus-grc2"
+        },
+        {
+          "urn": "urn:cts:greekLit:tlg0059.tlg012.perseus-eng2"
+        }
+      ]
+    },
+    "count": 25
+  },
+  {
+    "text_group": {
+      "urn": "urn:cts:greekLit:tlg0059.tlg034",
+      "label": "Laws",
+      "texts": [
+        {
+          "urn": "urn:cts:greekLit:tlg0059.tlg034.perseus-grc2"
+        },
+        {
+          "urn": "urn:cts:greekLit:tlg0059.tlg034.perseus-eng2"
+        }
+      ]
+    },
+    "count": 21
+  },
+  {
+    "text_group": {
+      "urn": "urn:cts:greekLit:tlg0059.tlg020",
+      "label": "Lysis",
+      "texts": [
+        {
+          "urn": "urn:cts:greekLit:tlg0059.tlg020.perseus-grc2"
+        },
+        {
+          "urn": "urn:cts:greekLit:tlg0059.tlg020.perseus-eng2"
+        }
+      ]
+    },
+    "count": 10
+  },
+  {
+    "text_group": {
+      "urn": "urn:cts:greekLit:tlg0059.tlg036",
+      "label": "Epistles",
+      "texts": [
+        {
+          "urn": "urn:cts:greekLit:tlg0059.tlg036.perseus-grc2"
+        },
+        {
+          "urn": "urn:cts:greekLit:tlg0059.tlg036.perseus-eng2"
+        }
+      ]
+    },
+    "count": 7
+  },
+  {
+    "text_group": {
+      "urn": "urn:cts:greekLit:tlg0059.tlg013",
+      "label": "Alcibiades 1",
+      "texts": [
+        {
+          "urn": "urn:cts:greekLit:tlg0059.tlg013.perseus-grc2"
+        },
+        {
+          "urn": "urn:cts:greekLit:tlg0059.tlg013.perseus-eng2"
+        }
+      ]
+    },
+    "count": 5
+  }
+]
