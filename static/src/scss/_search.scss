@@ -63,4 +63,21 @@ body.search {
     margin-bottom: 20px;
     padding-top: 10px;
   }
+
+}
+
+.search-text-groups, .search-works {
+  margin-bottom: 20px;
+
+  .link-container {
+    text-align: center;
+  }
+  .link-text {
+    cursor: pointer;
+    color: #B45141 !important;
+    &:hover {
+      color: #7c382d !important;
+      text-decoration: underline !important;
+    }
+  }
 }
