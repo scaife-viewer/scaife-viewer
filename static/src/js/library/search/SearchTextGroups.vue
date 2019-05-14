@@ -5,7 +5,7 @@
       <h5 v-if="showClearTextGroup">
         <span>Text Groups</span>
         &nbsp;
-        <small style="cursor:pointer;color:#B45141;" @click="handleClear()">clear</small>
+        <small class="link-text clear-btn" @click="handleClear()">clear</small>
       </h5>
       <h5 v-if="!showClearTextGroup">Text Groups</h5>
       <div class="list-group">
@@ -13,8 +13,7 @@
           v-if="!seeMore"
           v-for="ftg in firstTenTextGroups"
           :key="ftg.text_group.urn"
-          class="list-group-item d-flex justify-content-between align-items-center"
-          style="cursor:pointer;color:#B45141;"
+          class="list-group-item d-flex justify-content-between align-items-center link-text"
           @click="handleSearch(1, ftg.text_group.urn)"
         >
           <span>{{ ftg.text_group.label }}</span>
@@ -24,20 +23,19 @@
           v-if="seeMore"
           v-for="ftg in allTextGroups"
           :key="ftg.text_group.urn"
-          class="list-group-item d-flex justify-content-between align-items-center"
-          style="cursor:pointer;color:#B45141;"
+          class="list-group-item d-flex justify-content-between align-items-center link-text"
           @click="handleSearch(1, ftg.text_group.urn)"
         >
           <span>{{ ftg.text_group.label }}</span>
           <span class="badge badge-primary badge-pill">{{ ftg.count }}</span>
         </a>
-        <div class="small-link-container">
+        <div class="link-container">
           <small>
-            <span v-if="!seeMore && !showClearTextGroup && showSeeMore" class="small-link-text" @click="toggleTextGroups()">
+            <span v-if="!seeMore && !showClearTextGroup && showSeeMore" class="link-text" @click="toggleTextGroups()">
               <span><i class="fas fa-chevron-down"></i></span>
               &nbsp;See More
             </span>
-            <span v-if="seeMore && !showClearTextGroup && showSeeMore" class="small-link-text" @click="toggleTextGroups()">
+            <span v-if="seeMore && !showClearTextGroup && showSeeMore" class="link-text" @click="toggleTextGroups()">
               <span><i class="fas fa-chevron-up"></i></span>
               &nbsp;See Less
             </span>
@@ -50,19 +48,18 @@
       <h5>
         <span>Text Groups</span>
           <span @click="handleShowTextGroupsChange" v-show="!showTextGroups">
-            <i class="far fa-caret-square-down" style="cursor:pointer;color:#B45141;"></i>
+            <i class="far fa-caret-square-down link-text"></i>
           </span>
           <span @click="handleShowTextGroupsChange" v-show="showTextGroups">
-            <i class="far fa-caret-square-up" style="cursor:pointer;color:#B45141;"></i>
+            <i class="far fa-caret-square-up link-text"></i>
           </span>
-        <small style="cursor:pointer;color:#B45141;" @click="handleClear()" v-if="showClearTextGroup">&nbsp;clear</small>
+        <small class="link-text" @click="handleClear()" v-if="showClearTextGroup">&nbsp;clear</small>
       </h5>
       <div class="list-group" :style="{'display':showTextGroups?'block':'none'}">
         <a
           v-for="ftg in firstTenTextGroups"
           :key="ftg.text_group.urn"
-          class="list-group-item d-flex justify-content-between align-items-center"
-          style="cursor:pointer;color:#B45141;"
+          class="list-group-item d-flex justify-content-between align-items-center link-text"
           @click="handleSearch(1, ftg.text_group.urn)"
         >
           <span>{{ ftg.text_group.label }}</span>
@@ -88,7 +85,7 @@ export default {
   },
   computed: {
     allTextGroups() {
-      return this.textGroups
+      return this.textGroups;
     },
     firstTenTextGroups() {
       this.showSeeMore = false;

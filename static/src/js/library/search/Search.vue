@@ -207,7 +207,6 @@ export default {
           type: 'library',
         }
         api.searchText(params, 'search/json/', result => {
-          console.log(result)
           this.showSearchResults = true;
           this.totalPages = result.page.num_pages;
           this.pageNum = result.page.number;

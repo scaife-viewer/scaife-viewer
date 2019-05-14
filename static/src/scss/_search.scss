@@ -69,10 +69,15 @@ body.search {
 .search-text-groups, .search-work-groups {
   margin-bottom: 20px;
 
-  .small-link-container {
+  .link-container {
     text-align: center;
   }
-  .small-link-text {
-    cursor:pointer;color:#B45141;
+  .link-text {
+    cursor: pointer;
+    color: #B45141 !important;
+    &:hover {
+      color: #7c382d !important;
+      text-decoration: underline !important;
+    }
   }
 }

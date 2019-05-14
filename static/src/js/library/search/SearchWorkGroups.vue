@@ -5,7 +5,7 @@
       <h5 v-if="showClearWorkGroup">
         <span>Work Groups</span>
         &nbsp;
-        <small style="cursor:pointer;color:#B45141;" @click="handleClear()">clear</small>
+        <small class="link-text clear-btn" @click="handleClear()">clear</small>
       </h5>
       <h5 v-if="!showClearWorkGroup">Work Groups</h5>
       <div class="list-group">
@@ -13,8 +13,7 @@
           v-if="!seeMore"
           v-for="work in firstTenWorkGroups"
           :key="work.text_group.urn"
-          class="list-group-item d-flex justify-content-between align-items-center"
-          style="cursor:pointer;color:#B45141;"
+          class="list-group-item d-flex justify-content-between align-items-center link-text"
           @click="handleSearch(1, 0, work.text_group.urn)"
         >
           <span>{{ work.text_group.label }}</span>
@@ -24,20 +23,19 @@
           v-if="seeMore"
           v-for="work in allworkGroups"
           :key="work.text_group.urn"
-          class="list-group-item d-flex justify-content-between align-items-center"
-          style="cursor:pointer;color:#B45141;"
+          class="list-group-item d-flex justify-content-between align-items-center link-text"
           @click="handleSearch(1, 0, work.text_group.urn)"
         >
           <span>{{ work.text_group.label }}</span>
           <span class="badge badge-primary badge-pill">{{ work.count }}</span>
         </a>
-        <div class="small-link-container">
+        <div class="link-container">
           <small>
-            <span v-if="!seeMore && !showClearWorkGroup && showSeeMore" class="small-link-text" @click="toggleWorkGroups()">
+            <span v-if="!seeMore && !showClearWorkGroup && showSeeMore" class="link-text" @click="toggleWorkGroups()">
               <span><i class="fas fa-chevron-down"></i></span>
               &nbsp;See More
             </span>
-            <span v-if="seeMore && !showClearWorkGroup && showSeeMore" class="small-link-text" @click="toggleWorkGroups()">
+            <span v-if="seeMore && !showClearWorkGroup && showSeeMore" class="link-text" @click="toggleWorkGroups()">
               <span><i class="fas fa-chevron-up"></i></span>
               &nbsp;See Less
             </span>
@@ -50,19 +48,18 @@
       <h5>
         <span>Work Groups</span>
           <span @click="handleShowWorkGroupsChange" v-show="!showWorkGroups">
-            <i class="far fa-caret-square-down" style="cursor:pointer;color:#B45141;"></i>
+            <i class="far fa-caret-square-down link-text"></i>
           </span>
           <span @click="handleShowWorkGroupsChange" v-show="showWorkGroups">
-            <i class="far fa-caret-square-up" style="cursor:pointer;color:#B45141;"></i>
+            <i class="far fa-caret-square-up link-text"></i>
           </span>
-        <small style="cursor:pointer;color:#B45141;"  @click="handleClear()" v-if="showClearWorkGroup">&nbsp;clear</small>
+        <small class="link-text"  @click="handleClear()" v-if="showClearWorkGroup">&nbsp;clear</small>
       </h5>
       <div class="list-group" :style="{'display':showWorkGroups?'block':'none'}">
         <a
           v-for="work in firstTenWorkGroups"
           :key="work.text_group.urn"
-          class="list-group-item d-flex justify-content-between align-items-center"
-          style="cursor:pointer;color:#B45141;"
+          class="list-group-item d-flex justify-content-between align-items-center link-text"
           @click="handleSearch(1, 0, work.text_group.urn)"
         >
           <span>{{ work.text_group.label }}</span>
@@ -88,7 +85,7 @@ export default {
   },
   computed: {
     allworkGroups() {
-      return this.workGroups
+      return this.workGroups;
     },
     firstTenWorkGroups() {
       this.showSeeMore = false;
@@ -103,9 +100,7 @@ export default {
       this.seeMore = !this.seeMore;
     },
     handleClear() {
-      this.handleSearch(0, this.textGroup)
-      // this.textGroups = []
-      // this.workGroups = []
+      this.handleSearch(0, this.textGroup);
     }
   },
 };
