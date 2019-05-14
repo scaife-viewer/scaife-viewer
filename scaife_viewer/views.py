@@ -276,7 +276,7 @@ def search_json(request):
     kind = request.GET.get("kind", "form")
     size = int(request.GET.get("size", "10"))
     text_group_urn = request.GET.get("text_group")
-    work_group_urn = request.GET.get("work_group")
+    work_urn = request.GET.get("work")
 
     # validate params
     if not search_type:
@@ -316,9 +316,9 @@ def search_json(request):
                 }
             }
 
-        if work_group_urn:
+        if work_urn:
             scope = {}
-            scope["work"] = work_group_urn
+            scope["work"] = work_urn
 
         kwargs = {
             "search_type": search_type,
@@ -349,7 +349,7 @@ def search_json(request):
 
         data.update({
             "text_groups": results.filtered_aggs("filtered_text_group"),
-            "work_groups": results.filtered_aggs("filtered_work") if text_group_urn else None,
+            "works": results.filtered_aggs("filtered_work") if text_group_urn else None,
             "total_count": total_count,
             "page": page,
         })

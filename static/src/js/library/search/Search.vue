@@ -53,15 +53,15 @@
             :showClearTextGroup=showClearTextGroup
             :showTextGroups=showTextGroups
             :handleShowTextGroupsChange=handleShowTextGroupsChange
-            :clearWorkGroups=clearWorkGroups
+            :clearWorks=clearWorks
           />
-          <search-work-groups
-            v-if="workGroups.length"
-            :workGroups=workGroups
+          <search-works
+            v-if="works.length"
+            :works=works
             :handleSearch=handleSearch
-            :showClearWorkGroup=showClearWorkGroup
-            :showWorkGroups=showWorkGroups
-            :handleShowWorkGroupsChange=handleShowWorkGroupsChange
+            :showClearWork=showClearWork
+            :showWorks=showWorks
+            :handleShowWorksChange=handleShowWorksChange
             :textGroup=textGroup
           />
         </div>
@@ -105,7 +105,7 @@ import constants from '../../constants';
 import api from '../../api';
 import SearchPagination from './SearchPagination.vue';
 import SearchTextGroups from './SearchTextGroups.vue';
-import SearchWorkGroups from './SearchWorkGroups.vue';
+import SearchWorks from './SearchWorks.vue';
 import SearchResults from './SearchResults.vue';
 import TextLoader from '../../components/TextLoader.vue';
 
@@ -121,7 +121,7 @@ export default {
       totalResults: null,
       results: [],
       textGroups: [],
-      workGroups: [],
+      works: [],
       firstLoading: false,
       secondLoading: false,
       showSearchResults: false,
@@ -129,10 +129,10 @@ export default {
       hasPrev: false,
       searchType: 'form',
       showClearTextGroup: false,
-      showClearWorkGroup: false,
+      showClearWork: false,
       textGroup: null,
       showTextGroups: false,
-      showWorkGroups: false
+      showWorks: false
     };
   },
   mounted() {
@@ -142,8 +142,8 @@ export default {
       this.searchType = queryParams.kind || 'form';
       this.pageNum = queryParams.p;
       this.textGroup = queryParams.tg;
-      this.workGroup = queryParams.wg;
-      this.handleSearch(this.pageNum, this.textGroup, this.workGroup);
+      this.work = queryParams.work;
+      this.handleSearch(this.pageNum, this.textGroup, this.works);
     }
   },
   methods: {
@@ -155,15 +155,15 @@ export default {
     },
     handleShowTextGroupsChange() {
       this.showTextGroups = !this.showTextGroups;
-      this.showWorkGroups = !this.showWorkGroups;
+      this.showWorks = !this.showWorks;
     },
-    handleShowWorkGroupsChange() {
-      this.showWorkGroups = !this.showWorkGroups;
+    handleShowWorksChange() {
+      this.showWorks = !this.showWorks;
     },
-    clearWorkGroups() {
-      this.workGroups = [];
+    clearWorks() {
+      this.works = [];
     },
-    handleSearch(pageNum, textGroup=null, workGroup=null) {
+    handleSearch(pageNum, textGroup=null, work=null) {
       const query = this.searchQuery;
       if (query !== '') {
         if (pageNum) {
@@ -173,27 +173,27 @@ export default {
             this.secondLoading = true;
           }
           this.showClearTextGroup = false;
-          this.showClearWorkGroup = false;
+          this.showClearWork = false;
         } else {
           this.firstLoading = true;
           this.showSearchResults = false;
           this.showClearTextGroup = false;
-          this.showClearWorkGroup = false;
+          this.showClearWork = false;
           this.textGroup = null;
-          this.workGroup = null;
+          this.work = null;
           pageNum = 1;
           this.showTextGroups = false;
-          this.showWorkGroups = false;
+          this.showWorks = false;
         }
         if (textGroup) {
           this.showClearTextGroup = true;
           this.results = [];
           this.textGroup = textGroup;
         }
-        if (workGroup) {
-          this.showClearWorkGroup = true;
+        if (work) {
+          this.showClearWork = true;
           this.results = [];
-          this.workGroup = workGroup;
+          this.work = work;
         }
         if (this.textGroup) {
           this.showClearTextGroup = true;
@@ -203,7 +203,7 @@ export default {
           q: query,
           page_num: pageNum,
           text_group: this.textGroup,
-          work_group: this.workGroup,
+          work: this.work,
           type: 'library',
         }
         api.searchText(params, 'search/json/', result => {
@@ -221,10 +221,10 @@ export default {
           this.firstLoading = false;
           if (this.textGroup) {
             this.showClearTextGroup = true;
-            this.workGroups = result.work_groups;
+            this.works = result.works;
           }
-          if (this.workGroup) {
-            this.showClearWorkGroup = true;
+          if (this.work) {
+            this.showClearWork = true;
           }
           // update url state
           const urlState = {
@@ -235,8 +235,8 @@ export default {
           if (this.textGroup) {
             urlState.tg = this.textGroup;
           }
-          if (this.workGroup) {
-            urlState.wg = this.workGroup;
+          if (this.work) {
+            urlState.work = this.work;
           }
           this.$router.replace({
             query: urlState,
@@ -251,7 +251,7 @@ export default {
   components: {
     SearchPagination,
     SearchTextGroups,
-    SearchWorkGroups,
+    SearchWorks,
     SearchResults,
     TextLoader,
   },

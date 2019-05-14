@@ -1,20 +1,20 @@
 /* global describe, expect, it  */
 import { shallowMount } from '@vue/test-utils';
 
-import SearchWorkGroups from '../static/src/js/library/search/SearchWorkGroups.vue';
-import workGroupsLargeJson from './fixtures/work-groups-large.json';
-import workGroupsSmallJson from './fixtures/work-groups-small.json';
+import SearchWorks from '../static/src/js/library/search/SearchWorks.vue';
+import worksLargeJson from './fixtures/works-large.json';
+import worksSmallJson from './fixtures/works-small.json';
 
 
-describe('SearchWorkGroups.vue', () => {
-  it('displays the work groups correctly when there are more than ten work groups', () => {
-    const wrapper = shallowMount(SearchWorkGroups, {
+describe('SearchWorks.vue', () => {
+  it('displays the works correctly when there are more than ten works', () => {
+    const wrapper = shallowMount(SearchWorks, {
       propsData: {
         handleSearch: () => true,
-        workGroups: workGroupsLargeJson,
-        showClearWorkGroup: false,
-        showWorkGroups: false,
-        handleShowWorkGroupsChange: () => true,
+        works: worksLargeJson,
+        showClearWork: false,
+        showWorks: false,
+        handleShowWorksChange: () => true,
         textGroup: () => false,
       },
     });
@@ -28,25 +28,25 @@ describe('SearchWorkGroups.vue', () => {
     expect(wrapper.text()).toContain('See More');
   });
 
-  it('displays the work groups correctly when there are less than ten work groups', () => {
-    const wrapper = shallowMount(SearchWorkGroups, {
+  it('displays the works correctly when there are less than ten works', () => {
+    const wrapper = shallowMount(SearchWorks, {
       propsData: {
         handleSearch: () => true,
-        workGroups: workGroupsSmallJson,
-        showClearWorkGroup: false,
-        showWorkGroups: false,
-        handleShowWorkGroupsChange: () => true,
+        works: worksSmallJson,
+        showClearWork: false,
+        showWorks: false,
+        handleShowWorksChange: () => true,
         textGroup: () => false,
       },
     });
     expect(wrapper.text()).not.toContain('See More');
   });
 
-  it('displays the work groups correctly when one is selected', () => {
-    const wrapper = shallowMount(SearchWorkGroups, {
+  it('displays the works correctly when one work is selected', () => {
+    const wrapper = shallowMount(SearchWorks, {
       propsData: {
         handleSearch: () => true,
-        workGroups: [
+        works: [
           {
             text_group: {
               urn: 'urn:cts:greekLit:tlg0059.tlg011',
@@ -63,9 +63,9 @@ describe('SearchWorkGroups.vue', () => {
             count: 38,
           },
         ],
-        showClearWorkGroup: true,
-        showWorkGroups: false,
-        handleShowWorkGroupsChange: () => true,
+        showClearWork: true,
+        showWorks: false,
+        handleShowWorksChange: () => true,
         textGroup: () => false,
       },
     });
