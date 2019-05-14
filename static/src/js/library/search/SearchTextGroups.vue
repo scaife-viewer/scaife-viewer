@@ -75,7 +75,7 @@ export default {
   name: 'search-text-groups',
   props: [
     'handleSearch', 'textGroups', 'showClearTextGroup', 'showTextGroups',
-    'handleShowTextGroupsChange', 'clearWorkGroups',
+    'handleShowTextGroupsChange', 'clearWorks',
   ],
   data() {
     return {
@@ -101,7 +101,7 @@ export default {
     },
     handleClear() {
       this.handleSearch(0, 0, 0);
-      this.clearWorkGroups();
+      this.clearWorks();
     }
   },
 };

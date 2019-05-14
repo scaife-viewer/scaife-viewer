@@ -1,17 +1,17 @@
 <template>
-  <div class="search-work-groups">
+  <div class="search-works">
     <!-- hidden on sm and xs -->
     <div class="d-none d-md-block">
-      <h5 v-if="showClearWorkGroup">
-        <span>Work Groups</span>
+      <h5 v-if="showClearWork">
+        <span>Works</span>
         &nbsp;
         <small class="link-text clear-btn" @click="handleClear()">clear</small>
       </h5>
-      <h5 v-if="!showClearWorkGroup">Work Groups</h5>
+      <h5 v-if="!showClearWork">Works</h5>
       <div class="list-group">
         <a
           v-if="!seeMore"
-          v-for="work in firstTenWorkGroups"
+          v-for="work in firstTenWorks"
           :key="work.text_group.urn"
           class="list-group-item d-flex justify-content-between align-items-center link-text"
           @click="handleSearch(1, 0, work.text_group.urn)"
@@ -21,7 +21,7 @@
         </a>
         <a
           v-if="seeMore"
-          v-for="work in allworkGroups"
+          v-for="work in allworks"
           :key="work.text_group.urn"
           class="list-group-item d-flex justify-content-between align-items-center link-text"
           @click="handleSearch(1, 0, work.text_group.urn)"
@@ -31,11 +31,11 @@
         </a>
         <div class="link-container">
           <small>
-            <span v-if="!seeMore && !showClearWorkGroup && showSeeMore" class="link-text" @click="toggleWorkGroups()">
+            <span v-if="!seeMore && !showClearWork && showSeeMore" class="link-text" @click="toggleWorks()">
               <span><i class="fas fa-chevron-down"></i></span>
               &nbsp;See More
             </span>
-            <span v-if="seeMore && !showClearWorkGroup && showSeeMore" class="link-text" @click="toggleWorkGroups()">
+            <span v-if="seeMore && !showClearWork && showSeeMore" class="link-text" @click="toggleWorks()">
               <span><i class="fas fa-chevron-up"></i></span>
               &nbsp;See Less
             </span>
@@ -46,18 +46,18 @@
     <!-- visible on sm and xs -->
     <div class="d-md-none">
       <h5>
-        <span>Work Groups</span>
-          <span @click="handleShowWorkGroupsChange" v-show="!showWorkGroups">
+        <span>Works</span>
+          <span @click="handleShowWorksChange" v-show="!showWorks">
             <i class="far fa-caret-square-down link-text"></i>
           </span>
-          <span @click="handleShowWorkGroupsChange" v-show="showWorkGroups">
+          <span @click="handleShowWorksChange" v-show="showWorks">
             <i class="far fa-caret-square-up link-text"></i>
           </span>
-        <small class="link-text"  @click="handleClear()" v-if="showClearWorkGroup">&nbsp;clear</small>
+        <small class="link-text"  @click="handleClear()" v-if="showClearWork">&nbsp;clear</small>
       </h5>
-      <div class="list-group" :style="{'display':showWorkGroups?'block':'none'}">
+      <div class="list-group" :style="{'display':showWorks?'block':'none'}">
         <a
-          v-for="work in firstTenWorkGroups"
+          v-for="work in firstTenWorks"
           :key="work.text_group.urn"
           class="list-group-item d-flex justify-content-between align-items-center link-text"
           @click="handleSearch(1, 0, work.text_group.urn)"
@@ -72,10 +72,10 @@
 
 <script>
 export default {
-  name: 'search-work-groups',
+  name: 'search-works',
   props: [
-    'handleSearch', 'workGroups', 'showClearWorkGroup', 'showWorkGroups',
-    'handleShowWorkGroupsChange', 'textGroup',
+    'handleSearch', 'works', 'showClearWork', 'showWorks',
+    'handleShowWorksChange', 'textGroup',
   ],
   data() {
     return {
@@ -84,19 +84,19 @@ export default {
     }
   },
   computed: {
-    allworkGroups() {
-      return this.workGroups;
+    allworks() {
+      return this.works;
     },
-    firstTenWorkGroups() {
+    firstTenWorks() {
       this.showSeeMore = false;
-      if ((this.workGroups).length >= 10) {
+      if ((this.works).length >= 10) {
         this.showSeeMore = true;
       }
-      return this.workGroups.slice(0, 10);
+      return this.works.slice(0, 10);
     },
   },
   methods: {
-    toggleWorkGroups() {
+    toggleWorks() {
       this.seeMore = !this.seeMore;
     },
     handleClear() {
