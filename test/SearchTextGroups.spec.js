@@ -56,13 +56,13 @@ describe('SearchTextGroups.vue', () => {
                   urn: 'urn:cts:farsiLit:hafez.divan',
                   texts: [
                     {
-                      urn: 'urn:cts:farsiLit:hafez.divan.perseus-far1'
+                      urn: 'urn:cts:farsiLit:hafez.divan.perseus-far1',
                     },
                     {
-                      urn: 'urn:cts:farsiLit:hafez.divan.perseus-eng1'
+                      urn: 'urn:cts:farsiLit:hafez.divan.perseus-eng1',
                     },
                     {
-                      urn: 'urn:cts:farsiLit:hafez.divan.perseus-ger1'
+                      urn: 'urn:cts:farsiLit:hafez.divan.perseus-ger1',
                     },
                   ],
                 },

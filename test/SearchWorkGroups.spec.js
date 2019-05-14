@@ -53,10 +53,10 @@ describe('SearchWorkGroups.vue', () => {
               label: 'Symposium',
               texts: [
                 {
-                  urn: 'urn:cts:greekLit:tlg0059.tlg011.perseus-grc2'
+                  urn: 'urn:cts:greekLit:tlg0059.tlg011.perseus-grc2',
                 },
                 {
-                  urn: 'urn:cts:greekLit:tlg0059.tlg011.perseus-eng2'
+                  urn: 'urn:cts:greekLit:tlg0059.tlg011.perseus-eng2',
                 },
               ],
             },
