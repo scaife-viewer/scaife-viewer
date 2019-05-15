@@ -11,7 +11,7 @@
       <div class="list-group">
         <a
           v-if="!seeMore"
-          v-for="work in firstTenWorks"
+          v-for="work in firstFiveWorks"
           :key="work.text_group.urn"
           class="list-group-item d-flex justify-content-between align-items-center link-text"
           @click="handleSearch(1, 0, work.text_group.urn)"
@@ -57,7 +57,7 @@
       </h5>
       <div class="list-group" :style="{'display':showWorks?'block':'none'}">
         <a
-          v-for="work in firstTenWorks"
+          v-for="work in firstFiveWorks"
           :key="work.text_group.urn"
           class="list-group-item d-flex justify-content-between align-items-center link-text"
           @click="handleSearch(1, 0, work.text_group.urn)"
@@ -87,12 +87,12 @@ export default {
     allworks() {
       return this.works;
     },
-    firstTenWorks() {
+    firstFiveWorks() {
       this.showSeeMore = false;
-      if ((this.works).length >= 10) {
+      if ((this.works).length >= 5) {
         this.showSeeMore = true;
       }
-      return this.works.slice(0, 10);
+      return this.works.slice(0, 5);
     },
   },
   methods: {

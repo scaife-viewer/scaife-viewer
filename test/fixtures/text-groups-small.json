@@ -274,25 +274,5 @@
       ]
     },
     "count": 82
-  },
-  {
-    "text_group": {
-      "urn": "urn:cts:greekLit:tlg0525",
-      "label": "Pausanias",
-      "works": [
-        {
-          "urn": "urn:cts:greekLit:tlg0525.tlg001",
-          "texts": [
-            {
-              "urn": "urn:cts:greekLit:tlg0525.tlg001.perseus-grc2"
-            },
-            {
-              "urn": "urn:cts:greekLit:tlg0525.tlg001.perseus-eng2"
-            }
-          ]
-        }
-      ]
-    },
-    "count": 72
   }
 ]

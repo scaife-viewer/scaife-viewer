@@ -21,6 +21,9 @@
       <form class="search-form" v-on:submit.prevent="handleSearch(0)">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Search..." :value="searchQuery" @input="handleSearchQueryChange">
+        </div>
+        <div class="form-group" style="margin-bottom:0px;">
+          <label><strong>Search Type:</strong></label>
           <input
             type="radio"
             id="kind-form"
@@ -41,12 +44,17 @@
           <label for="kind-lemma">Lemma (Greek only)</label>
         </div>
       </form>
+      <br>
       <text-loader v-if="firstLoading" size="7px" margin="1px" />
       <div v-if="showSearchResults" class="row">
         <div v-if="!results.length && !textGroups.length" class="col-sm-12 text-center">
           <p class="no-results">No results found. Please try again.</p>
         </div>
         <div v-if="textGroups.length" class="col-md-3">
+          <search-results-format
+            :searchResultsType=searchResultsType
+            :handleResultsTypeChange=handleResultsTypeChange
+          />
           <search-text-groups
             :textGroups=textGroups
             :handleSearch=handleSearch
@@ -77,13 +85,12 @@
             :handleSearch=handleSearch
           />
           <text-loader v-if="secondLoading" size="7px" margin="1px" />
-          <div>
-            <search-results
-              :secondLoading=secondLoading
-              :results=results
-              :createPassageLink=createPassageLink
-            />
-          </div>
+          <search-results
+            :secondLoading=secondLoading
+            :results=results
+            :createPassageLink=createPassageLink
+            :searchResultsType=searchResultsType
+          />
           <search-pagination
             :startIndex=startIndex
             :endIndex=endIndex
@@ -107,6 +114,7 @@ import SearchPagination from './SearchPagination.vue';
 import SearchTextGroups from './SearchTextGroups.vue';
 import SearchWorks from './SearchWorks.vue';
 import SearchResults from './SearchResults.vue';
+import SearchResultsFormat from './SearchResultsFormat.vue';
 import TextLoader from '../../components/TextLoader.vue';
 
 export default {
@@ -128,6 +136,7 @@ export default {
       hasNext: false,
       hasPrev: false,
       searchType: 'form',
+      searchResultsType: 'instances',
       showClearTextGroup: false,
       showClearWork: false,
       textGroup: null,
@@ -143,6 +152,7 @@ export default {
       this.pageNum = queryParams.p;
       this.textGroup = queryParams.tg;
       this.work = queryParams.work;
+      this.searchResultsType = queryParams.format || 'instances';
       this.handleSearch(this.pageNum, this.textGroup, this.works);
     }
   },
@@ -152,6 +162,9 @@ export default {
     },
     handleTypeChange(e) {
       this.searchType = e.target.name;
+    },
+    handleResultsTypeChange(e) {
+      this.searchResultsType = e.target.name;
     },
     handleShowTextGroupsChange() {
       this.showTextGroups = !this.showTextGroups;
@@ -200,6 +213,7 @@ export default {
         }
         const params = {
           kind: this.searchType,
+          format: this.searchResultsType,
           q: query,
           page_num: pageNum,
           text_group: this.textGroup,
@@ -230,6 +244,7 @@ export default {
           const urlState = {
             q: this.searchQuery,
             kind: this.searchType,
+            format: this.searchResultsType,
             p: this.pageNum
           }
           if (this.textGroup) {
@@ -254,6 +269,7 @@ export default {
     SearchWorks,
     SearchResults,
     TextLoader,
+    SearchResultsFormat,
   },
 };
 </script>
