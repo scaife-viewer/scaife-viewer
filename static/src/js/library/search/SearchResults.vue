@@ -22,6 +22,7 @@
               ({{ result.passage.refs.start.reference }} to &ndash; {{ result.passage.refs.end.reference }})
             </span>
           </a>
+          <span class="badge badge-light">{{ result.passage.text.kind }}</span>
         </h2>
       </div>
       <div v-if="searchResultsType==='instances'" class="content">
