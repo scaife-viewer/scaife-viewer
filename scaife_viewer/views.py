@@ -330,9 +330,8 @@ def search_json(request):
         }
         try:
             sq = SearchQuery(q, **kwargs)
-        except Exception as e:
-            print(e)
-
+        except Exception:
+            return JsonResponse({"error": "Something went wrong."}, status=500)
         total_count = sq.count()
         page = get_pagination_info(total_count, page_num)
         results = sq.search_window(size=size, offset=((page_num - 1) * 10))

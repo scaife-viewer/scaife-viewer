@@ -1,16 +1,21 @@
-version: '3.2'
+version: '3.7'
 
 services:
+
   scaife-viewer:
     build:
       context: ../
       dockerfile: Dockerfile-dev
     container_name: scaife-viewer
-    entrypoint: /opt/scaife-viewer/src/deploy/entrypoint.sh
+    entrypoint: deploy/entrypoint.sh
     command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - 8000:8000
     environment:
       - DEBUG=1
+      - USE_ELASTICSEARCH_SERVICE=1
     volumes:
+      - webpack-stats:/opt/scaife-viewer/src/static/stats
       - ..:/opt/scaife-viewer/src/
 
   sv-webpack:
@@ -19,6 +24,11 @@ services:
       dockerfile: Dockerfile-webpack
     container_name: sv-webpack
     volumes:
-      - ..:/opt/scaife-viewer/src/
+      - webpack-stats:/opt/scaife-viewer/src/static/stats
+      - ../static/src:/opt/scaife-viewer/src/static/src
     ports:
       - 8080:8080
+
+volumes:
+  webpack-stats:
+    driver: local

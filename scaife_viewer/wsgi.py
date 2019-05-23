@@ -17,8 +17,10 @@ def setup():
     from . import cts
     # calling this will prime the cache in the master process. each fork
     # will inherit it. gunicorn --preload is required for this to work.
-    cts.TextInventory.load()
-    print("Loaded text inventory")
+    DEBUG = bool(int(os.environ.get("DEBUG", "0")))
+    if not DEBUG:
+        cts.TextInventory.load()
+        print("Loaded text inventory")
 
 
 def healthz(app):

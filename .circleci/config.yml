@@ -1,39 +1,80 @@
 version: 2
+
 jobs:
-  qa:
+
+  build:
     docker:
-    - image: circleci/python:3.6-node
-    working_directory: ~/repo
+      - image: google/cloud-sdk:alpine
+    environment:
+      GCP_PROJECT: scaife-viewer
+      IMAGE_NAME: gcr.io/scaife-viewer/scaife-viewer-build
     steps:
-    - checkout
-    - run:
-        name: Install Python dependencies
-        command: pipenv install --dev
-    - run:
-        name: Run isort
-        command: pipenv run isort -c **/*.py
-    - run:
-        name: Run flake8
-        command: pipenv run flake8 scaife_viewer
-    - run:
-        name: Install static dependencies
-        command: npm ci
-    - run:
-        name: Run eslint
-        command: npm run lint
-    - run:
-        name: Run jest tests
-        command: npm run unit
-    - run:
-        name: Run webpack build
-        command: npm run build
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Install Docker Compose
+          command: |
+            apk add --no-cache 'py2-pip' docker
+            pip install 'docker-compose==1.23.2'
+      # - run:
+      #     name: Log in to gcr and configure docker
+      #     command: |
+      #       echo $SV_GCR_SERVICE_ACCOUNT | base64 -d | gcloud auth activate-service-account --key-file=-
+      #       gcloud --quiet config set project ${GCP_PROJECT}
+      #       gcloud auth configure-docker --quiet
+      # - run:
+      #     name: Pull images from gcr
+      #     command: |
+      #       docker pull $IMAGE_NAME:static-build || true
+      #       docker pull $IMAGE_NAME:python-build || true
+      #       docker pull $IMAGE_NAME:final-build || true
+      # - run:
+      #     name: Build static-build from dockerfile
+      #     command: |
+      #       docker build \
+      #         --target static-build \
+      #         --cache-from $IMAGE_NAME:static-build \
+      #         --tag $IMAGE_NAME:static-build \
+      #         --file ./Dockerfile \
+      #         "."
+      # - run:
+      #     name: Build python-build from dockerfile
+      #     command: |
+      #       docker build \
+      #         --target python-build \
+      #         --cache-from $IMAGE_NAME:static-build \
+      #         --cache-from $IMAGE_NAME:python-build \
+      #         --tag $IMAGE_NAME:python-build \
+      #         --file ./Dockerfile \
+      #         "."
+      - run:
+          name: Build Docker images
+          command: |
+            mv deploy/.env.example deploy/.env
+            docker-compose -f deploy/docker-compose.yml -f deploy/docker-compose.override.ci.yml build
+      - run:
+          name: Spin up containers
+          command: docker-compose -f deploy/docker-compose.yml up -d
+      - run:
+          name: Run isort
+          command: docker-compose -f deploy/docker-compose.yml exec scaife-viewer isort -c **/*.py
+      - run:
+          name: Run flake8
+          command: docker-compose -f deploy/docker-compose.yml exec scaife-viewer flake8 scaife_viewer
+      # - run:
+      #     name: Push images to gcr
+      #     command: |
+      #       docker push $IMAGE_NAME:static-build || true
+      #       docker push $IMAGE_NAME:python-build || true
+      #       docker push $IMAGE_NAME:final-build || true
+
   deploy:
     docker:
-    - image: buildpack-deps:trusty-scm
+      - image: buildpack-deps:trusty-scm
     working_directory: ~/repo
     steps:
-    - checkout
-    - deploy:
+      - checkout
+      - deploy:
         name: Eldarion Cloud
         command: |
           declare -A INSTANCES=( [master]=primary )
@@ -45,14 +86,15 @@ jobs:
           bin/ec/auth.sh
           bin/ec/deploy.sh "$INSTANCE"
           bin/ec/slack-notify.sh "$INSTANCE"
+
 workflows:
   version: 2
-  qa-deploy:
+  build-deploy:
     jobs:
-    - qa
-    - deploy:
-        requires:
-        - qa
-        filters:
-          branches:
-            only: /(?:master|dev)/
+      - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: /(?:master|dev)/
