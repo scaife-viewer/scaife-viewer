@@ -268,6 +268,7 @@ SECURE_REDIRECT_EXEMPT = [
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "sv-cache",
     },
 }
 

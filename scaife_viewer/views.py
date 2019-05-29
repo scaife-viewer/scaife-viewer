@@ -19,6 +19,7 @@ import requests
 
 from . import cts
 from .http import ConditionMixin
+from .precomputed import library_view_json
 from .search import SearchQuery
 from .utils import apify, encode_link_header, get_pagination_info, link_passage
 
@@ -69,22 +70,8 @@ class LibraryView(LibraryConditionMixin, BaseLibraryView):
         return render(self.request, "library/index.html", {})
 
     def as_json(self):
-        all_text_groups = cts.text_inventory().text_groups()
-        text_groups = []
-        works = []
-        texts = []
-        for text_group in all_text_groups:
-            for work in text_group.works():
-                works.append(work)
-                for text in work.texts():
-                    texts.append(text)
-            text_groups.append(text_group)
-        payload = {
-            "text_groups": [apify(text_group) for text_group in text_groups],
-            "works": [apify(work) for work in works],
-            "texts": [apify(text, with_toc=False) for text in texts],
-        }
-        return JsonResponse(payload)
+        data = library_view_json()
+        return JsonResponse(data)
 
 
 class LibraryInfoView(View):
