@@ -307,5 +307,5 @@ if FORCE_SCRIPT_NAME:
 
 ELASTICSEARCH_HOSTS = os.environ.get("ELASTICSEARCH_HOSTS", "localhost").split(",")
 # https://elasticsearch-py.readthedocs.io/en/master/#sniffing
-ELASTICSEARCH_SNIFF_ON_START = DEBUG = bool(int(os.environ.get("ELASTICSEARCH_SNIFF_ON_START", "0")))
-ELASTICSEARCH_SNIFF_ON_CONNECTION_FAIL = DEBUG = bool(int(os.environ.get("ELASTICSEARCH_SNIFF_ON_CONNECTION_FAIL", "0")))
+ELASTICSEARCH_SNIFF_ON_START = bool(int(os.environ.get("ELASTICSEARCH_SNIFF_ON_START", "0")))
+ELASTICSEARCH_SNIFF_ON_CONNECTION_FAIL = bool(int(os.environ.get("ELASTICSEARCH_SNIFF_ON_CONNECTION_FAIL", "0")))
