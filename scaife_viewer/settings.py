@@ -8,7 +8,7 @@ PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir
 PACKAGE_ROOT = os.path.abspath(os.path.dirname(__file__))
 BASE_DIR = PACKAGE_ROOT
 
-DEBUG = bool(int(os.environ.get("DEBUG", "0")))
+DEBUG = bool(int(os.environ.get("DEBUG", "1")))
 TRACING_ENABLED = bool(int(os.environ.get("TRACING_ENABLED", not DEBUG)))
 LIBRARY_VIEW_API_VERSION = int(os.environ.get("LIBRARY_VIEW_API_VERSION", 0))
 
