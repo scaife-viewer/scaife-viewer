@@ -15,17 +15,13 @@ from django.core.wsgi import get_wsgi_application
 def setup():
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "scaife_viewer.settings")
     from django.conf import settings
-
-    from . import cts, precomputed
+    from . import cts
 
     if settings.DEBUG is False:
         # calling this will prime the cache in the master process. each fork
         # will inherit it. gunicorn --preload is required for this to work.
         cts.TextInventory.load()
         print("Loaded text inventory")
-
-        precomputed.library_view_json()
-        print("Precomputed library view JSON")
 
 
 def healthz(app):
