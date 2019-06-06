@@ -172,7 +172,3 @@ docker-compose -f deploy/docker-compose.yml -f deploy/docker-compose.override.ym
 ## API Library Cache
 
 The client-side currently caches the results of `library/json/`. The cache is automatically invalidated every 24 hours. You can manually invalidate it by bumping the `LIBRARY_VIEW_API_VERSION` environment variable.
-
-
-
-foo
