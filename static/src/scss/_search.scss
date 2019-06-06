@@ -24,7 +24,7 @@ body.search {
     input[type=radio] {
       margin-left: 8px;
     }
-    label {
+    label, .label {
       color: $gray-600;
       font-size: 12px;
       padding: 4px 4px 0 4px;
@@ -49,6 +49,12 @@ body.search {
   }
   div.result:not(:last-of-type) {
     border-bottom: 1px solid $gray-400;
+  }
+  div.result-passages {
+    margin-bottom: 1rem;
+  }
+  div.result-passages:not(:last-of-type) {
+    border-bottom: 1px;
   }
   div.content {
     p {
@@ -80,4 +86,8 @@ body.search {
       text-decoration: underline !important;
     }
   }
+}
+
+.search-results-format {
+  margin-bottom: 20px;
 }

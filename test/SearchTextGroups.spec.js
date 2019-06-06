@@ -7,7 +7,7 @@ import textGroupsSmallJson from './fixtures/text-groups-small.json';
 
 
 describe('SearchTextGroups.vue', () => {
-  it('displays the text groups correctly when there are more than ten text groups', () => {
+  it('displays the text groups correctly when there are more than five text groups', () => {
     const wrapper = shallowMount(SearchTextGroups, {
       propsData: {
         handleSearch: () => true,
@@ -28,7 +28,7 @@ describe('SearchTextGroups.vue', () => {
     expect(wrapper.text()).toContain('See More');
   });
 
-  it('displays the text groups correctly when there are less than ten text groups', () => {
+  it('displays the text groups correctly when there are less than five text groups', () => {
     const wrapper = shallowMount(SearchTextGroups, {
       propsData: {
         handleSearch: () => true,
