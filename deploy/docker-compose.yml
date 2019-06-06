@@ -3,10 +3,9 @@ version: '3.7'
 services:
 
   scaife-viewer:
-    # build:
-    #   context: ../
-    #   dockerfile: Dockerfile
     build:
+      context: ../
+      dockerfile: Dockerfile
       cache_from:
         - gcr.io/scaife-viewer/scaife-viewer-build:static-build
         - gcr.io/scaife-viewer/scaife-viewer-build:python-build
