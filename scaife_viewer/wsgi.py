@@ -18,8 +18,7 @@ def setup():
     from . import cts
     # calling this will prime the cache in the master process. each fork
     # will inherit it. gunicorn --preload is required for this to work.
-    DEBUG = bool(int(os.environ.get("DEBUG", "1")))
-    if not DEBUG:
+    if settings.DEBUG is False:
         cts.TextInventory.load()
         print("Loaded text inventory")
 
