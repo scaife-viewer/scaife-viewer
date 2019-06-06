@@ -2,42 +2,72 @@ version: 2
 
 jobs:
 
-  qa:
+  build:
     docker:
-      - image: circleci/python:3.6-node
-    working_directory: ~/repo
+      - image: google/cloud-sdk:alpine
+    environment:
+      GCP_PROJECT: scaife-viewer
+      IMAGE_NAME: gcr.io/scaife-viewer/scaife-viewer-build
     steps:
       - checkout
+      - setup_remote_docker
       - run:
-          name: Install dependencies
+          name: Install Docker Compose
           command: |
-            python3.6 -m venv env
-            source env/bin/activate
-            pip install -r requirements.txt
-            pip install isort
-            pip install flake8
+            apk add --no-cache 'py2-pip' docker
+            pip install 'docker-compose==1.23.2'
+      - run:
+          name: Log in to gcr and configure docker
+          command: |
+            echo $SV_GCR_SERVICE_ACCOUNT | base64 -d | gcloud auth activate-service-account --key-file=-
+            gcloud --quiet config set project ${GCP_PROJECT}
+            gcloud auth configure-docker --quiet
+      - run:
+          name: Pull images from gcr
+          command: |
+            docker pull $IMAGE_NAME:static-build || true
+            docker pull $IMAGE_NAME:python-build || true
+            docker pull $IMAGE_NAME:final-build || true
+      - run:
+          name: Build static-build from dockerfile
+          command: |
+            docker build \
+              --target static-build \
+              --cache-from $IMAGE_NAME:static-build \
+              --tag $IMAGE_NAME:static-build \
+              --file ./Dockerfile \
+              "."
+      - run:
+          name: Build python-build from dockerfile
+          command: |
+            docker build \
+              --target python-build \
+              --cache-from $IMAGE_NAME:static-build \
+              --cache-from $IMAGE_NAME:python-build \
+              --tag $IMAGE_NAME:python-build \
+              --file ./Dockerfile \
+              "."
+      - run:
+          # cache is not working here!
+          name: Build Docker images
+          command: |
+            mv deploy/.env.example deploy/.env
+            docker-compose -f deploy/docker-compose.yml -f deploy/docker-compose.override.ci.yml build
+      - run:
+          name: Spin up containers
+          command: docker-compose -f deploy/docker-compose.yml up -d
       - run:
           name: Run isort
-          command: |
-            source env/bin/activate
-            isort -c **/*.py
+          command: docker-compose -f deploy/docker-compose.yml exec scaife-viewer isort -c **/*.py
       - run:
           name: Run flake8
+          command: docker-compose -f deploy/docker-compose.yml exec scaife-viewer flake8 scaife_viewer
+      - run:
+          name: Push images to gcr
           command: |
-            source env/bin/activate
-            flake8 scaife_viewer
-      - run:
-          name: Install static dependencies
-          command: npm ci
-      - run:
-          name: Run eslint
-          command: npm run lint
-      - run:
-          name: Run jest tests
-          command: npm run unit
-      - run:
-          name: Run webpack build
-          command: npm run build
+            docker push $IMAGE_NAME:static-build || true
+            docker push $IMAGE_NAME:python-build || true
+            docker push $IMAGE_NAME:final-build || true
 
   deploy:
     docker:
@@ -46,26 +76,26 @@ jobs:
     steps:
       - checkout
       - deploy:
-          name: Eldarion Cloud
-          command: |
-            declare -A INSTANCES=( [master]=primary )
-            if [ ${INSTANCES[$CIRCLE_BRANCH]+_} ]; then
-              INSTANCE="${INSTANCES[$CIRCLE_BRANCH]}"
-            else
-              INSTANCE="$CIRCLE_BRANCH"
-            fi
-            bin/ec/auth.sh
-            bin/ec/deploy.sh "$INSTANCE"
-            bin/ec/slack-notify.sh "$INSTANCE"
+        name: Eldarion Cloud
+        command: |
+          declare -A INSTANCES=( [master]=primary )
+          if [ ${INSTANCES[$CIRCLE_BRANCH]+_} ]; then
+            INSTANCE="${INSTANCES[$CIRCLE_BRANCH]}"
+          else
+            INSTANCE="$CIRCLE_BRANCH"
+          fi
+          bin/ec/auth.sh
+          bin/ec/deploy.sh "$INSTANCE"
+          bin/ec/slack-notify.sh "$INSTANCE"
 
 workflows:
   version: 2
-  qa-deploy:
+  build-deploy:
     jobs:
-      - qa
+      - build
       - deploy:
           requires:
-            - qa
+            - build
           filters:
             branches:
               only: /(?:master|dev)/
