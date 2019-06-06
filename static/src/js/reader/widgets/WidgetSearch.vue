@@ -21,6 +21,7 @@
           <ul v-else ref="items">
             <li v-for="(r, idx) in results" :class="{ first: idx === 0, last: isLast(idx) }" :key="r.passage.urn">
               <router-link :to="toPassage(r.passage.urn)" :class="{ active : r.active }">{{ r.passage.refs.start.human_reference }}</router-link>
+              <span class="badge badge-light">{{ r.passage.text.kind }}</span>
             </li>
           </ul>
         </template>
