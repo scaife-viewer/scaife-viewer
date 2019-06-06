@@ -1,39 +1,51 @@
 version: 2
+
 jobs:
+
   qa:
     docker:
-    - image: circleci/python:3.6-node
+      - image: circleci/python:3.6-node
     working_directory: ~/repo
     steps:
-    - checkout
-    - run:
-        name: Install Python dependencies
-        command: pipenv install --dev
-    - run:
-        name: Run isort
-        command: pipenv run isort -c **/*.py
-    - run:
-        name: Run flake8
-        command: pipenv run flake8 scaife_viewer
-    - run:
-        name: Install static dependencies
-        command: npm ci
-    - run:
-        name: Run eslint
-        command: npm run lint
-    - run:
-        name: Run jest tests
-        command: npm run unit
-    - run:
-        name: Run webpack build
-        command: npm run build
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            python3.6 -m venv env
+            source env/bin/activate
+            pip install -r requirements.txt
+            pip install isort
+            pip install flake8
+      - run:
+          name: Run isort
+          command: |
+            source env/bin/activate
+            isort -c **/*.py
+      - run:
+          name: Run flake8
+          command: |
+            source env/bin/activate
+            flake8 scaife_viewer
+      - run:
+          name: Install static dependencies
+          command: npm ci
+      - run:
+          name: Run eslint
+          command: npm run lint
+      - run:
+          name: Run jest tests
+          command: npm run unit
+      - run:
+          name: Run webpack build
+          command: npm run build
+
   deploy:
     docker:
-    - image: buildpack-deps:trusty-scm
+      - image: buildpack-deps:trusty-scm
     working_directory: ~/repo
     steps:
-    - checkout
-    - deploy:
+      - checkout
+      - deploy:
         name: Eldarion Cloud
         command: |
           declare -A INSTANCES=( [master]=primary )
@@ -45,14 +57,15 @@ jobs:
           bin/ec/auth.sh
           bin/ec/deploy.sh "$INSTANCE"
           bin/ec/slack-notify.sh "$INSTANCE"
+
 workflows:
   version: 2
   qa-deploy:
     jobs:
-    - qa
-    - deploy:
-        requires:
-        - qa
-        filters:
-          branches:
-            only: /(?:master|dev)/
+      - qa
+      - deploy:
+          requires:
+            - qa
+          filters:
+            branches:
+              only: /(?:master|dev)/

@@ -1,4 +1,5 @@
 import os
+import sys
 
 import dj_database_url
 
@@ -175,7 +176,7 @@ WEBPACK_LOADER = {
     "DEFAULT": {
         "CACHE": not DEBUG,
         "BUNDLE_DIR_NAME": "/",
-        "STATS_FILE": os.path.join(PROJECT_ROOT, "webpack-stats.json"),
+        "STATS_FILE": os.path.join(PROJECT_ROOT, "static", "stats", "webpack-stats.json"),
         "POLL_INTERVAL": 0.1,
         "TIMEOUT": None,
         "IGNORE": [".*.hot-update.js", ".+.map"]
@@ -200,6 +201,15 @@ LOGGING = {
             "level": "ERROR",
             "filters": ["require_debug_false"],
             "class": "django.utils.log.AdminEmailHandler"
+        },
+        "sentry": {
+            "level": "WARNING",
+            "class": "raven.contrib.django.raven_compat.handlers.SentryHandler",
+        },
+        "console": {
+            "level": "INFO",
+            "class": "logging.StreamHandler",
+            "stream": sys.stdout
         }
     },
     "loggers": {
@@ -211,6 +221,21 @@ LOGGING = {
         "scaife_viewer.cts": {
             "level": "ERROR",
         },
+        "raven": {
+            "level": "WARNING",
+            "handlers": ["sentry"],
+            "propagate": False,
+        },
+        "sentry.errors": {
+            "level": "WARNING",
+            "handlers": ["sentry"],
+            "propagate": False,
+        },
+        "": {
+            "handlers": ["console"],
+            "level": "DEBUG" if DEBUG else "INFO",
+            "propagate": True
+        }
     }
 }
 
