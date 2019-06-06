@@ -11,7 +11,7 @@
       <div class="list-group">
         <a
           v-if="!seeMore"
-          v-for="ftg in firstTenTextGroups"
+          v-for="ftg in firstFiveTextGroups"
           :key="ftg.text_group.urn"
           class="list-group-item d-flex justify-content-between align-items-center link-text"
           @click="handleSearch(1, ftg.text_group.urn)"
@@ -57,7 +57,7 @@
       </h5>
       <div class="list-group" :style="{'display':showTextGroups?'block':'none'}">
         <a
-          v-for="ftg in firstTenTextGroups"
+          v-for="ftg in firstFiveTextGroups"
           :key="ftg.text_group.urn"
           class="list-group-item d-flex justify-content-between align-items-center link-text"
           @click="handleSearch(1, ftg.text_group.urn)"
@@ -87,12 +87,12 @@ export default {
     allTextGroups() {
       return this.textGroups;
     },
-    firstTenTextGroups() {
+    firstFiveTextGroups() {
       this.showSeeMore = false;
-      if ((this.textGroups).length >= 10) {
+      if ((this.textGroups).length >= 5) {
         this.showSeeMore = true;
       }
-      return this.textGroups.slice(0, 10);
+      return this.textGroups.slice(0, 5);
     },
   },
   methods: {

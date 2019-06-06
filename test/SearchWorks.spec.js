@@ -7,7 +7,7 @@ import worksSmallJson from './fixtures/works-small.json';
 
 
 describe('SearchWorks.vue', () => {
-  it('displays the works correctly when there are more than ten works', () => {
+  it('displays the works correctly when there are more than five works', () => {
     const wrapper = shallowMount(SearchWorks, {
       propsData: {
         handleSearch: () => true,
@@ -28,7 +28,7 @@ describe('SearchWorks.vue', () => {
     expect(wrapper.text()).toContain('See More');
   });
 
-  it('displays the works correctly when there are less than ten works', () => {
+  it('displays the works correctly when there are less than five works', () => {
     const wrapper = shallowMount(SearchWorks, {
       propsData: {
         handleSearch: () => true,
