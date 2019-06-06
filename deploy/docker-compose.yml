@@ -3,9 +3,15 @@ version: '3.7'
 services:
 
   scaife-viewer:
+    # build:
+    #   context: ../
+    #   dockerfile: Dockerfile
     build:
-      context: ../
-      dockerfile: Dockerfile
+      cache_from:
+        - gcr.io/scaife-viewer/scaife-viewer-build:static-build
+        - gcr.io/scaife-viewer/scaife-viewer-build:python-build
+        - gcr.io/scaife-viewer/scaife-viewer-build:final-build
+    image: gcr.io/scaife-viewer/scaife-viewer-build:final-build
     container_name: scaife-viewer
     entrypoint: deploy/entrypoint.sh
     command: gunicorn --preload scaife_viewer.wsgi

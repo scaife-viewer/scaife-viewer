@@ -52,7 +52,7 @@ jobs:
           name: Build Docker images
           command: |
             mv deploy/.env.example deploy/.env
-            docker-compose -f deploy/docker-compose.yml -f deploy/docker-compose.override.ci.yml build
+            docker-compose -f deploy/docker-compose.yml build
       - run:
           name: Spin up containers
           command: docker-compose -f deploy/docker-compose.yml up -d
