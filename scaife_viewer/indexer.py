@@ -4,10 +4,11 @@ from itertools import zip_longest
 from operator import attrgetter
 from typing import Iterable, List, NamedTuple
 
+from django.conf import settings
+
 import dask.bag
 import elasticsearch
 import elasticsearch.helpers
-from django.conf import settings
 from anytree.iterators import PreOrderIter
 
 from . import cts
