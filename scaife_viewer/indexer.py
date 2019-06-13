@@ -7,6 +7,7 @@ from typing import Iterable, List, NamedTuple
 import dask.bag
 import elasticsearch
 import elasticsearch.helpers
+from django.conf import settings
 from anytree.iterators import PreOrderIter
 
 from . import cts
@@ -203,7 +204,11 @@ class DirectPusher:
     @property
     def es(self):
         if not hasattr(self, "_es"):
-            self._es = elasticsearch.Elasticsearch()
+            self._es = elasticsearch.Elasticsearch(
+                hosts=settings.ELASTICSEARCH_HOSTS,
+                sniff_on_start=settings.ELASTICSEARCH_SNIFF_ON_START,
+                sniff_on_connection_fail=settings.ELASTICSEARCH_SNIFF_ON_CONNECTION_FAIL,
+            )
         return self._es
 
     @property
