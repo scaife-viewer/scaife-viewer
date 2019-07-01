@@ -169,6 +169,13 @@ To run only the `scaife-viewer`, `sv-webpack`, and `sv-postgres` services, set t
 docker-compose -f deploy/docker-compose.yml -f deploy/docker-compose.override.yml up --build scaife-viewer sv-webpack sv-postgres
 ```
 
+To run the simple_indexer command:
+
+```
+docker-compose -f deploy/docker-compose.yml -f deploy/docker-compose.override.yml exec scaife-viewer python manage.py simple_indexer
+```
+
+
 ## API Library Cache
 
 The client-side currently caches the results of `library/json/`. The cache is automatically invalidated every 24 hours. You can manually invalidate it by bumping the `LIBRARY_VIEW_API_VERSION` environment variable.

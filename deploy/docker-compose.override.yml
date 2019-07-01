@@ -7,7 +7,7 @@ services:
       context: ../
       dockerfile: Dockerfile-dev
     container_name: scaife-viewer
-    entrypoint: deploy/entrypoint.sh
+    entrypoint: deploy/entrypoint-dev.sh
     command: python manage.py runserver 0.0.0.0:8000
     ports:
       - 8000:8000
