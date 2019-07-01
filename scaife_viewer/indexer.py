@@ -4,6 +4,8 @@ from itertools import zip_longest
 from operator import attrgetter
 from typing import Iterable, List, NamedTuple
 
+from django.conf import settings
+
 import dask.bag
 import elasticsearch
 import elasticsearch.helpers
@@ -203,7 +205,11 @@ class DirectPusher:
     @property
     def es(self):
         if not hasattr(self, "_es"):
-            self._es = elasticsearch.Elasticsearch()
+            self._es = elasticsearch.Elasticsearch(
+                hosts=settings.ELASTICSEARCH_HOSTS,
+                sniff_on_start=settings.ELASTICSEARCH_SNIFF_ON_START,
+                sniff_on_connection_fail=settings.ELASTICSEARCH_SNIFF_ON_CONNECTION_FAIL,
+            )
         return self._es
 
     @property

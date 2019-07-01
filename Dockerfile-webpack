@@ -3,5 +3,4 @@ WORKDIR /opt/scaife-viewer/src/
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY webpack.config.js .babelrc ./
-COPY ./static static
 CMD npm run start

@@ -1,6 +1,10 @@
 <template>
   <section>
-    <div class="result" v-if="!secondLoading" v-for="result in results" :key="result.passage.url">
+    <div
+      :class="[searchResultsType==='instances' ? 'result' : 'result-passages']"
+      v-if="!secondLoading"
+      v-for="result in results" :key="result.passage.url"
+    >
       <div class="passage-heading">
         <h2>
           <a :href="createPassageLink(result.passage.url)">
@@ -18,9 +22,10 @@
               ({{ result.passage.refs.start.reference }} to &ndash; {{ result.passage.refs.end.reference }})
             </span>
           </a>
+          <span class="badge badge-light">{{ result.passage.text.kind }}</span>
         </h2>
       </div>
-      <div class="content">
+      <div v-if="searchResultsType==='instances'" class="content">
         <p v-for="result in result.content" :key="result">
           <span v-html="result"></span>
         </p>
@@ -32,6 +37,6 @@
 <script>
 export default {
   name: 'search-results',
-  props: ['secondLoading', 'results', 'createPassageLink'],
+  props: ['secondLoading', 'results', 'createPassageLink', 'searchResultsType'],
 };
 </script>

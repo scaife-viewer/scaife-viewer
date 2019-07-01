@@ -21,6 +21,9 @@
       <form class="search-form" v-on:submit.prevent="handleSearch(0)">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Search..." :value="searchQuery" @input="handleSearchQueryChange">
+        </div>
+        <div class="form-group" style="margin-bottom:0px;">
+          <label><strong>Search Type:</strong></label>
           <input
             type="radio"
             id="kind-form"
@@ -41,18 +44,35 @@
           <label for="kind-lemma">Lemma (Greek only)</label>
         </div>
       </form>
+      <br>
       <text-loader v-if="firstLoading" size="7px" margin="1px" />
       <div v-if="showSearchResults" class="row">
         <div v-if="!results.length && !textGroups.length" class="col-sm-12 text-center">
           <p class="no-results">No results found. Please try again.</p>
         </div>
-        <search-text-groups
-          :textGroups=textGroups
-          :handleSearch=handleSearch
-          :showClear=showClear
-          :showTextGroups=showTextGroups
-          :handleshowTextGroupsChange=handleshowTextGroupsChange
-        />
+        <div v-if="textGroups.length" class="col-md-3">
+          <search-results-format
+            :searchResultsType=searchResultsType
+            :handleResultsTypeChange=handleResultsTypeChange
+          />
+          <search-text-groups
+            :textGroups=textGroups
+            :handleSearch=handleSearch
+            :showClearTextGroup=showClearTextGroup
+            :showTextGroups=showTextGroups
+            :handleShowTextGroupsChange=handleShowTextGroupsChange
+            :clearWorks=clearWorks
+          />
+          <search-works
+            v-if="works.length"
+            :works=works
+            :handleSearch=handleSearch
+            :showClearWork=showClearWork
+            :showWorks=showWorks
+            :handleShowWorksChange=handleShowWorksChange
+            :textGroup=textGroup
+          />
+        </div>
         <div v-if="results.length || textGroups.length" class="col-md-9">
           <search-pagination
             :startIndex=startIndex
@@ -65,13 +85,12 @@
             :handleSearch=handleSearch
           />
           <text-loader v-if="secondLoading" size="7px" margin="1px" />
-          <div>
-            <search-results
-              :secondLoading=secondLoading
-              :results=results
-              :createPassageLink=createPassageLink
-            />
-          </div>
+          <search-results
+            :secondLoading=secondLoading
+            :results=results
+            :createPassageLink=createPassageLink
+            :searchResultsType=searchResultsType
+          />
           <search-pagination
             :startIndex=startIndex
             :endIndex=endIndex
@@ -93,7 +112,9 @@ import constants from '../../constants';
 import api from '../../api';
 import SearchPagination from './SearchPagination.vue';
 import SearchTextGroups from './SearchTextGroups.vue';
+import SearchWorks from './SearchWorks.vue';
 import SearchResults from './SearchResults.vue';
+import SearchResultsFormat from './SearchResultsFormat.vue';
 import TextLoader from '../../components/TextLoader.vue';
 
 export default {
@@ -108,15 +129,19 @@ export default {
       totalResults: null,
       results: [],
       textGroups: [],
+      works: [],
       firstLoading: false,
       secondLoading: false,
       showSearchResults: false,
       hasNext: false,
       hasPrev: false,
       searchType: 'form',
-      showClear: false,
-      tg: null,
-      showTextGroups: false
+      searchResultsType: 'instances',
+      showClearTextGroup: false,
+      showClearWork: false,
+      textGroup: null,
+      showTextGroups: false,
+      showWorks: false
     };
   },
   mounted() {
@@ -125,8 +150,10 @@ export default {
       this.searchQuery = queryParams.q;
       this.searchType = queryParams.kind || 'form';
       this.pageNum = queryParams.p;
-      this.tg = queryParams.tg;
-      this.handleSearch(this.pageNum, this.tg);
+      this.textGroup = queryParams.tg;
+      this.work = queryParams.work;
+      this.searchResultsType = queryParams.format || 'instances';
+      this.handleSearch(this.pageNum, this.textGroup, this.works);
     }
   },
   methods: {
@@ -136,10 +163,20 @@ export default {
     handleTypeChange(e) {
       this.searchType = e.target.name;
     },
-    handleshowTextGroupsChange() {
-      this.showTextGroups = !this.showTextGroups;
+    handleResultsTypeChange(e) {
+      this.searchResultsType = e.target.name;
     },
-    handleSearch(pageNum, urn=null) {
+    handleShowTextGroupsChange() {
+      this.showTextGroups = !this.showTextGroups;
+      this.showWorks = !this.showWorks;
+    },
+    handleShowWorksChange() {
+      this.showWorks = !this.showWorks;
+    },
+    clearWorks() {
+      this.works = [];
+    },
+    handleSearch(pageNum, textGroup=null, work=null) {
       const query = this.searchQuery;
       if (query !== '') {
         if (pageNum) {
@@ -148,28 +185,39 @@ export default {
           } else {
             this.secondLoading = true;
           }
-          this.showClear = false;
+          this.showClearTextGroup = false;
+          this.showClearWork = false;
         } else {
           this.firstLoading = true;
           this.showSearchResults = false;
-          this.showClear = false;
-          this.tg = null;
+          this.showClearTextGroup = false;
+          this.showClearWork = false;
+          this.textGroup = null;
+          this.work = null;
           pageNum = 1;
           this.showTextGroups = false;
+          this.showWorks = false;
         }
-        if (urn) {
-          this.showClear = true;
+        if (textGroup) {
+          this.showClearTextGroup = true;
           this.results = [];
-          this.tg = urn;
+          this.textGroup = textGroup;
         }
-        if (this.tg) {
-          this.showClear = true;
+        if (work) {
+          this.showClearWork = true;
+          this.results = [];
+          this.work = work;
+        }
+        if (this.textGroup) {
+          this.showClearTextGroup = true;
         }
         const params = {
           kind: this.searchType,
+          format: this.searchResultsType,
           q: query,
           page_num: pageNum,
-          text_group: this.tg,
+          text_group: this.textGroup,
+          work: this.work,
           type: 'library',
         }
         api.searchText(params, 'search/json/', result => {
@@ -182,20 +230,31 @@ export default {
           this.hasPrev = result.page.has_previous;
           this.totalResults = result.total_count;
           this.results = result.results;
-          this.textGroups = result.text_groups
+          this.textGroups = result.text_groups;
           this.secondLoading = false;
           this.firstLoading = false;
-          if (this.tg) {
-            this.showClear = true;
+          if (this.textGroup) {
+            this.showClearTextGroup = true;
+            this.works = result.works;
+          }
+          if (this.work) {
+            this.showClearWork = true;
           }
           // update url state
+          const urlState = {
+            q: this.searchQuery,
+            kind: this.searchType,
+            format: this.searchResultsType,
+            p: this.pageNum
+          }
+          if (this.textGroup) {
+            urlState.tg = this.textGroup;
+          }
+          if (this.work) {
+            urlState.work = this.work;
+          }
           this.$router.replace({
-            query: {
-              q: this.searchQuery,
-              kind: this.searchType,
-              p: this.pageNum,
-              tg: this.tg
-            }
+            query: urlState,
           });
         });
       }
@@ -207,8 +266,10 @@ export default {
   components: {
     SearchPagination,
     SearchTextGroups,
+    SearchWorks,
     SearchResults,
     TextLoader,
+    SearchResultsFormat,
   },
 };
 </script>
