@@ -2,7 +2,7 @@ anytree==2.4.3
 certifi==2018.11.29
 dask[bag]==1.1.0
 dj-database-url==0.5.0
-Django==2.1.9
+Django==2.1.10
 django-letsencrypt==3.0.1
 django-oidc-provider==0.7.0
 django-user-accounts==2.1.0
