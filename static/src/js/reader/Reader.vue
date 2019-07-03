@@ -107,7 +107,7 @@
           <widget-morpheus />
           <widget-token-list />
           <widget-word-list />
-          <widget-chs-commentary />
+          <widget-new-alexandria-commentary />
         </template>
       </skeleton>
     </template>
@@ -135,7 +135,7 @@ import WidgetTextSize from './widgets/WidgetTextSize.vue';
 import WidgetMorpheus from './widgets/WidgetMorpheus.vue';
 import WidgetWordList from './widgets/WidgetWordList.vue';
 import WidgetTokenList from './widgets/WidgetTokenList.vue';
-import WidgetCHSCommentary from './widgets/WidgetCHSCommentary.vue';
+import WidgetNewAlexandriaCommentary from './widgets/WidgetNewAlexandriaCommentary.vue';
 import WidgetTextWidth from './widgets/WidgetTextWidth.vue';
 
 const widgets = {
@@ -152,7 +152,7 @@ const widgets = {
   WidgetWordList,
   WidgetTokenList,
   WidgetTextWidth,
-  'widget-chs-commentary': WidgetCHSCommentary,
+  'widget-new-alexandria-commentary': WidgetNewAlexandriaCommentary,
 };
 
 export default {
