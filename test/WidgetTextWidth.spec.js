@@ -19,7 +19,7 @@ describe('WidgetTextWidth.vue', () => {
     });
     const normalSpan = wrapper.findAll('span').at(2);
 
-    expect(wrapper.text()).toBe('Text Width Narrow Normal Wide');
+    expect(wrapper.text()).toBe('Text Width Narrow Normal Wide Full');
     expect(normalSpan.html()).toBe('<span class="text-width-control active">Normal</span>');
     expect(store.state.reader.textWidth).toBe('normal');
   });
