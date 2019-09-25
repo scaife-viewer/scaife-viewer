@@ -5,6 +5,7 @@
       <span :class="['text-width-control', {active: textWidth == 'narrow'}]" @click="changetextWidth('narrow')">Narrow</span>
       <span :class="['text-width-control', {active: textWidth == 'normal'}]" @click="changetextWidth('normal')">Normal</span>
       <span :class="['text-width-control', {active: textWidth == 'wide'}]" @click="changetextWidth('wide')">Wide</span>
+      <span :class="['text-width-control', {active: textWidth == 'full'}]" @click="changetextWidth('full')">Full</span>
     </div>
   </base-widget>
 </template>
