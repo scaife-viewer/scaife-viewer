@@ -18,10 +18,12 @@ from .reference import URN
 w = r"\w[-\w]*"
 p = r"\p{P}+"
 ws = r"[\p{Z}\s]+"
-token_re = regex.compile(fr"{w}|{p}|{ws}")
+sym = r"\p{S}+"
+token_re = regex.compile(fr"{w}|{p}|{ws}|{sym}")
 w_re = regex.compile(w)
 p_re = regex.compile(p)
 ws_re = regex.compile(ws)
+sym_re = regex.compile(sym)
 
 
 class Passage:
@@ -95,7 +97,7 @@ class Passage:
         if reference:
             return Passage(self.text, reference)
 
-    def tokenize(self, words=True, punctuation=True, whitespace=True):
+    def tokenize(self, words=True, punctuation=True, whitespace=True, symbols=True):
         tokens = []
         idx = defaultdict(int)
         offset = 0
@@ -116,6 +118,10 @@ class Passage:
                     if not whitespace:
                         continue
                     t = "s"
+                if sym_re.match(w):
+                    if not symbols:
+                        continue
+                    t = "y"
                 for wk in (w[i:j + 1] for i in range(wl) for j in range(i, wl)):
                     idx[wk] += 1
                 token = {
