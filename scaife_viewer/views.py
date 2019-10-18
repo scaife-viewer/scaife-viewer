@@ -162,6 +162,14 @@ class LibraryPassageView(LibraryConditionMixin, View):
                 status=400,
                 content_type="application/json",
             )
+        except cts.InvalidURN as e:
+            return HttpResponse(
+                json.dumps({
+                    "reason": str(e),
+                }),
+                status=404,
+                content_type="application/json",
+            )
         if healed:
             key = {
                 "json": "json_url",
