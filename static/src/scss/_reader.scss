@@ -69,8 +69,12 @@ body.reader {
     }
   }
 
+  .single {
+    flex: 4;
+  }
   .pg-left, .pg-right {
     flex: 1;
+    max-width: 100px;
     min-height: calc(100vh - 250px);
     a {
       display: block;
