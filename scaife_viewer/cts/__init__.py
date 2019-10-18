@@ -3,7 +3,8 @@ from MyCapytain.errors import UnknownCollection
 from .capitains import default_resolver  # noqa
 from .collections import (Collection, Text, TextGroup, TextInventory,  # noqa
                           Work, resolve_collection)
-from .exceptions import CollectionDoesNotExist, PassageDoesNotExist, InvalidPassageReference
+from .exceptions import (CollectionDoesNotExist, PassageDoesNotExist,  # noqa
+                        InvalidPassageReference, InvalidURN)
 from .passage import Passage
 from .reference import URN
 from .heal import heal
@@ -26,7 +27,10 @@ def _has_subreference(reference):
 
 
 def _passage_urn_objs(urn: str):
-    urn = URN(urn)
+    try:
+        urn = URN(urn)
+    except IndexError:
+        raise InvalidURN(f"{urn} is invalid")
     if urn.reference is None:
         raise InvalidPassageReference("URN must contain a reference")
     reference = urn.reference
