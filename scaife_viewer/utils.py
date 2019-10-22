@@ -17,6 +17,7 @@ def link_passage(urn) -> dict:
     return {
         "url": reverse("reader", kwargs={"urn": urn}),
         "json_url": reverse("api:library_passage", kwargs={"urn": urn}),
+        "text_url": reverse("api:library_passage_text", kwargs={"urn": urn}),
     }
 
 
