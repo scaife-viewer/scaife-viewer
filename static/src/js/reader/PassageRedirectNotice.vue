@@ -1,10 +1,14 @@
 <template>
   <div v-if="redirected" class="passage-redirect-alert" role="alert">
-    Passage reference
-    <b>{{ redirected.previousUrn.reference }}</b>
-    could not be resolved.
-    Instead, we are showing you
-    <b>{{ passage.urn.reference }}</b>.
+    <p>
+      Passage reference for
+      <b>{{ redirected.previousUrn.value }}</b>
+      could not be resolved.
+    </p>
+    <p>
+      Instead, we are showing you
+      <b>{{ passage.urn.value }}</b>.
+    </p>
   </div>
 </template>
 <script>

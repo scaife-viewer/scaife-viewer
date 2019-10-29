@@ -26,15 +26,20 @@ def _has_subreference(reference):
     return reference.parsed[0][2] is not None
 
 
+def _is_valid_reference(reference):
+    if not reference:
+        return True
+    return _has_subreference(reference.start) or (reference.end and _has_subreference(reference.end))
+
+
 def _passage_urn_objs(urn: str):
     try:
         urn = URN(urn)
     except IndexError:
         raise InvalidURN(f"{urn} is invalid")
-    if urn.reference is None:
-        raise InvalidPassageReference("URN must contain a reference")
+
     reference = urn.reference
-    if _has_subreference(reference.start) or (reference.end and _has_subreference(reference.end)):
+    if not _is_valid_reference(reference):
         raise InvalidPassageReference("URN must not contain a start or end subreference")
     urn = urn.upTo(URN.NO_PASSAGE)
     c = collection(urn)
@@ -47,6 +52,9 @@ def _passage_urn_objs(urn: str):
         text = c
     else:
         raise ValueError(f"{urn} must reference a work or text")
+
+    if not reference:
+        reference = text.first_passage().reference
     return text, reference
 
 

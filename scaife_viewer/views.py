@@ -85,14 +85,26 @@ class LibraryInfoView(View):
 
 class LibraryCollectionView(LibraryConditionMixin, BaseLibraryView):
 
+    @property
+    def urn(self):
+        return self.kwargs["urn"]
+
     def validate_urn(self):
-        if not self.kwargs["urn"].startswith("urn:"):
+        if not self.urn.startswith("urn:"):
             raise Http404()
+
+    def heal_urn(self):
+        if self.urn.endswith(":"):
+            return (self.urn[:-1], True)
+        return (self.urn, False)
 
     def get_collection(self):
         self.validate_urn()
+        urn, was_healed = self.heal_urn()
+        if was_healed:
+            print(f'Trimmed trailing colon from URN [urn="{self.urn}"]')
         try:
-            return cts.collection(self.kwargs["urn"])
+            return cts.collection(urn)
         except cts.CollectionDoesNotExist:
             raise Http404()
 
