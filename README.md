@@ -41,6 +41,8 @@ Set up the database:
 Seed the text inventory to speed up local development:
 
     curl -s "https://scaife-cts-dev.perseus.org/api/cts?request=GetCapabilities" > ti.xml
+    # removes the existing ti-cached subdirectory if previously populated
+    if [ -d "ti-cache" ]; then rm -Rf ti-cache; fi
 
 You should now be set to run the static build pipeline and hot module reloading:
 

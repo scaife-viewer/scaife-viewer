@@ -2,6 +2,7 @@ from functools import lru_cache, partial
 from operator import attrgetter
 
 from django.conf import settings
+from django.core.cache import caches
 
 from MyCapytain.common.constants import RDF_NAMESPACES
 from MyCapytain.resources.collections.cts import XmlCtsTextInventoryMetadata
@@ -14,16 +15,33 @@ from .toc import RefTree
 from .typing import CtsCollectionMetadata
 
 
+def local_text_inventory():
+    cache = caches["ti-cache"]
+    key = "ti-metadata"
+
+    data = cache.get(key, None)
+    if data is None:
+        print("Caching parsed metadata from ti.xml")
+        with open(settings.CTS_LOCAL_TEXT_INVENTORY, "r") as fp:
+            ti_xml = fp.read()
+            data = XmlCtsTextInventoryMetadata.parse(ti_xml)
+        cache.set(key, data, None)
+    return data
+
+
 @lru_cache(maxsize=1)
 def load_text_inventory_metadata() -> cts.CtsTextInventoryMetadata:
     resolver_type = settings.CTS_RESOLVER["type"]
     resolver = default_resolver()
     if resolver_type == "api":
+
         if getattr(settings, "CTS_LOCAL_TEXT_INVENTORY", None) is not None:
-            with open(settings.CTS_LOCAL_TEXT_INVENTORY, "r") as fp:
-                ti_xml = fp.read()
-        else:
-            ti_xml = resolver.endpoint.getCapabilities()
+            # load text inventory from ti.xml
+            # cache the parsed data structure using the
+            # `ti-cache` cache backend
+            return local_text_inventory()
+
+        ti_xml = resolver.endpoint.getCapabilities()
         return XmlCtsTextInventoryMetadata.parse(ti_xml)
     elif resolver_type == "local":
         return resolver.getMetadata()["default"]

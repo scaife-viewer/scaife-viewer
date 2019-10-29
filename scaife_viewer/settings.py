@@ -334,3 +334,9 @@ ELASTICSEARCH_HOSTS = os.environ.get("ELASTICSEARCH_HOSTS", "localhost").split("
 # https://elasticsearch-py.readthedocs.io/en/master/#sniffing
 ELASTICSEARCH_SNIFF_ON_START = bool(int(os.environ.get("ELASTICSEARCH_SNIFF_ON_START", "0")))
 ELASTICSEARCH_SNIFF_ON_CONNECTION_FAIL = bool(int(os.environ.get("ELASTICSEARCH_SNIFF_ON_CONNECTION_FAIL", "0")))
+
+if CTS_LOCAL_TEXT_INVENTORY:
+    CACHES["ti-cache"] = {
+        "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+        "LOCATION": os.path.join(PROJECT_ROOT, "ti-cache"),
+    }
