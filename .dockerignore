@@ -3,3 +3,5 @@ static/dist/
 deploy/.env
 deploy/docker-compose.yml
 webpack-stats.json
+Pipfile
+Pipfile.lock

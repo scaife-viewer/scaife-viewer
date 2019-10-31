@@ -93,7 +93,7 @@ class TextGroup(Collection):
                 continue
             yield work
 
-    def as_json(self) -> dict:
+    def as_json(self, **kwargs) -> dict:
         return {
             "urn": str(self.urn),
             "label": str(self.label),
@@ -127,7 +127,7 @@ class Work(Collection):
             texts.append(resolve_collection(metadata.TYPE_URI)(urn, metadata))
         yield from sorted(texts, key=attrgetter("kind", "label"))
 
-    def as_json(self) -> dict:
+    def as_json(self, **kwargs) -> dict:
         return {
             "urn": str(self.urn),
             "label": str(self.label),
@@ -196,7 +196,8 @@ class Text(Collection):
         if chunk is not None:
             return Passage(self, URN(chunk.urn).reference)
 
-    def as_json(self, with_toc=True) -> dict:
+    def as_json(self, **kwargs) -> dict:
+        with_toc = kwargs.pop("with_toc", False)
         payload = {
             "urn": str(self.urn),
             "label": str(self.label),

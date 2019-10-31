@@ -3,7 +3,7 @@ import json
 import os
 from urllib.parse import urlencode
 
-from django.core.paginator import Paginator
+from django.conf import settings
 from django.http import (
     Http404,
     HttpResponse,
@@ -19,8 +19,9 @@ import requests
 
 from . import cts
 from .http import ConditionMixin
+from .precomputed import library_view_json
 from .search import SearchQuery
-from .utils import apify, encode_link_header, link_passage
+from .utils import apify, encode_link_header, get_pagination_info, link_passage
 
 
 def home(request):
@@ -69,20 +70,15 @@ class LibraryView(LibraryConditionMixin, BaseLibraryView):
         return render(self.request, "library/index.html", {})
 
     def as_json(self):
-        all_text_groups = cts.text_inventory().text_groups()
-        text_groups = []
-        works = []
-        texts = []
-        for text_group in all_text_groups:
-            for work in text_group.works():
-                works.append(work)
-                for text in work.texts():
-                    texts.append(text)
-            text_groups.append(text_group)
+        data = library_view_json()
+        return JsonResponse(data)
+
+
+class LibraryInfoView(View):
+
+    def get(self, request, **kwargs):
         payload = {
-            "text_groups": [apify(text_group) for text_group in text_groups],
-            "works": [apify(work) for work in works],
-            "texts": [apify(text, with_toc=False) for text in texts],
+            "api_version": settings.LIBRARY_VIEW_API_VERSION
         }
         return JsonResponse(payload)
 
@@ -108,10 +104,22 @@ class LibraryCollectionView(LibraryConditionMixin, BaseLibraryView):
         }
         return render(self.request, f"library/cts_{collection_name}.html", ctx)
 
-    def as_json(self):
+    def should_toc(self, collection_obj):
+        """
+        Only invoke TOC when the collection is a Text.
+        """
+        return isinstance(collection_obj, cts.Text)
+
+    @property
+    def json_paylod(self):
         collection = self.get_collection()
+        if self.should_toc:
+            return apify(collection, with_toc=True)
+        return apify(collection)
+
+    def as_json(self):
         try:
-            return JsonResponse(apify(collection))
+            return JsonResponse(self.json_paylod)
         except ValueError as e:
             """"
             TODO: good idea to refactor this to send back consistent error
@@ -164,6 +172,14 @@ class LibraryPassageView(LibraryConditionMixin, View):
                     "reason": str(e),
                 }),
                 status=400,
+                content_type="application/json",
+            )
+        except cts.InvalidURN as e:
+            return HttpResponse(
+                json.dumps({
+                    "reason": str(e),
+                }),
+                status=404,
                 content_type="application/json",
             )
         if healed:
@@ -256,49 +272,102 @@ def library_text_redirect(request, urn):
 
 
 def search(request):
-    q = request.GET.get("q", "")
-    try:
-        page_num = int(request.GET.get("p", 1))
-    except ValueError:
-        page_num = 1
-    kind = request.GET.get("kind", "form")
-    results = []
-    ctx = {
-        "q": q,
-        "results": results,
-        "kind": kind,
-    }
-    if q:
-        scope = {}
-        text_group_urn = request.GET.get("tg")
-        if text_group_urn:
-            scope["text_group"] = text_group_urn
-        kwargs = {
-            "scope": scope,
-            "aggregate_field": "text_group",
-            "kind": kind,
-        }
-        sq = SearchQuery(q, **kwargs)
-        paginator = Paginator(sq, 10)
-        ctx.update({
-            "paginator": paginator,
-            "page": paginator.page(page_num),
-        })
-    return render(request, "search.html", ctx)
+    return render(request, "search.html")
 
 
 def search_json(request):
+
+    # get params from query string
+    search_type = request.GET.get("type")
     q = request.GET.get("q", "")
+    kind = request.GET.get("kind", "form")
     size = int(request.GET.get("size", "10"))
-    offset = int(request.GET.get("offset", "0"))
-    pivot = request.GET.get("pivot")
+    text_group_urn = request.GET.get("text_group")
+    work_urn = request.GET.get("work")
+
+    # validate params
+    if not search_type:
+        return JsonResponse({"error": "Provide a search type - 'library' or 'reader'."}, status=400)
+    if not q:
+        return JsonResponse({"error": "Provide a search query."}, status=400)
+
+    scope = {}
     data = {"results": []}
-    if q:
-        scope = {}
-        text_group_urn = request.GET.get("text_group")
+
+    # conduct search
+    if search_type == "library":
+
+        page_num = int(request.GET.get("page_num"))
+        aggregate_fields = {
+            "filtered_text_group": {
+                "terms": {
+                    "field": "text_group",
+                    "size": 300,
+                }
+            }
+        }
+
+        data.update({
+            "q": q,
+            "kind": kind,
+            "page_num": page_num,
+            "type": search_type,
+        })
+
+        if text_group_urn:
+            scope["text_group"] = text_group_urn
+            aggregate_fields["filtered_work"] = {
+                "terms": {
+                    "field": "work",
+                    "size": 300,
+                }
+            }
+
+        if work_urn:
+            scope = {}
+            scope["work"] = work_urn
+
+        kwargs = {
+            "search_type": search_type,
+            "scope": scope,
+            "aggregate_fields": aggregate_fields,
+            "kind": kind,
+            "fragments": 10000,
+            "offset": (page_num - 1) * 10
+        }
+        try:
+            sq = SearchQuery(q, **kwargs)
+        except Exception:
+            return JsonResponse({"error": "Something went wrong."}, status=500)
+        total_count = sq.count()
+        page = get_pagination_info(total_count, page_num)
+        results = sq.search_window(size=size, offset=((page_num - 1) * 10))
+
+        for result in results:
+            r = {
+                "passage": apify(result["passage"], with_content=False),
+            }
+            if kind == "form":
+                r["content"] = result["raw_content"]
+            else:
+                r["content"] = result["content"]
+            data["results"].append(r)
+
+        data.update({
+            "text_groups": results.filtered_aggs("filtered_text_group"),
+            "works": results.filtered_aggs("filtered_work") if text_group_urn else None,
+            "total_count": total_count,
+            "page": page,
+        })
+
+    else:
+
+        offset = int(request.GET.get("offset", "0"))
+        pivot = request.GET.get("pivot")
         work_urn = request.GET.get("work")
         text_urn = request.GET.get("text")
         passage_urn = request.GET.get("passage")
+
         if text_group_urn:
             scope["text_group"] = text_group_urn
         elif work_urn:
@@ -307,12 +376,15 @@ def search_json(request):
             scope["text.urn"] = text_urn
         elif passage_urn:
             scope["urn"] = passage_urn
+
         query_kwargs = {
+            "search_type": search_type,
             "scope": scope,
             "sort_by": "document",
-            "kind": request.GET.get("kind", "form"),
+            "kind": kind,
         }
         sq = SearchQuery(q, **query_kwargs)
+
         if "text.urn" in scope and pivot:
             urn = cts.URN(pivot)
             urn_start = f"{urn.upTo(cts.URN.NO_PASSAGE)}:{urn.reference.start}"
@@ -326,8 +398,10 @@ def search_json(request):
                     }
                     offset = start_offset
                     break
+
         data["total_count"] = sq.count()
         fields = set(request.GET.get("fields", "content,highlights").split(","))
+
         for result in sq.search_window(size=size, offset=offset):
             r = {
                 "passage": apify(result["passage"], with_content=False),
@@ -340,6 +414,7 @@ def search_json(request):
                     for w, i in result["highlights"]
                 ]
             data["results"].append(r)
+
     return JsonResponse(data)
 
 

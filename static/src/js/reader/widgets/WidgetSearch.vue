@@ -21,6 +21,7 @@
           <ul v-else ref="items">
             <li v-for="(r, idx) in results" :class="{ first: idx === 0, last: isLast(idx) }" :key="r.passage.urn">
               <router-link :to="toPassage(r.passage.urn)" :class="{ active : r.active }">{{ r.passage.refs.start.human_reference }}</router-link>
+              <span class="badge badge-light">{{ r.passage.text.kind }}</span>
             </li>
           </ul>
         </template>
@@ -33,7 +34,7 @@
 import api from '../../api';
 import constants from '../../constants';
 import ReaderNavigationMixin from '../../mixins/ReaderNavigationMixin.vue';
-import TextLoader from '../TextLoader.vue';
+import TextLoader from '../../components/TextLoader.vue';
 
 const debounce = require('lodash.debounce');
 
@@ -168,13 +169,14 @@ export default {
           const params = {
             q: this.query,
             kind: this.queryKind,
+            type: 'reader',
             size,
             offset,
             pivot,
             fields: '',
             text: this.passage.urn.upTo('version'),
           };
-          api.searchText(params, result => resolve(result)).catch( error => reject(error));
+          api.searchText(params, 'search/json/', result => resolve(result)).catch( error => reject(error));
         }
       });
     },
@@ -243,11 +245,12 @@ export default {
         const params = {
           q: this.query,
           kind: this.queryKind,
+          type: 'reader',
           fields: 'highlights',
           passage: passage.urn,
           size: 1,
         };
-        api.searchText(params, result => {
+        api.searchText(params, 'search/json/', result => {
           const { highlights } = result.results[0];
           this.$store.commit(`reader/${constants.SET_ANNOTATIONS}`, {
             tokens: highlights.map(({ w, i }) => `${w}[${i}]`),

@@ -1,0 +1,186 @@
+[
+  {
+    "passage": {
+      "url": "/reader/urn:cts:pdlpsci:bodin.livrep.perseus-eng1:3.4/",
+      "json_url": "/library/passage/urn:cts:pdlpsci:bodin.livrep.perseus-eng1:3.4/json/",
+      "text": {
+        "url": "/library/urn:cts:pdlpsci:bodin.livrep.perseus-eng1/",
+        "json_url": "/library/urn:cts:pdlpsci:bodin.livrep.perseus-eng1/json/",
+        "text_url": "/library/passage/urn:cts:pdlpsci:bodin.livrep.perseus-eng1/text/",
+        "ancestors": [{
+            "url": "/library/urn:cts:pdlpsci:bodin/",
+            "json_url": "/library/urn:cts:pdlpsci:bodin/json/",
+            "text_url": "/library/passage/urn:cts:pdlpsci:bodin/text/",
+            "urn": "urn:cts:pdlpsci:bodin",
+            "label": "Bodin"
+          },
+          {
+            "url": "/library/urn:cts:pdlpsci:bodin.livrep/",
+            "json_url": "/library/urn:cts:pdlpsci:bodin.livrep/json/",
+            "text_url": "/library/passage/urn:cts:pdlpsci:bodin.livrep/text/",
+            "urn": "urn:cts:pdlpsci:bodin.livrep",
+            "label": "The Six Books of a Commonweale"
+          }
+        ],
+        "urn": "urn:cts:pdlpsci:bodin.livrep.perseus-eng1",
+        "label": "1606 The Six Books of a Commonweale",
+        "lang": "eng",
+        "human_lang": "English",
+        "kind": "translation"
+      },
+      "urn": "urn:cts:pdlpsci:bodin.livrep.perseus-eng1:3.4",
+      "refs": {
+        "start": {
+          "reference": "3.4",
+          "human_reference": "Book 3 Chapter 4"
+        }
+      },
+      "ancestors": [{
+        "reference": "3"
+      }],
+      "children": []
+    },
+    "link": "/reader/urn:cts:pdlpsci:bodin.livrep.perseus-eng1:3.4/",
+    "content": [
+      " , at the request there made by <em>Bodin</em> deputie of Vermandois"
+    ]
+  },
+  {
+    "passage": {
+      "url": "/reader/urn:cts:pdlpsci:bodin.livrep.perseus-eng1:3.7/",
+      "json_url": "/library/passage/urn:cts:pdlpsci:bodin.livrep.perseus-eng1:3.7/json/",
+      "text": {
+        "url": "/library/urn:cts:pdlpsci:bodin.livrep.perseus-eng1/",
+        "json_url": "/library/urn:cts:pdlpsci:bodin.livrep.perseus-eng1/json/",
+        "text_url": "/library/passage/urn:cts:pdlpsci:bodin.livrep.perseus-eng1/text/",
+        "ancestors": [{
+            "url": "/library/urn:cts:pdlpsci:bodin/",
+            "json_url": "/library/urn:cts:pdlpsci:bodin/json/",
+            "text_url": "/library/passage/urn:cts:pdlpsci:bodin/text/",
+            "urn": "urn:cts:pdlpsci:bodin",
+            "label": "Bodin"
+          },
+          {
+            "url": "/library/urn:cts:pdlpsci:bodin.livrep/",
+            "json_url": "/library/urn:cts:pdlpsci:bodin.livrep/json/",
+            "text_url": "/library/passage/urn:cts:pdlpsci:bodin.livrep/text/",
+            "urn": "urn:cts:pdlpsci:bodin.livrep",
+            "label": "The Six Books of a Commonweale"
+          }
+        ],
+        "urn": "urn:cts:pdlpsci:bodin.livrep.perseus-eng1",
+        "label": "1606 The Six Books of a Commonweale",
+        "lang": "eng",
+        "human_lang": "English",
+        "kind": "translation"
+      },
+      "urn": "urn:cts:pdlpsci:bodin.livrep.perseus-eng1:3.7",
+      "refs": {
+        "start": {
+          "reference": "3.7",
+          "human_reference": "Book 3 Chapter 7"
+        }
+      },
+      "ancestors": [{
+        "reference": "3"
+      }],
+      "children": []
+    },
+    "link": "/reader/urn:cts:pdlpsci:bodin.livrep.perseus-eng1:3.7/",
+    "content": [
+      " Lords , That <em>Bodin</em> at his pleasure had over ruled the Estates"
+    ]
+  },
+  {
+    "passage": {
+      "url": "/reader/urn:cts:pdlpsci:bodin.livrep.perseus-eng1:4.2/",
+      "json_url": "/library/passage/urn:cts:pdlpsci:bodin.livrep.perseus-eng1:4.2/json/",
+      "text": {
+        "url": "/library/urn:cts:pdlpsci:bodin.livrep.perseus-eng1/",
+        "json_url": "/library/urn:cts:pdlpsci:bodin.livrep.perseus-eng1/json/",
+        "text_url": "/library/passage/urn:cts:pdlpsci:bodin.livrep.perseus-eng1/text/",
+        "ancestors": [{
+            "url": "/library/urn:cts:pdlpsci:bodin/",
+            "json_url": "/library/urn:cts:pdlpsci:bodin/json/",
+            "text_url": "/library/passage/urn:cts:pdlpsci:bodin/text/",
+            "urn": "urn:cts:pdlpsci:bodin",
+            "label": "Bodin"
+          },
+          {
+            "url": "/library/urn:cts:pdlpsci:bodin.livrep/",
+            "json_url": "/library/urn:cts:pdlpsci:bodin.livrep/json/",
+            "text_url": "/library/passage/urn:cts:pdlpsci:bodin.livrep/text/",
+            "urn": "urn:cts:pdlpsci:bodin.livrep",
+            "label": "The Six Books of a Commonweale"
+          }
+        ],
+        "urn": "urn:cts:pdlpsci:bodin.livrep.perseus-eng1",
+        "label": "1606 The Six Books of a Commonweale",
+        "lang": "eng",
+        "human_lang": "English",
+        "kind": "translation"
+      },
+      "urn": "urn:cts:pdlpsci:bodin.livrep.perseus-eng1:4.2",
+      "refs": {
+        "start": {
+          "reference": "4.2",
+          "human_reference": "Book 4 Chapter 2"
+        }
+      },
+      "ancestors": [{
+        "reference": "4"
+      }],
+      "children": []
+    },
+    "link": "/reader/urn:cts:pdlpsci:bodin.livrep.perseus-eng1:4.2/",
+    "content": [
+      " Sauiour Christ 1583 , ( wherin <em>Bodin</em> writ these things in Latin"
+    ]
+  },
+  {
+    "passage": {
+      "url": "/reader/urn:cts:greekLit:tlg0059.tlg030.perseus-eng2:9.580/",
+      "json_url": "/library/passage/urn:cts:greekLit:tlg0059.tlg030.perseus-eng2:9.580/json/",
+      "text": {
+        "url": "/library/urn:cts:greekLit:tlg0059.tlg030.perseus-eng2/",
+        "json_url": "/library/urn:cts:greekLit:tlg0059.tlg030.perseus-eng2/json/",
+        "text_url": "/library/passage/urn:cts:greekLit:tlg0059.tlg030.perseus-eng2/text/",
+        "ancestors": [{
+            "url": "/library/urn:cts:greekLit:tlg0059/",
+            "json_url": "/library/urn:cts:greekLit:tlg0059/json/",
+            "text_url": "/library/passage/urn:cts:greekLit:tlg0059/text/",
+            "urn": "urn:cts:greekLit:tlg0059",
+            "label": "Plato"
+          },
+          {
+            "url": "/library/urn:cts:greekLit:tlg0059.tlg030/",
+            "json_url": "/library/urn:cts:greekLit:tlg0059.tlg030/json/",
+            "text_url": "/library/passage/urn:cts:greekLit:tlg0059.tlg030/text/",
+            "urn": "urn:cts:greekLit:tlg0059.tlg030",
+            "label": "Republic"
+          }
+        ],
+        "urn": "urn:cts:greekLit:tlg0059.tlg030.perseus-eng2",
+        "label": "Republic",
+        "lang": "eng",
+        "human_lang": "English",
+        "kind": "translation"
+      },
+      "urn": "urn:cts:greekLit:tlg0059.tlg030.perseus-eng2:9.580",
+      "refs": {
+        "start": {
+          "reference": "9.580",
+          "human_reference": "Book 9 Section 580"
+        }
+      },
+      "ancestors": [{
+        "reference": "9"
+      }],
+      "children": []
+    },
+    "link": "/reader/urn:cts:greekLit:tlg0059.tlg030.perseus-eng2:9.580/",
+    "content": [
+      " , Baudrillart , J . <em>Bodin</em> et son temps , p . 292-293 <em>Bodin</em> semble"
+    ]
+  }
+]

@@ -24,7 +24,7 @@ body.search {
     input[type=radio] {
       margin-left: 8px;
     }
-    label {
+    label, .label {
       color: $gray-600;
       font-size: 12px;
       padding: 4px 4px 0 4px;
@@ -50,6 +50,12 @@ body.search {
   div.result:not(:last-of-type) {
     border-bottom: 1px solid $gray-400;
   }
+  div.result-passages {
+    margin-bottom: 1rem;
+  }
+  div.result-passages:not(:last-of-type) {
+    border-bottom: 1px;
+  }
   div.content {
     p {
       font-family: 'Noto Serif';
@@ -61,5 +67,27 @@ body.search {
   .search-pagination {
     @extend .d-flex, .justify-content-between;
     margin-bottom: 20px;
+    padding-top: 10px;
   }
+
+}
+
+.search-text-groups, .search-works {
+  margin-bottom: 20px;
+
+  .link-container {
+    text-align: center;
+  }
+  .link-text {
+    cursor: pointer;
+    color: #B45141 !important;
+    &:hover {
+      color: #7c382d !important;
+      text-decoration: underline !important;
+    }
+  }
+}
+
+.search-results-format {
+  margin-bottom: 20px;
 }

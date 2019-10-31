@@ -4,6 +4,7 @@ _build/
 dev.db
 site_media/
 static/dist/
+static/stats/
 ti.xml
 .vscode/
 service-accounts/

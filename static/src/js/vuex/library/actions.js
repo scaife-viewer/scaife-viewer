@@ -1,20 +1,52 @@
 import api from '../../api';
 import constants from '../../constants';
 import transformTextGroupList from './transforms';
+import utils from './utils';
 
 export default {
-  [constants.LIBRARY_LOAD_TEXT_GROUP_LIST]: ({ commit }) => api.getTextGroupList((data) => {
-    const {
-      textGroups,
-      works,
-      texts,
-      textGroupUrns,
-    } = transformTextGroupList(data);
+  [constants.LIBRARY_LOAD_TEXT_GROUP_LIST]: ({ commit }) => {
+    const currentVersion = JSON.parse(localStorage.getItem('libraryDataVersion'));
+    const libraryData = JSON.parse(localStorage.getItem('libraryData'));
 
-    commit(constants.SET_TEXT_GROUPS, { textGroups, works, texts });
-    commit(constants.SET_TEXT_GROUP_URNS, { textGroupUrns });
-  }),
+    return api.getLibraryInfo((res) => {
+      if (!utils.isCacheValid(res.api_version, currentVersion) || !libraryData) {
+        return api.getTextGroupList((data) => {
+          // add data to localStorage
+          try {
+            localStorage.setItem('libraryData', JSON.stringify(data));
+            const version = {
+              version: res.api_version,
+              date: new Date(),
+            };
+            localStorage.setItem('libraryDataVersion', JSON.stringify(version));
+          } catch (e) {
+            if (utils.isQuotaExceeded(e)) {
+              console.error('localStorage is full!'); // eslint-disable-line no-console
+            }
+          }
+          const {
+            textGroups,
+            works,
+            texts,
+            textGroupUrns,
+          } = transformTextGroupList(data);
 
+          commit(constants.SET_TEXT_GROUPS, { textGroups, works, texts });
+          commit(constants.SET_TEXT_GROUP_URNS, { textGroupUrns });
+        });
+      }
+      const {
+        textGroups,
+        works,
+        texts,
+        textGroupUrns,
+      } = transformTextGroupList(libraryData);
+
+      commit(constants.SET_TEXT_GROUPS, { textGroups, works, texts });
+      commit(constants.SET_TEXT_GROUP_URNS, { textGroupUrns });
+      return true;
+    });
+  },
   [constants.LIBRARY_LOAD_WORK_LIST]: ({ commit }, urn) => api.getCollection(urn, (textGroup) => {
     // To reduce the load on the API, we prepare two vector calls against works
     // and texts.
@@ -23,7 +55,7 @@ export default {
     let params = {
       e: textGroup.works.map(work => work.urn.replace(`${textGroup.urn}.`, '')),
     };
-    api.getLibraryVector(textGroup.urn, params, (worksVector) => {
+    return api.getLibraryVector(textGroup.urn, params, (worksVector) => {
       const workMap = worksVector.collections;
 
       const e = [];
@@ -36,7 +68,7 @@ export default {
       params = { e };
 
       // vector for texts
-      api.getLibraryVector(textGroup.urn, params, (textsVector) => {
+      return api.getLibraryVector(textGroup.urn, params, (textsVector) => {
         const textMap = textsVector.collections;
 
         // finally prepare the works object to store
@@ -72,7 +104,7 @@ export default {
     const params = {
       e: work.texts.map(text => text.urn.replace(`${work.urn}.`, '')),
     };
-    api.getLibraryVector(work.urn, params, (textsVector) => {
+    return api.getLibraryVector(work.urn, params, (textsVector) => {
       const textMap = textsVector.collections;
       const versions = work.texts.map(({ urn: textUrn }) => textMap[textUrn]);
       commit(constants.SET_VERSIONS, versions);
