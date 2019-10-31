@@ -55,7 +55,7 @@ export default {
     let params = {
       e: textGroup.works.map(work => work.urn.replace(`${textGroup.urn}.`, '')),
     };
-    api.getLibraryVector(textGroup.urn, params, (worksVector) => {
+    return api.getLibraryVector(textGroup.urn, params, (worksVector) => {
       const workMap = worksVector.collections;
 
       const e = [];
@@ -68,7 +68,7 @@ export default {
       params = { e };
 
       // vector for texts
-      api.getLibraryVector(textGroup.urn, params, (textsVector) => {
+      return api.getLibraryVector(textGroup.urn, params, (textsVector) => {
         const textMap = textsVector.collections;
 
         // finally prepare the works object to store
@@ -104,7 +104,7 @@ export default {
     const params = {
       e: work.texts.map(text => text.urn.replace(`${work.urn}.`, '')),
     };
-    api.getLibraryVector(work.urn, params, (textsVector) => {
+    return api.getLibraryVector(work.urn, params, (textsVector) => {
       const textMap = textsVector.collections;
       const versions = work.texts.map(({ urn: textUrn }) => textMap[textUrn]);
       commit(constants.SET_VERSIONS, versions);

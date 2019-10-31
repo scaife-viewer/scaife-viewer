@@ -48,7 +48,7 @@ def apify(obj, **kwargs):
             "texts": [{**link_collection(text["urn"]), **text} for text in texts],
         }
     if isinstance(obj, cts.Text):
-        if kwargs.get("with_toc", True):
+        if kwargs.get("with_toc", False):
             first_passage = remaining.pop("first_passage")
             ancestors = remaining.pop("ancestors")
             toc = remaining.pop("toc")
