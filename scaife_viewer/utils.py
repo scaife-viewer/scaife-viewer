@@ -17,6 +17,7 @@ def link_passage(urn) -> dict:
     return {
         "url": reverse("reader", kwargs={"urn": urn}),
         "json_url": reverse("api:library_passage", kwargs={"urn": urn}),
+        "text_url": reverse("api:library_passage_text", kwargs={"urn": urn}),
     }
 
 
@@ -47,7 +48,7 @@ def apify(obj, **kwargs):
             "texts": [{**link_collection(text["urn"]), **text} for text in texts],
         }
     if isinstance(obj, cts.Text):
-        if kwargs.get("with_toc", True):
+        if kwargs.get("with_toc", False):
             first_passage = remaining.pop("first_passage")
             ancestors = remaining.pop("ancestors")
             toc = remaining.pop("toc")

@@ -104,10 +104,22 @@ class LibraryCollectionView(LibraryConditionMixin, BaseLibraryView):
         }
         return render(self.request, f"library/cts_{collection_name}.html", ctx)
 
-    def as_json(self):
+    def should_toc(self, collection_obj):
+        """
+        Only invoke TOC when the collection is a Text.
+        """
+        return isinstance(collection_obj, cts.Text)
+
+    @property
+    def json_paylod(self):
         collection = self.get_collection()
+        if self.should_toc:
+            return apify(collection, with_toc=True)
+        return apify(collection)
+
+    def as_json(self):
         try:
-            return JsonResponse(apify(collection))
+            return JsonResponse(self.json_paylod)
         except ValueError as e:
             """"
             TODO: good idea to refactor this to send back consistent error
@@ -160,6 +172,14 @@ class LibraryPassageView(LibraryConditionMixin, View):
                     "reason": str(e),
                 }),
                 status=400,
+                content_type="application/json",
+            )
+        except cts.InvalidURN as e:
+            return HttpResponse(
+                json.dumps({
+                    "reason": str(e),
+                }),
+                status=404,
                 content_type="application/json",
             )
         if healed:

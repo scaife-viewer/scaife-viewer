@@ -24,7 +24,7 @@ def library_view_json():
         data = {
             "text_groups": [apify(text_group) for text_group in text_groups],
             "works": [apify(work) for work in works],
-            "texts": [apify(text, with_toc=False) for text in texts],
+            "texts": [apify(text) for text in texts],
         }
         cache.set(key, data, None)
     return data

@@ -64,3 +64,10 @@ export default {
   },
 };
 </script>
+<style lang="scss">
+.new-alexandria-commentary {
+  img {
+    max-width: 24vw;
+  }
+}
+</style>

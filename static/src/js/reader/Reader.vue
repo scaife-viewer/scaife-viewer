@@ -74,7 +74,7 @@
                   </template>
                 </div>
               </template>
-              <div v-else>
+              <div class="single" v-else>
                 <div v-if="leftPassage.error" class="alert text-danger" role="alert">
                   Failed to load <b>{{ leftPassage.urn.toString() }}</b>: {{ leftPassage.error }}
                 </div>
