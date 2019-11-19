@@ -332,7 +332,6 @@ def search_json(request):
             "scope": scope,
             "aggregate_fields": aggregate_fields,
             "kind": kind,
-            "fragments": 10000,
             "offset": (page_num - 1) * 10
         }
         try:
