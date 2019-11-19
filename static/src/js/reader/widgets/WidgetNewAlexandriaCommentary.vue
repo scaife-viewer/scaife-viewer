@@ -1,6 +1,6 @@
 <template>
-  <base-widget class="chs-commentary" v-if="show">
-    <span slot="header">CHS Commentary</span>
+  <base-widget class="new-alexandria-commentary" v-if="show">
+    <span slot="header">New Alexandria Commentary</span>
     <div slot="body">
       <p class="no-comment" v-if="!comments || comments.length === 0">
         No comments found.
@@ -20,7 +20,7 @@
 import qs from 'query-string';
 
 export default {
-  name: 'widget-chs-commentary',
+  name: 'widget-new-alexandria',
   computed: {
     passage() {
       return this.$store.getters['reader/passage'];
@@ -64,3 +64,10 @@ export default {
   },
 };
 </script>
+<style lang="scss">
+.new-alexandria-commentary {
+  img {
+    max-width: 24vw;
+  }
+}
+</style>

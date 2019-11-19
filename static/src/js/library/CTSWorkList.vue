@@ -35,7 +35,7 @@
               <p class="card-text">{{ text.description }}</p>
             </div>
             <div class="card-footer">
-              <a :href="text.first_passage.url"><icon name="book"></icon> Read ({{ text.human_lang }})</a>
+              <a :href="text.reader_url"><icon name="book"></icon> Read ({{ text.human_lang }})</a>
             </div>
           </div>
         </div>

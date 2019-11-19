@@ -41,7 +41,7 @@
 
 <script>
 import constants from '../../constants';
-import TextLoader from '../TextLoader.vue';
+import TextLoader from '../../components/TextLoader.vue';
 
 const baseURL = `${process.env.FORCE_SCRIPT_NAME}`;
 

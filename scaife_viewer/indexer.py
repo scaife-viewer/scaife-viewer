@@ -283,7 +283,6 @@ class DirectPusher:
     def es(self):
         if not hasattr(self, "_es"):
             self._es = elasticsearch.Elasticsearch(**default_es_client_config())
-            print(str(default_es_client_config()))
         return self._es
 
     @property

@@ -1,12 +1,16 @@
-.text-width-normal {
-  max-width: 90%;
+.text-width-narrow {
+  max-width: 30em;
 }
 
-.text-width-narrow {
-  max-width: 80%;
+.text-width-normal {
+  max-width: 40em;
 }
 
 .text-width-wide {
+  max-width: 50em;
+}
+
+.text-width-full {
   max-width: 100%;
 }
 

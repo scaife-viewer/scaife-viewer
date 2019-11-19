@@ -1,4 +1,5 @@
 import os
+import sys
 
 import dj_database_url
 
@@ -9,6 +10,7 @@ BASE_DIR = PACKAGE_ROOT
 
 DEBUG = bool(int(os.environ.get("DEBUG", "1")))
 TRACING_ENABLED = bool(int(os.environ.get("TRACING_ENABLED", not DEBUG)))
+LIBRARY_VIEW_API_VERSION = int(os.environ.get("LIBRARY_VIEW_API_VERSION", 0))
 
 DATABASES = {
     "default": dj_database_url.config(default="postgres://localhost/scaife-viewer")
@@ -174,7 +176,7 @@ WEBPACK_LOADER = {
     "DEFAULT": {
         "CACHE": not DEBUG,
         "BUNDLE_DIR_NAME": "/",
-        "STATS_FILE": os.path.join(PROJECT_ROOT, "webpack-stats.json"),
+        "STATS_FILE": os.path.join(PROJECT_ROOT, "static", "stats", "webpack-stats.json"),
         "POLL_INTERVAL": 0.1,
         "TIMEOUT": None,
         "IGNORE": [".*.hot-update.js", ".+.map"]
@@ -199,6 +201,15 @@ LOGGING = {
             "level": "ERROR",
             "filters": ["require_debug_false"],
             "class": "django.utils.log.AdminEmailHandler"
+        },
+        "sentry": {
+            "level": "WARNING",
+            "class": "raven.contrib.django.raven_compat.handlers.SentryHandler",
+        },
+        "console": {
+            "level": "INFO",
+            "class": "logging.StreamHandler",
+            "stream": sys.stdout
         }
     },
     "loggers": {
@@ -210,6 +221,21 @@ LOGGING = {
         "scaife_viewer.cts": {
             "level": "ERROR",
         },
+        "raven": {
+            "level": "WARNING",
+            "handlers": ["sentry"],
+            "propagate": False,
+        },
+        "sentry.errors": {
+            "level": "WARNING",
+            "handlers": ["sentry"],
+            "propagate": False,
+        },
+        "": {
+            "handlers": ["console"],
+            "level": "DEBUG" if DEBUG else "INFO",
+            "propagate": True
+        }
     }
 }
 
@@ -267,6 +293,7 @@ SECURE_REDIRECT_EXEMPT = [
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "sv-cache",
     },
 }
 
@@ -306,3 +333,6 @@ if FORCE_SCRIPT_NAME:
 ELASTICSEARCH_HOSTS = os.environ.get("ELASTICSEARCH_HOSTS", "localhost:9200").split(",")
 USE_CLOUD_INDEXER = bool(int(os.environ.get("USE_CLOUD_INDEXER", "0")))
 ELASTICSEARCH_INDEX_NAME = os.environ.get("ELASTICSEARCH_INDEX_NAME", "scaife-viewer")
+# https://elasticsearch-py.readthedocs.io/en/master/#sniffing
+ELASTICSEARCH_SNIFF_ON_START = bool(int(os.environ.get("ELASTICSEARCH_SNIFF_ON_START", "0")))
+ELASTICSEARCH_SNIFF_ON_CONNECTION_FAIL = bool(int(os.environ.get("ELASTICSEARCH_SNIFF_ON_CONNECTION_FAIL", "0")))

@@ -11,7 +11,6 @@ See [Ways to Contribute](https://github.com/scaife-viewer/scaife-viewer/wiki/Way
 Requirements:
 
 * Python 3.6.x
-  * pipenv
 * Node 11.7
 * PostgreSQL 9.6
 * Elasticsearch 6
@@ -29,15 +28,15 @@ This assumes your local PostgreSQL is configured to allow your user to create da
 
     createuser --username=postgres --superuser $(whoami)
 
-Install the Node and Python dependencies:
+Create a virtual environment. Then, install the Node and Python dependencies:
 
     npm install
-    pipenv install --dev
+    pip install -r requirements-dev.txt
 
-Setup the database:
+Set up the database:
 
-    pipenv run python manage.py migrate
-    pipenv run python manage.py loaddata sites
+    python manage.py migrate
+    python manage.py loaddata sites
 
 Seed the text inventory to speed up local development:
 
@@ -49,8 +48,8 @@ You should now be set to run the static build pipeline and hot module reloading:
 
 In another terminal, collect the static files and then start runserver:
 
-    pipenv run python manage.py collectstatic --noinput
-    pipenv run python manage.py runserver
+    python manage.py collectstatic --noinput
+    python manage.py runserver
 
 Browse to http://localhost:8000/.
 
@@ -92,7 +91,7 @@ you'll need to do the following:
     export FORCE_SCRIPT_NAME=/perseus  # this front slash is important
 ```
 
-2. Make sure this is set prior to runing `npm run build` as well as prior to and
+2. Make sure this is set prior to running `npm run build` as well as prior to and
    part of your wsgi startup environment.
 
 3. Then, you just set your proxy to point to the location of where your wsgi
@@ -115,30 +114,35 @@ A sample docker-compose configuration is available at `deploy/docker-compose.yml
 Copy `.env.example` and customize environment variables for your deployment:
 
 ```
-cp deploy/.env.example cp deploy/.env
+cp deploy/.env.example deploy/.env
 ```
 
 To build the Docker image and bring up the `scaife-viewer`, `sv-postgres` and `sv-elasticsearch` services in the background:
+
 ```
 docker-compose -f deploy/docker-compose.yml up --build -d
 ```
 
 Tail logs via:
+
 ```
 docker-compose -f deploy/docker-compose.yml logs --follow
 ```
 
 To host the application off-root using docker-compose, you'll need to ensure that the `scaife-viewer` Docker image is built with the `FORCE_SCRIPT_NAME` build arg:
+
 ```
 docker-compose -f deploy/docker-compose.yml build --build-arg FORCE_SCRIPT_NAME=/<your-off-root-path>
 ```
 
 You'll also need to ensure that `FORCE_SCRIPT_NAME` exists in `deploy/.env`:
+
 ```
 echo "FORCE_SCRIPT_NAME=/<your-off-root-path>" >> deploy/.env
 ```
 
 Then, bring up all services:
+
 ```
 docker-compose -f deploy/docker-compose.yml up -d
 ```
@@ -150,7 +154,7 @@ The project also includes `Dockerfile-dev` and `Dockerfile-webpack` images which
 First, copy `.env.example` and customize environment variables for development:
 
 ```
-cp deploy/.env.example cp deploy/.env
+cp deploy/.env.example deploy/.env
 ```
 
 Then build the images and spin up the containers:
@@ -159,8 +163,19 @@ Then build the images and spin up the containers:
 docker-compose -f deploy/docker-compose.yml -f deploy/docker-compose.override.yml up --build
 ```
 
-To run only the `scaife-viewer` and `sv-webpack` services:
+To run only the `scaife-viewer`, `sv-webpack`, and `sv-postgres` services, set the `USE_ELASTICSEARCH_SERVICE` environment variable in `docker-compose.override.yml` to 0, and then run:
 
 ```
-docker-compose -f deploy/docker-compose.yml -f deploy/docker-compose.override.yml up --build scaife-viewer sv-webpack
+docker-compose -f deploy/docker-compose.yml -f deploy/docker-compose.override.yml up --build scaife-viewer sv-webpack sv-postgres
 ```
+
+To run the simple_indexer command:
+
+```
+docker-compose -f deploy/docker-compose.yml -f deploy/docker-compose.override.yml exec scaife-viewer python manage.py simple_indexer
+```
+
+
+## API Library Cache
+
+The client-side currently caches the results of `library/json/`. The cache is automatically invalidated every 24 hours. You can manually invalidate it by bumping the `LIBRARY_VIEW_API_VERSION` environment variable.

@@ -90,6 +90,6 @@ describe('WidgetSearch.vue', () => {
       ],
       totalCount: 1,
     });
-    expect(wrapper.html()).toContain('Book 3 Chapter 7');
+    expect(wrapper.text()).toContain('Form Lemma (Greek only) Book 3 Chapter 7 translation');
   });
 });

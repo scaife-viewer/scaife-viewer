@@ -12,3 +12,7 @@ class PassageDoesNotExist(Exception):
 
 class InvalidPassageReference(Exception):
     pass
+
+
+class InvalidURN(Exception):
+    pass
