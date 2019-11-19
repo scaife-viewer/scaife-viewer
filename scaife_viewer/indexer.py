@@ -1,3 +1,4 @@
+import hashlib
 import json
 import multiprocessing
 import os
@@ -12,6 +13,9 @@ import dask.bag
 import elasticsearch
 import elasticsearch.helpers
 from anytree.iterators import PreOrderIter
+from redis import BlockingConnectionPool, Redis
+
+from django.utils.functional import SimpleLazyObject
 
 from . import cts
 from .morphology import Morphology
@@ -21,7 +25,14 @@ from .search import default_es_client_config
 morphology = None
 DASK_CONFIG_NUM_WORKERS = int(os.environ.get("DASK_CONFIG_NUM_WORKERS", multiprocessing.cpu_count() - 1))
 LEMMA_CONTENT = bool(int(os.environ.get("LEMMA_CONTENT", 0)))
-LEMMA_CONTENT_DIR = os.environ.get("LEMMA_CONTENT_DIR")
+INDEXER_KV_STORE_URL = os.environ.get("INDEXER_KV_STORE_URL", "redis://localhost")
+
+
+def get_redis_pool():
+    return BlockingConnectionPool(max_connections=156).from_url(INDEXER_KV_STORE_URL)
+
+
+redis_pool = SimpleLazyObject(get_redis_pool)
 
 
 def compute_kwargs(**params):
@@ -225,20 +236,43 @@ class Indexer:
         ])
         if limit_exceeded:
             print(f"lemma content generated [urn={passage.urn}]")
+
         return content
+
+    def generate_passage_sha(self, passage):
+        summer = hashlib.md5()
+        summer.update(passage.content.encode("utf-8"))
+        return summer.hexdigest()
+
+    def retrieve_lemma_content_from_kv_store(self, passage):
+        client = Redis(connection_pool=redis_pool)
+        key = f"value:{self.generate_passage_sha(passage)}"
+        return client.get(key)
+
+    def push_lemma_content_to_kv_store(self, passage, lemma_content, urn=None):
+        if urn is None:
+            urn = str(passage.urn)
+
+        passage_sha = self.generate_passage_sha(passage)
+        client = Redis(connection_pool=redis_pool)
+        pipe = client.pipeline()
+        pipe.set(urn, passage_sha)
+        pipe.set(f"urn:{passage_sha}", urn)
+        pipe.set(f"value:{passage_sha}", lemma_content)
+        pipe.execute()
+
+    def get_lemma_content(self, passage, tokens):
+        data = self.retrieve_lemma_content_from_kv_store(passage)
+        if data is None:
+            data = self.lemma_content(passage, tokens)
+            self.push_lemma_content_to_kv_store(passage, data)
+        return data
 
     def passage_to_doc(self, passage, sort_idx, tokens, word_stats, lemma_content):
         language, word_count = word_stats
         urn = str(passage.urn)
         if lemma_content:
-            lc = self.lemma_content(passage, tokens)
-
-            if LEMMA_CONTENT_DIR:
-                passage_slug = str(passage.urn).replace(":", "~")
-                path = os.path.join(LEMMA_CONTENT_DIR, passage_slug)
-                with open(path, "w") as f:
-                    f.write(lc)
-
+            lc = self.get_lemma_content(passage, tokens)
             return {
                 "urn": urn,
                 "lemma_content": lc
