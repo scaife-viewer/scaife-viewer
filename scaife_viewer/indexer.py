@@ -246,7 +246,9 @@ class Indexer:
     def retrieve_lemma_content_from_kv_store(self, passage):
         client = Redis(connection_pool=redis_pool)
         key = f"value:{self.generate_passage_sha(passage)}"
-        return client.get(key).decode("utf-8")
+        response = client.get(key)
+        if response:
+            return response.decode("utf-8")
 
     def push_lemma_content_to_kv_store(self, passage, lemma_content, urn=None):
         if urn is None:
