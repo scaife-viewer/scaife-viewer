@@ -28,7 +28,7 @@ INDEXER_KV_STORE_URL = os.environ.get("INDEXER_KV_STORE_URL", "redis://localhost
 
 
 def get_redis_pool():
-    return BlockingConnectionPool(max_connections=156).from_url(INDEXER_KV_STORE_URL)
+    return BlockingConnectionPool(max_connections=256).from_url(INDEXER_KV_STORE_URL)
 
 
 redis_pool = SimpleLazyObject(get_redis_pool)
@@ -246,7 +246,7 @@ class Indexer:
     def retrieve_lemma_content_from_kv_store(self, passage):
         client = Redis(connection_pool=redis_pool)
         key = f"value:{self.generate_passage_sha(passage)}"
-        return client.get(key)
+        return client.get(key).decode("utf-8")
 
     def push_lemma_content_to_kv_store(self, passage, lemma_content, urn=None):
         if urn is None:
