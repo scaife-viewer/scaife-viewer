@@ -8,14 +8,13 @@ from operator import attrgetter
 from typing import Iterable, List, NamedTuple
 
 from django.conf import settings
+from django.utils.functional import SimpleLazyObject
 
 import dask.bag
 import elasticsearch
 import elasticsearch.helpers
 from anytree.iterators import PreOrderIter
 from redis import BlockingConnectionPool, Redis
-
-from django.utils.functional import SimpleLazyObject
 
 from . import cts
 from .morphology import Morphology
