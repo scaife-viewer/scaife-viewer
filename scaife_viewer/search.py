@@ -16,12 +16,30 @@ es = Elasticsearch(
     sniff_on_connection_fail=settings.ELASTICSEARCH_SNIFF_ON_CONNECTION_FAIL,
 )
 
+"""
+From https://www.elastic.co/guide/en/elasticsearch/reference/6.0/search-request-highlighting.html#boundary-scanners:
+
+"The maximum number of fragments to return. If the number of fragments
+is set to 0, no fragments are returned. Instead, the entire field contents
+are highlighted and returned. This can be handy when you need to highlight
+short texts such as a title or address, but fragmentation is not required.
+If number_of_fragments is 0, fragment_size is ignored. Defaults to 5."
+
+Since `Highlighter` zips the positions of the tokens returned in the ES hit
+with the tokens generated from `passage.tokenizer`, we must return the entire
+fragment from ElasticSearch.
+
+If `number_of_fragments` returns less than the number of tokens in the passage,
+`Highlighter` will not zip the highlighted tokens correctly.
+"""
+ENTIRE_FIELD_CONTENTS = 0
+
 
 class SearchQuery:
 
     def __init__(
         self, q, search_type, scope=None, sort_by=None, aggregate_fields=None,
-        kind="form", fragments=0, size=10, offset=0
+        kind="form", size=10, offset=0
     ):
         self.q = q
         self.search_type = search_type
@@ -29,7 +47,6 @@ class SearchQuery:
         self.sort_by = sort_by
         self.aggregate_fields = aggregate_fields
         self.kind = kind
-        self.fragments = fragments
         self.size = size
         self.offset = offset
         self.total_count = None
@@ -90,8 +107,7 @@ class SearchQuery:
         return {
             "highlight": {
                 "type": "fvh",
-                "number_of_fragments": self.fragments,
-                "fragment_size": 60,
+                "number_of_fragments": ENTIRE_FIELD_CONTENTS,
                 "fields": fields,
             }
         }

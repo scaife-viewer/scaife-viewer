@@ -67,7 +67,7 @@ export default {
 <style lang="scss">
 .new-alexandria-commentary {
   img {
-    max-width: 24vw;
+    max-width: 100%;
   }
 }
 </style>

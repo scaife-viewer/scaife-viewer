@@ -10,8 +10,8 @@
           <slot name="header"></slot>
         </span>
         <span v-if="open" class="fixed-toggle" @click.prevent="toggleFix">
-          <icon name="expand" v-if="fixed"></icon>
-          <icon name="compress" v-else></icon>
+          <icon name="expand-arrows-alt" v-if="fixed"></icon>
+          <icon name="compress-arrows-alt" v-else></icon>
         </span>
       </h2>
       <div v-if="open" class="sticky-body">

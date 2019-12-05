@@ -27,7 +27,7 @@ body.reader {
 
   @include media-breakpoint-up(sm) {  // pusher
     .sidebar {
-      max-width: 600px;
+      max-width: 33%;
       transition: max-width .2s;
       position: relative;
 
@@ -44,6 +44,12 @@ body.reader {
         overflow: hidden;
         opacity: 0;
       }
+    }
+  }
+
+  @include media-breakpoint-up(xl) {  // pusher
+    .sidebar {
+      max-width: 600px;
     }
   }
 

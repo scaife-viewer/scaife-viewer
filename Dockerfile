@@ -1,4 +1,4 @@
-FROM node:11.7-alpine AS static-build
+FROM node:12.13-alpine AS static-build
 WORKDIR /opt/scaife-viewer/src/
 COPY package.json package-lock.json ./
 RUN npm ci
