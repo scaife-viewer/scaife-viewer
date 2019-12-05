@@ -1,7 +1,7 @@
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
-import { faExpand } from '@fortawesome/free-solid-svg-icons/faExpand';
-import { faCompress } from '@fortawesome/free-solid-svg-icons/faCompress';
+import { faExpandArrowsAlt } from '@fortawesome/free-solid-svg-icons/faExpandArrowsAlt';
+import { faCompressArrowsAlt } from '@fortawesome/free-solid-svg-icons/faCompressArrowsAlt';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons/faChevronDown';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons/faChevronLeft';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons/faChevronRight';
@@ -12,8 +12,8 @@ import { faColumns } from '@fortawesome/free-solid-svg-icons/faColumns';
 const iconMap = [
   faArrowLeft,
   faArrowRight,
-  faExpand,
-  faCompress,
+  faExpandArrowsAlt,
+  faCompressArrowsAlt,
   faChevronDown,
   faChevronLeft,
   faChevronRight,
