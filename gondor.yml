@@ -1,8 +1,0 @@
-site: perseus/scaife-viewer
-buildpack: https://github.com/heroku/heroku-buildpack-multi.git
-branches:
-  master: primary
-  dev: dev
-deploy:
-  services:
-  - web

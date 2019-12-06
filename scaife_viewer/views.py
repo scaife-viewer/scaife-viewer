@@ -58,7 +58,7 @@ class LibraryConditionMixin(ConditionMixin):
         # @@@ per-URN modification dates will need nautilus-cnd
         # for now, use only deployment creation timestamp.
         last_modified = datetime.datetime.utcnow()
-        deployment_timestamp = os.environ.get("EC_DEPLOYMENT_CREATED")
+        deployment_timestamp = os.environ.get(settings.DEPLOYMENT_TIMESTAMP_VAR_NAME)
         if deployment_timestamp:
             last_modified = dateutil.parser.parse(deployment_timestamp)
         return last_modified
