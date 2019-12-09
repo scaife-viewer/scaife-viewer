@@ -11,14 +11,14 @@ SHA_SHORT="${CIRCLE_SHA1:0:7}"
 
 AUTHOR_NAME="$(git show -s --format='%an' $SHA_SHORT)"
 if [[ "$CIRCLE_BRANCH" == "master" ]]; then
-    EC_INSTANCE_URL="https://scaife.perseus.org/"
+    INSTANCE_URL="https://scaife.perseus.org/"
 else
-    EC_INSTANCE_URL="https://scaife-dev.perseus.org/"
+    INSTANCE_URL="https://scaife-dev.perseus.org/"
 fi
 
 # prepare Slack message payload
-MESSAGE="${AUTHOR_NAME} deployed \`<https://github.com/scaife-viewer/scaife-viewer/commit/${SHA_SHORT}|${SHA_SHORT}>\` to <${EC_INSTANCE_URL}|${INSTANCE}>."
-PAYLOAD_DATA="payload={\"channel\": \"#dev-feed\", \"username\": \"EC Deployments\", \"text\": \"${MESSAGE}\", \"icon_emoji\": \":lightning_cloud:\"}"
+MESSAGE="${AUTHOR_NAME} deployed \`<https://github.com/scaife-viewer/scaife-viewer/commit/${SHA_SHORT}|${SHA_SHORT}>\` to <${INSTANCE_URL}|${INSTANCE}>."
+PAYLOAD_DATA="payload={\"channel\": \"#dev-feed\", \"username\": \"Heroku Deployments\", \"text\": \"${MESSAGE}\", \"icon_emoji\": \":white_check_mark:\"}"
 
 # post to Slack
 echo "Sending Slack notification..."

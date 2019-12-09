@@ -22,9 +22,8 @@ ALLOWED_HOSTS = [
     "scaife-dev.perseus.org",
 ]
 
-host_domain = os.environ.get("GONDOR_INSTANCE_DOMAIN")
-if host_domain:
-    ALLOWED_HOSTS.append(host_domain)
+if "HEROKU_APP_NAME" in os.environ:
+    ALLOWED_HOSTS.append(".herokuapp.com")
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -334,3 +333,5 @@ ELASTICSEARCH_HOSTS = os.environ.get("ELASTICSEARCH_HOSTS", "localhost").split("
 # https://elasticsearch-py.readthedocs.io/en/master/#sniffing
 ELASTICSEARCH_SNIFF_ON_START = bool(int(os.environ.get("ELASTICSEARCH_SNIFF_ON_START", "0")))
 ELASTICSEARCH_SNIFF_ON_CONNECTION_FAIL = bool(int(os.environ.get("ELASTICSEARCH_SNIFF_ON_CONNECTION_FAIL", "0")))
+
+DEPLOYMENT_TIMESTAMP_VAR_NAME = os.environ.get("DEPLOYMENT_TIMESTAMP_VAR_NAME", "HEROKU_RELEASE_CREATED_AT")

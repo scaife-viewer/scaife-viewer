@@ -1,1 +1,2 @@
-web: gunicorn --bind=0.0.0.0 --log-file=- --preload --timeout=120 scaife_viewer.wsgi
+web: gunicorn --log-file=- --preload scaife_viewer.wsgi
+release: python manage.py migrate --noinput
