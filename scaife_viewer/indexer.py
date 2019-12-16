@@ -24,6 +24,7 @@ from .search import default_es_client_config
 morphology = None
 DASK_CONFIG_NUM_WORKERS = int(os.environ.get("DASK_CONFIG_NUM_WORKERS", multiprocessing.cpu_count() - 1))
 LEMMA_CONTENT = bool(int(os.environ.get("LEMMA_CONTENT", 0)))
+RAW_CONTENT = bool(int(os.environ.get("RAW_CONTENT", 0)))
 INDEXER_KV_STORE_URL = os.environ.get("INDEXER_KV_STORE_URL", "redis://localhost")
 
 
@@ -257,10 +258,19 @@ class Indexer:
         passage_sha = self.generate_passage_sha(passage)
         client = Redis(connection_pool=redis_pool)
         pipe = client.pipeline()
-        pipe.set(urn, passage_sha)
-        pipe.set(f"urn:{passage_sha}", urn)
-        pipe.set(f"value:{passage_sha}", lemma_content)
+        lemma_prefix = "lemmas"
+        lemma_sha_key = f"{lemma_prefix}:{urn}"
+        pipe.set(lemma_sha_key, passage_sha)
+        pipe.set(f"{lemma_prefix}:urn:{passage_sha}", urn)
+        pipe.set(f"{lemma_prefix}:value:{passage_sha}", lemma_content)
         pipe.execute()
+
+    def push_content_to_kv_store(self, passage, content, urn=None):
+        if urn is None:
+            urn = str(passage.urn)
+
+        client = Redis(connection_pool=redis_pool)
+        client.set(urn, content)
 
     def get_lemma_content(self, passage, tokens):
         data = self.retrieve_lemma_content_from_kv_store(passage)
@@ -279,6 +289,8 @@ class Indexer:
                 "lemma_content": lc
             }
         else:
+            if RAW_CONTENT:
+                self.push_content_to_kv_store(passage.content)
             return {
                 "urn": str(passage.urn),
                 "text_group": str(passage.text.urn.upTo(cts.URN.TEXTGROUP)),
