@@ -290,7 +290,7 @@ class Indexer:
             }
         else:
             if RAW_CONTENT:
-                self.push_content_to_kv_store(passage.content)
+                self.push_content_to_kv_store(passage, passage.content)
             return {
                 "urn": str(passage.urn),
                 "text_group": str(passage.text.urn.upTo(cts.URN.TEXTGROUP)),
