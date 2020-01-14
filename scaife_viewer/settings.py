@@ -289,6 +289,8 @@ SECURE_REDIRECT_EXEMPT = [
     r"\.well-known/acme-challenge/.+",
 ]
 
+DEFAULT_HTTP_PROTOCOL = "https" if SECURE_SSL_REDIRECT else "http"
+
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
