@@ -1,26 +1,21 @@
 .text {
   &.text-xs {
-    font-size: 12px;
     line-height: 1.5;
   }
 
   &.text-sm {
-    font-size: 14px;
     line-height: 1.6;
   }
 
   &.text-md {
-    font-size: 16px;
     line-height: 1.7;
   }
 
   &.text-lg {
-    font-size: 20px;
     line-height: 1.8;
   }
 
   &.text-xl {
-    font-size: 24px;
     line-height: 1.9;
   }
 }
@@ -29,26 +24,6 @@
   font-family: 'Noto Serif';
   cursor: pointer;
   color: $gray-500;
-
-  &.text-xs {
-    font-size: 12px;
-  }
-
-  &.text-sm {
-    font-size: 14px;
-  }
-
-  &.text-md {
-    font-size: 16px;
-  }
-
-  &.text-lg {
-    font-size: 20px;
-  }
-
-  &.text-xl {
-    font-size: 24px;
-  }
 }
 
 .text-size-control.text-xs.active,

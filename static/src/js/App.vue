@@ -17,3 +17,5 @@ export default {
   }
 }
 </script>
+
+<style src="@scaife-viewer/scaife-widgets/dist/scaife-widgets.css"></style>
