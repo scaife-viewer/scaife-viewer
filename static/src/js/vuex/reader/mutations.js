@@ -57,10 +57,6 @@ export default {
     state.textMode = mode;
   },
 
-  [constants.SET_TEXT_SIZE]: (state, { size }) => {
-    state.textSize = size;
-  },
-
   [constants.READER_TOGGLE_SIDEBAR_LEFT]: (state) => {
     state.sidebarLeftOpened = !state.sidebarLeftOpened;
   },
@@ -215,7 +211,4 @@ export default {
     state.error = error;
   },
 
-  [constants.SET_TEXT_WIDTH]: (state, { width }) => {
-    state.textWidth = width;
-  },
 };

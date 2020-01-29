@@ -1,4 +1,5 @@
 import createPersistedState from 'vuex-persistedstate';
+import { scaifeWidgets } from '@scaife-viewer/scaife-widgets';
 
 import { library, reader } from './vuex';
 
@@ -10,13 +11,13 @@ export default function createStore() {
     modules: {
       library,
       reader,
+      [scaifeWidgets.namespace]: scaifeWidgets.store,
     },
     plugins: [
       createPersistedState({
         paths: [
           'reader.sidebarLeftOpened',
           'reader.sidebarRightOpened',
-          'reader.textSize',
           'reader.textMode',
         ],
         storage: window.localStorage,
