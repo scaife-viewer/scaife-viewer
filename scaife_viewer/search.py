@@ -53,7 +53,7 @@ class SearchQuery:
 
     def query_index(self):
         return {
-            "index": "scaife-viewer",
+            "index": settings.ELASTICSEARCH_INDEX_NAME,
             "doc_type": "text",
         }
 

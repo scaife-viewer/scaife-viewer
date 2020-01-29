@@ -199,7 +199,7 @@ class DirectPusher:
 
     def __init__(self, chunk_size=500):
         self.chunk_size = chunk_size
-        self.index_name = "scaife-viewer"
+        self.index_name = settings.ELASTICSEARCH_INDEX_NAME
         self.es.indices.create(index=self.index_name, ignore=400)
 
     @property

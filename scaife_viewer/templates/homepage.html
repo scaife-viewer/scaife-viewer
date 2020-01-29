@@ -1,5 +1,6 @@
 {% extends "site_base.html" %}
 
+{% load humanize %}
 {% load i18n %}
 
 {% block head_title %}Home{% endblock %}
@@ -34,10 +35,10 @@
   <section class="stats">
     <div class="container">
       <p>
-        <b>2,060</b> works in <b>2,674</b> editions and translations
-        (1,298 in Greek and 620 in Latin)
+        <b>{{ stats.works_count }}</b> works in <b>{{ stats.text_counts_total }}</b> editions and translations
+        ({{ stats.text_counts_greek }} in Greek and {{ stats.text_counts_greek}} in Latin)
         <br>
-        <b>64.3 million</b> words (28.8 million in Greek, 16.4 million in Latin)
+        <b>{{ stats.word_counts_total }}</b> million words ({{ stats.word_counts_greek }} million in Greek, {{ stats.word_counts_latin }} million in Latin)
       </p>
     </div>
   </section>
