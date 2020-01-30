@@ -21,11 +21,12 @@ from . import cts
 from .http import ConditionMixin
 from .precomputed import library_view_json
 from .search import SearchQuery
+from .stats import get_library_stats
 from .utils import apify, encode_link_header, get_pagination_info, link_passage
 
 
 def home(request):
-    return render(request, "homepage.html", {})
+    return render(request, "homepage.html", {"stats": get_library_stats()})
 
 
 def about(request):

@@ -14,6 +14,8 @@ import TextPart from './TextPart.vue';
 import InlineToken from './InlineToken.vue';
 import RefLower from './RefLower.vue';
 
+import WIDGETS_NS from '@scaife-viewer/scaife-widgets';
+
 export default {
   name: 'passage-render-text',
   props: ['text', 'highlighting'],
@@ -27,10 +29,10 @@ export default {
   },
   computed: {
     textSize() {
-      return this.$store.state.reader.textSize;
+      return this.$store.state[WIDGETS_NS].readerTextSize;
     },
     textWidth() {
-      return this.$store.state.reader.textWidth;
+      return this.$store.state[WIDGETS_NS].readerTextWidth;
     },
   },
   provide() {

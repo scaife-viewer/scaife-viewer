@@ -147,6 +147,7 @@ INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
+    "django.contrib.humanize",
     "django.contrib.messages",
     "django.contrib.sessions",
     "django.contrib.sites",
@@ -169,6 +170,7 @@ INSTALLED_APPS = [
     # project
     "scaife_viewer",
     "scaife_viewer.reading",
+    "scaife_viewer.stats",
 ]
 
 WEBPACK_LOADER = {
@@ -289,6 +291,8 @@ SECURE_REDIRECT_EXEMPT = [
     r"\.well-known/acme-challenge/.+",
 ]
 
+DEFAULT_HTTP_PROTOCOL = "https" if SECURE_SSL_REDIRECT else "http"
+
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
@@ -331,6 +335,7 @@ if FORCE_SCRIPT_NAME:
 
 ELASTICSEARCH_HOSTS = os.environ.get("ELASTICSEARCH_HOSTS", "localhost").split(",")
 # https://elasticsearch-py.readthedocs.io/en/master/#sniffing
+ELASTICSEARCH_INDEX_NAME = os.environ.get("ELASTICSEARCH_INDEX_NAME", "scaife-viewer")
 ELASTICSEARCH_SNIFF_ON_START = bool(int(os.environ.get("ELASTICSEARCH_SNIFF_ON_START", "0")))
 ELASTICSEARCH_SNIFF_ON_CONNECTION_FAIL = bool(int(os.environ.get("ELASTICSEARCH_SNIFF_ON_CONNECTION_FAIL", "0")))
 

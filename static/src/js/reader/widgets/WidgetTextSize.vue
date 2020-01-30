@@ -2,30 +2,24 @@
   <base-widget>
     <span slot="header">Text Size</span>
     <div slot="body">
-      <span :class="['text-size-control', 'text-xs', {active: textSize == 'xs'}]" @click="changeTextSize('xs')">Αα</span>
-      <span :class="['text-size-control', 'text-sm', {active: textSize == 'sm'}]" @click="changeTextSize('sm')">Αα</span>
-      <span :class="['text-size-control', 'text-md', {active: textSize == 'md'}]" @click="changeTextSize('md')">Αα</span>
-      <span :class="['text-size-control', 'text-lg', {active: textSize == 'lg'}]" @click="changeTextSize('lg')">Αα</span>
-      <span :class="['text-size-control', 'text-xl', {active: textSize == 'xl'}]" @click="changeTextSize('xl')">Αα</span>
+      <text-size-widget />
     </div>
   </base-widget>
 </template>
 
 <script>
 import constants from '../../constants';
+import { TextSizeWidget } from '@scaife-viewer/scaife-widgets';
+import WIDGETS_NS from '@scaife-viewer/scaife-widgets';
 
 export default {
   name: 'widget-text-size',
+  components: {
+    TextSizeWidget,
+  },
   computed: {
     textSize() {
-      return this.$store.state.reader.textSize;
-    },
-  },
-  methods: {
-    changeTextSize(size) {
-      this.$store.commit(`reader/${constants.SET_TEXT_SIZE}`, { size });
-      // on text size change, reset width to normal
-      this.$store.commit(`reader/${constants.SET_TEXT_WIDTH}`, { width: 'normal' });
+      return this.$store.state[WIDGETS_NS].readerTextSize;
     },
   },
 };

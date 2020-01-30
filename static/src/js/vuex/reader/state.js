@@ -1,6 +1,5 @@
 export default {
   textMode: 'browser',
-  textSize: 'md',
   sidebarLeftOpened: true,
   sidebarRightOpened: true,
   versions: null,
@@ -20,5 +19,4 @@ export default {
   selectedLemmas: null,
   error: '',
   selectedTokenRange: { start: null, end: null },
-  textWidth: 'normal',
 };

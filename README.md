@@ -78,7 +78,6 @@ If you need to add a language; add it to `LANGUAGES` in settings.py and run:
 
     python manage.py makemessages --locale <lang>
 
-
 ## Hosting Off-Root
 
 If you need to host at a place other than root, for example, if you need to have
@@ -105,7 +104,6 @@ you'll need to do the following:
 ```
 
 That should be all you need to do.
-
 
 ## Deploying via Docker
 
@@ -169,12 +167,11 @@ To run only the `scaife-viewer`, `sv-webpack`, and `sv-postgres` services, set t
 docker-compose -f deploy/docker-compose.yml -f deploy/docker-compose.override.yml up --build scaife-viewer sv-webpack sv-postgres
 ```
 
-To run the simple_indexer command:
+To run the indexer command:
 
 ```
-docker-compose -f deploy/docker-compose.yml -f deploy/docker-compose.override.yml exec scaife-viewer python manage.py simple_indexer
+docker-compose -f deploy/docker-compose.yml -f deploy/docker-compose.override.yml exec scaife-viewer python manage.py indexer
 ```
-
 
 ## API Library Cache
 
