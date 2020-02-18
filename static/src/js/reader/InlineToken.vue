@@ -16,15 +16,30 @@ export default {
       return `${this.w}[${this.i}]`;
     },
   },
+  methods: {
+    processTokenClick(evt, clickable, selected, idx) {
+      if (evt.metaKey && selected) {
+        // clear input
+        this.$store.dispatch(`reader/${constants.READER_SET_SELECTED_TOKEN}`, { token: null });
+      } else if (evt.shiftKey) {
+        // add to selection
+        this.$store.dispatch(`reader/${constants.READER_SELECT_TOKEN_RANGE}`, { token: idx });
+      } else {
+        // set selection
+        this.$store.dispatch(`reader/${constants.READER_SET_SELECTED_TOKEN}`, { token: idx });
+      }
+      evt.stopPropagation();
+    }
+  },
   render(h) {
     let selected = false;
     let highlighted = false;
     let clickable = false;
+    const vueInstance = this;
     const {
       t, idx, highlighting,
       $parent: p,
       $store: store,
-      $router: router
     } = this;
     const { visible } = p;
     if (visible && highlighting) {
@@ -46,19 +61,7 @@ export default {
         on: {
           click(e) {
             if (clickable) {
-              let value = idx;
-              if (e.metaKey) {
-                if (selected) {
-                  value = null;
-                }
-              }
-              store.dispatch(`reader/${constants.READER_SET_SELECTED_TOKEN}`, { token: value });
-              router.replace({
-                query: {
-                  highlight: value
-                }
-              });
-              e.stopPropagation();
+              vueInstance.processTokenClick(e, clickable, selected, idx);
             }
           },
         },
