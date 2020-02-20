@@ -43,6 +43,19 @@ export default {
   methods: {
     setInputVal() {
       this.value = this.highlight;
+      this.updateHighlightQueryParam();
+    },
+    updateHighlightQueryParam() {
+      /*
+        Since the `highlight` computed property is reactive, when
+        `$store.state.reader.highlight` is changed, the widget will
+        update the `highlight` query param
+      */
+      this.$router.replace({
+        query: {
+          highlight: this.value,
+        },
+      });
     },
     handleKeyUp(e) {
       if (e.keyCode === 13) {
@@ -52,11 +65,6 @@ export default {
           this.$store.dispatch(`reader/${constants.READER_HIGHLIGHT}`, { highlight: this.value });
         }
         e.currentTarget.blur();
-        this.$router.replace({
-          query: {
-            highlight: this.value,
-          }
-        });
       } else {
         e.stopPropagation();
       }
