@@ -82,7 +82,7 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
 
-STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 if "SECRET_KEY" in os.environ:
     SECRET_KEY = os.environ["SECRET_KEY"]
@@ -176,7 +176,7 @@ INSTALLED_APPS = [
 WEBPACK_LOADER = {
     "DEFAULT": {
         "CACHE": not DEBUG,
-        "BUNDLE_DIR_NAME": "/",
+        "BUNDLE_DIR_NAME": "",
         "STATS_FILE": os.path.join(PROJECT_ROOT, "static", "stats", "webpack-stats.json"),
         "POLL_INTERVAL": 0.1,
         "TIMEOUT": None,
