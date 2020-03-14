@@ -2,9 +2,7 @@
 
 The new reading environment for version 5.0 of the Perseus Digital Library.
 
-The Scaife Viewer is the new reading environment for the Perseus Digital Library.
-
-See [Ways to Contribute](https://github.com/scaife-viewer/scaife-viewer/wiki/Ways-to-Contribute).
+This repository is part of the [Scaife Viewer](https://scaife-viewer.org) project, an open-source ecosystem for building rich online reading environments.
 
 ## Getting Started with Local Development
 
