@@ -25,18 +25,28 @@
           </div>
         </div>
       </div>
-      <CTSWorkDeck
-        v-for="work in filteredWorks"
-        :key="work.urn"
-        :work="work"
-        :versions="versions"
-      />
+      <DynamicScroller
+        :items="filteredWorks"
+        :min-item-size="270"
+        class="scroller"
+      >
+        <template v-slot="{ item, index, active }">
+            <DynamicScrollerItem
+                :item="item"
+                :active="active"
+                :size-dependencies="[item.message]"
+                :data-index="index"
+            >
+                <CTSWorkDeck :key="item.urn" :work="item" :versions="versions" />
+            </DynamicScrollerItem>
+        </template>
+      </DynamicScroller>
     </div>
   </div>
 </template>
 
 <script>
-
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css';
 const debounce = require('lodash.debounce');
 import gql from 'graphql-tag';
 import constants from '../constants';
@@ -133,7 +143,13 @@ export default {
         }`;
     },
     filteredWorks() {
-      return this.filtered ? this.works.filter(work => work.label.toLowerCase().indexOf(this.trimmedQuery.toLowerCase()) !== -1) : this.works;
+      const works = this.filtered ? this.works.filter(work => work.label.toLowerCase().indexOf(this.trimmedQuery.toLowerCase()) !== -1) : this.works;
+      return works.map(w => {
+          return {
+              ...w,
+              id: w.urn,
+          };
+      });
     },
   },
   methods: {
