@@ -1,26 +1,47 @@
 <template>
   <div class="work" :key="work.urn">
     <div class="label">
-      <a :href="work.url">{{ work.label }}</a>
+      <a :href="getLibraryURL(work)">{{ work.label }}</a>
     </div>
     <div class="text-group">
-      {{ work.textGroup.label }}
+      {{ textGroup.label }}
     </div>
     <div class="urn">
       {{ work.urn }}
     </div>
     <div class="versions">
-      <template v-for="text in work.texts">
-        <a :key="text.urn" :href="text.reader_url" class="badge badge-light" v-popover:bottom="{title: text.label, content: text.description, trigger: 'hover'}">
-          {{ text.lang }}
-        </a>{{ ' ' }}
-      </template>
+      <TextVersion v-for="text in getTexts(work)" :key="text.urn" :text="text" />
     </div>
   </div>
 </template>
 
 <script>
+import TextVersion from './TextVersion.vue';
+
 export default {
-  props: ['work', 'filtered'],
+  props: ['work', 'filtered', 'text-groups', 'versions'],
+  components: { TextVersion },
+  computed: {
+    textGroup() {
+      // @@@ .includes
+      // @@@ .find
+      return this.textGroups.find((textGroup) => {
+        return this.work.urn.includes(this.safeURN(textGroup.urn));
+      });
+    },
+  },
+  methods: {
+    safeURN(urn) {
+      // @@@ maintain backwards compatability
+      return urn.endsWith(':') ? urn.slice(0, -1) : urn;
+    },
+    getTexts(work) {
+      const workUrn = this.safeURN(work.urn);
+      return this.versions ? this.versions.filter(version => version.urn.startsWith(workUrn)) : this.versions;
+    },
+    getLibraryURL(ctsObj) {
+      return `/library/${this.safeURN(ctsObj.urn)}/`;
+    },
+  },
 };
 </script>

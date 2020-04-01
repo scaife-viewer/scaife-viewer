@@ -33,16 +33,16 @@
       </div>
       <div :class="['text-groups', { filtered }]">
         <template v-if="sortKind === 'cts-urn' || sortKind === 'text-group'">
-          <template v-for="textGroup in textGroups">
+          <template v-for="textGroup in sortedTextGroups">
             <keep-alive>
-              <library-text-group ref="collapsible" :textGroup="textGroup" :filtered="filtered" :key="textGroup.urn" />
+              <library-text-group ref="collapsible" :textGroup="textGroup" :texts="versions" :filtered="filtered" :key="textGroup.urn" />
             </keep-alive>
           </template>
         </template>
         <div v-else-if="sortKind === 'work'" class="flat-work-list">
-          <template v-for="work in works">
+          <template v-for="work in sortedWorks">
             <keep-alive>
-              <library-work :work="work" :filtered="filtered" :key="work.urn" />
+              <library-work :work="work" :text-groups="textGroups" :versions="versions" :filtered="filtered" :key="work.urn" />
             </keep-alive>
           </template>
         </div>
@@ -57,30 +57,33 @@ import LibraryTextGroup from './LibraryTextGroup.vue';
 import LibraryWork from './LibraryWork.vue';
 
 const debounce = require('lodash.debounce');
+import gql from 'graphql-tag';
+
 
 export default {
-  created() {
-    this.loading = true;
-    this.$store.dispatch(constants.LIBRARY_LOAD_TEXT_GROUP_LIST)
-      .then(() => {
-        // delay for vuex store update
-        setTimeout(()=> {
-          this.loading = false;
-          this.$nextTick(() => {
-            this.$refs['filter-input'].focus();
-          });
-        }, 100)
-      })
-      // .catch((err) => {
-      //   this.loading = false;
-      //   this.error = err.message;
-      // });
-  },
+  // created() {
+  //   this.loading = true;
+  //   this.$store.dispatch(constants.LIBRARY_LOAD_TEXT_GROUP_LIST)
+  //     .then(() => {
+  //       // delay for vuex store update
+  //       setTimeout(()=> {
+  //         // this.loading = false;
+  //         this.$nextTick(() => {
+  //           this.$refs['filter-input'].focus();
+  //         });
+  //       }, 100)
+  //     })
+  //     // .catch((err) => {
+  //     //   this.loading = false;
+  //     //   this.error = err.message;
+  //     // });
+  // },
   data() {
     return {
-      loading: false,
+      // loading: false,
       error: '',
       query: '',
+      trimmedQuery: '',
       filtered: false,
     };
   },
@@ -91,22 +94,112 @@ export default {
     sortKind() {
       this.filter();
     },
+    loading() {
+      if (!this.loading) {
+        this.$nextTick(() => {
+          this.$refs['filter-input'].focus();
+        });
+      }
+    },
   },
   computed: {
+    loading() {
+      return !this.gqlData;
+    },
     textGroups() {
-      if (this.sortKind === 'text-group') {
-        return this.$store.getters.sortedByTextGroup;
+      const textGroups = [];
+      const initialTextGroups = this.gqlData
+        ? this.gqlData.textGroups.edges.map(textGroup => textGroup.node)
+        : [];
+      initialTextGroups.forEach((textGroup) => {
+        textGroups.push({
+          ...textGroup,
+          works: this.getWorks(textGroup),
+        });
+      });
+      return textGroups;
+    },
+    filteredTextGroups() {
+      if (!this.filtered) {
+        return this.textGroups;
       }
-      return this.$store.getters.sortedByURN;
+      const filteredTextGroups = [];
+      this.textGroups.forEach((textGroup) => {
+        if (textGroup.label.toLowerCase().indexOf(this.trimmedQuery.toLowerCase()) !== -1) {
+          filteredTextGroups.push(textGroup);
+        } else {
+          const works = textGroup.works.filter((work) => {
+            return work.label.toLowerCase().indexOf(this.trimmedQuery.toLowerCase()) !== -1;
+          });
+          if (works.length > 0) {
+            filteredTextGroups.push({ ...textGroup, works });
+          }
+        }
+      });
+      return filteredTextGroups;
+    },
+    sortedTextGroups() {
+      return this.sortKind === 'text-group' ? this.alphaSortedTextGroups : this.URNSortedTextGroups;
+    },
+    URNSortedTextGroups() {
+      return [...this.filteredTextGroups].sort((a, b) => a.urn.localeCompare(b.urn));
+    },
+    alphaSortedTextGroups() {
+      return [...this.filteredTextGroups].sort((a, b) => a.label.localeCompare(b.label));
     },
     works() {
-      return this.$store.getters.sortedByWork;
+      return this.gqlData
+        ? this.gqlData.works.edges.map(work => work.node)
+        : [];
+    },
+    filteredWorks() {
+      return this.filtered ? this.works.filter(work => work.label.toLowerCase().indexOf(this.trimmedQuery.toLowerCase()) !== -1) : this.works;
+    },
+    sortedWorks() {
+      return [...this.filteredWorks].sort((a, b) => a.label.localeCompare(b.label));
+    },
+    versions() {
+      return this.gqlData
+        ? this.gqlData.versions.edges.map(version => version.node)
+        : [];
     },
     sortKind() {
       return this.$store.state.library.sortKind;
     },
     collapsible() {
       return this.sortKind === 'cts-urn' || this.sortKind === 'text-group';
+    },
+    gqlQuery() {
+      return gql`
+        {
+          textGroups {
+            edges {
+              node {
+                label
+                urn
+              }
+            }
+          }
+          works {
+            edges{
+              node {
+                urn
+                label
+              }
+            }
+          }
+          versions {
+            edges {
+              node {
+                access
+                urn
+                label
+                description
+                lang
+              }
+            }
+          }
+        }`;
     },
   },
   methods: {
@@ -115,15 +208,11 @@ export default {
     },
     filter: debounce(
       function f() {
-        const query = this.query.trim();
-        this.filtered = query !== '';
-
-        if (query === '') {
-          const action = this.sortKind === 'work' ? constants.LIBRARY_RESET_TEXT_GROUP_WORKS : constants.LIBRARY_RESET_TEXT_GROUPS;
-          this.$store.dispatch(action);
+        this.trimmedQuery = this.query.trim();
+        if (this.trimmedQuery === '') {
+          this.filtered = false;
         } else {
-          const action = this.sortKind === 'work' ? constants.LIBRARY_FILTER_TEXT_GROUP_WORKS : constants.LIBRARY_FILTER_TEXT_GROUPS;
-          this.$store.dispatch(action, query);
+          this.filtered = true;
         }
       },
       250,
@@ -140,6 +229,14 @@ export default {
     },
     sort(kind) {
       this.$store.commit(constants.SET_LIBRARY_SORT, { kind });
+    },
+    safeURN(urn) {
+      // @@@ maintain backwards compatability
+      return urn.endsWith(':') ? urn.slice(0, -1) : urn;
+    },
+    getWorks(textGroup) {
+      const textGroupUrn = this.safeURN(textGroup.urn);
+      return this.works ? this.works.filter(work => work.urn.startsWith(textGroupUrn)) : this.works;
     },
   },
   components: {

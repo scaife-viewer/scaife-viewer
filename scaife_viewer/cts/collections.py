@@ -1,3 +1,4 @@
+import re
 from functools import lru_cache, partial
 from operator import attrgetter
 
@@ -7,6 +8,7 @@ from MyCapytain.common.constants import RDF_NAMESPACES
 from MyCapytain.resources.collections.cts import XmlCtsTextInventoryMetadata
 from MyCapytain.resources.prototypes.cts import inventory as cts
 
+from . import constants
 from .capitains import default_resolver
 from .passage import Passage
 from .reference import URN
@@ -153,20 +155,15 @@ class Text(Collection):
 
     @property
     def lang(self):
-        return self.metadata.lang
+        if re.match(r"^[a-z]+-[A-Z][a-z]+$", self.metadata.lang):
+            return self.metadata.lang.split('-')[0]
+        else:
+            return self.metadata.lang
 
     @property
     def human_lang(self):
-        lang = self.metadata.lang
-        return {
-            "grc": "Greek",
-            "lat": "Latin",
-            "heb": "Hebrew",
-            "fa": "Farsi",
-            "eng": "English",
-            "ger": "German",
-            "fre": "French",
-        }.get(lang, lang)
+        lang = self.lang
+        return constants.LANGAUGE_MAP.get(lang, lang)
 
     @property
     def rtl(self):

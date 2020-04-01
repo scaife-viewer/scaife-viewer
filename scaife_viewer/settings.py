@@ -121,6 +121,7 @@ TEMPLATES = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "scaife_viewer.middleware.PerRequestMiddleware",
 ]
@@ -161,16 +162,20 @@ INSTALLED_APPS = [
 
     # external
     "account",
+    # "corsheaders",
+    "graphene_django",
     "pinax.eventlog",
     "pinax.webanalytics",
     "raven.contrib.django.raven_compat",
     "oidc_provider",
     "letsencrypt",
+    "treebeard",
 
     # project
     "scaife_viewer",
     "scaife_viewer.reading",
     "scaife_viewer.stats",
+    "scaife_viewer.atlas.library",
 ]
 
 WEBPACK_LOADER = {
@@ -340,3 +345,24 @@ ELASTICSEARCH_SNIFF_ON_START = bool(int(os.environ.get("ELASTICSEARCH_SNIFF_ON_S
 ELASTICSEARCH_SNIFF_ON_CONNECTION_FAIL = bool(int(os.environ.get("ELASTICSEARCH_SNIFF_ON_CONNECTION_FAIL", "0")))
 
 DEPLOYMENT_TIMESTAMP_VAR_NAME = os.environ.get("DEPLOYMENT_TIMESTAMP_VAR_NAME", "HEROKU_RELEASE_CREATED_AT")
+# @@@
+CORS_ORIGIN_ALLOW_ALL = True
+
+GRAPHENE = {
+    "SCHEMA": "scaife_viewer.atlas.schema.schema",
+    # setting RELAY_CONNECTION_MAX_LIMIT to None removes the limit; for backwards compatability with current API
+    # @@@ restore the limit
+    "RELAY_CONNECTION_MAX_LIMIT": None,
+}
+
+ATLAS_CONFIG = dict(
+    IN_MEMORY_PASSAGE_CHUNK_MAX=int(
+        os.environ.get("ATLAS_IN_MEMORY_PASSAGE_CHUNK_MAX", 2500)
+    ),
+    NODE_ALPHABET="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+)
+
+if "VUE_APP_ATLAS_BASIC_AUTH_USERNAME" in os.environ:
+    BASICAUTH_USERS = {
+        os.environ["VUE_APP_ATLAS_BASIC_AUTH_USERNAME"]: os.environ["VUE_APP_ATLAS_BASIC_AUTH_PASSWORD"]
+    }

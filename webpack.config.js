@@ -64,6 +64,8 @@ const plugins = [
     NODE_ENV: 'development',
     FORCE_SCRIPT_NAME: '',
     CTS_API_ENDPOINT: 'https://scaife-cts-dev.perseus.org/api/cts',
+    // @@@ mimic vue-cli
+    VUE_APP_ATLAS_GRAPHQL_ENDPOINT: '',
   }),
 ];
 

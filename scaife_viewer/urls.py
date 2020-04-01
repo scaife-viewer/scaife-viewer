@@ -53,7 +53,11 @@ urlpatterns = [
     path("openid/", include("oidc_provider.urls", namespace="oidc_provider")),
     path(".well-known/", include("letsencrypt.urls")),
 
-    path("<path:path>/", app, name="app")
+    path(
+        "atlas/",
+        include("scaife_viewer.atlas.urls")
+    ),
+    path("<path:path>/", app, name="app"),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
