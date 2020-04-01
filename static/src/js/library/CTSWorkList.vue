@@ -25,21 +25,12 @@
           </div>
         </div>
       </div>
-      <div class="work" v-for="work in filteredWorks" :key="work.urn">
-        <h3><a :href="getLibraryURL(work)"><b>{{ work.label }}</b></a></h3>
-        <div class="card-deck">
-          <div class="version-card" v-for="text in getTexts(work)" :key="text.urn">
-            <div class="card-body">
-              <p class="text-subtype">{{ text.kind }}</p>
-              <h4 class="card-title"><a :href="getLibraryURL(text)">{{ text.label }}</a></h4>
-              <p class="card-text">{{ text.description }}</p>
-            </div>
-            <div class="card-footer">
-              <a :href="getReaderURL(text)"><icon name="book"></icon> Read ({{ text.humanLang }})</a>
-            </div>
-          </div>
-        </div>
-      </div>
+      <CTSWorkDeck
+        v-for="work in filteredWorks"
+        :key="work.urn"
+        :work="work"
+        :versions="versions"
+      />
     </div>
   </div>
 </template>
@@ -50,7 +41,10 @@ const debounce = require('lodash.debounce');
 import gql from 'graphql-tag';
 import constants from '../constants';
 
+import CTSWorkDeck from './CTSWorkDeck.vue';
+
 export default {
+  components: { CTSWorkDeck },
   name: 'cts-work-list',
   // created() {
   //   // this.loading = true;
@@ -143,21 +137,6 @@ export default {
     },
   },
   methods: {
-    getLibraryURL(ctsObj) {
-      return `/library/${this.safeURN(ctsObj.urn)}/`;
-    },
-    getReaderURL(version) {
-      // @@@ prefer firstPassageUrl
-      return `/library/${this.safeURN(version.urn)}/redirect/`;
-    },
-    getTexts(work) {
-      const workUrn = this.safeURN(work.urn);
-      return this.versions ? this.versions.filter(version => version.urn.startsWith(workUrn)) : this.versions;
-    },
-    safeURN(urn) {
-      // @@@ maintain backwards compatability
-      return urn.endsWith(':') ? urn.slice(0, -1) : urn;
-    },
     clearQuery() {
       this.query = '';
     },

@@ -1,4 +1,8 @@
-export default class URN {
+const safeURN = (urn) => {
+  return urn.endsWith(':') ? urn.slice(0, -1) : urn;
+};
+
+class URN {
   constructor(value) {
     this.value = value;
     this.urnNamespace = null;
@@ -71,3 +75,5 @@ export default class URN {
     return this.upTo('reference');
   }
 }
+
+export { URN as default, safeURN };
