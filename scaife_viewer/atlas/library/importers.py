@@ -352,6 +352,13 @@ class CTSImporter:
 
     def destructure_urn(self, node_urn, tokens):
         node_data = []
+        bad_urns = [
+            "urn:cts:perslit:moulavi:",
+            "urn:cts:perslit:salman:"
+        ]
+        if node_urn.up_to(node_urn.TEXTGROUP) in bad_urns:
+            return node_data
+
         for kind in self.get_urn_scheme(node_urn):
             data = {"kind": kind}
             # @@@ duplicate; we might need a cts_ prefix for work, for example
@@ -412,7 +419,10 @@ class CTSImporter:
         # Node.objects.bulk_update(to_update, ["numchild"], batch_size=500)
 
     def finalize(self):
-        self.version_node = Node.objects.get(urn=self.urn.absolute)
+        self.version_node = Node.objects.filter(urn=self.urn.absolute).first()
+        if not self.version_node:
+            print(f"Could not find a version matching {self.urn.absolute}")
+            return 0
         Node.objects.bulk_create(self.nodes_to_create, batch_size=500)
         self.update_numchild_values()
         return self.version_node.get_descendant_count() + 1
@@ -436,8 +446,11 @@ def resolve_library():
 
 
 def get_first_value_for_language(values, lang):
-    return next(iter(filter(lambda x: x["lang"] == lang, values)), None).get("value")
-
+    for value in values:
+        if value["lang"] == lang:
+            return value["value"]
+    # @@@ fallback to the last value
+    return value["value"]
 
 def import_versions():
     Node.objects.filter(kind="nid").delete()
