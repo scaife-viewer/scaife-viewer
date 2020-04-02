@@ -170,3 +170,16 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+  /*
+  @@@ a height is required, otherwise `itemsLimitError` is raised:
+  https://github.com/Akryum/vue-virtual-scroller#important-notes
+  https://github.com/Akryum/vue-virtual-scroller/blob/f91fe0b204d3a6a89307b51836783d09496b0d98/src/components/RecycleScroller.vue#L554
+  */
+  .scroller {
+    height: 100vh;
+    // @@@ this was a hacky attempt to reduce duplicate scrolling
+    // width: 100vw;
+  }
+</style>
