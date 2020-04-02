@@ -11,25 +11,27 @@
     <div v-else>
       <h2>Works</h2>
 
-      <div class="form-group">
-        <div class="input-group">
-          <input
-            type="text"
-            class="form-control"
-            v-model="query"
-            placeholder="Find a work..."
-            ref="filter-input"
-          >
-          <div class="input-group-append" v-if="filtered">
-            <button class="btn btn-outline-secondary" type="button" @click="clearQuery"><icon name="times"></icon></button>
-          </div>
-        </div>
-      </div>
+
+
       <DynamicScroller
         :items="filteredWorks"
         :min-item-size="270"
         class="scroller"
       >
+        <div slot="before" class="form-group">
+            <div class="input-group">
+            <input
+                type="text"
+                class="form-control"
+                v-model="query"
+                placeholder="Find a work..."
+                ref="filter-input"
+            >
+            <div class="input-group-append" v-if="filtered">
+                <button class="btn btn-outline-secondary" type="button" @click="clearQuery"><icon name="times"></icon></button>
+            </div>
+            </div>
+        </div>
         <template v-slot="{ item, index, active }">
             <DynamicScrollerItem
                 :item="item"
