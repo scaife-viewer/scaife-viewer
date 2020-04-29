@@ -60,11 +60,7 @@ class Command(BaseCommand):
 
         text_language_counts = Counter()
         for text in texts:
-            # @@@ resolve pers issue
-            if text.lang == "None":
-                key = "pers"
-            else:
-                key = text.lang
+            key = text.lang
             text_language_counts[key] += 1
         return {
             "works_count": len(works),

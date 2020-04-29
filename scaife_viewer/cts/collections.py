@@ -153,11 +153,17 @@ class Text(Collection):
 
     @property
     def lang(self):
-        return self.metadata.lang
+        lang = self.metadata.lang
+        # @@@ Nautilus returns "None" if language is not set
+        if lang != "None":
+            return lang
+        # @@@ "None" for perslit should be pers
+        if self.urn.upTo(cts.URN.NAMESPACE) == "urn:cts:perslit":
+            return "pers"
+        return lang
 
     @property
     def human_lang(self):
-        lang = self.metadata.lang
         return {
             "grc": "Greek",
             "lat": "Latin",
@@ -166,7 +172,8 @@ class Text(Collection):
             "eng": "English",
             "ger": "German",
             "fre": "French",
-        }.get(lang, lang)
+            "pers": "Persian",
+        }.get(self.lang, self.lang)
 
     @property
     def rtl(self):
