@@ -1,7 +1,10 @@
 import api from '../../api';
+import HTTP from '../../api/http';
 import constants from '../../constants';
 import transformTextGroupList from './transforms';
 import utils from './utils';
+
+const _chunk = require('lodash.chunk');
 
 export default {
   [constants.LIBRARY_LOAD_TEXT_GROUP_LIST]: ({ commit }) => {
@@ -65,12 +68,22 @@ export default {
           e.push(textUrn.replace(`${textGroup.urn}.`, ''));
         });
       });
-      params = { e };
 
-      // vector for texts
-      return api.getLibraryVector(textGroup.urn, params, (textsVector) => {
-        const textMap = textsVector.collections;
 
+      // split into multiple chunks to avoid URI length limits
+      const chunks = _chunk(e, 100);
+      const requests = [];
+      chunks.forEach((chunk) => {
+        params = { e: chunk };
+        // vector for texts
+        requests.push(HTTP.get(`library/vector/${textGroup.urn}/`, { params }));
+      });
+
+      return Promise.all(requests).then((responses) => {
+        const textMap = {};
+        responses.flatMap(response => response.data).flatMap(data => data).forEach((obj) => {
+          Object.assign(textMap, obj.collections);
+        });
         // finally prepare the works object to store
         const works = [];
         textGroup.works.forEach(({ urn: workUrn }) => {
@@ -80,11 +93,11 @@ export default {
             texts: work.texts.map(({ urn: textUrn }) => textMap[textUrn]),
           });
         });
-
         commit(constants.SET_WORKS, works);
       });
     });
   }),
+
 
   // Probably should move this a getter
   [constants.LIBRARY_FILTER_WORKS]: ({ state, commit }, query) => {
