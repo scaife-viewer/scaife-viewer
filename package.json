@@ -23,6 +23,7 @@
     "loaders.css": "^0.1.2",
     "lodash.chunk": "^4.2.0",
     "lodash.debounce": "^4.0.8",
+    "lodash.merge": "^4.6.2",
     "parse-link-header": "^1.0.1",
     "popper.js": "^1.16.0",
     "query-string": "^5.0",
