@@ -10,7 +10,7 @@
     "unit": "jest"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.7.0",
+    "@babel/polyfill": "^7.10.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.26",
     "@fortawesome/free-solid-svg-icons": "^5.12.0",
     "@fortawesome/vue-fontawesome": "^0.1.9",
@@ -21,7 +21,9 @@
     "json-schema": "^0.2.5",
     "keykey": "^2.1.1",
     "loaders.css": "^0.1.2",
+    "lodash.chunk": "^4.2.0",
     "lodash.debounce": "^4.0.8",
+    "lodash.merge": "^4.6.2",
     "parse-link-header": "^1.0.1",
     "popper.js": "^1.16.0",
     "query-string": "^5.0",
@@ -32,10 +34,10 @@
     "vuex-router-sync": "^5.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.7.7",
-    "@babel/plugin-proposal-object-rest-spread": "^7.7.7",
-    "@babel/plugin-transform-runtime": "^7.7.6",
-    "@babel/preset-env": "^7.7.7",
+    "@babel/core": "^7.10.2",
+    "@babel/plugin-proposal-object-rest-spread": "^7.10.1",
+    "@babel/plugin-transform-runtime": "^7.10.1",
+    "@babel/preset-env": "^7.10.2",
     "@sentry/webpack-plugin": "^1.9.3",
     "@vue/test-utils": "1.0.0-beta.29",
     "autoprefixer": "^9.7.3",

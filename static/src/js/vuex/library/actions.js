@@ -65,13 +65,10 @@ export default {
           e.push(textUrn.replace(`${textGroup.urn}.`, ''));
         });
       });
-      params = { e };
 
-      // vector for texts
+      params = { e };
       return api.getLibraryVector(textGroup.urn, params, (textsVector) => {
         const textMap = textsVector.collections;
-
-        // finally prepare the works object to store
         const works = [];
         textGroup.works.forEach(({ urn: workUrn }) => {
           const work = workMap[workUrn];
@@ -80,11 +77,11 @@ export default {
             texts: work.texts.map(({ urn: textUrn }) => textMap[textUrn]),
           });
         });
-
         commit(constants.SET_WORKS, works);
       });
     });
   }),
+
 
   // Probably should move this a getter
   [constants.LIBRARY_FILTER_WORKS]: ({ state, commit }, query) => {

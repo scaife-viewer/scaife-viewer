@@ -1,9 +1,31 @@
 import HTTP from './http';
 import pagination from './pagination';
 
+const chunkFunc = require('lodash.chunk');
+const mergeFunc = require('lodash.merge');
+
+
+async function chunkedVectorRequest(urn, params) {
+  const urns = params.e;
+  delete params.e;
+  const chunks = chunkFunc(urns, 100);
+  const requests = [];
+  chunks.forEach((chunk) => {
+    params = { e: chunk };
+    // vector for texts
+    requests.push(HTTP.get(`library/vector/${urn}/`, { params }));
+  });
+  const responses = await Promise.all(requests);
+  const allData = {};
+  responses.flatMap(response => response.data).flatMap(data => data).forEach((obj) => {
+    mergeFunc(allData, obj);
+  });
+  return allData;
+}
+
 export default {
   getTextGroupList: cb => HTTP.get('library/json/').then(r => cb(r.data)),
-  getLibraryVector: (urn, params, cb) => HTTP.get(`library/vector/${urn}/`, { params }).then(r => cb(r.data)),
+  getLibraryVector: (urn, params, cb) => chunkedVectorRequest(urn, params).then(data => cb(data)),
   getCollection: (urn, cb) => HTTP.get(`library/${urn}/json/`)
     .then(r => cb(r.data))
     .catch((err) => {

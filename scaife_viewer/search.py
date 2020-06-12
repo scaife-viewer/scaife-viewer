@@ -234,11 +234,15 @@ class Highlighter:
                 self.highlights.split(" "),
                 [(t["w"], t["i"]) for t in self.passage.tokenize(whitespace=False)]
             )
+            is_highlight = False
             for hw, (sw, si) in it:
                 if hw:
-                    if w_re.match(hw):
-                        if "<em>" in hw:
-                            acc.add((sw, si))
+                    if "<em>" in hw:
+                        is_highlight = True
+                    if is_highlight and w_re.match(hw):
+                        acc.add((sw, si))
+                    if "</em>" in hw:
+                        is_highlight = False
             self._tokens = acc
         return self._tokens
 
