@@ -5,7 +5,7 @@ import sys
 
 
 if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "scaife_viewer.settings")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "sv_pdl.settings")
 
     from django.core.management import execute_from_command_line
 

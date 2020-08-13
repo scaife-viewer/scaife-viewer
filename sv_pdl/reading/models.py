@@ -3,7 +3,7 @@ from django.utils import timezone
 
 from django.contrib.auth.models import User
 
-from .. import cts
+from scaife_viewer.core import cts
 
 
 class ReadingLog(models.Model):

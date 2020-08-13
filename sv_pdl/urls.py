@@ -4,21 +4,24 @@ from django.urls import include, path
 
 from django.contrib import admin
 
-from .views import (
+from scaife_viewer.core.views import (
     LibraryCollectionVectorView,
     LibraryCollectionView,
     LibraryInfoView,
     LibraryPassageView,
     LibraryView,
     Reader,
-    about,
-    app,
-    home,
     library_text_redirect,
     morpheus,
-    profile,
     search,
     search_json
+)
+
+from .views import (
+    home,
+    about,
+    app,
+    profile,
 )
 
 
@@ -37,23 +40,29 @@ api_patterns = (
     "api",
 )
 
-urlpatterns = [
+site_patterns = [
     path("", home, name="home"),
     path("about/", about, name="about"),
     path("admin/", admin.site.urls),
     path("account/", include("account.urls")),
+    path("profile/", profile, name="profile"),
+    path("search/", search, name="search"),
+    path("reading/", include("sv_pdl.reading.urls")),
+    path("openid/", include("oidc_provider.urls", namespace="oidc_provider")),
+    path(".well-known/", include("letsencrypt.urls")),
+]
+
+scaife_viewer_patterns = [
     path("", include(api_patterns)),
     path("library/", LibraryView.as_view(format="html"), name="library"),
     path("library/<str:urn>/", LibraryCollectionView.as_view(format="html"), name="library_collection"),
     path("library/<str:urn>/redirect/", library_text_redirect, name="library_text_redirect"),
     path("reader/<str:urn>/", Reader.as_view(), name="reader"),
-    path("profile/", profile, name="profile"),
-    path("search/", search, name="search"),
-    path("reading/", include("scaife_viewer.reading.urls")),
-    path("openid/", include("oidc_provider.urls", namespace="oidc_provider")),
-    path(".well-known/", include("letsencrypt.urls")),
 
-    path("<path:path>/", app, name="app")
+]
+
+urlpatterns = site_patterns + scaife_viewer_patterns + [
+    path("<path:path>/", app, name="app"),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
