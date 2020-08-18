@@ -260,8 +260,8 @@ export default {
       }
     },
     createPassageLink(link) {
-      return `${link}?q=${this.searchQuery}&amp;qk=${this.searchType}`;
-    }
+      return `${link}?q=${this.searchQuery}&qk=${this.searchType}`;
+    },
   },
   components: {
     SearchPagination,
