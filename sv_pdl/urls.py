@@ -17,12 +17,7 @@ from scaife_viewer.core.views import (
     search_json
 )
 
-from .views import (
-    home,
-    about,
-    app,
-    profile,
-)
+from .views import about, app, home, profile
 
 
 api_patterns = (
