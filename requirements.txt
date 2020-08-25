@@ -1,5 +1,5 @@
 # @@@ core package is not yet released to pypi
-git+https://github.com/scaife-viewer/backend.git@1d95edb8f211e5176d7e7e9fe299432d3a032f7f#subdirectory=core
+https://github.com/scaife-viewer/backend/archive/412abd82f13af064367dbd67b6a09dff00d3e2bf.zip#subdirectory=core
 
 dj-database-url==0.5.0
 django-letsencrypt==3.0.1
