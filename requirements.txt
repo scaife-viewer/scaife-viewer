@@ -6,7 +6,7 @@ django-letsencrypt==3.0.1
 django-oidc-provider==0.7.0
 django-user-accounts==2.1.0
 django-webpack-loader==0.6.0
-Django==2.1.11
+Django==2.2.13
 gunicorn==19.9.0
 honcho==1.0.1
 pinax-eventlog==2.0.3
