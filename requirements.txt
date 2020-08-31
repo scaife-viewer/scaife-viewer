@@ -1,15 +1,15 @@
 # @@@ core package is not yet released to pypi
-https://github.com/scaife-viewer/backend/archive/412abd82f13af064367dbd67b6a09dff00d3e2bf.zip#subdirectory=core
+https://github.com/scaife-viewer/backend/archive/d28b2a855698f76386491809ce1f44dbf6c78838.zip#subdirectory=core
 
 dj-database-url==0.5.0
 django-letsencrypt==3.0.1
 django-oidc-provider==0.7.0
-django-user-accounts==2.1.0
+django-user-accounts==3.0.2
 django-webpack-loader==0.6.0
-Django==2.1.11
+Django==2.2.15
 gunicorn==19.9.0
 honcho==1.0.1
-pinax-eventlog==2.0.3
+pinax-eventlog[django-lts]==5.1.0
 pinax-theme-bootstrap==8.0.1
 pinax-webanalytics==4.0.2
 psycopg2==2.7.6.1

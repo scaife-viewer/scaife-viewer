@@ -138,6 +138,16 @@ PER_REQUEST_MIDDLEWARE = {
     "api": [],
 }
 
+# Due to PER_REQUEST_MIDDLEWARE being used to add SessionMiddleware,
+# AuthenticationMiddleware and MessageMiddleware, we must silence related
+# SystemCheckErrors
+# refs https://code.djangoproject.com/ticket/30237#comment:10
+SILENCED_SYSTEM_CHECKS = [
+    "admin.E408",
+    "admin.E409",
+    "admin.E410"
+]
+
 ROOT_URLCONF = "sv_pdl.urls"
 
 # Python dotted path to the WSGI application used by Django's runserver.
@@ -161,11 +171,12 @@ INSTALLED_APPS = [
 
     # external
     "account",
+    "django_jsonfield_backport",
+    "letsencrypt",
+    "oidc_provider",
     "pinax.eventlog",
     "pinax.webanalytics",
     "raven.contrib.django.raven_compat",
-    "oidc_provider",
-    "letsencrypt",
 
     # scaife-viewer
     "scaife_viewer.core",
@@ -267,7 +278,6 @@ ACCOUNT_EMAIL_CONFIRMATION_REQUIRED = True
 ACCOUNT_LOGIN_REDIRECT_URL = "home"
 ACCOUNT_LOGOUT_REDIRECT_URL = "home"
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 2
-ACCOUNT_USE_AUTH_AUTHENTICATE = True
 ACCOUNT_LANGUAGES = LANGUAGES
 
 AUTHENTICATION_BACKENDS = [
