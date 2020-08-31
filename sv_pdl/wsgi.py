@@ -1,5 +1,5 @@
 """
-WSGI config for scaife_viewer project.
+WSGI config for sv_pdl project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -13,9 +13,9 @@ from django.core.wsgi import get_wsgi_application
 
 
 def setup():
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "scaife_viewer.settings")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "sv_pdl.settings")
     from django.conf import settings
-    from . import cts
+    from scaife_viewer.core import cts
     # calling this will prime the cache in the master process. each fork
     # will inherit it. gunicorn --preload is required for this to work.
     if settings.DEBUG is False:

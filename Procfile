@@ -1,2 +1,2 @@
-web: gunicorn --log-file=- --preload scaife_viewer.wsgi
+web: gunicorn --log-file=- --preload sv_pdl.wsgi
 release: python manage.py migrate --noinput
