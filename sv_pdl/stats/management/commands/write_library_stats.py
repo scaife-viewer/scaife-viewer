@@ -5,8 +5,8 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.utils.functional import cached_property
 
-from .... import cts
-from ....search import es
+from scaife_viewer.core import cts
+from scaife_viewer.core.search import es
 
 from ... import LIBRARY_STATS_PATH
 

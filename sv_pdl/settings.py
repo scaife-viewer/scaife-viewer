@@ -112,7 +112,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "account.context_processors.account",
                 "pinax_theme_bootstrap.context_processors.theme",
-                "scaife_viewer.context_processors.google_analytics",
+                "sv_pdl.context_processors.google_analytics",
             ],
         },
     },
@@ -122,7 +122,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "scaife_viewer.middleware.PerRequestMiddleware",
+    "sv_pdl.middleware.PerRequestMiddleware",
 ]
 
 PER_REQUEST_MIDDLEWARE = {
@@ -138,10 +138,20 @@ PER_REQUEST_MIDDLEWARE = {
     "api": [],
 }
 
-ROOT_URLCONF = "scaife_viewer.urls"
+# Due to PER_REQUEST_MIDDLEWARE being used to add SessionMiddleware,
+# AuthenticationMiddleware and MessageMiddleware, we must silence related
+# SystemCheckErrors
+# refs https://code.djangoproject.com/ticket/30237#comment:10
+SILENCED_SYSTEM_CHECKS = [
+    "admin.E408",
+    "admin.E409",
+    "admin.E410"
+]
+
+ROOT_URLCONF = "sv_pdl.urls"
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = "scaife_viewer.wsgi.application"
+WSGI_APPLICATION = "sv_pdl.wsgi.application"
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -161,16 +171,20 @@ INSTALLED_APPS = [
 
     # external
     "account",
+    "django_jsonfield_backport",
+    "letsencrypt",
+    "oidc_provider",
     "pinax.eventlog",
     "pinax.webanalytics",
     "raven.contrib.django.raven_compat",
-    "oidc_provider",
-    "letsencrypt",
+
+    # scaife-viewer
+    "scaife_viewer.core",
 
     # project
-    "scaife_viewer",
-    "scaife_viewer.reading",
-    "scaife_viewer.stats",
+    "sv_pdl",
+    "sv_pdl.reading",
+    "sv_pdl.stats",
 ]
 
 WEBPACK_LOADER = {
@@ -264,7 +278,6 @@ ACCOUNT_EMAIL_CONFIRMATION_REQUIRED = True
 ACCOUNT_LOGIN_REDIRECT_URL = "home"
 ACCOUNT_LOGOUT_REDIRECT_URL = "home"
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 2
-ACCOUNT_USE_AUTH_AUTHENTICATE = True
 ACCOUNT_LANGUAGES = LANGUAGES
 
 AUTHENTICATION_BACKENDS = [
@@ -273,7 +286,7 @@ AUTHENTICATION_BACKENDS = [
 
 LOGIN_URL = "account_login"
 
-OIDC_USERINFO = "scaife_viewer.oidc.userinfo"
+OIDC_USERINFO = "sv_pdl.oidc.userinfo"
 
 DEFAULT_FROM_EMAIL = "Scaife Viewer <perseus_webmaster@tufts.edu>"
 THEME_CONTACT_EMAIL = "perseus_webmaster@tufts.edu"
@@ -300,7 +313,7 @@ CACHES = {
     },
 }
 
-XSL_STYLESHEET_PATH = os.environ.get("XSL_STYLESHEET_PATH", os.path.join(PACKAGE_ROOT, "cts/tei.xsl"))
+XSL_STYLESHEET_PATH = os.environ.get("XSL_STYLESHEET_PATH", os.path.join(PACKAGE_ROOT, "tei.xsl"))
 
 resolver = os.environ.get("CTS_RESOLVER", "api")
 if resolver == "api":
