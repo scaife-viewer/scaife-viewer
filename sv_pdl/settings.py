@@ -174,15 +174,18 @@ INSTALLED_APPS = [
     "django_jsonfield_backport",
     "letsencrypt",
     "oidc_provider",
+    "graphene_django",
     "pinax.eventlog",
     "pinax.webanalytics",
     "raven.contrib.django.raven_compat",
 
     # scaife-viewer
+    "scaife_viewer.atlas",
     "scaife_viewer.core",
 
     # project
     "sv_pdl",
+    "sv_pdl.atlas",
     "sv_pdl.reading",
     "sv_pdl.stats",
 ]
@@ -353,3 +356,32 @@ ELASTICSEARCH_SNIFF_ON_START = bool(int(os.environ.get("ELASTICSEARCH_SNIFF_ON_S
 ELASTICSEARCH_SNIFF_ON_CONNECTION_FAIL = bool(int(os.environ.get("ELASTICSEARCH_SNIFF_ON_CONNECTION_FAIL", "0")))
 
 DEPLOYMENT_TIMESTAMP_VAR_NAME = os.environ.get("DEPLOYMENT_TIMESTAMP_VAR_NAME", "HEROKU_RELEASE_CREATED_AT")
+
+
+GRAPHENE = {
+    "SCHEMA": "sv_pdl.atlas.schema.schema",
+    # setting RELAY_CONNECTION_MAX_LIMIT to None removes the limit; for backwards compatability with current API
+    # @@@ restore the limit
+    "RELAY_CONNECTION_MAX_LIMIT": None,
+}
+
+SV_ATLAS_DATA_DIR = os.path.join(
+    PROJECT_ROOT, "atlas_data"
+)
+
+SV_ATLAS_DB_LABEL = "atlas"
+SV_ATLAS_DB_PATH = os.getenv(
+    "ATLAS_DB_PATH",
+    os.path.join(SV_ATLAS_DATA_DIR, "atlas.sqlite")
+)
+
+# ATLAS uses an isolated database with a custom router that ensures
+# that SV_ATLAS_DB_LABEL database only contains data from the ATLAS application.
+DATABASES.update({
+    SV_ATLAS_DB_LABEL: {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": SV_ATLAS_DB_PATH,
+    }
+})
+
+DATABASE_ROUTERS = ["scaife_viewer.atlas.db_routers.ATLASRouter"]
