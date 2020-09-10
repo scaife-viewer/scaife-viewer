@@ -1,0 +1,5 @@
+#!/bin/bash
+if [ $ATLAS_DB_URL ]
+then
+    ./bin/fetch_atlas_db $ATLAS_DB_URL
+fi

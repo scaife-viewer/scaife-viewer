@@ -365,8 +365,11 @@ GRAPHENE = {
     "RELAY_CONNECTION_MAX_LIMIT": None,
 }
 
-SV_ATLAS_DATA_DIR = os.path.join(
-    PROJECT_ROOT, "atlas_data"
+SV_ATLAS_DATA_DIR = os.getenv(
+    "ATLAS_DATA_DIR",
+    os.path.join(
+        PROJECT_ROOT, "atlas_data"
+    )
 )
 
 SV_ATLAS_HOOKSET = "sv_pdl.atlas.hooks.ATLASHookSet"
