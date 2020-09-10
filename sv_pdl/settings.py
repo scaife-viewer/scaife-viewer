@@ -369,6 +369,8 @@ SV_ATLAS_DATA_DIR = os.path.join(
     PROJECT_ROOT, "atlas_data"
 )
 
+SV_ATLAS_HOOKSET = "sv_pdl.atlas.hooks.ATLASHookSet"
+
 SV_ATLAS_DB_LABEL = "atlas"
 SV_ATLAS_DB_PATH = os.getenv(
     "ATLAS_DB_PATH",
