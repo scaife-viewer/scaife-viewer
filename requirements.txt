@@ -14,7 +14,7 @@ psycopg2==2.7.6.1
 raven==6.10.0
 requests==2.22.0
 # @@@ atlas package is not yet released to pypi
-scaife-viewer-atlas @https://github.com/scaife-viewer/backend/archive/d1cee5854eb0b531a63c475261dc04f4a3a948fa.zip#subdirectory=atlas
+scaife-viewer-atlas @https://github.com/scaife-viewer/backend/archive/fad8c458d222d29fe6c7749012eb7cf47b71725f.zip#subdirectory=atlas
 # @@@ core package is not yet released to pypi
 scaife-viewer-core @https://github.com/scaife-viewer/backend/archive/4cf714d4b1661ba1f793d12b0fa1346f7e2d9946.zip#subdirectory=core
 six==1.12.0
