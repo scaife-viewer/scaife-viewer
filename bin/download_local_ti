@@ -1,0 +1,6 @@
+#!/bin/bash
+echo "Downloading local text inventory as ti.xml"
+
+CTS_API_ENDPOINT=${CTS_API_ENDPOINT-https://scaife-cts-dev.perseus.org/api/cts}
+
+curl -s "${CTS_API_ENDPOINT}?request=GetCapabilities" > ti.xml
