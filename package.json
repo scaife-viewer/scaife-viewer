@@ -16,6 +16,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.12.0",
     "@fortawesome/vue-fontawesome": "^0.1.9",
     "@scaife-viewer/scaife-widgets": "^0.9.0",
+    "@scaife-viewer/widget-attributions": "https://gitpkg.now.sh/scaife-viewer/frontend/packages/widget-attributions?4f1be8b0a6a83c3baac6e9f04c0950343d95e7c6",
     "axios": "^0.18.1",
     "bootstrap": "^4.4.1",
     "dayjs": "^1.8.18",
