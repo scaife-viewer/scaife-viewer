@@ -1,5 +1,6 @@
 
 dj-database-url==0.5.0
+django-cors-headers==3.1.1
 django-letsencrypt==3.0.1
 django-oidc-provider==0.7.0
 django-user-accounts==3.0.2
