@@ -94,6 +94,9 @@
     "transform": {
       "^.+\\.js$": "./node_modules/babel-jest",
       ".*\\.(vue)$": "./node_modules/vue-jest"
-    }
+    },
+    "transformIgnorePatterns": [
+      "node_modules/(?!(@scaife-viewer/common|@scaife-viewer/store))"
+    ]
   }
 }

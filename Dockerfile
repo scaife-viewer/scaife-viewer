@@ -2,7 +2,7 @@ FROM node:12.13-alpine AS static-build
 WORKDIR /opt/scaife-viewer/src/
 COPY package.json package-lock.json ./
 RUN npm ci
-COPY webpack.config.js .babelrc .eslintrc.json ./
+COPY webpack.config.js babel.config.js .eslintrc.json ./
 COPY ./static static
 COPY ./test test
 ARG FORCE_SCRIPT_NAME
