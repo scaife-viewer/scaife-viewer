@@ -23,7 +23,7 @@ jobs:
           name: Run flake8
           command: |
             source env/bin/activate
-            flake8 scaife_viewer
+            flake8 sv_pdl
       - run:
           name: Install static dependencies
           command: npm ci
