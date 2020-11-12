@@ -364,6 +364,9 @@ GRAPHENE = {
     "RELAY_CONNECTION_MAX_LIMIT": None,
 }
 
+SCAIFE_VIEWER_CORE_USE_CLOUD_INDEXER = bool(int(os.environ.get("USE_CLOUD_INDEXER", "0")))
+
+
 SV_ATLAS_DATA_DIR = os.getenv(
     "ATLAS_DATA_DIR",
     os.path.join(
