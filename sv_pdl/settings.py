@@ -349,8 +349,7 @@ if FORCE_SCRIPT_NAME:
     STATIC_URL = f"{FORCE_SCRIPT_NAME}{STATIC_URL}"
 
 
-ELASTICSEARCH_HOSTS = os.environ.get("ELASTICSEARCH_HOSTS", "localhost").split(",")
-# https://elasticsearch-py.readthedocs.io/en/master/#sniffing
+ELASTICSEARCH_HOSTS = os.environ.get("ELASTICSEARCH_HOSTS", "localhost:9200").split(",")
 ELASTICSEARCH_INDEX_NAME = os.environ.get("ELASTICSEARCH_INDEX_NAME", "scaife-viewer")
 ELASTICSEARCH_SNIFF_ON_START = bool(int(os.environ.get("ELASTICSEARCH_SNIFF_ON_START", "0")))
 ELASTICSEARCH_SNIFF_ON_CONNECTION_FAIL = bool(int(os.environ.get("ELASTICSEARCH_SNIFF_ON_CONNECTION_FAIL", "0")))
