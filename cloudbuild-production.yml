@@ -10,3 +10,4 @@ steps:
   - gcr.io/$PROJECT_ID/scaife-viewer:$TAG_NAME
 images:
 - gcr.io/$PROJECT_ID/scaife-viewer:$TAG_NAME
+timeout: 1200s
