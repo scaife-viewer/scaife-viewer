@@ -2,6 +2,8 @@
 
 set -ex
 
+export USE_CLOUD_INDEXER=1
+
 # seed data
 export CTS_RESOLVER=api
 mkdir -p /var/lib/nautilus/data
