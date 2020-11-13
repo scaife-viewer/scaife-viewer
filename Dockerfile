@@ -41,6 +41,6 @@ RUN set -x \
         $runDeps \
         curl
 COPY . .
-RUN flake8 scaife_viewer
+RUN flake8 sv_pdl
 RUN isort -c **/*.py
 RUN python manage.py collectstatic --noinput
