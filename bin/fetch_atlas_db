@@ -1,0 +1,12 @@
+#!/bin/bash
+DATA_DIR=${ATLAS_DATA_DIR:-atlas_data}
+if [ $1 ]
+then
+    echo "Downloading ATLAS database"
+    echo "$1" > .atlas-db-url
+    curl $1 > atlas-db.tgz
+    tar -zxvf atlas-db.tgz
+    mkdir -p ${DATA_DIR}
+    mv atlas.sqlite ${DATA_DIR}/atlas.sqlite
+    rm atlas-db.tgz
+fi

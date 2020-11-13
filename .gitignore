@@ -12,3 +12,5 @@ service-accounts/
 repos/
 webpack-stats.json
 deploy/.env
+/.atlas-db-url
+/atlas_data

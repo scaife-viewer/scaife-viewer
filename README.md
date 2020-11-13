@@ -38,7 +38,7 @@ Set up the database:
 
 Seed the text inventory to speed up local development:
 
-    curl -s "https://scaife-cts-dev.perseus.org/api/cts?request=GetCapabilities" > ti.xml
+    ./bin/download_local_ti
 
 You should now be set to run the static build pipeline and hot module reloading:
 
@@ -174,3 +174,14 @@ docker-compose -f deploy/docker-compose.yml -f deploy/docker-compose.override.ym
 ## API Library Cache
 
 The client-side currently caches the results of `library/json/`. The cache is automatically invalidated every 24 hours. You can manually invalidate it by bumping the `LIBRARY_VIEW_API_VERSION` environment variable.
+
+## ATLAS Database
+
+`bin/fetch_atlas_db` can be used to fetch and extract an ATLAS database from a provided URL.
+
+To build a copy of this database locally:
+- Run `bin/download_local_ti` to get a local copy of the text inventory from `$CTS_API_ENDPOINT`
+- Run the `prepare_atlas_db` management command to ingest ATLAS data from CTS collections
+
+Queries to ATLAS models are routed via the `ATLASRouter` database router
+(and therefore are isolated from the `default` database)
