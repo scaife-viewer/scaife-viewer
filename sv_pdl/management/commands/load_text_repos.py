@@ -1,4 +1,5 @@
 import concurrent.futures
+import json
 import os
 import subprocess
 import sys
@@ -32,8 +33,7 @@ class Command(BaseCommand):
         with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
             for repo, data in repos.items():
                 sha = data["sha"]
-                tarball_url = f"https://api.github.com/repos/{repo}/tarball/{sha}"
-                f = executor.submit(load_repo, tarball_url, dest)
+                f = executor.submit(load_repo, repo, data, dest)
                 fs[f] = (repo, sha)
             for f in concurrent.futures.as_completed(fs):
                 repo, sha = fs[f]
@@ -49,7 +49,17 @@ def load_repo_list():
     return r.json()
 
 
-def load_repo(tarball_url, dest):
+def write_repo_metadata(repo, data, dest):
+    sv_metadata_path = os.path.join(dest, data["tarball_path"], ".scaife-viewer.json")
+    metadata = {
+        "repo": repo,
+        "sha": data["sha"],
+    }
+    json.dump(metadata, open(sv_metadata_path, "w"), indent=2)
+
+
+def load_repo(repo, data, dest):
+    tarball_url = f'https://api.github.com/repos/{repo}/tarball/{data["sha"]}'
     resp = requests.get(tarball_url, stream=True)
     resp.raise_for_status()
     r, w = os.pipe()
@@ -60,3 +70,5 @@ def load_repo(tarball_url, dest):
             os.write(w, chunk)
     os.close(w)
     proc.wait()
+
+    write_repo_metadata(repo, data, dest)
