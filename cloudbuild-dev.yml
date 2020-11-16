@@ -1,8 +1,10 @@
 steps:
 - name: gcr.io/cloud-builders/docker
+  entrypoint: bash
   args:
-  - pull
-  - gcr.io/$PROJECT_ID/scaife-viewer:$BRANCH_NAME
+  - "-c"
+  - |
+   docker pull gcr.io/$PROJECT_ID/scaife-viewer:$BRANCH_NAME || exit 0
 - name: gcr.io/cloud-builders/docker
   args:
   - build
@@ -16,5 +18,6 @@ steps:
 images:
 - gcr.io/$PROJECT_ID/scaife-viewer:$COMMIT_SHA
 - gcr.io/$PROJECT_ID/scaife-viewer:$BRANCH_NAME
+timeout: 1200s
 options:
   machineType: N1_HIGHCPU_8
