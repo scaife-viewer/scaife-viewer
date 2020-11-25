@@ -19,6 +19,7 @@
     "@scaife-viewer/scaife-widgets": "^0.9.0",
     "@scaife-viewer/store": "0.0.10",
     "@scaife-viewer/widget-attributions": "https://gitpkg.now.sh/scaife-viewer/frontend/packages/widget-attributions?7fc9b641f870cb301febe655e0ae1cc3c67974c3",
+    "@scaife-viewer/widget-repo-metadata": "https://gitpkg.now.sh/scaife-viewer/frontend/packages/widget-repo-metadata?70ae91be9cb678f38b86740ca005ef2dc31088df",
     "axios": "^0.18.1",
     "bootstrap": "^4.4.1",
     "dayjs": "^1.8.18",
