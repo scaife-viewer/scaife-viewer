@@ -173,6 +173,7 @@ INSTALLED_APPS = [
     # external
     "account",
     "corsheaders",
+    "django_extensions",
     "django_jsonfield_backport",
     "letsencrypt",
     "oidc_provider",
