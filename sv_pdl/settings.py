@@ -316,6 +316,21 @@ CACHES = {
     },
 }
 
+if DEBUG:
+    CTS_RESOLVER_CACHE_KWARGS = {
+        "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+        "LOCATION": "cts_resolver_cache"
+    }
+else:
+    # TODO: test cache for prod
+    # TODO: Define namespace for sv_core
+    CTS_RESOLVER_CACHE_KWARGS = {
+        "BACKEND": "django.core.cache.backends.dummy.DummyCache",
+    }
+CACHES.update({
+    "cts-resolver": CTS_RESOLVER_CACHE_KWARGS,
+})
+
 XSL_STYLESHEET_PATH = os.environ.get("XSL_STYLESHEET_PATH", os.path.join(PACKAGE_ROOT, "tei.xsl"))
 
 resolver = os.environ.get("CTS_RESOLVER", "api")
