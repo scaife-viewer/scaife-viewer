@@ -1,0 +1,62 @@
+attributions:
+  substitutions:
+  - match:
+      role: "Published original versions of the electronic texts"
+      orgs:
+      - "Open Greek and Latin"
+      names:
+      - Gregory Crane
+      - Leonard Muellner
+      - Bruce Robertson
+    data:
+      - person:
+          name: Gregory Crane
+        organization:
+          name: Open Greek and Latin
+        role: Published original versions of the electronic texts
+      - person:
+          name: Leonard Muellner
+        organization:
+          name: Open Greek and Latin
+        role: Published original versions of the electronic texts
+      - person:
+          name: Bruce Robertson
+        organization:
+          name: Open Greek and Latin
+        role: Published original versions of the electronic texts
+  - match:
+      role: "Published original versions of the electronic texts"
+      orgs:
+      - "A Digital Corpus for Graeco-Arabic Studies, funded by the Andrew W. Mellon Foundation"
+      names:
+      - Mark Schiefsky, Harvard University
+      - Gregory R. Crane, Universität Leipzig
+      - Uwe Vagelpohl, University of Warwick
+    data:
+      - person:
+          name: Mark Schiefsky
+        organization:
+          name: Harvard University
+        role: Published original versions of the electronic texts
+      - person:
+          name: Gregory R. Crane
+        organization:
+          name: Universität Leipzig
+        role: Published original versions of the electronic texts
+      - person:
+          name: Uwe Vagelpohl
+        organization:
+          name: University of Warwick
+        role: Published original versions of the electronic texts
+  promoted:
+  - Publisher
+  - Additional proofreading and CTS conversion
+  - annotation
+  - Corrected and encoded the text
+  - CTS conversion
+  - Keyboarding
+  - proofreader
+  - Proofreading
+  - Proofreading and CTS conversion
+  - source
+  - Zoning and proofreading

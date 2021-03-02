@@ -2,7 +2,7 @@ from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.core.management.base import BaseCommand
 
-from scaife_viewer.atlas.extractors.attributions import extract_attributions
+from sv_pdl.atlas.extractors.attributions import extract_attributions
 
 
 class Command(BaseCommand):
