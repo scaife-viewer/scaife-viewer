@@ -23,7 +23,7 @@ ANNOTATIONS_DATA_PATH = os.path.join(
 STATS_DATA_PATH = os.path.join(settings.SV_ATLAS_DATA_DIR, "stats",)
 
 OGL_CONFIG_PATH = os.path.join(
-    settings.PROJECT_ROOT, "sv_pdl", "atlas", "extractors", ".ogl-first1k-grc-scaife-config.yml"
+    settings.SV_ATLAS_DATA_DIR, "config", "OpenGreekAndLatin--First1KGreek--config.yml"
 )
 
 def tei(name):
