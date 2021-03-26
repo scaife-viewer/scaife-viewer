@@ -146,7 +146,7 @@ const widgets = {
   WidgetPassageReference,
   WidgetSearch,
   WidgetPassageLinks,
-  WidgetAttributions, // TODO: Resume here
+  WidgetAttributions,
   WidgetPassageExports,
   WidgetTextMode,
   WidgetTextSize,
