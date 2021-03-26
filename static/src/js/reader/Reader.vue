@@ -98,6 +98,7 @@
           </div>
         </template>
         <template slot="right">
+          <widget-attributions />
           <widget-passage-links />
           <widget-text-mode />
           <widget-text-size />
@@ -129,6 +130,7 @@ import WidgetPassageReference from './widgets/WidgetPassageReference.vue';
 import WidgetSearch from './widgets/WidgetSearch.vue';
 import WidgetHighlight from './widgets/WidgetHighlight.vue';
 import WidgetPassageLinks from './widgets/WidgetPassageLinks.vue';
+import WidgetAttributions from './widgets/WidgetAttributions.vue';
 import WidgetPassageExports from './widgets/WidgetPassageExports.vue';
 import WidgetTextMode from './widgets/WidgetTextMode.vue';
 import WidgetTextSize from './widgets/WidgetTextSize.vue';
@@ -144,6 +146,7 @@ const widgets = {
   WidgetPassageReference,
   WidgetSearch,
   WidgetPassageLinks,
+  WidgetAttributions,
   WidgetPassageExports,
   WidgetTextMode,
   WidgetTextSize,

@@ -16,9 +16,8 @@ class Command(BaseCommand):
 
     @staticmethod
     def do_shell_command(command_string):
-        result = subprocess.run(shlex.split(command_string), capture_output=True)
-        result.check_returncode()
-        return result.stdout.decode("utf-8")
+        result = subprocess.check_output(shlex.split(command_string))
+        return result.decode("utf-8")
 
     def handle(self, *args, **options):
         database_path = settings.SV_ATLAS_DB_PATH

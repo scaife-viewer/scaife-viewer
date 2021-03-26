@@ -1,5 +1,7 @@
 
 dj-database-url==0.5.0
+django-cors-headers==3.1.1
+django-extensions==2.2.9
 django-letsencrypt==3.0.1
 django-oidc-provider==0.7.0
 django-user-accounts==3.0.2
@@ -15,8 +17,10 @@ pinax-webanalytics==4.0.2
 psycopg2==2.7.6.1
 raven==6.10.0
 requests==2.22.0
+# TODO: Resolve CircleCI build error with grpcio
+grpcio==1.33.2
 # @@@ atlas package is not yet released to pypi
-scaife-viewer-atlas @https://github.com/scaife-viewer/backend/archive/2b6670ae592a57946b7a8f80d99d102eb40f6f6d.zip#subdirectory=atlas
+scaife-viewer-atlas @https://github.com/scaife-viewer/backend/archive/bc928031538237473d5db6ee46e32e76c4697150.zip#subdirectory=atlas
 # @@@ core package is not yet released to pypi
 scaife-viewer-core @https://github.com/scaife-viewer/backend/archive/scaife-viewer-core@0.1a7.zip#subdirectory=core
 six==1.12.0
