@@ -166,70 +166,78 @@ def get_substitutions(config):
     return substitutions
 
 
-# TODO: Shorten this function body
-
-
 class AttributionAnnotationConverter:
     def __init__(self, config, lookup):
         self.substitutions = get_substitutions(config)
         self.promoted_roles = set(config.get("promoted", []))
         self.lookup = lookup
 
+    def process_substitution(self, annotations, urn, remap_key, weight):
+        for replacement in self.substitutions[remap_key]:
+            record = dict(data=dict(references=[urn], weight=weight))
+            record.update(replacement)
+            annotations.append(record)
+        return
+
+    def process_orgs_only_row(self, urn, role, weight, orgs, annotations):
+        for org in orgs:
+            record = dict(
+                role=role,
+                person=None,
+                organization=dict(name=org),
+                data=dict(references=[urn], weight=weight),
+            )
+            annotations.append(record)
+        return
+
+    def process_name_org_pairs(self, urn, role, weight, names, orgs, annotations):
+        for name, org in zip(names, orgs):
+            record = dict(
+                role=role,
+                person=dict(name=name),
+                organization=dict(name=org),
+                data=dict(references=[urn], weight=weight),
+            )
+            annotations.append(record)
+        return
+
+    def process_names_and_orgs(self, urn, role, weight, names, orgs, annotations):
+        for org in orgs:
+            record = dict(
+                role=role,
+                person=None,
+                organization=dict(name=org),
+                data=dict(references=[urn], weight=weight),
+            )
+            annotations.append(record)
+        for name in names:
+            person = {
+                "name": name,
+            }
+            record = dict(
+                role=role,
+                person=person,
+                organization=None,
+                data=dict(references=[urn], weight=weight),
+            )
+            annotations.append(record)
+
     def process_row(self, urn, row, annotations):
         # @@@ getlist type functionality for persons and organizations
         role = row[1][0]
-        person = None
-        organization = None
         orgs = [o.strip() for o in row[2] if o.strip]
         names = [n.strip() for n in row[0] + row[3] if n.strip]
         weight = get_weight(self.promoted_roles, role)
 
         remap_key = (role, tuple(names), tuple(orgs))
         if remap_key in self.substitutions:
-            for replacement in self.substitutions[remap_key]:
-                record = dict(data=dict(references=[urn], weight=weight))
-                record.update(replacement)
-                annotations.append(record)
-            return
+            return self.process_substitution(annotations, urn, remap_key, weight)
         elif not names and orgs:
-            for org in orgs:
-                record = dict(
-                    role=role,
-                    person=None,
-                    organization=dict(name=org),
-                    data=dict(references=[urn], weight=weight),
-                )
-                annotations.append(record)
-            return
+            return self.process_orgs_only_row(urn, role, weight, orgs, annotations)
         elif len(names) == len(orgs):
-            for name, org in zip(names, orgs):
-                record = dict(
-                    role=role,
-                    person=dict(name=name),
-                    organization=dict(name=org),
-                    data=dict(references=[urn], weight=weight),
-                )
-                annotations.append(record)
+            return self.process_name_org_pairs(urn, role, weight, names, orgs, annotations)
         else:
-            for org in orgs:
-                record = dict(
-                    role=role,
-                    person=None,
-                    organization=dict(name=org),
-                    data=dict(references=[urn], weight=weight),
-                )
-                annotations.append(record)
-            for name in names:
-                person = {
-                    "name": name,
-                }
-                record = dict(
-                    role=role,
-                    person=person,
-                    organization=organization,
-                    data=dict(references=[urn], weight=weight),
-                )
-                annotations.append(record)
+            return self.process_names_and_orgs(urn, role, weight, names, orgs, annotations)
 
     def postprocess_rows(self, annotations):
         # post-processing
