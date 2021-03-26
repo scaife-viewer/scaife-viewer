@@ -20,7 +20,7 @@ requests==2.22.0
 # TODO: Resolve CircleCI build error with grpcio
 grpcio==1.33.2
 # @@@ atlas package is not yet released to pypi
-scaife-viewer-atlas @https://github.com/scaife-viewer/backend/archive/d3d8e706e8822737af1f7e6304f373377bfc9c94.zip#subdirectory=atlas
+scaife-viewer-atlas @https://github.com/scaife-viewer/backend/archive/scaife-viewer-atlas@0.1a13.zip#subdirectory=atlas
 # @@@ core package is not yet released to pypi
 scaife-viewer-core @https://github.com/scaife-viewer/backend/archive/scaife-viewer-core@0.1a7.zip#subdirectory=core
 six==1.12.0
