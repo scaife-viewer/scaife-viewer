@@ -26,6 +26,7 @@ OGL_CONFIG_PATH = os.path.join(
     settings.SV_ATLAS_DATA_DIR, "config", "OpenGreekAndLatin--First1KGreek--config.yml"
 )
 
+
 def tei(name):
     return "{http://www.tei-c.org/ns/1.0}" + name
 
