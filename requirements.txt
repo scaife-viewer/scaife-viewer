@@ -9,6 +9,8 @@ django-webpack-loader==0.6.0
 Django==2.2.15
 gunicorn==19.9.0
 honcho==1.0.1
+# @@@ pin to MyCapytain fork until performance improvements are merged
+MyCapytain @https://github.com/jacobwegner/MyCapytain/archive/4571e53b7f8835f609ad750ca94bb4bbaf9e2451.zip
 pinax-eventlog[django-lts]==5.1.0
 pinax-theme-bootstrap==8.0.1
 pinax-webanalytics==4.0.2
@@ -20,6 +22,6 @@ grpcio==1.33.2
 # @@@ atlas package is not yet released to pypi
 scaife-viewer-atlas @https://github.com/scaife-viewer/backend/archive/bc928031538237473d5db6ee46e32e76c4697150.zip#subdirectory=atlas
 # @@@ core package is not yet released to pypi
-scaife-viewer-core @https://github.com/scaife-viewer/backend/archive/2b6670ae592a57946b7a8f80d99d102eb40f6f6d.zip#subdirectory=core
+scaife-viewer-core @https://github.com/scaife-viewer/backend/archive/scaife-viewer-core@0.1a7.zip#subdirectory=core
 six==1.12.0
 whitenoise==4.1.2
