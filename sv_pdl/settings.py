@@ -322,8 +322,8 @@ if DEBUG:
         "LOCATION": "cts_resolver_cache"
     }
 else:
-    # TODO: test cache for prod
-    # TODO: Define namespace for sv_core
+    # NOTE: This cache is disabled in production, since
+    # the CTS data is loaded on boot from CTS_API_ENDPOINT
     CTS_RESOLVER_CACHE_KWARGS = {
         "BACKEND": "django.core.cache.backends.dummy.DummyCache",
     }
