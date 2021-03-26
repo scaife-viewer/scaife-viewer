@@ -15,6 +15,7 @@ pinax-eventlog[django-lts]==5.1.0
 pinax-theme-bootstrap==8.0.1
 pinax-webanalytics==4.0.2
 psycopg2==2.7.6.1
+PyYAML==5.4.1
 raven==6.10.0
 requests==2.22.0
 # TODO: Resolve CircleCI build error with grpcio
