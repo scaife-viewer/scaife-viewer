@@ -5,7 +5,7 @@ from account.signals import (
     user_logged_in,
     user_login_attempt,
     user_sign_up_attempt,
-    user_signed_up
+    user_signed_up,
 )
 from pinax.eventlog.models import log
 

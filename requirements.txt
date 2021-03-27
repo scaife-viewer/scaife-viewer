@@ -1,5 +1,7 @@
 
 dj-database-url==0.5.0
+django-cors-headers==3.1.1
+django-extensions==2.2.9
 django-letsencrypt==3.0.1
 django-oidc-provider==0.7.0
 django-user-accounts==3.0.2
@@ -7,15 +9,20 @@ django-webpack-loader==0.6.0
 Django==2.2.15
 gunicorn==19.9.0
 honcho==1.0.1
+# @@@ pin to MyCapytain fork until performance improvements are merged
+MyCapytain @https://github.com/jacobwegner/MyCapytain/archive/4571e53b7f8835f609ad750ca94bb4bbaf9e2451.zip
 pinax-eventlog[django-lts]==5.1.0
 pinax-theme-bootstrap==8.0.1
 pinax-webanalytics==4.0.2
 psycopg2==2.7.6.1
+PyYAML==5.4.1
 raven==6.10.0
 requests==2.22.0
+# TODO: Resolve CircleCI build error with grpcio
+grpcio==1.33.2
 # @@@ atlas package is not yet released to pypi
-scaife-viewer-atlas @https://github.com/scaife-viewer/backend/archive/fad8c458d222d29fe6c7749012eb7cf47b71725f.zip#subdirectory=atlas
+scaife-viewer-atlas @https://github.com/scaife-viewer/backend/archive/scaife-viewer-atlas@0.1a13.zip#subdirectory=atlas
 # @@@ core package is not yet released to pypi
-scaife-viewer-core @https://github.com/scaife-viewer/backend/archive/66377c91e4b8b74093cba7189017268557dc955f.zip#subdirectory=core
+scaife-viewer-core @https://github.com/scaife-viewer/backend/archive/scaife-viewer-core@0.1a7.zip#subdirectory=core
 six==1.12.0
 whitenoise==4.1.2

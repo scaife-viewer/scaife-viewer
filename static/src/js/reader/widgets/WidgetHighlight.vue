@@ -51,7 +51,7 @@ export default {
         `$store.state.reader.highlight` is changed, the widget will
         update the `highlight` query param
       */
-      let queryParams = { ...this.$router.query };
+      let queryParams = { ...this.$route.query };
       if (!this.value) {
         // prefer removing the highlight param over ?highlight
         queryParams = (({ highlight: deleted, ...o }) => o)(queryParams);

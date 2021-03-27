@@ -17,7 +17,17 @@ const hotReload = process.env.HOT_RELOAD === '1';
 const vueRule = {
   test: /\.vue$/,
   use: 'vue-loader',
-  exclude: /node_modules/,
+  // exclude: path.resolve(__dirname, 'node_modules'),
+  // NOTE: The exclusion pattern below allows us to
+  // specify which modules need to be transpiled,
+  // while avoiding transpiling all Node.js dependencies
+  // TODO: Revisit in v2 (where we have no such overrides)
+  exclude: {
+    test: path.resolve(__dirname, 'node_modules'),
+    exclude: [
+      path.resolve(__dirname, 'node_modules/@scaife-viewer'),
+    ],
+  },
 };
 
 const styleRule = {

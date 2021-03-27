@@ -98,12 +98,14 @@
           </div>
         </template>
         <template slot="right">
+          <widget-attributions />
           <widget-passage-links />
           <widget-text-mode />
           <widget-text-size />
           <widget-text-width />
           <widget-highlight />
           <widget-passage-exports />
+          <widget-repo-metadata />
           <widget-morpheus />
           <widget-token-list />
           <widget-word-list />
@@ -129,6 +131,8 @@ import WidgetPassageReference from './widgets/WidgetPassageReference.vue';
 import WidgetSearch from './widgets/WidgetSearch.vue';
 import WidgetHighlight from './widgets/WidgetHighlight.vue';
 import WidgetPassageLinks from './widgets/WidgetPassageLinks.vue';
+import WidgetAttributions from './widgets/WidgetAttributions.vue';
+import WidgetRepoMetadata from './widgets/WidgetRepoMetadata.vue';
 import WidgetPassageExports from './widgets/WidgetPassageExports.vue';
 import WidgetTextMode from './widgets/WidgetTextMode.vue';
 import WidgetTextSize from './widgets/WidgetTextSize.vue';
@@ -144,6 +148,8 @@ const widgets = {
   WidgetPassageReference,
   WidgetSearch,
   WidgetPassageLinks,
+  WidgetAttributions,
+  WidgetRepoMetadata,
   WidgetPassageExports,
   WidgetTextMode,
   WidgetTextSize,

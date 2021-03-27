@@ -121,6 +121,7 @@ TEMPLATES = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "sv_pdl.middleware.PerRequestMiddleware",
 ]
@@ -171,6 +172,8 @@ INSTALLED_APPS = [
 
     # external
     "account",
+    "corsheaders",
+    "django_extensions",
     "django_jsonfield_backport",
     "letsencrypt",
     "oidc_provider",
@@ -316,6 +319,21 @@ CACHES = {
     },
 }
 
+if DEBUG:
+    CTS_RESOLVER_CACHE_KWARGS = {
+        "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+        "LOCATION": "cts_resolver_cache"
+    }
+else:
+    # NOTE: This cache is disabled in production, since
+    # the CTS data is loaded on boot from CTS_API_ENDPOINT
+    CTS_RESOLVER_CACHE_KWARGS = {
+        "BACKEND": "django.core.cache.backends.dummy.DummyCache",
+    }
+CACHES.update({
+    "cts-resolver": CTS_RESOLVER_CACHE_KWARGS,
+})
+
 XSL_STYLESHEET_PATH = os.environ.get("XSL_STYLESHEET_PATH", os.path.join(PACKAGE_ROOT, "tei.xsl"))
 
 resolver = os.environ.get("CTS_RESOLVER", "api")
@@ -392,3 +410,17 @@ DATABASES.update({
 })
 
 DATABASE_ROUTERS = ["scaife_viewer.atlas.db_routers.ATLASRouter"]
+
+
+def populate_cors_origin_whitelist():
+    allowed = []
+    for host in ALLOWED_HOSTS:
+        allowed.append(f"https://{host}")
+        allowed.append(f"http://{host}")
+    return allowed
+
+
+if DEBUG:
+    CORS_ORIGIN_ALLOW_ALL = True
+else:
+    CORS_ORIGIN_WHITELIST = populate_cors_origin_whitelist()
