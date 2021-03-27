@@ -9,7 +9,6 @@ import re
 from collections import Counter, defaultdict
 
 import yaml
-
 from scaife_viewer.atlas import constants
 from scaife_viewer.atlas.conf import settings
 from scaife_viewer.atlas.models import Node, Repo
@@ -20,7 +19,10 @@ logger = logging.getLogger(__name__)
 ANNOTATIONS_DATA_PATH = os.path.join(
     settings.SV_ATLAS_DATA_DIR, "annotations", "attributions"
 )
-STATS_DATA_PATH = os.path.join(settings.SV_ATLAS_DATA_DIR, "stats",)
+STATS_DATA_PATH = os.path.join(
+    settings.SV_ATLAS_DATA_DIR,
+    "stats",
+)
 
 OGL_CONFIG_PATH = os.path.join(
     settings.SV_ATLAS_DATA_DIR, "config", "OpenGreekAndLatin--First1KGreek--config.yml"
@@ -235,9 +237,13 @@ class AttributionAnnotationConverter:
         elif not names and orgs:
             return self.process_orgs_only_row(urn, role, weight, orgs, annotations)
         elif len(names) == len(orgs):
-            return self.process_name_org_pairs(urn, role, weight, names, orgs, annotations)
+            return self.process_name_org_pairs(
+                urn, role, weight, names, orgs, annotations
+            )
         else:
-            return self.process_names_and_orgs(urn, role, weight, names, orgs, annotations)
+            return self.process_names_and_orgs(
+                urn, role, weight, names, orgs, annotations
+            )
 
     def postprocess_rows(self, annotations):
         # post-processing
@@ -298,22 +304,20 @@ def write_annotations(name, attributions):
         json.dump(attributions, f, ensure_ascii=False, indent=2)
 
 
-def write_stats(stats):
-    # TODO: Customize file_name
+def write_stats(source, stats):
     os.makedirs(STATS_DATA_PATH, exist_ok=True)
-    file_name = os.path.join(STATS_DATA_PATH, "attributions.json")
+    file_name = os.path.join(STATS_DATA_PATH, f'{source["name"]}-attributions.json')
 
     with open(file_name, "w") as f:
         json.dump(stats, f, ensure_ascii=False, indent=2)
 
 
-def extract_attributions():
+def extract_attributions(include_stats=False):
     # TODO: filter by repo or URN
-    # TODO: write lookup to temp dir
     resolver = get_cts_resolver()
     version_qs = Node.objects.filter(depth=constants.CTS_URN_DEPTHS["version"])
 
-    # TODO: Split sources by repo
+    # TODO: Split sources by repo based on presence of config files
     ogl_1kgrc_repo = Repo.objects.get(name="OpenGreekAndLatin/First1KGreek")
 
     ogl_1kgrc_versions = version_qs.filter(repos__in=[ogl_1kgrc_repo])
@@ -337,6 +341,6 @@ def extract_attributions():
         attributions = prepare_atlas_annotations(config, lookup)
         write_annotations(source["name"], attributions)
 
-        # TODO: add a flag to expose these
-        # stats = generate_attribution_stats(attributions)
-        # write_stats(stats)
+        if include_stats:
+            stats = generate_attribution_stats(attributions)
+            write_stats(source, stats)

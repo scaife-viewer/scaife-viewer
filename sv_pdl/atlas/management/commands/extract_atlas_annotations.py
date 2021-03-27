@@ -13,4 +13,4 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         # TODO: add fetch_corpus_repo_metadata to this pipeline
         self.stdout.write("--[Extracting attributions]--")
-        extract_attributions()
+        extract_attributions(include_stats=True)
