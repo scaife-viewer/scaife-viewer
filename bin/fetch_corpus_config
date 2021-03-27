@@ -1,0 +1,11 @@
+#!/bin/bash
+set -e
+
+# NOTE: This script should be ran before ingesting data into ATLAS
+
+DATA_DIR=${ATLAS_DATA_DIR:-atlas_data}
+CONFIG_DIR=${DATA_DIR}/config
+OGL_SCAIFE_CONFIG_URL="https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/master/.scaife-viewer.yml"
+mkdir -p ${CONFIG_DIR}
+
+curl -s "${OGL_SCAIFE_CONFIG_URL}" > ${CONFIG_DIR}/OpenGreekAndLatin--First1KGreek--config.yml

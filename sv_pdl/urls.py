@@ -14,7 +14,7 @@ from scaife_viewer.core.views import (
     library_text_redirect,
     morpheus,
     search,
-    search_json
+    search_json,
 )
 
 from .views import about, app, home, profile

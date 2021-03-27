@@ -15,12 +15,13 @@ pinax-eventlog[django-lts]==5.1.0
 pinax-theme-bootstrap==8.0.1
 pinax-webanalytics==4.0.2
 psycopg2==2.7.6.1
+PyYAML==5.4.1
 raven==6.10.0
 requests==2.22.0
 # TODO: Resolve CircleCI build error with grpcio
 grpcio==1.33.2
 # @@@ atlas package is not yet released to pypi
-scaife-viewer-atlas @https://github.com/scaife-viewer/backend/archive/bc928031538237473d5db6ee46e32e76c4697150.zip#subdirectory=atlas
+scaife-viewer-atlas @https://github.com/scaife-viewer/backend/archive/scaife-viewer-atlas@0.1a13.zip#subdirectory=atlas
 # @@@ core package is not yet released to pypi
 scaife-viewer-core @https://github.com/scaife-viewer/backend/archive/scaife-viewer-core@0.1a7.zip#subdirectory=core
 six==1.12.0

@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "start": "HOT_RELOAD=1 webpack-dev-server --mode development",
-    "lint": "eslint .",
+    "lint": "eslint static/src",
     "build": "NODE_ENV=production webpack --mode production",
     "heroku-postbuild": "npm run build",
     "unit": "jest"
@@ -18,7 +18,8 @@
     "@scaife-viewer/common": "0.0.7",
     "@scaife-viewer/scaife-widgets": "^0.9.0",
     "@scaife-viewer/store": "0.0.10",
-    "@scaife-viewer/widget-attributions": "https://gitpkg.now.sh/scaife-viewer/frontend/packages/widget-attributions?7fc9b641f870cb301febe655e0ae1cc3c67974c3",
+    "@scaife-viewer/widget-attributions": "https://gitpkg.now.sh/scaife-viewer/frontend/packages/widget-attributions?8d4196f2a6617e667f3c51998c1216527a82b502",
+    "@scaife-viewer/widget-repo-metadata": "https://gitpkg.now.sh/scaife-viewer/frontend/packages/widget-repo-metadata?8d4196f2a6617e667f3c51998c1216527a82b502",
     "axios": "^0.18.1",
     "bootstrap": "^4.4.1",
     "dayjs": "^1.8.18",
