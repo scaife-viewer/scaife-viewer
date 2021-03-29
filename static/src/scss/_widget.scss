@@ -360,3 +360,9 @@ START scaife-widgets style overrides
 /*
 END scaife-widgets style overrides
 */
+
+:root {
+  // TODO: Remove once we bump @scaife-viewer/widget-repo-metadata
+  // to the latest release
+  --sv-widget-repo-metadata-sha-font-family: monospace;
+}
