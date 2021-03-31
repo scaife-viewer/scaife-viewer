@@ -402,6 +402,13 @@ SV_ATLAS_DB_PATH = os.getenv(
     os.path.join(SV_ATLAS_DATA_DIR, "atlas.sqlite")
 )
 
+SV_ATLAS_INGESTION_PIPELINE = [
+    "scaife_viewer.atlas.importers.versions.import_versions",
+    # TODO: Run bin/fetch_corpus_repo_metadata first
+    "scaife_viewer.atlas.importers.repo_metadata.import_repo_metadata",
+    # TODO: Run extract_atlas_annotations command first
+    "scaife_viewer.atlas.importers.attributions.import_attributions",
+]
 # ATLAS uses an isolated database with a custom router that ensures
 # that SV_ATLAS_DB_LABEL database only contains data from the ATLAS application.
 DATABASES.update({
