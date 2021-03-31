@@ -54,6 +54,7 @@ urn:cts:perslit:vahshi.divan.pdl
 
 PERSLIT_NS = "urn:cts:perslit:"
 
+
 class ATLASHookSet(DefaultHookSet):
     def resolve_library(self):
         ti = text_inventory()
@@ -81,5 +82,3 @@ class ATLASHookSet(DefaultHookSet):
         # NOTE: We don't yet use ATLAS to resolve anything past the version-text
         # level, so we can safely skip this.
         return {}
-
-
