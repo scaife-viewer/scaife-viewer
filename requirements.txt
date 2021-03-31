@@ -10,7 +10,7 @@ Django==2.2.15
 gunicorn==19.9.0
 honcho==1.0.1
 # @@@ pin to MyCapytain fork until performance improvements are merged
-MyCapytain @https://github.com/jacobwegner/MyCapytain/archive/4571e53b7f8835f609ad750ca94bb4bbaf9e2451.zip
+MyCapytain @https://github.com/jacobwegner/MyCapytain/archive/7b3c18b5721476535796ae4241934aea3afa85f8.zip
 pinax-eventlog[django-lts]==5.1.0
 pinax-theme-bootstrap==8.0.1
 pinax-webanalytics==4.0.2
