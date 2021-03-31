@@ -319,10 +319,12 @@ CACHES = {
     },
 }
 
+CTS_RESOLVER_CACHE_LOCATION = os.environ.get("CTS_RESOLVER_CACHE_LOCATION", "cts_resolver_cache")
+SCAIFE_VIEWER_CORE_RESOLVER_CACHE_LABEL = "cts-resolver"
 if DEBUG:
     CTS_RESOLVER_CACHE_KWARGS = {
         "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
-        "LOCATION": "cts_resolver_cache"
+        "LOCATION": CTS_RESOLVER_CACHE_LOCATION,
     }
 else:
     # NOTE: This cache is disabled in production, since
@@ -331,7 +333,7 @@ else:
         "BACKEND": "django.core.cache.backends.dummy.DummyCache",
     }
 CACHES.update({
-    "cts-resolver": CTS_RESOLVER_CACHE_KWARGS,
+    SCAIFE_VIEWER_CORE_RESOLVER_CACHE_LABEL: CTS_RESOLVER_CACHE_KWARGS,
 })
 
 XSL_STYLESHEET_PATH = os.environ.get("XSL_STYLESHEET_PATH", os.path.join(PACKAGE_ROOT, "tei.xsl"))
@@ -400,6 +402,13 @@ SV_ATLAS_DB_PATH = os.getenv(
     os.path.join(SV_ATLAS_DATA_DIR, "atlas.sqlite")
 )
 
+SV_ATLAS_INGESTION_PIPELINE = [
+    "scaife_viewer.atlas.importers.versions.import_versions",
+    # TODO: Run bin/fetch_corpus_repo_metadata first
+    "scaife_viewer.atlas.importers.repo_metadata.import_repo_metadata",
+    # TODO: Run extract_atlas_annotations command first
+    "scaife_viewer.atlas.importers.attributions.import_attributions",
+]
 # ATLAS uses an isolated database with a custom router that ensures
 # that SV_ATLAS_DB_LABEL database only contains data from the ATLAS application.
 DATABASES.update({
