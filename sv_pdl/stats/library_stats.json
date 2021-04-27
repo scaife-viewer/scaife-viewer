@@ -1,13 +1,13 @@
 {
   "text_counts": {
-    "grc": 1527,
+    "grc": 1509,
     "lat": 642,
-    "total": 3092
+    "total": 3068
   },
   "word_counts": {
-    "grc": 30572604,
+    "grc": 30515294,
     "lat": 16684484,
-    "total": 68503490
+    "total": 68414106
   },
-  "works_count": 2296
+  "works_count": 2281
 }
