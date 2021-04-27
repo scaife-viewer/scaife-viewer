@@ -32,13 +32,12 @@ class Command(BaseCommand):
         fs = {}
         with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
             for repo, data in repos.items():
-                sha = data["sha"]
                 f = executor.submit(load_repo, repo, data, dest)
-                fs[f] = (repo, sha)
+                fs[f] = (repo, data["ref"])
             for f in concurrent.futures.as_completed(fs):
-                repo, sha = fs[f]
-                f.result()
-                print(f"Loaded {repo} to {sha}")
+                repo, ref = fs[f]
+                data = f.result()
+                print(f"Loaded {repo} at {ref} to {data['sha']}")
                 sys.stdout.flush()
 
 
@@ -49,21 +48,22 @@ def load_repo_list():
     return r.json()
 
 
-def write_repo_metadata(repo, data, dest):
-    sv_metadata_path = os.path.join(dest, data["tarball_path"], ".scaife-viewer.json")
-    metadata = {
-        "repo": repo,
-        "sha": data["sha"],
-    }
-    json.dump(metadata, open(sv_metadata_path, "w"), indent=2)
+def write_repo_metadata(metadata_path, data):
+    json.dump(data, open(metadata_path, "w"), indent=2)
 
 
 def load_repo(repo, data, dest):
-    tarball_url = f'https://api.github.com/repos/{repo}/tarball/{data["sha"]}'
+    ref = data["ref"]
+    sha = data["sha"]
+    tarball_url = data["tarball_url"]
+    tarball_path = f"{repo.replace('/', '-')}-{ref}-{sha[:7]}"
+    absolute_tarball_path = os.path.join(dest, tarball_path)
+
     resp = requests.get(tarball_url, stream=True)
     resp.raise_for_status()
     r, w = os.pipe()
-    proc = subprocess.Popen(["tar", "-zxf", "-", "-C", dest], stdin=r)
+    os.makedirs(absolute_tarball_path, exist_ok=True)
+    proc = subprocess.Popen(["tar", "-zxf", "-", "-C", absolute_tarball_path, "--strip-components", "1"], stdin=r)
     os.close(r)
     for chunk in resp.iter_content(chunk_size=4092):
         if chunk:
@@ -71,4 +71,6 @@ def load_repo(repo, data, dest):
     os.close(w)
     proc.wait()
 
-    write_repo_metadata(repo, data, dest)
+    metadata_path = os.path.join(absolute_tarball_path, ".scaife-viewer.json")
+    write_repo_metadata(metadata_path, data)
+    return data
