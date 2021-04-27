@@ -321,7 +321,9 @@ CACHES = {
 
 CTS_RESOLVER_CACHE_LOCATION = os.environ.get("CTS_RESOLVER_CACHE_LOCATION", "cts_resolver_cache")
 SCAIFE_VIEWER_CORE_RESOLVER_CACHE_LABEL = "cts-resolver"
-if DEBUG:
+
+CTS_LOCAL_RESOLVER_CACHE = bool(int(os.environ.get("CTS_LOCAL_RESOLVER_CACHE", "1")))
+if CTS_LOCAL_RESOLVER_CACHE:
     CTS_RESOLVER_CACHE_KWARGS = {
         "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
         "LOCATION": CTS_RESOLVER_CACHE_LOCATION,
