@@ -8,19 +8,24 @@ body.reader {
   }
 
   .sidebar {
+    display: flex;
+    flex-direction: column;
     background: $white;
     z-index: 900;
 
     &#left-sidebar {
       border-right: 1px solid $gray-300;
       > div {
-        padding: 35px 5px 5px;
+        padding: 0px 5px 5px;
+        margin-top: -3px;
       }
     }
     &#right-sidebar {
       border-left: 1px solid $gray-300;
       > div {
-        padding: 35px 5px 5px;
+        padding: 0px 5px 5px;
+        margin-top: -3px;
+        overflow-y: scroll;
       }
     }
   }
@@ -84,22 +89,24 @@ body.reader {
   .open-left, .close-left, .open-right, .close-right {
     @extend .btn;
     @extend .btn-link;
-    position: absolute;
-    top: 0;
     color: $gray-500;
   }
 
   .open-left {
+    position: absolute;
+    top: 0;
     left: 0;
   }
   .close-right {
-    left: 0;
+    text-align: left;
   }
   .open-right {
+    position: absolute;
+    top: 0;
     right: 0;
   }
   .close-left {
-    right: 0;
+    text-align: right;
   }
 
   #content_body {
