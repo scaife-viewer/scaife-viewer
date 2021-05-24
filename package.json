@@ -51,7 +51,7 @@
     "babel-eslint": "^10.0.3",
     "babel-jest": "^24.9.0",
     "babel-loader": "^8.0.6",
-    "browserslist": "^4.8.2",
+    "browserslist": "^4.16.5",
     "clean-webpack-plugin": "^1.0.1",
     "copy-webpack-plugin": "^4.5.2",
     "css-hot-loader": "^1.4.4",
