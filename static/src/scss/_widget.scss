@@ -6,7 +6,9 @@
   }
   .sticky-block {
     position: sticky;
-    top: 0;
+    // NOTE: This _shouldn't_ be necessary, but setting to -1px
+    //  prevents "bleed" when scrolling the sidebars
+    top: -1px;
     z-index: 1000;
   }
   h2 {
