@@ -14,12 +14,12 @@ MyCapytain @https://github.com/jacobwegner/MyCapytain/archive/7b3c18b57214765357
 pinax-eventlog[django-lts]==5.1.0
 pinax-theme-bootstrap==8.0.1
 pinax-webanalytics==4.0.2
-psycopg2==2.7.6.1
+psycopg2-binary==2.9.1
 PyYAML==5.4.1
 raven==6.10.0
 requests==2.22.0
 # TODO: Resolve CircleCI build error with grpcio
-grpcio==1.33.2
+grpcio==1.41.1
 # @@@ atlas package is not yet released to pypi
 scaife-viewer-atlas @https://github.com/scaife-viewer/backend/archive/scaife-viewer-atlas@0.1a15.zip#subdirectory=atlas
 # @@@ core package is not yet released to pypi
