@@ -272,11 +272,14 @@
   }
   .comment {
     margin: 2em 0;
-    h6 {
+    h6, h4 {
+      font-family: 'Noto Serif';
+      font-size: 1rem;
       margin-bottom: 0;
       font-weight: normal;
     }
     .commenter-name {
+      font-size: 12px;
       color: $gray-600;
       font-weight: bold;
     }
