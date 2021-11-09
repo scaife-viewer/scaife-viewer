@@ -43,7 +43,7 @@ export default {
   },
   methods: {
     async fetchCommentary() {
-      const apiUrl = 'https://commentary-api.chs.harvard.edu/graphql';
+      const apiUrl = 'https://chs-homer-proxy.herokuapp.com/homer-chs-proxy/graphql/';
       const { urn } = this.passage;
       const query = `{ commentsOn(urn: "${urn}") { _id updated latestRevision { title text } commenters { _id name } } }`;
       const params = qs.stringify({ query });
