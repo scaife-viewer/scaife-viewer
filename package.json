@@ -24,7 +24,7 @@
     "axios": "^0.21.1",
     "bootstrap": "^4.4.1",
     "dayjs": "^1.8.18",
-    "json-schema": "^0.2.5",
+    "json-schema": "^0.4.0",
     "keykey": "^2.1.1",
     "loaders.css": "^0.1.2",
     "lodash.chunk": "^4.2.0",
