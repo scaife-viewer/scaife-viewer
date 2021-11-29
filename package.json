@@ -21,7 +21,7 @@
     "@scaife-viewer/widget-attributions": "https://gitpkg.now.sh/scaife-viewer/frontend/packages/widget-attributions?8d4196f2a6617e667f3c51998c1216527a82b502",
     "@scaife-viewer/widget-repo-metadata": "https://gitpkg.now.sh/scaife-viewer/frontend/packages/widget-repo-metadata?8d4196f2a6617e667f3c51998c1216527a82b502",
     "@scaife-viewer/widget-new-alexandria": "https://gitpkg.now.sh/scaife-viewer/frontend/packages/widget-new-alexandria?b48935fa4737773a8d1b8460c75660ba26f3e0c9",
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "bootstrap": "^4.4.1",
     "dayjs": "^1.8.18",
     "json-schema": "^0.4.0",
