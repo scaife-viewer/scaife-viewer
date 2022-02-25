@@ -4,11 +4,11 @@
 import constants from '../constants';
 
 export default {
-  name: 'inline-token',
+  name: 'InlineToken',
   props: {
-    t: { type: String, required: true, },
-    w: { type: String, required: true, },
-    i: { type: String, required: true, },
+    t: { type: String, required: true },
+    w: { type: String, required: true },
+    i: { type: String, required: true },
   },
   inject: ['highlighting'],
   computed: {
@@ -29,7 +29,7 @@ export default {
         this.$store.dispatch(`reader/${constants.READER_SET_SELECTED_TOKEN}`, { token: idx });
       }
       evt.stopPropagation();
-    }
+    },
   },
   render(h) {
     let selected = false;
