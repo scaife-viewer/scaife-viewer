@@ -138,6 +138,16 @@ div.text {
   span.w.selected.highlighted {
     background-color: mix($highlight-color, $selected-color);
   }
+  // FIXME: Unify styles across SV1 and SV2
+  span.w.commentary {
+    box-shadow: 0 -10px 0 var(--sv-widget-reader-token-commentary-shadow-color,#ff6) inset;
+  }
+  span.w.selected.commentary {
+    box-shadow: 0 -10px 0 var(--sv-widget-reader-token-selected-commentary-shadow-color,#9f9) inset;
+    background-color: unset;
+    border-style: unset;
+  }
+
   .textpart {
     display: flex;
     & > .a {

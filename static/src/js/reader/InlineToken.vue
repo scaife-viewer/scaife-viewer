@@ -9,6 +9,7 @@ export default {
     t: { type: String, required: true },
     w: { type: String, required: true },
     i: { type: String, required: true },
+    veRef: { type: String, required: false },
   },
   inject: ['highlighting'],
   computed: {
@@ -36,9 +37,10 @@ export default {
     let selected = false;
     let highlighted = false;
     let clickable = false;
+    let hasCommentary = false;
     const vueInstance = this;
     const {
-      t, idx, highlighting,
+      t, idx, highlighting, veRef,
       $parent: p,
       $store: store,
     } = this;
@@ -46,20 +48,25 @@ export default {
     if (visible && highlighting) {
       // TODO: Determine why annotationChange is required for reactivity;
       // likely this is due to annotations being a Map
-      const { textMode, annotations, annotationChange } = store.state.reader;
+      const {
+        textMode, annotations, annotationChange, commentaryTokensHash,
+      } = store.state.reader;
       if (textMode === 'clickable') {
         clickable = true;
       }
       if (annotations.has(idx)) {
         ({ selected, highlighted } = annotations.get(idx));
       }
+      hasCommentary = commentaryTokensHash[veRef];
     }
     return h(
       'span',
       {
         class: [
           t,
-          { c: clickable, selected, highlighted },
+          {
+            c: clickable, selected, highlighted, commentary: hasCommentary,
+          },
         ],
         on: {
           click(e) {

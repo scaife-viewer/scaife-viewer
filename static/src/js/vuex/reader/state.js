@@ -16,6 +16,10 @@ export default {
   annotations: new Map(),
   annotationsHash: {},
   annotationChange: 0,
+  // FIXME: Remove placeholder
+  commentaryTokensHash: {
+    '1.1.t2': ['foo'],
+  },
   selectedLemmas: null,
   error: '',
   selectedTokenRange: { start: null, end: null },
