@@ -17,7 +17,7 @@ export default {
     },
   },
   methods: {
-    processTokenClick(evt, clickable, selected, idx) {
+    processTokenClick(evt, selected, idx) {
       if (evt.metaKey && selected) {
         // clear input
         this.$store.dispatch(`reader/${constants.READER_SET_SELECTED_TOKEN}`, { token: null });
@@ -31,6 +31,7 @@ export default {
       evt.stopPropagation();
     },
   },
+  // TODO: Consider computed props for more consistency
   render(h) {
     let selected = false;
     let highlighted = false;
@@ -43,6 +44,8 @@ export default {
     } = this;
     const { visible } = p;
     if (visible && highlighting) {
+      // TODO: Determine why annotationChange is required for reactivity;
+      // likely this is due to annotations being a Map
       const { textMode, annotations, annotationChange } = store.state.reader;
       if (textMode === 'clickable') {
         clickable = true;
@@ -61,7 +64,7 @@ export default {
         on: {
           click(e) {
             if (clickable) {
-              vueInstance.processTokenClick(e, clickable, selected, idx);
+              vueInstance.processTokenClick(e, selected, idx);
             }
           },
         },
