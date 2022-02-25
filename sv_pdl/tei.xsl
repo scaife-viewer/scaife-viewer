@@ -271,6 +271,8 @@
             <xsl:attribute name="w"><xsl:value-of select="." /></xsl:attribute>
             <xsl:attribute name="i"><xsl:value-of select="py:token_index(.)" /></xsl:attribute>
             <xsl:attribute name="o"><xsl:value-of select="py:token_offset(.)" /></xsl:attribute>
+            <xsl:attribute name="passageIdx"><xsl:value-of select="py:token_passage_idx(.)" /></xsl:attribute>
+            <xsl:attribute name="veRef"><xsl:value-of select="py:token_ve_ref(.)" /></xsl:attribute>
             <xsl:value-of select="." />
           </xsl:element>
         </xsl:when>

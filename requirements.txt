@@ -23,6 +23,6 @@ grpcio==1.41.1
 # @@@ atlas package is not yet released to pypi
 scaife-viewer-atlas @https://github.com/scaife-viewer/backend/archive/scaife-viewer-atlas@0.1a15.zip#subdirectory=atlas
 # @@@ core package is not yet released to pypi
-scaife-viewer-core @https://github.com/scaife-viewer/backend/archive/scaife-viewer-core@0.1a9.zip#subdirectory=core
+scaife-viewer-core @https://github.com/scaife-viewer/backend/archive/597922034a3f5f345210756eceb0695245ca129d.zip#subdirectory=core
 six==1.12.0
 whitenoise==4.1.2
