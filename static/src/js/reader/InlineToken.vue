@@ -68,6 +68,9 @@ export default {
             c: clickable, selected, highlighted, commentary: hasCommentary,
           },
         ],
+        attrs: {
+          title: veRef,
+        },
         on: {
           click(e) {
             if (clickable) {
