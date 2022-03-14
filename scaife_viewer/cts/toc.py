@@ -125,7 +125,7 @@ class RefNode(anytree.NodeMixin):
 
     def __repr__(self):
         if self.is_root:
-            return f"<RefRootNode>"
+            return "<RefRootNode>"
         else:
             return f"<RefNode {self.reference}>"
 

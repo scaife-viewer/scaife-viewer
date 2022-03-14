@@ -1,12 +1,22 @@
 from MyCapytain.errors import UnknownCollection
 
 from .capitains import default_resolver  # noqa
-from .collections import (Collection, Text, TextGroup, TextInventory,  # noqa
-                          Work, resolve_collection)
-from .exceptions import CollectionDoesNotExist, PassageDoesNotExist, InvalidPassageReference
+from .collections import (  # noqa
+    Collection,
+    Text,
+    TextGroup,
+    TextInventory,
+    Work,
+    resolve_collection
+)
+from .exceptions import (
+    CollectionDoesNotExist,
+    InvalidPassageReference,
+    PassageDoesNotExist
+)
+from .heal import heal
 from .passage import Passage
 from .reference import URN
-from .heal import heal
 
 
 def text_inventory() -> TextInventory:
