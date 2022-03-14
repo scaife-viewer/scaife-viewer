@@ -10,14 +10,14 @@ RUN npm run build
 
 FROM python:3.6-alpine3.7 AS build
 WORKDIR /opt/scaife-viewer/src/
-RUN pip --no-cache-dir --disable-pip-version-check install pipenv
+RUN pip --no-cache-dir --disable-pip-version-check install virtualenv
 ENV PATH="/opt/scaife-viewer/bin:${PATH}" VIRTUAL_ENV="/opt/scaife-viewer"
-COPY Pipfile Pipfile.lock /opt/scaife-viewer/src/
+COPY requirements.txt /opt/scaife-viewer/src/
 RUN set -x \
     && virtualenv /opt/scaife-viewer \
     && apk --no-cache add \
         build-base curl git libxml2-dev libxslt-dev postgresql-dev linux-headers \
-    && pipenv install --deploy
+    && pip install -r requirements.txt
 RUN pip install flake8 flake8-quotes isort
 
 FROM python:3.6-alpine3.7
