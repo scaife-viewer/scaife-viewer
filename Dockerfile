@@ -17,6 +17,7 @@ RUN set -x \
     && virtualenv /opt/scaife-viewer \
     && apk --no-cache add \
         build-base curl git libxml2-dev libxslt-dev postgresql-dev linux-headers \
+    && pip install --force-reinstall 'setuptools<58.0.0' \
     && pip install -r requirements.txt
 RUN pip install flake8 flake8-quotes isort
 
