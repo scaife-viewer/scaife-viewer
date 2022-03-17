@@ -1,4 +1,7 @@
+from django.db.models import Count
 from django.shortcuts import render
+
+from scaife_viewer.atlas.models import Repo
 
 from .stats import get_library_stats
 
@@ -8,7 +11,10 @@ def home(request):
 
 
 def about(request):
-    return render(request, "about.html", {})
+    repos = Repo.objects.annotate(version_count=Count("urns")).order_by(
+        "-version_count"
+    )
+    return render(request, "about.html", {"repos": repos})
 
 
 def profile(request):

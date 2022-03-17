@@ -65,15 +65,9 @@
       </p>
 
       <ul style="font-size: 90%;">
-        <li><a href="https://github.com/PerseusDL/canonical-greekLit">PerseusDL/canonical-greekLit</a></li>
-        <li><a href="https://github.com/PerseusDL/canonical-latinLit">PerseusDL/canonical-latinLit</a></li>
-        <li><a href="https://github.com/OpenGreekAndLatin/First1KGreek">OpenGreekAndLatin/First1KGreek</a></li>
-        <li><a href="https://github.com/OpenGreekAndLatin/csel-dev">OpenGreekAndLatin/csel-dev</a></li>
-        <li><a href="https://github.com/PerseusDL/canonical-farsiLit">PerseusDL/canonical-farsiLit</a></li>
-        <li><a href="https://github.com/PerseusDL/canonical-pdlpsci">PerseusDL/canonical-pdlpsci</a></li>
-        <li><a href="https://github.com/hlapin/ancJewLitCTS">hlapin/ancJewLitCTS</a></li>
-        <li><a href="https://github.com/lascivaroma/priapeia">lascivaroma/priapeia</a></li>
-        <li><a href="https://github.com/nevenjovanovic/sophocles-ajax-latinus">nevenjovanovic/sophocles-ajax-latinus</a></li>
+        {% for repo in repos %}
+          <li><a href="{{ repo.metadata.github_url }}">{{ repo.name }}</a></li>
+        {% endfor %}
       </ul>
 
       <p>
