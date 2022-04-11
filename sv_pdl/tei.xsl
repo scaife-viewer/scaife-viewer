@@ -195,22 +195,39 @@
     </div>
   </xsl:template>
 
-  <xsl:template match="t:div[@type='textpart']|t:l">
-    <xsl:element name="text-part">
-      <xsl:attribute name="class">
-        <xsl:value-of select="@subtype" />
-        <xsl:if test="count(descendant::t:div[@type='textpart']|descendant::t:l[not(parent::t:quote)])=0"> leaf o</xsl:if>
-      </xsl:attribute>
-      <xsl:if test="@n">
-        <xsl:attribute name="reference">
-          <xsl:for-each select="ancestor::t:div[@type='textpart']/@n">
-            <xsl:value-of select="concat(., '.')" />
-          </xsl:for-each>
-          <xsl:value-of select="@n" />
-        </xsl:attribute>
-      </xsl:if>
+  <!-- TODO: Can we support a `test` invocation, or only match? -->
+  <!-- OR, could we also pass the xpath(s) fron Capitains -->
+  <!-- to limit matches where we have l[@n], etc? -->
+  <!-- TODO: Do we need a wider cast (@n) -->
+  <!-- http://capitains.org/pages/guidelines#citation-information -->
+  <xsl:template match="t:div[@type='textpart' and @n]|t:l[@n]">
+    <xsl:choose>
+      <xsl:when test="py:is_citable_node(.)">
+        <xsl:element name="text-part">
+          <xsl:attribute name="class">
+            <xsl:value-of select="@subtype" />
+            <xsl:if test="py:has_descendants(.)"> leaf o</xsl:if>
+          </xsl:attribute>
+          <xsl:attribute name="reference">
+            <xsl:value-of select="py:cts_reference(.)" />
+          </xsl:attribute>
+          <xsl:apply-templates/>
+        </xsl:element>
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- TODO: Determine if we should continue this processing -->
+        <div>
+          <xsl:apply-templates/>
+        </div>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <!-- TODO: Can we simplify with the above? -->
+  <xsl:template match="t:l[not(@n)]">
+    <div>
       <xsl:apply-templates/>
-    </xsl:element>
+    </div>
   </xsl:template>
 
   <xsl:template match="t:w">
