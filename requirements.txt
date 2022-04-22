@@ -6,7 +6,7 @@ django-letsencrypt==3.0.1
 django-oidc-provider==0.7.0
 django-user-accounts==3.0.2
 django-webpack-loader==0.6.0
-Django==2.2.27
+Django==2.2.28
 gunicorn==19.9.0
 honcho==1.0.1
 # @@@ pin to MyCapytain fork until performance improvements are merged
