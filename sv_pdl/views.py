@@ -1,12 +1,13 @@
+from django.core.cache import cache
 from django.db.models import Count
 from django.shortcuts import render
-from django.core.cache import cache
 
 from scaife_viewer.atlas.models import Repo
 
-from .stats import get_library_stats
-from .changelog.models import ChangelogEntry
 from .changelog.keyfile import cachekeys
+from .changelog.models import ChangelogEntry
+from .stats import get_library_stats
+
 
 CACHE_FOREVER = None
 LATEST_CHANGELOG_KEY = cachekeys["LATEST_CHANGELOG"]
