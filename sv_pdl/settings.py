@@ -189,6 +189,7 @@ INSTALLED_APPS = [
     # project
     "sv_pdl",
     "sv_pdl.atlas",
+    "sv_pdl.changelog",
     "sv_pdl.reading",
     "sv_pdl.stats",
 ]

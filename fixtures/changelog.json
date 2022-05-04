@@ -1,0 +1,32 @@
+[
+  {
+    "model": "changelog.changelogentry",
+    "pk": 1,
+    "fields": {
+      "title": "week of January 24th, 2022",
+      "body": "<ul>\r\n  <li>updated corpora and corpora stats</li>\r\n</ul>",
+      "release_url": "https://github.com/scaife-viewer/scaife-viewer/releases/tag/v2022-01-24-001",
+      "timestamp": "2022-01-24T15:00:00Z"
+    }
+  },
+  {
+    "model": "changelog.changelogentry",
+    "pk": 2,
+    "fields": {
+      "title": "week of March 14th, 2022",
+      "body": "<ul>\r\n  <li>updated corpora and corpora stats</li>\r\n</ul>",
+      "release_url": "https://github.com/scaife-viewer/scaife-viewer/releases/tag/v2022-03-17-001",
+      "timestamp": "2022-03-14T15:00:00Z"
+    }
+  },
+  {
+    "model": "changelog.changelogentry",
+    "pk": 3,
+    "fields": {
+      "title": "week of April 4th, 2022",
+      "body": "<ul>\r\n  <li>updated corpora and corpora stats</li>\r\n</ul>",
+      "release_url": "https://github.com/scaife-viewer/scaife-viewer/releases/tag/v2022-04-07-001",
+      "timestamp": "2022-04-07T15:00:00Z"
+    }
+  }
+]
