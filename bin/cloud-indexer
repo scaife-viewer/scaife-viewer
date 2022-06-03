@@ -2,7 +2,7 @@
 
 set -ex
 
-export SCAIFE_VIEWER_CORE_USE_CLOUD_INDEXER=1
+export USE_CLOUD_INDEXER=1
 
 # seed data
 # TODO: Re-use Docker layer caching from
