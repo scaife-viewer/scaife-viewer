@@ -5,29 +5,35 @@ set -ex
 export USE_CLOUD_INDEXER=1
 
 # seed data
+# TODO: Re-use Docker layer caching from
+# scaife-cts-api
 export CTS_RESOLVER=api
 mkdir -p /var/lib/nautilus/data
 python manage.py load_text_repos
-mkdir -p /var/lib/scaife-viewer/morphology
-curl \
-    --silent \
-    --retry-delay 1 \
-    --retry-max-time 30 \
-    --compressed \
-    https://storage.googleapis.com/scaife-indexer-us-central1/forms-normalised-20180208_001.txt > /var/lib/scaife-viewer/morphology/forms-normalised.txt
-curl \
-    --silent \
-    --retry-delay 1 \
-    --retry-max-time 30 \
-    --compressed \
-    https://storage.googleapis.com/scaife-indexer-us-central1/works-20180208_001.txt > /var/lib/scaife-viewer/morphology/works.txt
-curl \
-    --silent \
-    --retry-delay 1 \
-    --retry-max-time 30 \
-    --compressed \
-    https://storage.googleapis.com/scaife-indexer-us-central1/text-20180208_001.txt > /var/lib/scaife-viewer/morphology/text.txt
-
+if [[ $# -eq 0 ]]
+then
+    echo "No morphology path arg was set."
+else
+    mkdir -p /var/lib/scaife-viewer/morphology
+    curl \
+        --silent \
+        --retry-delay 1 \
+        --retry-max-time 30 \
+        --compressed \
+        https://storage.googleapis.com/scaife-indexer-us-central1/forms-normalised-20180208_001.txt > /var/lib/scaife-viewer/morphology/forms-normalised.txt
+    curl \
+        --silent \
+        --retry-delay 1 \
+        --retry-max-time 30 \
+        --compressed \
+        https://storage.googleapis.com/scaife-indexer-us-central1/works-20180208_001.txt > /var/lib/scaife-viewer/morphology/works.txt
+    curl \
+        --silent \
+        --retry-delay 1 \
+        --retry-max-time 30 \
+        --compressed \
+        https://storage.googleapis.com/scaife-indexer-us-central1/text-20180208_001.txt > /var/lib/scaife-viewer/morphology/text.txt
+fi
 export CTS_RESOLVER=local
 python manage.py indexer \
     --pusher=pubsub \
