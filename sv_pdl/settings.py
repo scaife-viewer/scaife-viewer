@@ -339,7 +339,7 @@ CACHES.update({
 
 XSL_STYLESHEET_PATH = os.environ.get("XSL_STYLESHEET_PATH", os.path.join(PACKAGE_ROOT, "tei.xsl"))
 
-resolver = os.environ.get("CTS_RESOLVER", "api")
+resolver = os.environ.get("CTS_RESOLVER", "local")
 if resolver == "api":
     CTS_API_ENDPOINT = os.environ.get("CTS_API_ENDPOINT", "https://scaife-cts-dev.perseus.org/api/cts")
     CTS_RESOLVER = {
@@ -350,7 +350,7 @@ if resolver == "api":
     }
     CTS_LOCAL_TEXT_INVENTORY = "ti.xml" if DEBUG else None
 elif resolver == "local":
-    CTS_LOCAL_DATA_PATH = os.environ["CTS_LOCAL_DATA_PATH"]
+    CTS_LOCAL_DATA_PATH = os.environ.get("CTS_LOCAL_DATA_PATH", "data/cts")
     CTS_RESOLVER = {
         "type": "local",
         "kwargs": {

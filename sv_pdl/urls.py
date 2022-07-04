@@ -5,6 +5,7 @@ from django.urls import include, path
 from django.contrib import admin
 
 from scaife_viewer.core.views import (
+    CTSApiGetPassageView,
     LibraryCollectionVectorView,
     LibraryCollectionView,
     LibraryInfoView,
@@ -28,6 +29,7 @@ api_patterns = (
         path("library/passage/<str:urn>/json/", LibraryPassageView.as_view(format="json"), name="library_passage"),
         path("library/passage/<str:urn>/text/", LibraryPassageView.as_view(format="text"), name="library_passage_text"),
         path("library/passage/<str:urn>/xml/", LibraryPassageView.as_view(format="xml"), name="library_passage_xml"),
+        path("library/passage/<str:urn>/cts-api-xml/", CTSApiGetPassageView.as_view(format="xml"), name="library_passage_cts_api_xml"),
         path("library/<str:urn>/json/", LibraryCollectionView.as_view(format="json"), name="library_collection"),
         path("search/json/", search_json, name="search"),
         path("morpheus/", morpheus, name="morpheus"),
