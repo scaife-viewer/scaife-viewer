@@ -186,3 +186,13 @@ To build a copy of this database locally:
 
 Queries to ATLAS models are routed via the `ATLASRouter` database router
 (and therefore are isolated from the `default` database)
+
+## CTS Data
+
+CTS data is now bundled with the application.
+
+The deployment workflow is responsible for making corpora available under at the location
+specified by `settings.CTS_LOCAL_DATA_PATH`.
+
+For Heroku deployments, this is currently accomplished by preparing a tarball made available via
+`$CTS_TARBALL_URL` and downloading and uncompressing the tarball using `bin/fetch_cts_tarball.sh`.
