@@ -2,27 +2,22 @@ PerseusDL/canonical-latinLit:
   ref: 0.0.1137
   sha: 5a05bea6ac116dc75213c87b2061146f9cc330e5
   tarball_url: https://api.github.com/repos/PerseusDL/canonical-latinLit/tarball/0.0.1137
-  prefer_default_branch: false
 PerseusDL/canonical-greekLit:
   ref: 0.0.3026
   sha: 71074f355797f03ba2fa4feef8e1f0a9bca94977
   tarball_url: https://api.github.com/repos/PerseusDL/canonical-greekLit/tarball/0.0.3026
-  prefer_default_branch: false
 OpenGreekAndLatin/csel-dev:
   ref: 1.0.427
   sha: ad69dbca78725d921b2322585682f7f2633252b9
   tarball_url: https://api.github.com/repos/OpenGreekAndLatin/csel-dev/tarball/1.0.427
-  prefer_default_branch: false
 PerseusDL/canonical-farsiLit:
   ref: 0.0.11
   sha: 1ce632ece8a2af0646195a0531f5e8f39b161f72
   tarball_url: https://api.github.com/repos/PerseusDL/canonical-farsiLit/tarball/0.0.11
-  prefer_default_branch: false
 PerseusDL/canonical-pdlpsci:
   ref: v0.3.0
   sha: 72f6ce7dc6e3b783a063baed4c1539302e3b9247
   tarball_url: https://api.github.com/repos/PerseusDL/canonical-pdlpsci/tarball/v0.3.0
-  prefer_default_branch: false
 OpenGreekAndLatin/First1KGreek:
   ref: 1.1.6094
   sha: 5974b9f955ea1cd383c8dc63270004dc93d6e78c
@@ -31,29 +26,23 @@ OpenGreekAndLatin/Latin:
   ref: v1.14.0
   sha: 9a3e833b515adad490bdd11977eaf1a84d24b246
   tarball_url: https://api.github.com/repos/OpenGreekAndLatin/Latin/tarball/v1.14.0
-  prefer_default_branch: false
 lascivaroma/priapeia:
   ref: 1.1.18
   sha: 3dfc11fe1bbbe5f34c435e6cd56cc277cdacbe8f
   tarball_url: https://api.github.com/repos/lascivaroma/priapeia/tarball/1.1.18
-  prefer_default_branch: false
 hlapin/ancJewLitCTS:
   ref: 0.1.50
   sha: f3534557c6cae678bccbbf0d97ac2b2cdf71cc2e
   tarball_url: https://api.github.com/repos/hlapin/ancJewLitCTS/tarball/0.1.50
-  prefer_default_branch: false
 nevenjovanovic/sophocles-ajax-latinus:
   ref: master
   sha: aee7611f65a30b8fe17f1833154988c811e886b3
   tarball_url: https://api.github.com/repos/nevenjovanovic/sophocles-ajax-latinus/tarball/aee7611f65a30b8fe17f1833154988c811e886b3
-  prefer_default_branch: false
 jacobwegner/PDL:
   ref: v0.0.2
   sha: eca3d09f9516c85173bece362749d0cb40c261df
   tarball_url: https://api.github.com/repos/jacobwegner/PDL/tarball/v0.0.2
-  prefer_default_branch: false
 jacobwegner/Multepal-CTS:
   ref: v0.0.1-rc4
   sha: 976a340223666380ece66a936bdd58330b822e40
   tarball_url: https://api.github.com/repos/jacobwegner/Multepal-CTS/tarball/v0.0.1-rc4
-  prefer_default_branch: false
