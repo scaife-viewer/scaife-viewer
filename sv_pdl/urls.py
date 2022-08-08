@@ -5,6 +5,7 @@ from django.urls import include, path
 from django.contrib import admin
 
 from scaife_viewer.core.views import (
+    CorporaReposView,
     CTSApiGetPassageView,
     LibraryCollectionVectorView,
     LibraryCollectionView,
@@ -23,6 +24,7 @@ from .views import about, app, home, profile
 
 api_patterns = (
     [
+        path("corpora/repos/", CorporaReposView.as_view(), name="corpora_repos"),
         path("library/json/", LibraryView.as_view(format="json"), name="library"),
         path("library/json/info", LibraryInfoView.as_view(), name="library_info"),
         path("library/vector/<str:urn>/", LibraryCollectionVectorView.as_view(), name="library_collection_vector"),
