@@ -5,8 +5,7 @@ set -e
 
 DATA_DIR=${ATLAS_DATA_DIR:-atlas_data}
 REPO_METADATA_DIR=${DATA_DIR}/annotations/repo-metadata
-CORPUS_METADATA_ENDPOINT=${CORPUS_METADATA_ENDPOINT-https://scaife-cts-dev.perseus.org/corpus-metadata}
 
 mkdir -p ${REPO_METADATA_DIR}
 
-curl -s "${CORPUS_METADATA_ENDPOINT}" > ${REPO_METADATA_DIR}/corpus-metadata.json
+cp ${SCAIFE_VIEWER_JSON:-data/cts/.scaife-viewer.json} ${REPO_METADATA_DIR}/corpus-metadata.json
