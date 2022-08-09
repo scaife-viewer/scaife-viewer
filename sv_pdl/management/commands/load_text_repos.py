@@ -76,5 +76,7 @@ def load_repo(repo, data, dest):
 
     # TODO: Convert to YAML
     metadata_path = os.path.join(absolute_tarball_path, ".scaife-viewer.json")
+
+    data["repo"] = repo
     write_repo_metadata(metadata_path, data)
     return data
