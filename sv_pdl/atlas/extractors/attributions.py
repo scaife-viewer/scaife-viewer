@@ -318,25 +318,29 @@ def extract_attributions(include_stats=False):
     version_qs = Node.objects.filter(depth=constants.CTS_URN_DEPTHS["version"])
 
     # TODO: Split sources by repo based on presence of config files
-    ogl_1kgrc_repo = Repo.objects.get(name="OpenGreekAndLatin/First1KGreek")
+    ogl_1kgrc_repo = Repo.objects.filter(name="OpenGreekAndLatin/First1KGreek").first()
 
     ogl_1kgrc_versions = version_qs.filter(repos__in=[ogl_1kgrc_repo])
     other_versions = version_qs.exclude(repos__in=[ogl_1kgrc_repo])
+    sources = [dict(qs=other_versions, name="other", config_path=None)]
+    if ogl_1kgrc_repo:
+        sources.append(
+            dict(
+                qs=ogl_1kgrc_versions,
+                name="1kgrc",
+                # TODO: derive queryset and config from repo root
+                # or another optional config path
+                config_path=OGL_CONFIG_PATH,
+            )
+        )
 
-    sources = [
-        dict(
-            qs=ogl_1kgrc_versions,
-            name="1kgrc",
-            # TODO: derive queryset and config from repo root
-            # or another optional config path
-            config_path=OGL_CONFIG_PATH,
-        ),
-        dict(qs=other_versions, name="other", config_path=None),
-    ]
     for source in sources:
         lookup = build_attributions_lookup(resolver, source["qs"])
-        if source["config_path"]:
-            config = get_attributions_config(source["config_path"])
+        config_path = source.get("config_path")
+        if config_path:
+            config = get_attributions_config(config_path)
+        else:
+            config = None
 
         attributions = prepare_atlas_annotations(config, lookup)
         write_annotations(source["name"], attributions)

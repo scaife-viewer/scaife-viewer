@@ -182,7 +182,7 @@ The client-side currently caches the results of `library/json/`. The cache is au
 To build a copy of this database locally:
 - Run `bin/download_local_ti` to get a local copy of the text inventory from `$CTS_API_ENDPOINT`
 - Run `bin/fetch_corpus_config` to load corpus-specific configuration files
-- Run the `prepare_atlas_db` management command to ingest ATLAS data from CTS collections
+- Run the `prepare_atlas_db` management command to ingest ATLAS data from CTS collections (assumes `atlas_data` directory exists; create it via `mkdir -p atlas_data`)
 
 Queries to ATLAS models are routed via the `ATLASRouter` database router
 (and therefore are isolated from the `default` database)
