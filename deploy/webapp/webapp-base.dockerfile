@@ -11,7 +11,7 @@ COPY ./test test
 ARG FORCE_SCRIPT_NAME
 RUN npm run lint
 # 👀 restore unit tests
-# RUN npm run unit
+RUN npm run unit
 RUN npm run build
 
 FROM python:3.9-alpine AS python-build
