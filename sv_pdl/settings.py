@@ -10,7 +10,8 @@ BASE_DIR = PACKAGE_ROOT
 
 DEBUG = bool(int(os.environ.get("DEBUG", "1")))
 TRACING_ENABLED = bool(int(os.environ.get("TRACING_ENABLED", not DEBUG)))
-LIBRARY_VIEW_API_VERSION = int(os.environ.get("LIBRARY_VIEW_API_VERSION", 0))
+# FIXME: Deprecate or make this dynamic
+LIBRARY_VIEW_API_VERSION = int(os.environ.get("LIBRARY_VIEW_API_VERSION", 10))
 
 DATABASES = {
     "default": dj_database_url.config(default="postgres://localhost/scaife-viewer")
@@ -322,17 +323,9 @@ CACHES = {
 
 CTS_RESOLVER_CACHE_LOCATION = os.environ.get("CTS_RESOLVER_CACHE_LOCATION", "cts_resolver_cache")
 SCAIFE_VIEWER_CORE_RESOLVER_CACHE_LABEL = "cts-resolver"
-if True:
-    CTS_RESOLVER_CACHE_KWARGS = {
-        "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
-        "LOCATION": CTS_RESOLVER_CACHE_LOCATION,
-    }
-else:
-    # NOTE: This cache is disabled in production, since
-    # the CTS data is loaded on boot from CTS_API_ENDPOINT
-    CTS_RESOLVER_CACHE_KWARGS = {
-        "BACKEND": "django.core.cache.backends.dummy.DummyCache",
-    }
+CTS_RESOLVER_CACHE_KWARGS = {
+    "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+    "LOCATION": CTS_RESOLVER_CACHE_LOCATION,
 CACHES.update({
     SCAIFE_VIEWER_CORE_RESOLVER_CACHE_LABEL: CTS_RESOLVER_CACHE_KWARGS,
 })

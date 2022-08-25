@@ -10,7 +10,6 @@ COPY ./test test
 
 ARG FORCE_SCRIPT_NAME
 RUN npm run lint
-# 👀 restore unit tests
 RUN npm run unit
 RUN npm run build
 
@@ -24,6 +23,8 @@ RUN set -x \
     && apk --no-cache add \
         build-base curl git libffi-dev libxml2-dev libxslt-dev postgresql-dev linux-headers \
     && pip install -r requirements.txt
+# TODO: Move PyGithub dependency as an extra installable
+# for scaife-viewer-core
 RUN pip install flake8 flake8-quotes isort PyGithub
 
 FROM python:3.9-alpine AS python-source

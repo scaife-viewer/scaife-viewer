@@ -7,9 +7,10 @@ from pathlib import Path
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
-
 import requests
 import yaml
+
+from scaife_viewer.core.hooks import hookset
 
 
 class Command(BaseCommand):
@@ -20,7 +21,6 @@ class Command(BaseCommand):
         parser.add_argument(
             "--path",
             dest="path",
-            # FIXME: Assumptions with /var/lib/natuilus/data
             default=settings.CTS_LOCAL_DATA_PATH,
         )
 
@@ -44,7 +44,7 @@ class Command(BaseCommand):
 
 def load_repo_list():
     # TODO: Make this env dependent
-    content_path = Path("data/content-manifests/production.yaml")
+    content_path = hookset.content_manifest_path
     return yaml.safe_load(content_path.open())
 
 
