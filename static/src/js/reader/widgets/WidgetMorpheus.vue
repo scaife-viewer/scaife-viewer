@@ -43,8 +43,6 @@
 import constants from '../../constants';
 import TextLoader from '../../components/TextLoader.vue';
 
-const baseURL = `${process.env.FORCE_SCRIPT_NAME}`;
-
 export default {
   name: 'widget-morpheus',
   watch: {
@@ -86,7 +84,8 @@ export default {
       const lang = this.text.metadata.lang;
       if (word) {
         this.loading = true;
-        const url = `${baseURL}/morpheus/?word=${word.w}&lang=${lang}`;
+        const baseURL = this.$router.options.base;
+        const url = `${baseURL}morpheus/?word=${word.w}&lang=${lang}`;
         const headers = new Headers({
           Accept: 'application/json',
         });
