@@ -14,11 +14,8 @@
 </template>
 
 <script>
-// TODO: Grab this from $router
-const baseURL = `${process.env.FORCE_SCRIPT_NAME}` || "";
-
 export default {
-  name: 'widget-passage-links',
+  name: 'WidgetPassageLinks',
   computed: {
     passage() {
       return this.$store.getters['reader/passage'];
@@ -32,7 +29,8 @@ export default {
   },
   methods: {
     getPassageUrl(urn) {
-      return `${baseURL}/library/passage/${urn}/cts-api-xml/`;
+      const baseURL = this.$router.options.base;
+      return `${baseURL}library/${urn}/cts-api-xml/`;
     },
   },
 };
