@@ -22,6 +22,9 @@ const store = new Vuex.Store({
 
 const mocks = {
   $store: store,
+  $router: {
+    options: { base: '/' },
+  },
 };
 
 describe('WidgetPassageLinks.vue', () => {
