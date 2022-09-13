@@ -1,6 +1,6 @@
 jacobwegner/canonical-latinLit:
   ref: 0.0.2821200559
-  sha: aa9b817958d01d59c259f64f77997619f3c33656
+  sha: 1b69d78f295eb27c0e3d23ef429581d555fcfc3f
   tarball_url: https://api.github.com/repos/jacobwegner/canonical-latinLit/tarball/0.0.2821200559
 jacobwegner/canonical-greekLit:
   ref: 0.0.2821198127
@@ -19,9 +19,9 @@ PerseusDL/canonical-pdlpsci:
   sha: 72f6ce7dc6e3b783a063baed4c1539302e3b9247
   tarball_url: https://api.github.com/repos/PerseusDL/canonical-pdlpsci/tarball/v0.3.0
 OpenGreekAndLatin/First1KGreek:
-  ref: 1.1.6113
-  sha: 40e818cf52134df2e1fae03608d8fb247ddd42cd
-  tarball_url: https://api.github.com/repos/OpenGreekAndLatin/First1KGreek/tarball/1.1.6113
+  ref: 1.1.6119
+  sha: 5516db37bf51c4f987231d7854cba2bec7a018e8
+  tarball_url: https://api.github.com/repos/OpenGreekAndLatin/First1KGreek/tarball/1.1.6119
 OpenGreekAndLatin/Latin:
   ref: v1.14.0
   sha: 9a3e833b515adad490bdd11977eaf1a84d24b246
