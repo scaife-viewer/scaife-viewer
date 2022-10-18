@@ -402,6 +402,7 @@ SV_ATLAS_INGESTION_PIPELINE = [
     # TODO: Run bin/fetch_corpus_repo_metadata first
     "scaife_viewer.atlas.importers.repo_metadata.import_repo_metadata",
     "sv_pdl.atlas.importer_pipelines.extract_atlas_annotations",
+    "sv_pdl.atlas.importer_pipelines.prefer_source_repo_names",
     "scaife_viewer.atlas.importers.attributions.import_attributions",
 ]
 # ATLAS uses an isolated database with a custom router that ensures
