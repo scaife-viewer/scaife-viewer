@@ -3,13 +3,13 @@ jacobwegner/canonical-latinLit:
   sha: 5bc1f3727baa11e9d679cfa944edff160f34d511
   tarball_url: https://api.github.com/repos/jacobwegner/canonical-latinLit/tarball/0.0.3045175573
 PerseusDL/canonical-greekLit:
-  ref: 0.0.3199857488
-  sha: a8c4a98eabe8b419a709ded884f2642167700c1b
-  tarball_url: https://api.github.com/repos/PerseusDL/canonical-greekLit/tarball/0.0.3199857488
+  ref: 0.0.3252199997
+  sha: 91ea4c3292d1355a2517a1e7dbfbf0c78e41ead8
+  tarball_url: https://api.github.com/repos/PerseusDL/canonical-greekLit/tarball/0.0.3252199997
 OpenGreekAndLatin/csel-dev:
-  ref: 0.0.3206375951
-  sha: 6ba44946d1818600f20a1d1f9768b2ff52b7f5d1
-  tarball_url: https://api.github.com/repos/OpenGreekAndLatin/csel-dev/tarball/0.0.3206375951
+  ref: 0.0.3314407196
+  sha: 0301978dc9c3ea8090e945809d37d52c3631d08d
+  tarball_url: https://api.github.com/repos/OpenGreekAndLatin/csel-dev/tarball/0.0.3314407196
 PerseusDL/canonical-farsiLit:
   ref: 0.0.11
   sha: 1ce632ece8a2af0646195a0531f5e8f39b161f72
