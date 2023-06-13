@@ -10,7 +10,7 @@ PerseusDL/canonical-latinLit:
 PerseusDL/canonical-greekLit:
   ref: 0.0.5217465242
   sha: 9a2a647c9948e2f3ceb85b8c18111c19485e7eca
-  tarball_url: https://api.github.com/jacobwegner/canonical-greekLit/tarball/805e0a3b1b19c86c669d62379400adc1c8516208
+  tarball_url: https://api.github.com/repos/jacobwegner/canonical-greekLit/tarball/805e0a3b1b19c86c669d62379400adc1c8516208
 OpenGreekAndLatin/csel-dev:
   ref: 0.0.3678995538
   sha: 3f8969d102e18621edd165d5edaa72891477e74f
