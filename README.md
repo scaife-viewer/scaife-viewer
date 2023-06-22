@@ -4,6 +4,116 @@ The new reading environment for version 5.0 of the Perseus Digital Library.
 
 This repository is part of the [Scaife Viewer](https://scaife-viewer.org) project, an open-source ecosystem for building rich online reading environments.
 
+## Getting Started with Codespaces Development
+
+This project can be developed via [GitHub Codespaces](https://github.com/features/codespaces).
+
+### Setting up the Codespace
+- Browse to https://github.com/scaife-viewer/scaife-viewer
+- (Optionally) fork the repo; if you're a part of the Scaife  Viewer development team, you can work from `scaife-viewer/scaife-viewer`
+- Create a codespace from the green "Code" button:
+  ![image-20230622050539589](https://f000.backblazeb2.com/file/typora-images-23-06-14/uPic/image-20230622050539589.png)
+- Configure options to:
+  - Choose the closest data center to your geographical location
+  - Start the codespace from the `feature/content-update-pipeline` branch
+  ![image-20230622050632620](https://f000.backblazeb2.com/file/typora-images-23-06-14/uPic/image-20230622050632620.png)
+
+### Install and build the frontend
+- Install and activate Node 12:
+```shell
+nvm use 12
+```
+- Install dependencies:
+```shell
+npm i
+```
+- Rebuild the `node-sass` dependency:
+```shell
+npm rebuild node-sass
+```
+- Build the frontend:
+```shell
+npm run build
+```
+
+
+### Start up PostgreSQL and ElasticSearch
+_Note_: These may be made optional in the future
+Build and start up services via:
+```shell
+docker-compose -f deploy/docker-compose.yml up -d sv-elasticsearch sv-postgres
+```
+### Prepare the backend
+- Create a virtual environment and activate it:
+```shell
+python3 -m venv .venv
+source .venv/bin/activate
+```
+- Install dependencies:
+```shell
+pip install pip wheel --upgrade
+pip install -r requirements.txt
+pip install PyGithub
+```
+- Populate the database schema and load site fixture:
+```shell
+./manage.py migrate
+./manage.py loaddata sites
+```
+- Set required environment variables:
+```shell
+export CTS_RESOLVER=local \
+    CTS_LOCAL_DATA_PATH=data/cts \
+    CONTENT_MANIFEST_PATH=data/content-manifests/test.yaml \
+    DATABASE_URL=postgres://scaife:scaife@127.0.0.1:5432/scaife
+```
+- Fetch content from `content-manifests/test.yaml`:
+```shell
+mkdir -p $CTS_LOCAL_DATA_PATH
+./manage.py load_text_repos
+./manage.py slim_text_repos
+```
+- Ingest the data and pre-populate CTS cache:
+```shell
+mkdir -p atlas_data
+./manage.py prepare_atlas_db
+```
+
+### Seed the search index
+We'll ingest a portion of the data into ElasticSearch
+
+- Fetch the ElasticSearch template:
+```shell
+curl -O https://gist.githubusercontent.com/jacobwegner/68e538edf66539feb25786cc3c9cc6c6/raw/3d17cde6a72d4526aa15fe79a07265c6638dd71c/scaife-viewer-tmp.json
+```
+- Install the template:
+```shell
+curl -X PUT "localhost:9200/_template/scaife-viewer?pretty" -H 'Content-Type: application/json' -d "$(cat scaife-viewer-tmp.json)"
+```
+- Index content:
+```shell
+python manage.py indexer --max-workers=1 --limit=1000
+```
+
+
+### Run the dev server
+```shell
+ ./manage.py runserver
+```
+
+Codespaces should show a notification that a port has been mapped:
+![image-20230622052553784](https://f000.backblazeb2.com/file/typora-images-23-06-14/uPic/image-20230622052553784.png)
+- Click "Open in Browser" to load the dev server.
+- Click on "try the Iliad" to load the reader:
+  ![image-20230622054959080](https://f000.backblazeb2.com/file/typora-images-23-06-14/uPic/image-20230622054959080.png)
+
+### Ongoing development
+_TODO_: Flesh this out more
+- Start the codespace
+- Activate the virtual environment
+- Set enviornment variables
+- Run the dev serverr
+
 ## Getting Started with Local Development
 
 Requirements:
