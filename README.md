@@ -41,6 +41,7 @@ npm run build
 _Note_: These may be made optional in the future
 Build and start up services via:
 ```shell
+touch deploy/.env
 docker-compose -f deploy/docker-compose.yml up -d sv-elasticsearch sv-postgres
 ```
 ### Prepare the backend
@@ -55,11 +56,6 @@ pip install pip wheel --upgrade
 pip install -r requirements.txt
 pip install PyGithub
 ```
-- Populate the database schema and load site fixture:
-```shell
-./manage.py migrate
-./manage.py loaddata sites
-```
 - Set required environment variables:
 ```shell
 export CTS_RESOLVER=local \
@@ -67,6 +63,17 @@ export CTS_RESOLVER=local \
     CONTENT_MANIFEST_PATH=data/content-manifests/test.yaml \
     DATABASE_URL=postgres://scaife:scaife@127.0.0.1:5432/scaife
 ```
+
+- Populate the database schema and load site fixture:
+```shell
+./manage.py migrate
+./manage.py loaddata sites
+```
+- Copy the static assets
+```shell
+./manage.py collectstatic --noinput
+```
+
 - Fetch content from `content-manifests/test.yaml`:
 ```shell
 mkdir -p $CTS_LOCAL_DATA_PATH
@@ -76,7 +83,7 @@ mkdir -p $CTS_LOCAL_DATA_PATH
 - Ingest the data and pre-populate CTS cache:
 ```shell
 mkdir -p atlas_data
-./manage.py prepare_atlas_db
+./manage.py prepare_atlas_db --force
 ```
 
 ### Seed the search index
@@ -94,7 +101,10 @@ curl -X PUT "localhost:9200/_template/scaife-viewer?pretty" -H 'Content-Type: ap
 ```shell
 python manage.py indexer --max-workers=1 --limit=1000
 ```
-
+- Cleanup the search index template:
+```shell
+rm scaife-viewer-tmp.json
+```
 
 ### Run the dev server
 ```shell
@@ -107,15 +117,49 @@ Codespaces should show a notification that a port has been mapped:
 - Click on "try the Iliad" to load the reader:
   ![image-20230622054959080](https://f000.backblazeb2.com/file/typora-images-23-06-14/uPic/image-20230622054959080.png)
 
+The Codespace has now been set up!  Close it by opening the "Codespaces" menu (`F1`) and then selecting
+`Codespaces: Stop Current Codespace`.
+
+### Rename the Codepsace
+- Browse to https://github.com/codespaces and find the codespace:
+  ![image-20230622165419317](https://f000.backblazeb2.com/file/typora-images-23-06-14/uPic/image-20230622165419317.png)
+- Select the "..." menu and then "Rename":
+  ![image-20230622165552978](https://f000.backblazeb2.com/file/typora-images-23-06-14/uPic/image-20230622165552978.png)
+- Give the Codespace a meaningful name (e.g. Scaife Viewer / Perseus dev):
+  ![image-20230622165414325](https://f000.backblazeb2.com/file/typora-images-23-06-14/uPic/image-20230622165414325.png)
+
+
 ### Ongoing development
-_TODO_: Flesh this out more
-- Start the codespace
-- Activate the virtual environment
-- Set enviornment variables
-- Run the dev serverr
+- Browse to https://github.com/codespaces and find the codespace
+- Select the "..." menu and then "Open in..." and select "Open in browser" or another of the available options.
+  ![image-20230622165503906](https://f000.backblazeb2.com/file/typora-images-23-06-14/uPic/image-20230622165503906.png)
+- After the Codespace launches, open a new terminal and reactivate the Python virtual environment:
+```shell
+source .venv/bin/activate
+```
+- Populate required envionment variables:
+```shell
+export CTS_RESOLVER=local \
+    CTS_LOCAL_DATA_PATH=data/cts \
+    CONTENT_MANIFEST_PATH=data/content-manifests/test.yaml \
+    DATABASE_URL=postgres://scaife:scaife@127.0.0.1:5432/scaife
+```
+- Start up PostgreSQL and ElasticSearch:
+```shell
+docker-compose -f deploy/docker-compose.yml up -d sv-elasticsearch sv-postgres
+# Optionally wait 10 seconds for Postgres to finish starting
+sleep 10
+```
+- Run the dev server:
+```shell
+ ./manage.py runserver
+```
+Codespaces should show a notification that a port has been mapped:
+![image-20230622052553784](https://f000.backblazeb2.com/file/typora-images-23-06-14/uPic/image-20230622052553784.png)
+- Click "Open in Browser" to load the dev server.
 
 ## Getting Started with Local Development
-
+<!-- TODO: Update this section of the docs; Codespaces documentation is more up to date. -->
 Requirements:
 
 * Python 3.6.x
