@@ -18,6 +18,12 @@ jobs:
       uses: 'google-github-actions/auth@v0.4.4'
       with:
         # added via the sv-github-actions-sa Service Account
+        # NOTE: The following IAM roles are required
+        # - Artifact Registry Writer (not yet required, will be once we retire gcr.io)
+        # - Cloud Run Admin
+        # - Service Account Token Creator
+        # - Storage Admin
+        # - Service Account User
         credentials_json: '${{ secrets.GCP_SA_KEY }}'
         token_format: 'access_token'
     - name: Login to GitHub and GCR container registries
@@ -31,13 +37,12 @@ jobs:
         docker push gcr.io/${{ github.repository }}/indexer:${{ github.event.inputs.imageTag }}
     - name: 'Set up Cloud SDK'
       uses: 'google-github-actions/setup-gcloud@v1'
+    # TODO: Make ELASTICSEARCH_INDEX_NAME an output value to trigger a downstream deployment job
     - name: Configure and run reindexing job
       run: |
         export ELASTICSEARCH_INDEX_NAME="scaife-viewer-$(date +%s)"
         echo $ELASTICSEARCH_INDEX_NAME
 
-        gcloud components install beta --quiet
+        gcloud --project=scaife-viewer run jobs --region=us-east4 update scaife-viewer-update-search-index-dev --image=gcr.io/scaife-viewer/scaife-viewer/indexer:${{ github.event.inputs.imageTag }} --args="--chunk-size=500,--index-name=${ELASTICSEARCH_INDEX_NAME}"
 
-        gcloud --project=scaife-viewer beta run jobs --region=us-east4 update scaife-viewer-update-search-index-dev --image=gcr.io/scaife-viewer/scaife-viewer/indexer:${{ github.event.inputs.imageTag }} --args="--chunk-size=500,--index-name=${ELASTICSEARCH_INDEX_NAME}"
-
-        gcloud beta run jobs --region=us-east4 execute scaife-viewer-update-search-index-dev --async
+        gcloud --project=scaife-viewer run jobs --region=us-east4 execute scaife-viewer-update-search-index-dev --async
