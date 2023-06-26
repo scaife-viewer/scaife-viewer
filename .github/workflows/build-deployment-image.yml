@@ -25,13 +25,13 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build deployment image
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4
         with:
           context: ./
           file: deploy/webapp/webapp-deploy.dockerfile
           tags:
             ghcr.io/${{ github.repository }}/webapp-deploy:latest
-          build-args:
+          build-args: |
             WEBAPP_DOCKER_IMAGE=ghcr.io/${{ github.repository }}/webapp-base:latest
             ARTIFACTS_DOCKER_IMAGE=ghcr.io/${{ github.repository }}/artifacts:latest
             GITHUB_ACCESS_TOKEN=${{ secrets.GITHUB_TOKEN }}
