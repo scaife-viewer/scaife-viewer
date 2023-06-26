@@ -350,3 +350,7 @@ specified by `settings.CTS_LOCAL_DATA_PATH`.
 
 For Heroku deployments, this is currently accomplished by preparing a tarball made available via
 `$CTS_TARBALL_URL` and downloading and uncompressing the tarball using `bin/fetch_cts_tarball.sh`.
+
+## Build / Deploy Pipeline
+
+The production instance of the application is built using [GitHub Actions](https://github.com/features/actions)
