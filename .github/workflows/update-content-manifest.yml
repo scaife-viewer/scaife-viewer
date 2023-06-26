@@ -1,0 +1,29 @@
+name: Update content manifest
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update-content-manifest:
+    name: Update the content manifest and push a commit to a new branch
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    # TODO: Simplify via webapp-base docker image
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    - run: pip install pip wheel --upgrade
+    - name: Install scaife-cli and dependencies
+      run: pip install "scaife-viewer-core @https://github.com/scaife-viewer/backend/archive/10e66fc47f36a308f8cdcd1a2c84344ae2cdd23e.zip#subdirectory=core" PyGithub
+    - name: Update content manifest
+      run: scaife update-manifest --github-access-token=$GITHUB_TOKEN
+    # TODO: Commit to a new branch and open a PR
+    - name: Commit and push
+      run: |
+        git config user.name 'github-actions[bot]'
+        git config user.email 'github-actions[bot]@users.noreply.github.com'
+        git add data/content-manifests/production.yaml
+        git commit -m "Update corpora SHAs"
+        git push
