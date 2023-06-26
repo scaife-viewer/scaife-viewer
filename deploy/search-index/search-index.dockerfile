@@ -1,5 +1,5 @@
-ARG WEBAPP_DOCKER_IMAGE="docker.io/scaife-viewer/scaife-viewer/webapp-deploy:latest"
-FROM $WEBAPP_DOCKER_IMAGE as data-prep
+ARG WEBAPP_DEPLOY_DOCKER_IMAGE="docker.io/scaife-viewer/scaife-viewer/webapp-deploy:latest"
+FROM $WEBAPP_DEPLOY_DOCKER_IMAGE as data-prep
 
 ARG ANNOTATIONS_TARBALL="https://github.com/scaife-viewer/ogl-pdl-annotations/tarball/main"
 RUN mkdir -p /opt/scaife-viewer/src/data/search-annotations

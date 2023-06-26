@@ -33,5 +33,5 @@ jobs:
           tags:
             ghcr.io/${{ github.repository }}/indexer:latest
           build-args: |
-            WEBAPP_DOCKER_IMAGE=ghcr.io/${{ github.repository }}/webapp-base:latest
+            WEBAPP_DEPLOY_DOCKER_IMAGE=ghcr.io/${{ github.repository }}/webapp-deploy:latest
           push: true
