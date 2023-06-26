@@ -37,12 +37,15 @@ jobs:
         docker push gcr.io/${{ github.repository }}/indexer:${{ github.event.inputs.imageTag }}
     - name: 'Set up Cloud SDK'
       uses: 'google-github-actions/setup-gcloud@v1'
+    - name: Set ELASTICSEARCH_INDEX_NAME
+      run: |
+        echo ELASTICSEARCH_INDEX_NAME="scaife-viewer-$(date +%s)" >> "$GITHUB_ENV"
     # TODO: Make ELASTICSEARCH_INDEX_NAME an output value to trigger a downstream deployment job
     - name: Configure and run reindexing job
       run: |
-        export ELASTICSEARCH_INDEX_NAME="scaife-viewer-$(date +%s)"
-        echo $ELASTICSEARCH_INDEX_NAME
-
-        gcloud --project=scaife-viewer run jobs --region=us-east4 update scaife-viewer-update-search-index-dev --image=gcr.io/scaife-viewer/scaife-viewer/indexer:${{ github.event.inputs.imageTag }} --args="--chunk-size=500,--index-name=${ELASTICSEARCH_INDEX_NAME}"
+        gcloud --project=scaife-viewer run jobs --region=us-east4 update scaife-viewer-update-search-index-dev --image=gcr.io/scaife-viewer/scaife-viewer/indexer:${{ github.event.inputs.imageTag }} --args="--chunk-size=500,--index-name=${{ env.ELASTICSEARCH_INDEX_NAME }}"
 
         gcloud --project=scaife-viewer run jobs --region=us-east4 execute scaife-viewer-update-search-index-dev --async
+    - name: Echo $ELASTICSEARCH_INDEX_NAME
+      run: |
+        echo "${{ env.ELASTICSEARCH_INDEX_NAME }}"
