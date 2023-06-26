@@ -36,11 +36,6 @@ jobs:
         export ELASTICSEARCH_INDEX_NAME="scaife-viewer-$(date +%s)"
         echo $ELASTICSEARCH_INDEX_NAME
 
-        gcloud --project=scaife-viewer beta run jobs --region=us-east4 update \
-            scaife-viewer-update-search-index-dev \
-            --image=gcr.io/scaife-viewer/scaife-viewer/indexer:${{ github.event.inputs.imageTag }} \
-            --args="--chunk-size=500,--index-name=${ELASTICSEARCH_INDEX_NAME}"
+        gcloud --project=scaife-viewer beta run jobs --region=us-east4 update scaife-viewer-update-search-index-dev --image=gcr.io/scaife-viewer/scaife-viewer/indexer:${{ github.event.inputs.imageTag }} --args="--chunk-size=500,--index-name=${ELASTICSEARCH_INDEX_NAME}"
 
-        gcloud beta run jobs --region=us-east4 execute \
-            scaife-viewer-update-search-index-dev \
-            --async
+        gcloud beta run jobs --region=us-east4 execute scaife-viewer-update-search-index-dev --async
