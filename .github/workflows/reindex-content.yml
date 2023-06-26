@@ -28,7 +28,5 @@ jobs:
       run: |
         gcr.io/scaife-viewer/scaife-viewer/indexer:${DOCKER_IMAGE_TAG:-latest}
         docker pull ghcr.io/${{ github.repository }}/indexer:${{ github.event.inputs.imageTag }}
-        docker tag \
-          ghcr.io/${{ github.repository }}/indexer:${{ github.event.inputs.imageTag }} \
-          gcr.io/${{ github.repository }}/indexer:${{ github.event.inputs.imageTag }}
+        docker tag ghcr.io/${{ github.repository }}/indexer:${{ github.event.inputs.imageTag }} gcr.io/${{ github.repository }}/indexer:${{ github.event.inputs.imageTag }}
         docker push gcr.io/${{ github.repository }}/indexer:${{ github.event.inputs.imageTag }}
