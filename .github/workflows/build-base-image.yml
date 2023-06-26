@@ -33,3 +33,4 @@ jobs:
           file: deploy/webapp/webapp-base.dockerfile
           tags:
             ghcr.io/${{ github.repository }}/webapp-base:latest
+          push: true
