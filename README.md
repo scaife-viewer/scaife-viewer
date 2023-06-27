@@ -59,6 +59,8 @@ You can run the Vue unit tests, via:
 
     npm run unit
 
+Cross-browser testing is provided by BrowserStack through their [open source program](](https://www.browserstack.com/open-source)).  
+
 ## Translations
 
 Before you work with translations, you will need gettext installed.
