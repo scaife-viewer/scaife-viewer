@@ -27,7 +27,15 @@ jobs:
       run: scaife update-manifest --github-access-token=$GITHUB_TOKEN
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Check for changes to content manifest
+      id: manifest_has_changes
+      run: |
+        git diff --quiet data/content-manifests/
+    # NOTE: manifest_has_changes returns a non-zero code if there are changes
+    # commit_and_push will only run if the previous step fails (e.g., there are changes)
     - name: Commit and push new branch
+      id: commit_and_push
+      if: ${{ steps.manifest_has_changes.conclusion == 'failure'  }}
       run: |
         git config user.name 'github-actions[bot]'
         git config user.email 'github-actions[bot]@users.noreply.github.com'
@@ -36,7 +44,10 @@ jobs:
         git push
     # NOTE: Requires change at https://github.com/scaife-viewer/scaife-viewer/settings/actions
     # [√] Allow GitHub Actions to create and approve pull requests
+    # NOTE: Only runs when changes have been pushed
     - name: Create pull request
+      id: create-pr
+      if: ${{ steps.commit_and_push.conclusion == 'success'  }}
       run: gh pr create --fill
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
