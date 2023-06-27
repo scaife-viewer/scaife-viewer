@@ -51,3 +51,7 @@ jobs:
       run: gh pr create --fill
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Report if no changes were detected
+      id: no-changes-detected
+      if: ${{ steps.manifest_has_changes.conclusion == 'failure'  }}
+      run: echo 'No changes detected'
