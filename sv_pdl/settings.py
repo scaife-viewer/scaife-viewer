@@ -10,7 +10,8 @@ BASE_DIR = PACKAGE_ROOT
 
 DEBUG = bool(int(os.environ.get("DEBUG", "1")))
 TRACING_ENABLED = bool(int(os.environ.get("TRACING_ENABLED", not DEBUG)))
-LIBRARY_VIEW_API_VERSION = int(os.environ.get("LIBRARY_VIEW_API_VERSION", 0))
+# FIXME: Deprecate or make this dynamic
+LIBRARY_VIEW_API_VERSION = int(os.environ.get("LIBRARY_VIEW_API_VERSION", 10))
 
 DATABASES = {
     "default": dj_database_url.config(default="postgres://localhost/scaife-viewer")
@@ -322,24 +323,17 @@ CACHES = {
 
 CTS_RESOLVER_CACHE_LOCATION = os.environ.get("CTS_RESOLVER_CACHE_LOCATION", "cts_resolver_cache")
 SCAIFE_VIEWER_CORE_RESOLVER_CACHE_LABEL = "cts-resolver"
-if DEBUG:
-    CTS_RESOLVER_CACHE_KWARGS = {
-        "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
-        "LOCATION": CTS_RESOLVER_CACHE_LOCATION,
-    }
-else:
-    # NOTE: This cache is disabled in production, since
-    # the CTS data is loaded on boot from CTS_API_ENDPOINT
-    CTS_RESOLVER_CACHE_KWARGS = {
-        "BACKEND": "django.core.cache.backends.dummy.DummyCache",
-    }
+CTS_RESOLVER_CACHE_KWARGS = {
+    "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+    "LOCATION": CTS_RESOLVER_CACHE_LOCATION,
+}
 CACHES.update({
     SCAIFE_VIEWER_CORE_RESOLVER_CACHE_LABEL: CTS_RESOLVER_CACHE_KWARGS,
 })
 
 XSL_STYLESHEET_PATH = os.environ.get("XSL_STYLESHEET_PATH", os.path.join(PACKAGE_ROOT, "tei.xsl"))
 
-resolver = os.environ.get("CTS_RESOLVER", "api")
+resolver = os.environ.get("CTS_RESOLVER", "local")
 if resolver == "api":
     CTS_API_ENDPOINT = os.environ.get("CTS_API_ENDPOINT", "https://scaife-cts-dev.perseus.org/api/cts")
     CTS_RESOLVER = {
@@ -350,7 +344,7 @@ if resolver == "api":
     }
     CTS_LOCAL_TEXT_INVENTORY = "ti.xml" if DEBUG else None
 elif resolver == "local":
-    CTS_LOCAL_DATA_PATH = os.environ["CTS_LOCAL_DATA_PATH"]
+    CTS_LOCAL_DATA_PATH = os.environ.get("CTS_LOCAL_DATA_PATH", "data/cts")
     CTS_RESOLVER = {
         "type": "local",
         "kwargs": {
@@ -408,6 +402,7 @@ SV_ATLAS_INGESTION_PIPELINE = [
     # TODO: Run bin/fetch_corpus_repo_metadata first
     "scaife_viewer.atlas.importers.repo_metadata.import_repo_metadata",
     "sv_pdl.atlas.importer_pipelines.extract_atlas_annotations",
+    "sv_pdl.atlas.importer_pipelines.prefer_source_repo_names",
     "scaife_viewer.atlas.importers.attributions.import_attributions",
 ]
 # ATLAS uses an isolated database with a custom router that ensures

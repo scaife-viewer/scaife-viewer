@@ -17,8 +17,8 @@ services:
   sv-postgres:
     container_name: sv-postgres
     image: postgres:9.6-alpine
-    expose:
-      - 5432
+    ports:
+      - 5432:5432
     environment:
       - POSTGRES_USER=scaife
       - POSTGRES_PASSWORD=scaife
@@ -27,12 +27,15 @@ services:
       - sv-postgres-data:/var/lib/postgresql/data
 
   sv-elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.4
+    build:
+      context: ../
+      dockerfile: Dockerfile-elasticsearch
     container_name: sv-elasticsearch
     environment:
       - cluster.name=docker-cluster
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - discovery.type=single-node
     ulimits:
       memlock:
         soft: -1

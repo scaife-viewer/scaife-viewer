@@ -37,13 +37,12 @@
 </template>
 
 <script>
-const baseURL = `${process.env.FORCE_SCRIPT_NAME}` || "";
-
 export default {
   name: "widget-passage-exports",
   methods: {
     getPassageUrl(passage, format) {
-      return `${baseURL}/library/passage/${passage.urn.toString()}/${format}/`;
+      const baseURL = this.$router.options.base;
+      return `${baseURL}library/passage/${passage.urn.toString()}/${format}/`;
     },
   },
   computed: {

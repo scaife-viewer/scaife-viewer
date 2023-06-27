@@ -5,6 +5,10 @@ from django.urls import include, path
 from django.contrib import admin
 
 from scaife_viewer.core.views import (
+    CorporaReposView,
+    CorpusMetadata,
+    CTSApiGetPassageView,
+    CTSApiGetValidReffView,
     LibraryCollectionVectorView,
     LibraryCollectionView,
     LibraryInfoView,
@@ -22,12 +26,16 @@ from .views import about, app, home, profile
 
 api_patterns = (
     [
+        path("corpora/corpus-metadata/", CorpusMetadata.as_view(), name="corpora_corpus_metadata"),
+        path("corpora/repos/", CorporaReposView.as_view(), name="corpora_repos"),
         path("library/json/", LibraryView.as_view(format="json"), name="library"),
         path("library/json/info", LibraryInfoView.as_view(), name="library_info"),
         path("library/vector/<str:urn>/", LibraryCollectionVectorView.as_view(), name="library_collection_vector"),
         path("library/passage/<str:urn>/json/", LibraryPassageView.as_view(format="json"), name="library_passage"),
         path("library/passage/<str:urn>/text/", LibraryPassageView.as_view(format="text"), name="library_passage_text"),
         path("library/passage/<str:urn>/xml/", LibraryPassageView.as_view(format="xml"), name="library_passage_xml"),
+        path("library/<str:urn>/cts-api-xml/reffs/", CTSApiGetValidReffView.as_view(), name="library_cts_api_get_valid_reff"),
+        path("library/<str:urn>/cts-api-xml/", CTSApiGetPassageView.as_view(), name="library_cts_api_xml"),
         path("library/<str:urn>/json/", LibraryCollectionView.as_view(format="json"), name="library_collection"),
         path("search/json/", search_json, name="search"),
         path("morpheus/", morpheus, name="morpheus"),

@@ -3,12 +3,14 @@ import json
 import os
 import subprocess
 import sys
-from urllib.parse import urlparse
+from pathlib import Path
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
-
 import requests
+import yaml
+
+from scaife_viewer.core.hooks import hookset
 
 
 class Command(BaseCommand):
@@ -19,16 +21,15 @@ class Command(BaseCommand):
         parser.add_argument(
             "--path",
             dest="path",
-            default="/var/lib/nautilus",
+            default=settings.CTS_LOCAL_DATA_PATH,
         )
 
     def handle(self, *args, **options):
         repos = load_repo_list()
-        root_dir = options["path"]
-        dest = os.path.join(root_dir, "data")
-        if not os.path.exists(dest):
+        dest = Path(options["path"])
+        if not dest.exists():
             print(f"Creating directory {dest}")
-            os.makedirs(dest)
+            dest.mkdir(parents=True, exist_ok=True)
         fs = {}
         with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
             for repo, data in repos.items():
@@ -42,10 +43,9 @@ class Command(BaseCommand):
 
 
 def load_repo_list():
-    parsed = urlparse(settings.CTS_API_ENDPOINT)
-    r = requests.get(f"{parsed.scheme}://{parsed.netloc}/repos")
-    r.raise_for_status()
-    return r.json()
+    # TODO: Make this env dependent
+    content_path = hookset.content_manifest_path
+    return yaml.safe_load(content_path.open())
 
 
 def write_repo_metadata(metadata_path, data):
@@ -63,7 +63,10 @@ def load_repo(repo, data, dest):
     resp.raise_for_status()
     r, w = os.pipe()
     os.makedirs(absolute_tarball_path, exist_ok=True)
-    proc = subprocess.Popen(["tar", "-zxf", "-", "-C", absolute_tarball_path, "--strip-components", "1"], stdin=r)
+    proc = subprocess.Popen(
+        ["tar", "-zxf", "-", "-C", absolute_tarball_path, "--strip-components", "1"],
+        stdin=r,
+    )
     os.close(r)
     for chunk in resp.iter_content(chunk_size=4092):
         if chunk:
@@ -71,6 +74,9 @@ def load_repo(repo, data, dest):
     os.close(w)
     proc.wait()
 
+    # TODO: Convert to YAML
     metadata_path = os.path.join(absolute_tarball_path, ".scaife-viewer.json")
+
+    data["repo"] = repo
     write_repo_metadata(metadata_path, data)
     return data

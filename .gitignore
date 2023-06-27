@@ -15,3 +15,7 @@ deploy/.env
 /.atlas-db-url
 /atlas_data
 /cts_resolver_cache
+/data/cts
+/sv_pdl/stats/library_stats.json
+.venv
+archive/

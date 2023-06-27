@@ -18,11 +18,9 @@ psycopg2-binary==2.8.6
 PyYAML==5.4.1
 raven==6.10.0
 requests==2.22.0
-# TODO: Resolve CircleCI build error with grpcio
-grpcio==1.41.1
 # @@@ atlas package is not yet released to pypi
 scaife-viewer-atlas @https://github.com/scaife-viewer/backend/archive/scaife-viewer-atlas@0.1a15.zip#subdirectory=atlas
 # @@@ core package is not yet released to pypi
-scaife-viewer-core @https://github.com/scaife-viewer/backend/archive/cab32f42098fdaa69728eb7bfa29a7ecd25aeab4.zip#subdirectory=core
+scaife-viewer-core @https://github.com/scaife-viewer/backend/archive/10e66fc47f36a308f8cdcd1a2c84344ae2cdd23e.zip#subdirectory=core
 six==1.12.0
 whitenoise==4.1.2

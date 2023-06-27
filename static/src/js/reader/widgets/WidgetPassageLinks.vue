@@ -3,14 +3,11 @@
     <span slot="header">CTS URN</span>
     <div slot="body">
       <template v-if="rightPassage">
-        <p v-if="ctsApiUrl"><span class="side">L</span> <tt><a :href="`${ctsApiUrl}?request=GetPassage&amp;urn=${leftPassage.urn}`">{{ leftPassage.urn.toString() }}</a></tt></p>
-        <p v-else><span class="side">L</span> <tt>{{ leftPassage.urn.toString() }}</tt></p>
-        <p v-if="ctsApiUrl"><span class="side">R</span> <tt><a :href="`${ctsApiUrl}?request=GetPassage&amp;urn=${rightPassage.urn}`">{{ rightPassage.urn.toString() }}</a></tt></p>
-        <p v-else><span class="side">R</span> <tt>{{ rightPassage.urn.toString() }}</tt></p>
+        <p><span class="side">L</span> <tt><a :href="getPassageUrl(leftPassage.urn)">{{ leftPassage.urn.toString() }}</a></tt></p>
+        <p><span class="side">R</span> <tt><a :href="getPassageUrl(rightPassage.urn)">{{ rightPassage.urn.toString() }}</a></tt></p>
       </template>
       <template v-else>
-        <p v-if="ctsApiUrl"><tt><a :href="`${ctsApiUrl}?request=GetPassage&amp;urn=${passage.urn}`">{{ passage.urn.toString() }}</a></tt></p>
-        <p v-else><tt>{{ passage.urn.toString() }}</tt></p>
+        <p><tt><a :href="getPassageUrl(passage.urn)">{{ passage.urn.toString() }}</a></tt></p>
       </template>
     </div>
   </base-widget>
@@ -18,11 +15,8 @@
 
 <script>
 export default {
-  name: 'widget-passage-links',
+  name: 'WidgetPassageLinks',
   computed: {
-    ctsApiUrl() {
-      return process.env.CTS_API_ENDPOINT
-    },
     passage() {
       return this.$store.getters['reader/passage'];
     },
@@ -31,6 +25,12 @@ export default {
     },
     rightPassage() {
       return this.$store.state.reader.rightPassage;
+    },
+  },
+  methods: {
+    getPassageUrl(urn) {
+      const baseURL = this.$router.options.base;
+      return `${baseURL}library/${urn}/cts-api-xml/`;
     },
   },
 };

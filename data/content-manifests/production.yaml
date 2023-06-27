@@ -1,0 +1,48 @@
+PerseusDL/canonical-latinLit:
+  ref: 0.0.5328305771
+  sha: 4493548c8e78a88e6e28459b2ed4490d533683fa
+  tarball_url: https://api.github.com/repos/PerseusDL/canonical-latinLit/tarball/0.0.5328305771
+PerseusDL/canonical-greekLit:
+  ref: 0.0.5350070018
+  sha: 593087513cb16dd02f0a7b8362519a3a0e2f29bc
+  tarball_url: https://api.github.com/repos/PerseusDL/canonical-greekLit/tarball/0.0.5350070018
+OpenGreekAndLatin/csel-dev:
+  ref: 0.0.3678995538
+  sha: 3f8969d102e18621edd165d5edaa72891477e74f
+  tarball_url: https://api.github.com/repos/OpenGreekAndLatin/csel-dev/tarball/0.0.3678995538
+PerseusDL/canonical-farsiLit:
+  ref: 0.0.11
+  sha: 1ce632ece8a2af0646195a0531f5e8f39b161f72
+  tarball_url: https://api.github.com/repos/PerseusDL/canonical-farsiLit/tarball/0.0.11
+PerseusDL/canonical-pdlpsci:
+  ref: v0.3.0
+  sha: 72f6ce7dc6e3b783a063baed4c1539302e3b9247
+  tarball_url: https://api.github.com/repos/PerseusDL/canonical-pdlpsci/tarball/v0.3.0
+OpenGreekAndLatin/First1KGreek:
+  ref: 1.1.5328298963
+  sha: 736ca20351a9c478829e150a47a95fae5a1e6992
+  tarball_url: https://api.github.com/repos/OpenGreekAndLatin/First1KGreek/tarball/1.1.5328298963
+OpenGreekAndLatin/Latin:
+  ref: v1.14.0
+  sha: 9a3e833b515adad490bdd11977eaf1a84d24b246
+  tarball_url: https://api.github.com/repos/OpenGreekAndLatin/Latin/tarball/v1.14.0
+lascivaroma/priapeia:
+  ref: 1.1.18
+  sha: 3dfc11fe1bbbe5f34c435e6cd56cc277cdacbe8f
+  tarball_url: https://api.github.com/repos/lascivaroma/priapeia/tarball/1.1.18
+hlapin/ancJewLitCTS:
+  ref: 0.1.50
+  sha: f3534557c6cae678bccbbf0d97ac2b2cdf71cc2e
+  tarball_url: https://api.github.com/repos/hlapin/ancJewLitCTS/tarball/0.1.50
+nevenjovanovic/sophocles-ajax-latinus:
+  ref: master
+  sha: aee7611f65a30b8fe17f1833154988c811e886b3
+  tarball_url: https://api.github.com/repos/nevenjovanovic/sophocles-ajax-latinus/tarball/aee7611f65a30b8fe17f1833154988c811e886b3
+jacobwegner/PDL:
+  ref: v0.0.2
+  sha: eca3d09f9516c85173bece362749d0cb40c261df
+  tarball_url: https://api.github.com/repos/jacobwegner/PDL/tarball/v0.0.2
+jacobwegner/Multepal-CTS:
+  ref: v0.0.1-rc4
+  sha: 976a340223666380ece66a936bdd58330b822e40
+  tarball_url: https://api.github.com/repos/jacobwegner/Multepal-CTS/tarball/v0.0.1-rc4
