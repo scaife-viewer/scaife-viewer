@@ -60,5 +60,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Report if no changes were detected
       id: no-changes-detected
-      if: ${{ steps.manifest_has_changes.conclusion == 'failure'  }}
+      if: ${{ steps.manifest_has_changes.conclusion == 'success'  }}
       run: echo 'No changes detected'
