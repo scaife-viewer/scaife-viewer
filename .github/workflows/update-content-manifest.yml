@@ -17,13 +17,24 @@ jobs:
     - run: pip install pip wheel --upgrade
     - name: Install scaife-cli and dependencies
       run: pip install "scaife-viewer-core @https://github.com/scaife-viewer/backend/archive/10e66fc47f36a308f8cdcd1a2c84344ae2cdd23e.zip#subdirectory=core" PyGithub
+    - name: Create content branch env var
+      run: |
+        echo "CONTENT_BRANCH=content-`date -I`" >> "$GITHUB_ENV"
+    - name: Checkout a new branch
+      run: |
+        git checkout -b ${{ env.CONTENT_BRANCH }}
     - name: Update content manifest
       run: scaife update-manifest --github-access-token=$GITHUB_TOKEN
-    # TODO: Commit to a new branch and open a PR
-    - name: Commit and push
+    - name: Commit and push new branch
       run: |
         git config user.name 'github-actions[bot]'
         git config user.email 'github-actions[bot]@users.noreply.github.com'
         git add data/content-manifests/production.yaml
-        git commit -m "Update corpora SHAs"
+        git commit -m "Update corpora SHAs ${{ env.CONTENT_BRANCH }}"
         git push
+    # NOTE: Requires change at https://github.com/scaife-viewer/scaife-viewer/settings/actions
+    # [√] Allow GitHub Actions to create and approve pull requests
+    - name: Create pull request
+      run: gh pr create --fill
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
