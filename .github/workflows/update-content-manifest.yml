@@ -2,6 +2,10 @@ name: Update content manifest
 
 on:
   workflow_dispatch:
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    # NOTE: See https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule
+    - cron:  '0 12 * * *'
 
 jobs:
   update-content-manifest:
@@ -33,6 +37,7 @@ jobs:
         git diff --quiet data/content-manifests/
     # NOTE: manifest_has_changes returns a non-zero code if there are changes
     # commit_and_push will only run if the previous step fails (e.g., there are changes)
+    # TODO: Prevent overlapping branches; e.g. 2023-06-27, 2023-06-28, etc
     - name: Commit and push new branch
       id: commit_and_push
       if: ${{ steps.manifest_has_changes.conclusion == 'failure'  }}
