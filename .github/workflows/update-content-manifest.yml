@@ -25,6 +25,8 @@ jobs:
         git checkout -b ${{ env.CONTENT_BRANCH }}
     - name: Update content manifest
       run: scaife update-manifest --github-access-token=$GITHUB_TOKEN
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Commit and push new branch
       run: |
         git config user.name 'github-actions[bot]'
