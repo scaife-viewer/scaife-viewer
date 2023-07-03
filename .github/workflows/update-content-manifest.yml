@@ -35,6 +35,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Check for changes to content manifest
       id: manifest_has_changes
+      continue-on-error: true
       run: |
         git diff --quiet data/content-manifests/
     # NOTE: manifest_has_changes returns a non-zero code if there are changes
