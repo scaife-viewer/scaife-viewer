@@ -49,7 +49,7 @@
     <div class="container">
 
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-8 offset-md-2">
           <h2>About the Scaife Viewer</h2>
           <p class="lead">
             The <b>Scaife Viewer</b> is a reading environment for pre-modern text
@@ -60,28 +60,11 @@
           <p class="more">
             <a href="{% url 'about' %}">read more</a>
           </p>
-        </div>
-        <div class="col-md-6">
-          <h2>Recent Changes</h2>
-
-          {% for entry in changelog %}
-
-          <h3>{{ entry.title }}</h3>
-
-          {{ entry.body|safe }}
-
-          <div class="ml-4">
-            <a href="{{ entry.release_url }}">
-            <small>
-              ({{ entry.release_tag }} release)
-            </small>
-            </a>
-          </div>
-          {% if not forloop.last %}
-          <hr />
+          {% if release %}
+          <small>
+            Latest release: <a target="_blank" href="{{ release.url }}">{{ release.title }}</a>
+          </small>
           {% endif %}
-
-          {% endfor %}
 
         </div>
       </div>
