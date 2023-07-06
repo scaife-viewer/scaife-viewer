@@ -354,3 +354,110 @@ For Heroku deployments, this is currently accomplished by preparing a tarball ma
 ## Build / Deploy Pipeline
 
 The production instance of the application is built using [GitHub Actions](https://github.com/features/actions)
+
+To deploy a new version, trigger the following GitHub Actions workflows:
+- [Update content manifest](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/update-content-manifest.yml): _(optional)_
+
+    This workflow [scheduled to run daily](https://github.com/scaife-viewer/scaife-viewer/blob/6d1b12b1e993b58d25507b8bb2ff6235f900f385/.github/workflows/update-content-manifest.yml#L5), and if a change is found, it will open a PR against the default GitHub branch (e.g. [#592](https://github.com/scaife-viewer/scaife-viewer/pull/592))
+  - Manually merge the PR into the branch (e.g. [a3f9ba6](https://github.com/scaife-viewer/scaife-viewer/commit/a3f9ba6c5b681e02d4f746d4b51519890aeeb1e9))
+- [Build artifacts image](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/build-artifacts-image.yml):
+
+    Fetches content as defined in [data/content-manifests/production.yaml](data/content-manifests/production.yaml) and removes non-essential files.
+- [Build base image](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/build-base-image.yml): _(optional)_
+
+    This workflow should be ran each time the source code / code dependencies are changed.
+
+    If there have been no changes to the code since the last deployment, the last built base image will be used when creating the deployment image.
+- [Build deployment image](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/build-deployment-image.yml):
+
+    Copies the content from the artifacts image onto the base image and ingests content into the CTS resolver and the ATLAS database.
+- [Deploy app image](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/deploy-image.yml):
+
+    Deploys the deployment image to Heroku.
+
+    After the deploy finishes, create a [new draft release](#github-releases)
+
+    Heroku app defaults to `scaife-perseus-org-dev`.
+
+- [Build search indexer image](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/build-search-image.yml):
+
+    Copies the lemmatization data from [scaife-viewer/ogl-pdl-annotations](https://github.com/scaife-viewer/ogl-pdl-annotations) onto the deployment image.
+
+    This image with code + data + lemmatization data is used to rebuild the search index.
+- [Reindex content](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/reindex-content.yml):
+
+    Use the search indexer image to run a reindex task (currently on Google Cloud Run).
+
+    The job output includes the new index as `ELASTICSEARCH_INDEX_NAME`.
+- [Promote search index](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/promote-index.yml):
+
+    Updates the search index on Heroku to the provided index name (from the "Reindex content" workflow above).
+
+    Heroku app defaults to `scaife-perseus-org-dev`.
+
+After verifying the changes on [scaife-dev.perseus.org](https://scaife-dev.perseus.org), re-run "Deploy app image" and "Promote search index" with:
+- Heroku app: `scaife-perseus-org`
+- Name of the latest search index: (`$ELASTICSEARCH_INDEX_NAME`) from the "Reindex content" workflow.
+
+## GitHub releases
+
+After deploying to scaife.perseus.org, manually create a new release:
+1. [Create a new release](https://github.com/scaife-viewer/scaife-viewer/releases/new)
+    - Tag: `YYYY-MM-DD-###`, e.g. `2023-07-06-001`
+    - Title: (repeat value from "Tag")
+    - Description:
+        - Code feature 1
+        - Code feature 2, etc
+        - Content changes since the last deployment (see sample below \*)
+
+    \* TODO: Add a workflow to generate the content changes diff.
+
+    It can be created manually via:
+
+    ```shell
+    python sv_pdl/stats/management/commands/diff_corpora_contents.py > diff.patch
+    cat diff.patch | pbcopy
+    ```
+
+    resulting in:
+
+    ```diff
+    --- old.json	2023-07-06 08:30:12
+    +++ new.json	2023-07-06 08:30:12
+    @@ -1527,10 +1527,10 @@
+        ]
+    },
+    {
+    -    "ref": "0.0.5350070018",
+    +    "ref": "0.0.5426028119",
+        "repo": "PerseusDL/canonical-greekLit",
+    -    "sha": "593087513cb16dd02f0a7b8362519a3a0e2f29bc",
+    -    "tarball_url": "https://api.github.com/repos/PerseusDL/canonical-greekLit/tarball/0.0.5350070018",
+    +    "sha": "701d7470d6bf9a11fb6e508ddd3270bf88748303",
+    +    "tarball_url": "https://api.github.com/repos/PerseusDL/canonical-greekLit/tarball/0.0.5426028119",
+        "texts": [
+        "urn:cts:greekLit:tlg0001.tlg001.perseus-grc2",
+        "urn:cts:greekLit:tlg0003.tlg001.opp-fre1",
+    \ No newline at end of file
+    ```
+-
+
+2. Save the release as a draft
+3. After verifying changes on [scaife-dev.perseus.org](https://scaife-dev.perseus.org) and promoting changes to [scaife.perseus.org](https://scaife.perseus.org), publish the draft
+4. Restart the Heroku app to pick up the new release: \*
+
+\* TODO: Add a workflow to restart the app.
+
+It will be restarted when "Promote search index" is ran (due to the updated environment variable):
+
+<img width="863" alt="image" src="https://github.com/scaife-viewer/scaife-viewer/assets/629062/5a546943-4155-4041-91f8-c8c4515bf55d">
+
+Or manually via:
+
+```shell
+heroku ps:restart --app=scaife.perseus.org
+```
+
+After the application restarts, refresh the homepage to verify the latest release is linked:
+
+<img width="752" alt="image" src="https://github.com/scaife-viewer/scaife-viewer/assets/629062/f905769f-49d1-405e-8f76-159aea468a0f">
