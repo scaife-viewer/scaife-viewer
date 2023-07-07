@@ -353,7 +353,7 @@ For Heroku deployments, this is currently accomplished by preparing a tarball ma
 
 ## Build / Deploy Pipeline
 
-The production instance of the application is built using [GitHub Actions](https://github.com/features/actions)
+The production instance of the application is built using [GitHub Actions](https://github.com/features/actions).
 
 To deploy a new version, trigger the following GitHub Actions workflows:
 - [Update content manifest](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/update-content-manifest.yml): _(optional)_
@@ -398,6 +398,8 @@ To deploy a new version, trigger the following GitHub Actions workflows:
 After verifying the changes on [scaife-dev.perseus.org](https://scaife-dev.perseus.org), re-run "Deploy app image" and "Promote search index" with:
 - Heroku app: `scaife-perseus-org`
 - Name of the latest search index: (`$ELASTICSEARCH_INDEX_NAME`) from the "Reindex content" workflow.
+
+Additional [maintenance tasks](#maintenance-tasks) are documented below.
 
 ## GitHub releases
 
@@ -461,3 +463,15 @@ heroku ps:restart --app=scaife.perseus.org
 After the application restarts, refresh the homepage to verify the latest release is linked:
 
 <img width="752" alt="image" src="https://github.com/scaife-viewer/scaife-viewer/assets/629062/f905769f-49d1-405e-8f76-159aea468a0f">
+
+## Maintenance Tasks
+
+The following GitHub Actions workflows are used to run maintenance tasks:
+
+- [Delete indices](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/delete-indices.yml):
+
+    This workflow should be ran after promoting the search index.
+
+    It will remove _all_ indices _except_ for the current active index (`$ELASTICSEARCH_INDEX_NAME` as configured for the `scaife-perseus-org` Heroku app).
+
+    This _could_ be a scheduled workflow, but was kept as a manual task in case there was a need to have multiple indices available (for testing on `scaife-perseus-org-dev`, etc.)

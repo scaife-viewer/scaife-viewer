@@ -1,0 +1,15 @@
+name: Delete indices
+
+on:
+  workflow_dispatch:
+
+jobs:
+  promote:
+      name: Delete indices
+      runs-on: ubuntu-latest
+      env:
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        HEROKU_APP: scaife-perseus-org
+      steps:
+        - name: Run cleanup_search_indices command
+          run: heroku run python manage.py cleanup_search_indices --force
