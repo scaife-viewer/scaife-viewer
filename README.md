@@ -410,39 +410,8 @@ After deploying to scaife.perseus.org, manually create a new release:
     - Description:
         - Code feature 1
         - Code feature 2, etc
-        - Content changes since the last deployment (see sample below \*)
-
-    \* TODO: Add a workflow to generate the content changes diff.
-
-    It can be created manually via:
-
-    ```shell
-    scaife diff-corpora-contents > diff.patch
-    cat diff.patch | pbcopy
-    ```
-
-    resulting in:
-
-    ```diff
-    --- old.json	2023-07-06 08:30:12
-    +++ new.json	2023-07-06 08:30:12
-    @@ -1527,10 +1527,10 @@
-        ]
-    },
-    {
-    -    "ref": "0.0.5350070018",
-    +    "ref": "0.0.5426028119",
-        "repo": "PerseusDL/canonical-greekLit",
-    -    "sha": "593087513cb16dd02f0a7b8362519a3a0e2f29bc",
-    -    "tarball_url": "https://api.github.com/repos/PerseusDL/canonical-greekLit/tarball/0.0.5350070018",
-    +    "sha": "701d7470d6bf9a11fb6e508ddd3270bf88748303",
-    +    "tarball_url": "https://api.github.com/repos/PerseusDL/canonical-greekLit/tarball/0.0.5426028119",
-        "texts": [
-        "urn:cts:greekLit:tlg0001.tlg001.perseus-grc2",
-        "urn:cts:greekLit:tlg0003.tlg001.opp-fre1",
-    \ No newline at end of file
-    ```
--
+        - Content changes since the last deployment
+        (To generate a diff, use the "Diff corpora contents" workflow documented below in ["Release Tasks"](#release-tasks))
 
 2. Save the release as a draft
 3. After verifying changes on [scaife-dev.perseus.org](https://scaife-dev.perseus.org) and promoting changes to [scaife.perseus.org](https://scaife.perseus.org), publish the draft
@@ -463,6 +432,43 @@ heroku ps:restart --app=scaife.perseus.org
 After the application restarts, refresh the homepage to verify the latest release is linked:
 
 <img width="752" alt="image" src="https://github.com/scaife-viewer/scaife-viewer/assets/629062/f905769f-49d1-405e-8f76-159aea468a0f">
+
+## Release Tasks
+
+- [Diff corpora contents](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/workflows/diff-corpora-contents.yml):
+
+    Diff two versions of the corpus-metadata manifest.
+
+    This workflow should be ran after deploying to `scaife-perseus-org-dev` and before deploying to `scaife-perseus-org`.
+
+    It uses the `scaife` CLI to create a diff:
+
+
+    ```shell
+    scaife diff-corpora-contents
+    ```
+
+    If the workflow is succesful, the diff will be included in the job summary:
+
+    ```diff
+    --- old.json	2023-07-06 08:30:12
+    +++ new.json	2023-07-06 08:30:12
+    @@ -1527,10 +1527,10 @@
+        ]
+    },
+    {
+    -    "ref": "0.0.5350070018",
+    +    "ref": "0.0.5426028119",
+        "repo": "PerseusDL/canonical-greekLit",
+    -    "sha": "593087513cb16dd02f0a7b8362519a3a0e2f29bc",
+    -    "tarball_url": "https://api.github.com/repos/PerseusDL/canonical-greekLit/tarball/0.0.5350070018",
+    +    "sha": "701d7470d6bf9a11fb6e508ddd3270bf88748303",
+    +    "tarball_url": "https://api.github.com/repos/PerseusDL/canonical-greekLit/tarball/0.0.5426028119",
+        "texts": [
+        "urn:cts:greekLit:tlg0001.tlg001.perseus-grc2",
+        "urn:cts:greekLit:tlg0003.tlg001.opp-fre1",
+    \ No newline at end of file
+    ```
 
 ## Maintenance Tasks
 
