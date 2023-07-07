@@ -2,11 +2,24 @@ name: Build deployment image
 
 on:
   workflow_dispatch:
+    inputs:
+      artifacts_image:
+        description: Artifacts Docker image (optional)
+        type: string
+        required: false
+      webapp_image:
+        description: Webapp Base Docker image (optional)
+        type: string
+        required: false
 
 jobs:
   build-images:
     name: Build deployment image and push image tags
     runs-on: ubuntu-latest
+    env:
+      DEFAULT_ARTIFACTS_IMAGE: ghcr.io/${{ github.repository }}/artifacts:latest
+      DEFAULT_WEBAPP_IMAGE: ghcr.io/${{ github.repository }}/webapp-base:latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -45,7 +58,7 @@ jobs:
           file: deploy/webapp/webapp-deploy.dockerfile
           tags: ${{ steps.autogen-docker-tags.outputs.tags }}
           build-args: |
-            WEBAPP_DOCKER_IMAGE=ghcr.io/${{ github.repository }}/webapp-base:latest
-            ARTIFACTS_DOCKER_IMAGE=ghcr.io/${{ github.repository }}/artifacts:latest
+            WEBAPP_DOCKER_IMAGE=${{ github.event.inputs.webapp_image || env.DEFAULT_WEBAPP_IMAGE }}
+            ARTIFACTS_DOCKER_IMAGE=${{ github.event.inputs.artifacts_image || env.DEFAULT_ARTIFACTS_IMAGE }}
             GITHUB_ACCESS_TOKEN=${{ secrets.GITHUB_TOKEN }}
           push: true

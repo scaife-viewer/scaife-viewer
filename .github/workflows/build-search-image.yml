@@ -2,11 +2,19 @@ name: Build search indexer image
 
 on:
   workflow_dispatch:
+    inputs:
+      deployment_image:
+        description: Deployment Docker image (optional)
+        type: string
+        required: false
 
 jobs:
   build-images:
     name: Build search indexer image and push image tags
     runs-on: ubuntu-latest
+    env:
+      DEFAULT_DEPLOYMENT_IMAGE: ghcr.io/${{ github.repository }}/webapp-deploy:latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -46,5 +54,5 @@ jobs:
           file: deploy/search-index/search-index.dockerfile
           tags: ${{ steps.autogen-docker-tags.outputs.tags }}
           build-args: |
-            WEBAPP_DEPLOY_DOCKER_IMAGE=ghcr.io/${{ github.repository }}/webapp-deploy:latest
+            WEBAPP_DEPLOY_DOCKER_IMAGE=${{ github.event.inputs.deployment_image || env.DEFAULT_DEPLOYMENT_IMAGE }}
           push: true
