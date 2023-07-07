@@ -24,6 +24,20 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Autogenerate webapp Docker image tags
+        id: autogen-docker-tags
+        uses: docker/metadata-action@v3
+        with:
+          # list of Docker images to use as base name for tags
+          images: ghcr.io/${{ github.repository }}/webapp-base
+          # generate Docker tags based on the following events/attributes
+          tags: |
+            type=sha
+            type=schedule
+            type=ref,event=branch
+            type=ref,event=pr
+            type=raw,value=latest,enable={{is_default_branch}}
+
       - name: Build base image
         uses: docker/build-push-action@v2
         with:
@@ -31,6 +45,5 @@ jobs:
           cache-to: type=gha,mode=max
           context: ./
           file: deploy/webapp/webapp-base.dockerfile
-          tags:
-            ghcr.io/${{ github.repository }}/webapp-base:latest
+          tags: ${{ steps.autogen-docker-tags.outputs.tags }}
           push: true
