@@ -417,7 +417,7 @@ After deploying to scaife.perseus.org, manually create a new release:
     It can be created manually via:
 
     ```shell
-    python sv_pdl/stats/management/commands/diff_corpora_contents.py > diff.patch
+    scaife diff-corpora-contents > diff.patch
     cat diff.patch | pbcopy
     ```
 
