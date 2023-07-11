@@ -48,7 +48,7 @@ jobs:
     # TODO: Make ELASTICSEARCH_INDEX_NAME an output value to trigger a downstream deployment job
     - name: Configure and run reindexing job
       run: |
-        gcloud --project=scaife-viewer run jobs --region=us-east4 update scaife-viewer-update-search-index-dev --image=${GCR_IMAGE}
+        gcloud --project=scaife-viewer run jobs --region=us-east4 update scaife-viewer-update-search-index-dev --image=${GCR_IMAGE} --args="--chunk-size=500,--index-name=${ELASTICSEARCH_INDEX_NAME}"
 
         gcloud --project=scaife-viewer run jobs --region=us-east4 execute scaife-viewer-update-search-index-dev --async
     - name: Echo $ELASTICSEARCH_INDEX_NAME
