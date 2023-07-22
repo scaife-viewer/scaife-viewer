@@ -31,7 +31,7 @@ jobs:
     - name: Pull changes from the named remote branch
       continue-on-error: true
       run: |
-        git pull origin gh-actions/update-content-manifest -ff
+        git pull origin gh-actions/update-content-manifest --ff-only
     - name: Update content manifest
       run: scaife update-manifest --github-access-token=$GITHUB_TOKEN
       env:
