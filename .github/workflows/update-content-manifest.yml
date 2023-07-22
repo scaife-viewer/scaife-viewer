@@ -28,10 +28,12 @@ jobs:
     - name: Fetch branches
       run: git fetch
     - name: Checkout the existing content branch
+      id: checkout_existing_branch
       continue-on-error: true
       run: |
         git switch -c g${{ env.CONTENT_BRANCH }} --track origin/${{ env.CONTENT_BRANCH }}
     - name: Checkout the non-existent content branch
+      if: ${{ steps.checkout_existing_branch.outcome == 'failure'  }}
       run: |
         git switch -c g${{ env.CONTENT_BRANCH }}
     - name: Update content manifest
