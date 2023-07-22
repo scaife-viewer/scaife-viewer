@@ -14,7 +14,7 @@ jobs:
     name: Update the content manifest and push a commit to a new branch
     runs-on: ubuntu-latest
     env:
-      CONTENT_BRANCH: gh-actions/update-content-manifest-test
+      CONTENT_BRANCH: gh-actions/update-content-manifest
 
     steps:
     - uses: actions/checkout@v3
