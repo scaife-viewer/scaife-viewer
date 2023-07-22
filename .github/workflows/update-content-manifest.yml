@@ -27,11 +27,7 @@ jobs:
       run: pip install "scaife-viewer-core @https://github.com/scaife-viewer/backend/archive/10e66fc47f36a308f8cdcd1a2c84344ae2cdd23e.zip#subdirectory=core" PyGithub
     - name: Checkout the content branch
       run: |
-        git checkout -B ${{ env.CONTENT_BRANCH }}
-    - name: Pull changes from the named remote branch
-      continue-on-error: true
-      run: |
-        git pull origin gh-actions/update-content-manifest --ff-only
+        git switch -c ${{ env.CONTENT_BRANCH }} --track origin/${{ env.CONTENT_BRANCH }}
     - name: Update content manifest
       run: scaife update-manifest --github-access-token=$GITHUB_TOKEN
       env:
