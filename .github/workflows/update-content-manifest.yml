@@ -53,7 +53,7 @@ jobs:
         git config user.email 'github-actions[bot]@users.noreply.github.com'
         git add data/content-manifests/production.yaml
         git commit -m "Update corpora SHAs `date -I`"
-        git push origin ${{ env.CONTENT_BRANCH }}
+        git push origin HEAD
     # NOTE: Requires change at https://github.com/scaife-viewer/scaife-viewer/settings/actions
     # [√] Allow GitHub Actions to create and approve pull requests
     # NOTE: Only runs when changes have been pushed
