@@ -25,9 +25,6 @@ jobs:
     - run: pip install pip wheel --upgrade
     - name: Install scaife-cli and dependencies
       run: pip install "scaife-viewer-core @https://github.com/scaife-viewer/backend/archive/10e66fc47f36a308f8cdcd1a2c84344ae2cdd23e.zip#subdirectory=core" PyGithub
-    - name: Create content branch env var
-      run: |
-        echo "CONTENT_BRANCH=content-`date -I`" >> "$GITHUB_ENV"
     - name: Checkout a new branch
       run: |
         git checkout -B ${{ env.CONTENT_BRANCH }}
@@ -42,7 +39,6 @@ jobs:
         git diff --quiet data/content-manifests/
     # NOTE: manifest_has_changes returns a non-zero code if there are changes
     # commit_and_push will only run if the previous step fails (e.g., there are changes)
-    # TODO: Prevent overlapping branches; e.g. 2023-06-27, 2023-06-28, etc
     - name: Commit and push new branch
       id: commit_and_push
       if: ${{ steps.manifest_has_changes.outcome == 'failure'  }}
