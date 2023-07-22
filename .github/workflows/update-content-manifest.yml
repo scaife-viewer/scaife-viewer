@@ -13,6 +13,8 @@ jobs:
   update-content-manifest:
     name: Update the content manifest and push a commit to a new branch
     runs-on: ubuntu-latest
+    env:
+      CONTENT_BRANCH: gh-actions/update-content-manifest
 
     steps:
     - uses: actions/checkout@v3
@@ -28,7 +30,7 @@ jobs:
         echo "CONTENT_BRANCH=content-`date -I`" >> "$GITHUB_ENV"
     - name: Checkout a new branch
       run: |
-        git checkout -b ${{ env.CONTENT_BRANCH }}
+        git checkout -B ${{ env.CONTENT_BRANCH }}
     - name: Update content manifest
       run: scaife update-manifest --github-access-token=$GITHUB_TOKEN
       env:
@@ -48,7 +50,7 @@ jobs:
         git config user.name 'github-actions[bot]'
         git config user.email 'github-actions[bot]@users.noreply.github.com'
         git add data/content-manifests/production.yaml
-        git commit -m "Update corpora SHAs ${{ env.CONTENT_BRANCH }}"
+        git commit -m "Update corpora SHAs `date -I`"
         git push --set-upstream origin ${{ env.CONTENT_BRANCH }}
     # NOTE: Requires change at https://github.com/scaife-viewer/scaife-viewer/settings/actions
     # [√] Allow GitHub Actions to create and approve pull requests
