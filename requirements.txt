@@ -21,6 +21,6 @@ requests==2.22.0
 # @@@ atlas package is not yet released to pypi
 scaife-viewer-atlas @https://github.com/scaife-viewer/backend/archive/scaife-viewer-atlas@0.1a15.zip#subdirectory=atlas
 # @@@ core package is not yet released to pypi
-scaife-viewer-core @https://github.com/scaife-viewer/backend/archive/8ca4c2e2328a7deaeb41fa3f388943d1a4c24328.zip#subdirectory=core
+scaife-viewer-core @https://github.com/scaife-viewer/backend/archive/e2915ad35f190c8c42bdb6475c2299abc3082668.zip#subdirectory=core
 six==1.12.0
 whitenoise==4.1.2
