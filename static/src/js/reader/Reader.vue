@@ -13,6 +13,7 @@
     <template v-else>
       <skeleton>
         <template slot="left">
+          <widget-toc />
           <widget-passage-ancestors />
           <widget-passage-children />
           <widget-passage-reference />
@@ -141,6 +142,7 @@ import WidgetWordList from './widgets/WidgetWordList.vue';
 import WidgetTokenList from './widgets/WidgetTokenList.vue';
 import WidgetNewAlexandriaCommentary from './widgets/WidgetNewAlexandriaCommentary.vue';
 import WidgetTextWidth from './widgets/WidgetTextWidth.vue';
+import WidgetToc from './widgets/WidgetToc.vue';
 
 const widgets = {
   WidgetPassageAncestors,
@@ -159,6 +161,7 @@ const widgets = {
   WidgetTokenList,
   WidgetTextWidth,
   'widget-new-alexandria-commentary': WidgetNewAlexandriaCommentary,
+  WidgetToc,
 };
 
 export default {

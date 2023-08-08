@@ -26,4 +26,7 @@ export default {
     });
     return words;
   },
+  textToc(state) {
+    return state.leftText.metadata.toc;
+  }
 };
