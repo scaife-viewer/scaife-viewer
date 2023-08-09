@@ -91,7 +91,7 @@ We'll ingest a portion of the data into ElasticSearch
 
 - Fetch the ElasticSearch template:
 ```shell
-curl -O https://gist.githubusercontent.com/jacobwegner/68e538edf66539feb25786cc3c9cc6c6/raw/3d17cde6a72d4526aa15fe79a07265c6638dd71c/scaife-viewer-tmp.json
+curl -O https://gist.githubusercontent.com/jacobwegner/68e538edf66539feb25786cc3c9cc6c6/raw/252e01a4c7e633b4663777a7e12dcb81119131e1/scaife-viewer-tmp.json
 ```
 - Install the template:
 ```shell
