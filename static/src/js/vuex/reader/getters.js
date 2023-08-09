@@ -28,5 +28,5 @@ export default {
   },
   textToc(state) {
     return state.leftText.metadata.toc;
-  }
+  },
 };
