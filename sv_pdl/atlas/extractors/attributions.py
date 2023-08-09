@@ -6,7 +6,7 @@ import json
 import logging
 import os
 import re
-from collections import Counter, defaultdict
+from collections import Counter, OrderedDict, defaultdict
 
 import yaml
 from scaife_viewer.atlas import constants
@@ -145,10 +145,9 @@ def build_attributions_lookup(resolver, versions):
     return lookup
 
 
-def get_weight(promoted_roles, role):
-    if role in promoted_roles:
-        return -1
-    return 0
+def get_weight(promoted_roles_lookup, role):
+    weight = promoted_roles_lookup.get(role, 0)
+    return weight
 
 
 def get_attributions_config(config_file_path):
@@ -168,10 +167,19 @@ def get_substitutions(config):
     return substitutions
 
 
+def get_promoted_roles_lookup(config):
+    promoted = config.get("promoted", [])
+    promoted.reverse()
+    roles_lookup = OrderedDict()
+    for pos, entry in enumerate(promoted):
+        roles_lookup[entry] = (pos + 1) * -1
+    return roles_lookup
+
+
 class AttributionAnnotationConverter:
     def __init__(self, config, lookup):
         self.substitutions = get_substitutions(config)
-        self.promoted_roles = set(config.get("promoted", []))
+        self.promoted_roles_lookup = get_promoted_roles_lookup(config)
         self.lookup = lookup
 
     def process_substitution(self, annotations, urn, remap_key, weight):
@@ -229,7 +237,7 @@ class AttributionAnnotationConverter:
         role = row[1][0]
         orgs = [o.strip() for o in row[2] if o.strip]
         names = [n.strip() for n in row[0] + row[3] if n.strip]
-        weight = get_weight(self.promoted_roles, role)
+        weight = get_weight(self.promoted_roles_lookup, role)
 
         remap_key = (role, tuple(names), tuple(orgs))
         if remap_key in self.substitutions:
