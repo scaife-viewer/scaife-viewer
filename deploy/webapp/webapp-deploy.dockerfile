@@ -12,6 +12,7 @@ RUN apk add bash
 RUN ./bin/fetch_corpus_config
 RUN ./bin/copy_corpus_repo_metadata
 
+ARG GITHUB_ACCESS_TOKEN=""
 RUN python manage.py prepare_atlas_db --force
 
 # https://stackoverflow.com/a/54245466

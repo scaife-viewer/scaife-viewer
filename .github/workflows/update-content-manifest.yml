@@ -1,0 +1,71 @@
+name: Update content manifest
+
+on:
+  workflow_dispatch:
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    # NOTE: See https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule
+    # > To decrease the chance of delay, schedule your workflow to run at a different time of the hour.
+    # This is why we're targeting the 48th minute.
+    - cron:  '48 12 * * *'
+
+jobs:
+  update-content-manifest:
+    name: Update the content manifest and push a commit to a new branch
+    runs-on: ubuntu-latest
+    env:
+      CONTENT_BRANCH: gh-actions/update-content-manifest
+
+    steps:
+    - uses: actions/checkout@v3
+    # TODO: Simplify via webapp-base docker image
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    - run: pip install pip wheel --upgrade
+    - name: Install scaife-cli and dependencies
+      run: pip install "scaife-viewer-core @https://github.com/scaife-viewer/backend/archive/10e66fc47f36a308f8cdcd1a2c84344ae2cdd23e.zip#subdirectory=core" PyGithub
+    - name: Fetch branches
+      run: git fetch
+    - name: Checkout the existing content branch
+      id: checkout_existing_branch
+      continue-on-error: true
+      run: |
+        git switch -c ${{ env.CONTENT_BRANCH }} --track origin/${{ env.CONTENT_BRANCH }}
+    - name: Checkout the non-existent content branch
+      if: ${{ steps.checkout_existing_branch.outcome == 'failure'  }}
+      run: |
+        git switch -c ${{ env.CONTENT_BRANCH }}
+    - name: Update content manifest
+      run: scaife update-manifest --github-access-token=$GITHUB_TOKEN
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Check for changes to content manifest
+      id: manifest_has_changes
+      continue-on-error: true
+      run: |
+        git diff --quiet data/content-manifests/
+    # NOTE: manifest_has_changes returns a non-zero code if there are changes
+    # commit_and_push will only run if the previous step fails (e.g., there are changes)
+    - name: Commit and push new branch
+      id: commit_and_push
+      if: ${{ steps.manifest_has_changes.outcome == 'failure'  }}
+      run: |
+        git config user.name 'github-actions[bot]'
+        git config user.email 'github-actions[bot]@users.noreply.github.com'
+        git add data/content-manifests/production.yaml
+        git commit -m "Update corpora SHAs `date -I`"
+        git push origin HEAD
+    # NOTE: Requires change at https://github.com/scaife-viewer/scaife-viewer/settings/actions
+    # [√] Allow GitHub Actions to create and approve pull requests
+    # NOTE: Only runs when changes have been pushed
+    - name: Create pull request
+      id: create-pr
+      if: ${{ steps.commit_and_push.outcome == 'success'  }}
+      run: gh pr create --fill
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Report if no changes were detected
+      id: no-changes-detected
+      if: ${{ steps.manifest_has_changes.outcome == 'success'  }}
+      run: echo 'No changes detected'

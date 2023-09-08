@@ -1,0 +1,24 @@
+name: Promote search index
+
+on:
+  workflow_dispatch:
+    inputs:
+      indexName:
+        description: 'Name of the latest search index'
+        required: true
+      herokuAppName:
+        description: 'Heroku app'
+        required: true
+        default: scaife-perseus-org-dev
+
+jobs:
+  promote:
+      name: Promote search index
+      runs-on: ubuntu-latest
+      env:
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        HEROKU_APP: ${{ github.event.inputs.herokuAppName }}
+        ELASTICSEARCH_INDEX_NAME: ${{ github.event.inputs.indexName }}
+      steps:
+        - name: Release
+          run: heroku config:set ELASTICSEARCH_INDEX_NAME=${ELASTICSEARCH_INDEX_NAME}

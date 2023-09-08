@@ -1,0 +1,27 @@
+name: Diff corpora contents
+
+on:
+  workflow_dispatch:
+
+jobs:
+  diff-corpora-contents:
+    name: Diff two versions of the corpus-metadata manifest
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    # TODO: Simplify via webapp-base docker image
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    - run: pip install pip wheel --upgrade
+    - name: Install scaife-cli and dependencies
+      run: pip install "scaife-viewer-core @https://github.com/scaife-viewer/backend/archive/8ca4c2e2328a7deaeb41fa3f388943d1a4c24328.zip#subdirectory=core" PyGithub
+    - name: Diff corpora contents
+      run: |
+        scaife diff-corpora-contents > diff.patch
+        echo 'Copying diff.patch to step summary'
+        printf '```\n```diff\n' > $GITHUB_STEP_SUMMARY
+        cat diff.patch >> $GITHUB_STEP_SUMMARY
+        printf '```\n```\n' >> $GITHUB_STEP_SUMMARY
+        cat $GITHUB_STEP_SUMMARY

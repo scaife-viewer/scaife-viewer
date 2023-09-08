@@ -1,0 +1,58 @@
+name: Build search indexer image
+
+on:
+  workflow_dispatch:
+    inputs:
+      deployment_image:
+        description: Deployment Docker image (optional)
+        type: string
+        required: false
+
+jobs:
+  build-images:
+    name: Build search indexer image and push image tags
+    runs-on: ubuntu-latest
+    env:
+      DEFAULT_DEPLOYMENT_IMAGE: ghcr.io/${{ github.repository }}/webapp-deploy:latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Docker buildx build
+        id: buildx
+        uses: docker/setup-buildx-action@v2.5.0
+        with:
+          driver-opts: network=host
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Autogenerate webapp Docker image tags
+        id: autogen-docker-tags
+        uses: docker/metadata-action@v3
+        with:
+          # list of Docker images to use as base name for tags
+          images: ghcr.io/${{ github.repository }}/indexer
+          # generate Docker tags based on the following events/attributes
+          tags: |
+            type=sha
+            type=schedule
+            type=ref,event=branch
+            type=ref,event=pr
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      # TODO: Push to gcr.io and rebuild the search index
+      - name: Build search indexer image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./
+          file: deploy/search-index/search-index.dockerfile
+          tags: ${{ steps.autogen-docker-tags.outputs.tags }}
+          build-args: |
+            WEBAPP_DEPLOY_DOCKER_IMAGE=${{ github.event.inputs.deployment_image || env.DEFAULT_DEPLOYMENT_IMAGE }}
+          push: true

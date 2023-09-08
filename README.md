@@ -91,7 +91,7 @@ We'll ingest a portion of the data into ElasticSearch
 
 - Fetch the ElasticSearch template:
 ```shell
-curl -O https://gist.githubusercontent.com/jacobwegner/68e538edf66539feb25786cc3c9cc6c6/raw/3d17cde6a72d4526aa15fe79a07265c6638dd71c/scaife-viewer-tmp.json
+curl -O https://gist.githubusercontent.com/jacobwegner/68e538edf66539feb25786cc3c9cc6c6/raw/252e01a4c7e633b4663777a7e12dcb81119131e1/scaife-viewer-tmp.json
 ```
 - Install the template:
 ```shell
@@ -352,3 +352,134 @@ specified by `settings.CTS_LOCAL_DATA_PATH`.
 
 For Heroku deployments, this is currently accomplished by preparing a tarball made available via
 `$CTS_TARBALL_URL` and downloading and uncompressing the tarball using `bin/fetch_cts_tarball.sh`.
+
+## Build / Deploy Pipeline
+
+The production instance of the application is built using [GitHub Actions](https://github.com/features/actions).
+
+To deploy a new version, trigger the following GitHub Actions workflows:
+- [Update content manifest](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/update-content-manifest.yml): _(optional)_
+
+    This workflow [scheduled to run daily](https://github.com/scaife-viewer/scaife-viewer/blob/6d1b12b1e993b58d25507b8bb2ff6235f900f385/.github/workflows/update-content-manifest.yml#L5), and if a change is found, it will open a PR against the default GitHub branch (e.g. [#592](https://github.com/scaife-viewer/scaife-viewer/pull/592))
+  - Manually merge the PR into the branch (e.g. [a3f9ba6](https://github.com/scaife-viewer/scaife-viewer/commit/a3f9ba6c5b681e02d4f746d4b51519890aeeb1e9))
+- [Build artifacts image](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/build-artifacts-image.yml):
+
+    Fetches content as defined in [data/content-manifests/production.yaml](data/content-manifests/production.yaml) and removes non-essential files.
+- [Build base image](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/build-base-image.yml): _(optional)_
+
+    This workflow should be ran each time the source code / code dependencies are changed.
+
+    If there have been no changes to the code since the last deployment, the last built base image will be used when creating the deployment image.
+- [Build deployment image](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/build-deployment-image.yml):
+
+    Copies the content from the artifacts image onto the base image and ingests content into the CTS resolver and the ATLAS database.
+- [Deploy app image](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/deploy-image.yml):
+
+    Deploys the deployment image to Heroku.
+
+    After the deploy finishes, create a [new draft release](#github-releases)
+
+    Heroku app defaults to `scaife-perseus-org-dev`.
+
+- [Build search indexer image](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/build-search-image.yml):
+
+    Copies the lemmatization data from [scaife-viewer/ogl-pdl-annotations](https://github.com/scaife-viewer/ogl-pdl-annotations) onto the deployment image.
+
+    This image with code + data + lemmatization data is used to rebuild the search index.
+- [Reindex content](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/reindex-content.yml):
+
+    Use the search indexer image to run a reindex task (currently on Google Cloud Run).
+
+    The job output includes the new index as `ELASTICSEARCH_INDEX_NAME`.
+- [Promote search index](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/promote-index.yml):
+
+    Updates the search index on Heroku to the provided index name (from the "Reindex content" workflow above).
+
+    Heroku app defaults to `scaife-perseus-org-dev`.
+
+After verifying the changes on [scaife-dev.perseus.org](https://scaife-dev.perseus.org), re-run "Deploy app image" and "Promote search index" with:
+- Heroku app: `scaife-perseus-org`
+- Name of the latest search index: (`$ELASTICSEARCH_INDEX_NAME`) from the "Reindex content" workflow.
+
+Additional [maintenance tasks](#maintenance-tasks) are documented below.
+
+## GitHub releases
+
+After deploying to scaife.perseus.org, manually create a new release:
+1. [Create a new release](https://github.com/scaife-viewer/scaife-viewer/releases/new)
+    - Tag: `YYYY-MM-DD-###`, e.g. `2023-07-06-001`
+    - Title: (repeat value from "Tag")
+    - Description:
+        - Code feature 1
+        - Code feature 2, etc
+        - Content changes since the last deployment
+        (To generate a diff, use the "Diff corpora contents" workflow documented below in ["Release Tasks"](#release-tasks))
+
+2. Save the release as a draft
+3. After verifying changes on [scaife-dev.perseus.org](https://scaife-dev.perseus.org) and promoting changes to [scaife.perseus.org](https://scaife.perseus.org), publish the draft
+4. Restart the Heroku app to pick up the new release: \*
+
+\* TODO: Add a workflow to restart the app.
+
+It will be restarted when "Promote search index" is ran (due to the updated environment variable):
+
+<img width="863" alt="image" src="https://github.com/scaife-viewer/scaife-viewer/assets/629062/5a546943-4155-4041-91f8-c8c4515bf55d">
+
+Or manually via:
+
+```shell
+heroku ps:restart --app=scaife.perseus.org
+```
+
+After the application restarts, refresh the homepage to verify the latest release is linked:
+
+<img width="752" alt="image" src="https://github.com/scaife-viewer/scaife-viewer/assets/629062/f905769f-49d1-405e-8f76-159aea468a0f">
+
+## Release Tasks
+
+- [Diff corpora contents](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/workflows/diff-corpora-contents.yml):
+
+    Diff two versions of the corpus-metadata manifest.
+
+    This workflow should be ran after deploying to `scaife-perseus-org-dev` and before deploying to `scaife-perseus-org`.
+
+    It uses the `scaife` CLI to create a diff:
+
+
+    ```shell
+    scaife diff-corpora-contents
+    ```
+
+    If the workflow is succesful, the diff will be included in the job summary:
+
+    ```diff
+    --- old.json	2023-07-06 08:30:12
+    +++ new.json	2023-07-06 08:30:12
+    @@ -1527,10 +1527,10 @@
+        ]
+    },
+    {
+    -    "ref": "0.0.5350070018",
+    +    "ref": "0.0.5426028119",
+        "repo": "PerseusDL/canonical-greekLit",
+    -    "sha": "593087513cb16dd02f0a7b8362519a3a0e2f29bc",
+    -    "tarball_url": "https://api.github.com/repos/PerseusDL/canonical-greekLit/tarball/0.0.5350070018",
+    +    "sha": "701d7470d6bf9a11fb6e508ddd3270bf88748303",
+    +    "tarball_url": "https://api.github.com/repos/PerseusDL/canonical-greekLit/tarball/0.0.5426028119",
+        "texts": [
+        "urn:cts:greekLit:tlg0001.tlg001.perseus-grc2",
+        "urn:cts:greekLit:tlg0003.tlg001.opp-fre1",
+    \ No newline at end of file
+    ```
+
+## Maintenance Tasks
+
+The following GitHub Actions workflows are used to run maintenance tasks:
+
+- [Delete indices](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/delete-indices.yml):
+
+    This workflow should be ran after promoting the search index.
+
+    It will remove _all_ indices _except_ for the current active index (`$ELASTICSEARCH_INDEX_NAME` as configured for the `scaife-perseus-org` Heroku app).
+
+    This _could_ be a scheduled workflow, but was kept as a manual task in case there was a need to have multiple indices available (for testing on `scaife-perseus-org-dev`, etc.)

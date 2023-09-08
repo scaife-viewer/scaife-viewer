@@ -1,0 +1,43 @@
+name: Deploy app image
+
+on:
+  workflow_dispatch:
+    inputs:
+      imageTag:
+        description: 'Tag to use for the deployment'
+        required: true
+        default: latest
+      herokuAppName:
+        description: 'Destination app for deployment'
+        required: true
+        default: scaife-perseus-org-dev
+
+jobs:
+  deploy:
+      name: Deploy to Heroku
+      runs-on: ubuntu-latest
+      env:
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      steps:
+        - name: Login to GitHub Container Registry
+          uses: docker/login-action@v1
+          with:
+            registry: ghcr.io
+            username: ${{ github.actor }}
+            password: ${{ secrets.GITHUB_TOKEN }}
+
+        - name: Login to Heroku Container Registry
+          uses: docker/login-action@v1
+          with:
+            registry: registry.heroku.com
+            username: _
+            password: ${{ secrets.HEROKU_API_KEY }}
+
+        - name: Tag and push Heroku image
+          run: |
+            docker pull ghcr.io/${{ github.repository }}/webapp-deploy:${{ github.event.inputs.imageTag }}
+            docker tag ghcr.io/${{ github.repository }}/webapp-deploy:${{ github.event.inputs.imageTag }} registry.heroku.com/${{ github.event.inputs.herokuAppName }}/web:latest
+            docker push registry.heroku.com/${{ github.event.inputs.herokuAppName }}/web:latest
+
+        - name: Release
+          run: heroku container:release --app ${{ github.event.inputs.herokuAppName }} web

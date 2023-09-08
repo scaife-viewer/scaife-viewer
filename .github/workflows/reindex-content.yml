@@ -1,0 +1,56 @@
+name: Reindex content
+
+on:
+  workflow_dispatch:
+    inputs:
+      search_image:
+        description: Search Docker image (optional)
+        type: string
+        required: false
+
+jobs:
+  reindex-content:
+    name: Reindex content in ElasticSearch
+    runs-on: ubuntu-latest
+    env:
+      DEFAULT_SEARCH_IMAGE: ghcr.io/${{ github.repository }}/indexer:latest
+      GCR_IMAGE: gcr.io/${{ github.repository }}/indexer:${{ github.run_id }}
+    steps:
+    - name: Authenticate with Google
+      id: 'google-auth'
+      uses: 'google-github-actions/auth@v0.4.4'
+      with:
+        # added via the sv-github-actions-sa Service Account
+        # NOTE: The following IAM roles are required
+        # - Artifact Registry Writer (not yet required, will be once we retire gcr.io)
+        # - Cloud Run Admin
+        # - Service Account Token Creator
+        # - Storage Admin
+        # - Service Account User
+        credentials_json: '${{ secrets.GCP_SA_KEY }}'
+        token_format: 'access_token'
+    - name: Login to GitHub and GCR container registries
+      run: |
+        echo '${{ github.token }}' | docker login ghcr.io -u '${{ github.actor }}' --password-stdin
+        echo '${{ steps.google-auth.outputs.access_token }}' | docker login gcr.io -u oauth2accesstoken --password-stdin
+    - name: Tag and push GCR image
+      env:
+        SEARCH_IMAGE: ${{ github.event.inputs.search_image || env.DEFAULT_SEARCH_IMAGE }}
+      run: |
+        docker pull ${SEARCH_IMAGE}
+        docker tag ${SEARCH_IMAGE} ${GCR_IMAGE}
+        docker push ${GCR_IMAGE}
+    - name: 'Set up Cloud SDK'
+      uses: 'google-github-actions/setup-gcloud@v1'
+    - name: Set ELASTICSEARCH_INDEX_NAME
+      run: |
+        echo ELASTICSEARCH_INDEX_NAME="scaife-viewer-$(date +%s)" >> "$GITHUB_ENV"
+    # TODO: Make ELASTICSEARCH_INDEX_NAME an output value to trigger a downstream deployment job
+    - name: Configure and run reindexing job
+      run: |
+        gcloud --project=scaife-viewer run jobs --region=us-east4 update scaife-viewer-update-search-index-dev --image=${GCR_IMAGE} --args="--chunk-size=500,--index-name=${ELASTICSEARCH_INDEX_NAME}"
+
+        gcloud --project=scaife-viewer run jobs --region=us-east4 execute scaife-viewer-update-search-index-dev --async
+    - name: Echo $ELASTICSEARCH_INDEX_NAME
+      run: |
+        echo "${{ env.ELASTICSEARCH_INDEX_NAME }}"
