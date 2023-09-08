@@ -22,7 +22,7 @@ PyYAML==6.0.1
 raven==6.10.0
 requests==2.22.0
 # @@@ atlas package is not yet released to pypi
-scaife-viewer-atlas @https://github.com/scaife-viewer/backend/archive/scaife-viewer-atlas@0.1a15.zip#subdirectory=atlas
+scaife-viewer-atlas @https://github.com/scaife-viewer/backend/archive/2e629fe4f95b4662e6d92365a700c4b6e227e9b3.zip#subdirectory=atlas
 # @@@ core package is not yet released to pypi
 scaife-viewer-core @https://github.com/scaife-viewer/backend/archive/60513f33fa67e8d28f512841622970f38933ddb3.zip#subdirectory=core
 six==1.12.0

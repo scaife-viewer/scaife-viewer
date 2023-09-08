@@ -1,4 +1,9 @@
-from scaife_viewer.atlas.hooks import DefaultHookSet
+from pathlib import Path
+
+from django.conf import settings
+
+import regex
+from scaife_viewer.atlas.hooks import DefaultHookSet, _get_annotation_paths
 from scaife_viewer.atlas.resolvers.cts_collection import (
     resolve_cts_collection_library,
 )
@@ -55,15 +60,17 @@ urn:cts:perslit:vahshi.divan.pdl
 PERSLIT_NS = "urn:cts:perslit:"
 
 
+THUCYDIDES_TEXTGROUP_REGEX = r"urn:cts:greekLit:tlg0003\."
+LOWEST_TEXTPARTS_TEXTGROUPS_REGEX = regex.compile(rf"{THUCYDIDES_TEXTGROUP_REGEX}")
+
+
 class ATLASHookSet(DefaultHookSet):
     def resolve_library(self):
         ti = text_inventory()
         return resolve_cts_collection_library(ti)
 
     def should_ingest_lowest_citable_nodes(self, cts_version_obj):
-        # NOTE: We don't yet use ATLAS to resolve anything past the version-text
-        # level, so we can safely skip this.
-        return False
+        return LOWEST_TEXTPARTS_TEXTGROUPS_REGEX.match(cts_version_obj.urn)
 
     def get_first_passage_urn(self, version):
         version_urn = str(version.urn)
@@ -82,3 +89,12 @@ class ATLASHookSet(DefaultHookSet):
         # NOTE: We don't yet use ATLAS to resolve anything past the version-text
         # level, so we can safely skip this.
         return {}
+
+    def get_dictionary_annotation_paths(self):
+        # FIXME: improve discovery
+        subdir = "scaife-viewer-ogl-pdl-annotations-532d1bd-532d1bd/data/dictionaries"
+        path = Path(settings.SV_ATLAS_DATA_DIR, "annotations", subdir)
+        # FIXME: Standardize "default" annotation formats; currently we have a mixture
+        # of manifest or "all-in-one" files that makes things inconsistent
+        predicate = lambda x: x.suffix == ".json" or x.is_dir()  # noqa
+        return _get_annotation_paths(path, predicate=predicate)

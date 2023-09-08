@@ -100,6 +100,7 @@
         <template slot="right">
           <widget-attributions />
           <widget-passage-links />
+          <widget-dictionary-entries />
           <widget-text-mode />
           <widget-text-size />
           <widget-text-width />
@@ -141,6 +142,7 @@ import WidgetWordList from './widgets/WidgetWordList.vue';
 import WidgetTokenList from './widgets/WidgetTokenList.vue';
 import WidgetNewAlexandriaCommentary from './widgets/WidgetNewAlexandriaCommentary.vue';
 import WidgetTextWidth from './widgets/WidgetTextWidth.vue';
+import WidgetDictionaryEntries from './widgets/WidgetDictionaryEntries.vue';
 
 const widgets = {
   WidgetPassageAncestors,
@@ -158,6 +160,7 @@ const widgets = {
   WidgetWordList,
   WidgetTokenList,
   WidgetTextWidth,
+  WidgetDictionaryEntries,
   'widget-new-alexandria-commentary': WidgetNewAlexandriaCommentary,
 };
 

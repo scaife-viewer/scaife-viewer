@@ -1,5 +1,5 @@
 import URN from '@scaife-viewer/common';
-import { MODULE_NS } from '@scaife-viewer/store';
+import createDefaultSVStore, { MODULE_NS } from '@scaife-viewer/store';
 
 const passageGetter = function passageGetter(state, getters, rootState, rootGetters) {
   /*
@@ -12,17 +12,35 @@ const passageGetter = function passageGetter(state, getters, rootState, rootGett
   return null;
 };
 
-const createStoreShim = () => ({
-  namespace: MODULE_NS,
-  store: {
-    namespaced: true,
-    state: {},
-    getters: {
-      passage: passageGetter,
-    },
-    actions: {},
-    mutations: {},
-  },
-});
+// eslint-disable-next-line arrow-body-style
+const selectedLemmasGetter = (state, getters, rootState) => {
+  /*
+  Mimics the selectedLemmas getter from @scaife-viewer/store
+  */
+  return rootState.reader.selectedLemmas;
+};
 
+const createStoreShim = function createStoreShim() {
+  const defaultStore = createDefaultSVStore().store;
+  return {
+    namespace: MODULE_NS,
+    store: {
+      namespaced: true,
+      state: {
+        ...defaultStore.state(),
+      },
+      getters: {
+        ...defaultStore.getters,
+        passage: passageGetter,
+        selectedLemmas: selectedLemmasGetter,
+      },
+      actions: {
+        ...defaultStore.actions,
+      },
+      mutations: {
+        ...defaultStore.mutations,
+      },
+    },
+  };
+};
 export default createStoreShim;

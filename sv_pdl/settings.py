@@ -404,6 +404,7 @@ SV_ATLAS_INGESTION_PIPELINE = [
     "sv_pdl.atlas.importer_pipelines.extract_atlas_annotations",
     "sv_pdl.atlas.importer_pipelines.prefer_source_repo_names",
     "scaife_viewer.atlas.importers.attributions.import_attributions",
+    "scaife_viewer.atlas.importers.dictionaries.import_dictionaries",
 ]
 # ATLAS uses an isolated database with a custom router that ensures
 # that SV_ATLAS_DB_LABEL database only contains data from the ATLAS application.
