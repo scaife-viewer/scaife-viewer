@@ -83,6 +83,12 @@ if (devMode) {
 
 module.exports = {
   context: __dirname,
+  node: {
+    // FIXME: Resolve this error
+    // Module not found: Error: Can't resolve 'fs' in 'node_modules/sass.js/dist'
+    // h/t https://stackoverflow.com/a/65490683
+    fs: 'empty',
+  },
   entry: [
     '@babel/polyfill',
     './static/src/js/index.js',
