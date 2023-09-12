@@ -21,7 +21,13 @@ jobs:
       run: |
         scaife diff-corpora-contents > diff.patch
         echo 'Copying diff.patch to step summary'
-        printf '```\n```diff\n' > $GITHUB_STEP_SUMMARY
+        printf '```diff\n' > $GITHUB_STEP_SUMMARY
         cat diff.patch >> $GITHUB_STEP_SUMMARY
-        printf '```\n```\n' >> $GITHUB_STEP_SUMMARY
+        printf '```\n' >> $GITHUB_STEP_SUMMARY
         cat $GITHUB_STEP_SUMMARY
+    - name: Upload diff.patch
+      uses: actions/upload-artifact@v3
+      with:
+        name: diff-patch
+        path: |
+          diff.patfch
