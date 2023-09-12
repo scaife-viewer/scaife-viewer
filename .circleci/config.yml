@@ -1,5 +1,5 @@
 version: 2
-
+# TODO: Deprecate CircleCI
 jobs:
   qa:
     docker:
@@ -42,9 +42,3 @@ workflows:
   qa-deploy:
     jobs:
       - qa
-      - deploy:
-          requires:
-            - qa
-          filters:
-            branches:
-              only: /(?:master|dev)/
