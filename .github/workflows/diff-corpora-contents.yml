@@ -30,4 +30,4 @@ jobs:
       with:
         name: diff-patch
         path: |
-          diff.patfch
+          diff.patch
