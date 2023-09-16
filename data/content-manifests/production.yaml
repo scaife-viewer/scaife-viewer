@@ -1,11 +1,11 @@
 PerseusDL/canonical-latinLit:
-  ref: 0.0.5728893694
-  sha: 5d4237e6c5b5d14a6e82719a4fdacd55c1cf7520
-  tarball_url: https://api.github.com/repos/PerseusDL/canonical-latinLit/tarball/0.0.5728893694
+  ref: 0.0.6198992767
+  sha: c5e7de0bba5ae12b0d3c5bf0b1008783b7b66d71
+  tarball_url: https://api.github.com/repos/PerseusDL/canonical-latinLit/tarball/0.0.6198992767
 PerseusDL/canonical-greekLit:
-  ref: 0.0.6191807794
-  sha: 948cdf2032634d70f7325966f4a01034c3da359a
-  tarball_url: https://api.github.com/repos/PerseusDL/canonical-greekLit/tarball/0.0.6191807794
+  ref: 0.0.6199424155
+  sha: 6f941ae64791d5bb58182504661b70c6256424da
+  tarball_url: https://api.github.com/repos/PerseusDL/canonical-greekLit/tarball/0.0.6199424155
 OpenGreekAndLatin/csel-dev:
   ref: 0.0.3678995538
   sha: 3f8969d102e18621edd165d5edaa72891477e74f
