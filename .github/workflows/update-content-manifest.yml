@@ -59,10 +59,12 @@ jobs:
     # NOTE: Requires change at https://github.com/scaife-viewer/scaife-viewer/settings/actions
     # [√] Allow GitHub Actions to create and approve pull requests
     # NOTE: Only runs when changes have been pushed
+    # NOTE: Will fail if the PR already exists
     - name: Create pull request
       id: create-pr
       if: ${{ steps.commit_and_push.outcome == 'success'  }}
       run: gh pr create --fill
+      continue-on-error: true
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Report if no changes were detected
