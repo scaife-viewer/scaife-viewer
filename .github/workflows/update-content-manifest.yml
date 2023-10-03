@@ -24,7 +24,7 @@ jobs:
         python-version: '3.10'
     - run: pip install pip wheel --upgrade
     - name: Install scaife-cli and dependencies
-      run: pip install "scaife-viewer-core @https://github.com/scaife-viewer/backend/archive/10e66fc47f36a308f8cdcd1a2c84344ae2cdd23e.zip#subdirectory=core" PyGithub
+      run: pip install "scaife-viewer-core @https://github.com/scaife-viewer/backend/archive/10e66fc47f36a308f8cdcd1a2c84344ae2cdd23e.zip#subdirectory=core" "PyGithub==1.53"
     - name: Fetch branches
       run: git fetch
     - name: Checkout the existing content branch
