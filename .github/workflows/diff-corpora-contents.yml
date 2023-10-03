@@ -16,7 +16,7 @@ jobs:
         python-version: '3.10'
     - run: pip install pip wheel --upgrade
     - name: Install scaife-cli and dependencies
-      run: pip install "scaife-viewer-core @https://github.com/scaife-viewer/backend/archive/8ca4c2e2328a7deaeb41fa3f388943d1a4c24328.zip#subdirectory=core" PyGithub
+      run: pip install "scaife-viewer-core @https://github.com/scaife-viewer/backend/archive/8ca4c2e2328a7deaeb41fa3f388943d1a4c24328.zip#subdirectory=core" PyGithub==1.53
     - name: Diff corpora contents
       run: |
         scaife diff-corpora-contents > diff.patch
