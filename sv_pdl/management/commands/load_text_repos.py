@@ -7,10 +7,14 @@ from pathlib import Path
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
+
 import requests
 import yaml
-
+from github import Github
 from scaife_viewer.core.hooks import hookset
+
+
+GITHUB_ACCESS_TOKEN = os.environ.get("GITHUB_ACCESS_TOKEN")
 
 
 class Command(BaseCommand):
@@ -30,10 +34,13 @@ class Command(BaseCommand):
         if not dest.exists():
             print(f"Creating directory {dest}")
             dest.mkdir(parents=True, exist_ok=True)
+
+        client = Github(GITHUB_ACCESS_TOKEN)
+
         fs = {}
         with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
             for repo, data in repos.items():
-                f = executor.submit(load_repo, repo, data, dest)
+                f = executor.submit(load_repo, client, repo, data, dest)
                 fs[f] = (repo, data["ref"])
             for f in concurrent.futures.as_completed(fs):
                 repo, ref = fs[f]
@@ -52,7 +59,7 @@ def write_repo_metadata(metadata_path, data):
     json.dump(data, open(metadata_path, "w"), indent=2)
 
 
-def load_repo(repo, data, dest):
+def load_repo(client, repo, data, dest):
     ref = data["ref"]
     sha = data["sha"]
     tarball_url = data["tarball_url"]
@@ -60,7 +67,17 @@ def load_repo(repo, data, dest):
     absolute_tarball_path = os.path.join(dest, tarball_path)
 
     resp = requests.get(tarball_url, stream=True)
-    resp.raise_for_status()
+
+    try:
+        resp.raise_for_status()
+    except requests.exceptions.HTTPError:
+        # NOTE: This handles private repos
+        # TODO: Add explicit boolean to private repo in content manifest
+        repo_obj = client.get_repo(repo)
+        archive_url = repo_obj.get_archive_link("tarball", data["ref"])
+        resp = requests.get(archive_url)
+        resp.raise_for_status()
+
     r, w = os.pipe()
     os.makedirs(absolute_tarball_path, exist_ok=True)
     proc = subprocess.Popen(
