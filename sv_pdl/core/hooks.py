@@ -7,3 +7,8 @@ class CoreHookSet(DefaultHookSet):
     def content_manifest_path(self):
         # FIXME:
         return Path("data/content-manifests/local.yaml")
+
+    @property
+    def enable_canonical_pdlrefwk_flags(self):
+        # FIXME:
+        return True
