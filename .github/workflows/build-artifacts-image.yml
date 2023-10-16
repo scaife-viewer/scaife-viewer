@@ -7,10 +7,6 @@ on:
         description: Webapp Base Docker image (optional)
         type: string
         required: false
-      private_repo_github_token:
-        description: Token that has access to private content repos
-        type: string
-        required: false
 
 jobs:
   build-images:
@@ -59,5 +55,5 @@ jobs:
           no-cache: true
           build-args:
             WEBAPP_DOCKER_IMAGE=${{ github.event.inputs.webapp_image || env.DEFAULT_WEBAPP_IMAGE }}
-            GITHUB_ACCESS_TOKEN=${{ github.event.inputs.private_repo_github_token || secrets.GITHUB_TOKEN }}
+            GITHUB_ACCESS_TOKEN=${{ secrets.PRIVATE_GITHUB_ACCESS_TOKEN || secrets.GITHUB_TOKEN }}
           push: true
