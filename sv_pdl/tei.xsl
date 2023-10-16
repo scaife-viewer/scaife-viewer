@@ -442,6 +442,6 @@
   <xsl:template match="//t:facsimile" />
 
   <!-- <xsl:include href="text.xsl" /> -->
-  <xsl:template match="t:div[not(@type = 'edition') and not(@type = 'translation') and not(@type= 'textpart')]" />
+  <xsl:template match="t:div[not(@type = 'edition') and not(@type = 'translation') and not(@type = 'commentary') and not(@type= 'textpart')]" />
 
 </xsl:stylesheet>
