@@ -1,11 +1,11 @@
 PerseusDL/canonical-latinLit:
-  ref: 0.0.6264053744
-  sha: f3e31374ff2e384be3ae27105cb12b20ba0ebea9
-  tarball_url: https://api.github.com/repos/PerseusDL/canonical-latinLit/tarball/0.0.6264053744
+  ref: 0.0.6736696957
+  sha: c33c838c97a9febd503c3bac1dcba787b8f1ded2
+  tarball_url: https://api.github.com/repos/PerseusDL/canonical-latinLit/tarball/0.0.6736696957
 PerseusDL/canonical-greekLit:
-  ref: 0.0.6655777258
-  sha: 6bd5e84ab8437171ed4c20742eab34585f54698a
-  tarball_url: https://api.github.com/repos/PerseusDL/canonical-greekLit/tarball/0.0.6655777258
+  ref: 0.0.6736698169
+  sha: 2c438130031a2833f7c8ce7718a301a9a85d2f6e
+  tarball_url: https://api.github.com/repos/PerseusDL/canonical-greekLit/tarball/0.0.6736698169
 OpenGreekAndLatin/csel-dev:
   ref: 0.0.3678995538
   sha: d94f655c8cb5bd258cb1a72fe78f55a73a86fe52
@@ -19,9 +19,9 @@ PerseusDL/canonical-pdlpsci:
   sha: 02346d884baac129ab3e21374a54f5b8c5b12522
   tarball_url: https://api.github.com/repos/PerseusDL/canonical-pdlpsci/tarball/v0.4.0
 OpenGreekAndLatin/First1KGreek:
-  ref: 1.1.6189478048
-  sha: cd3db784e0ba6a045fac1185a1b3280a32d97f89
-  tarball_url: https://api.github.com/repos/OpenGreekAndLatin/First1KGreek/tarball/1.1.6189478048
+  ref: 1.1.6736695142
+  sha: ca2d9f42586cdb32c641a8a2c56a853067d57a7a
+  tarball_url: https://api.github.com/repos/OpenGreekAndLatin/First1KGreek/tarball/1.1.6736695142
 OpenGreekAndLatin/Latin:
   ref: v1.14.0
   sha: 9a3e833b515adad490bdd11977eaf1a84d24b246
