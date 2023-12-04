@@ -1,4 +1,4 @@
 pletcher/canonical_pdlrefwk:
-  ref: master
-  sha: b261d62f51a4a9255457bfe46487dca685e1879f
-  tarball_url: https://api.github.com/repos/pletcher/canonical_pdlrefwk/tarball/b261d62f51a4a9255457bfe46487dca685e1879f
+  ref: task/rename-files
+  sha: 329a19851c06aa1d8ff2b055bce2a563ce3a8282
+  tarball_url: https://api.github.com/repos/pletcher/canonical_pdlrefwk/tarball/329a19851c06aa1d8ff2b055bce2a563ce3a8282

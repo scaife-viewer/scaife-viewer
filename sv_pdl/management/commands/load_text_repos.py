@@ -18,7 +18,6 @@ GITHUB_ACCESS_TOKEN = os.environ.get("GITHUB_ACCESS_TOKEN")
 
 
 class Command(BaseCommand):
-
     help = "Load text repos to disk"
 
     def add_arguments(self, parser):
@@ -63,7 +62,8 @@ def load_repo(client, repo, data, dest):
     ref = data["ref"]
     sha = data["sha"]
     tarball_url = data["tarball_url"]
-    tarball_path = f"{repo.replace('/', '-')}-{ref}-{sha[:7]}"
+    safe_ref = ref.replace("/", "-")
+    tarball_path = f"{repo.replace('/', '-')}-{safe_ref}-{sha[:7]}"
     absolute_tarball_path = os.path.join(dest, tarball_path)
 
     resp = requests.get(tarball_url, stream=True)
