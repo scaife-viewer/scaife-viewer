@@ -10,5 +10,7 @@ class CoreHookSet(DefaultHookSet):
 
     @property
     def enable_canonical_pdlrefwk_flags(self):
-        # FIXME:
-        return True
+        # NOTE: Setting this to `False` will allow us to consume
+        # the lower refsDecls on Marchant, but Greenough will not
+        # load consistently.
+        return False
