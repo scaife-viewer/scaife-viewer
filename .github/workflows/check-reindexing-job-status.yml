@@ -35,12 +35,16 @@ jobs:
       run: |
         gcloud --project=scaife-viewer run jobs executions describe --region=us-east4 $JOB_NAME --format=json | jq ".status.succeededCount == 1" -e
       continue-on-error: true
-    - name: Capture job status in summary
+    - name: Capture job status artifact
       env:
           JOB_NAME: ${{ steps.fetch-job-name.outputs.JOB_NAME }}
       run: |
         export JOB_SUMMARY=`gcloud --project=scaife-viewer run jobs executions describe --region=us-east4 $JOB_NAME`
         echo "Job summary: ${JOB_SUMMARY}"
-        printf '```shell\n' >> $GITHUB_STEP_SUMMARY
-        echo $JOB_SUMMARY >> $GITHUB_STEP_SUMMARY
-        printf '```\n' >> $GITHUB_STEP_SUMMARY
+        echo $JOB_SUMMARY > status.txt
+    - name: Upload status.txt
+      uses: actions/upload-artifact@v3
+      with:
+        name: status.txt
+        path: |
+          status.txt
