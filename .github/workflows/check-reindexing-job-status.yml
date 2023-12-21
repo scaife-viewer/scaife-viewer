@@ -41,4 +41,6 @@ jobs:
       run: |
         export JOB_SUMMARY=`gcloud --project=scaife-viewer run jobs executions describe --region=us-east4 $JOB_NAME`
         echo "Job summary: ${JOB_SUMMARY}"
+        printf '```shell\n' >> $GITHUB_STEP_SUMMARY
         echo $JOB_SUMMARY >> $GITHUB_STEP_SUMMARY
+        printf '```\n' >> $GITHUB_STEP_SUMMARY
