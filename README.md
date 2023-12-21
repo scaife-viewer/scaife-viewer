@@ -440,7 +440,7 @@ After the application restarts, refresh the homepage to verify the latest releas
 
 ## Release Tasks
 
-- [Diff corpora contents](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/workflows/diff-corpora-contents.yml):
+- [Diff corpora contents](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/diff-corpora-contents.yml):
 
     Diff two versions of the corpus-metadata manifest.
 
