@@ -29,22 +29,14 @@ jobs:
         export JOB_NAME=`gcloud --project=scaife-viewer run jobs executions list --job=scaife-viewer-update-search-index-dev --region=us-east4 --limit=1 --format="csv(name)"| tail -n 1`
         echo "Job name: ${JOB_NAME}"
         echo "JOB_NAME=$JOB_NAME" >> "$GITHUB_OUTPUT"
+    - name: Output job status
+      env:
+          JOB_NAME: ${{ steps.fetch-job-name.outputs.JOB_NAME }}
+      run: |
+        gcloud --project=scaife-viewer run jobs executions describe --region=us-east4 $JOB_NAME
     - name: Check if the job is complete
       env:
           JOB_NAME: ${{ steps.fetch-job-name.outputs.JOB_NAME }}
       run: |
         gcloud --project=scaife-viewer run jobs executions describe --region=us-east4 $JOB_NAME --format=json | jq ".status.succeededCount == 1" -e
       continue-on-error: true
-    - name: Capture job status artifact
-      env:
-          JOB_NAME: ${{ steps.fetch-job-name.outputs.JOB_NAME }}
-      run: |
-        export JOB_SUMMARY=`gcloud --project=scaife-viewer run jobs executions describe --region=us-east4 $JOB_NAME`
-        echo "Job summary: ${JOB_SUMMARY}"
-        echo $JOB_SUMMARY > status.txt
-    - name: Upload status.txt
-      uses: actions/upload-artifact@v3
-      with:
-        name: status.txt
-        path: |
-          status.txt
