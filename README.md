@@ -387,10 +387,13 @@ To deploy a new version, trigger the following GitHub Actions workflows:
 
     This image with code + data + lemmatization data is used to rebuild the search index.
 - [Reindex content](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/reindex-content.yml):
+    <a name="reindex-content"></a>
 
     Use the search indexer image to run a reindex task (currently on Google Cloud Run).
 
     The job output includes the new index as `ELASTICSEARCH_INDEX_NAME`.
+    
+    Check the status of the job using the [Check reindexing job status workflow](#check-reindexing-job-status)
 - [Promote search index](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/promote-index.yml):
 
     Updates the search index on Heroku to the provided index name (from the "Reindex content" workflow above).
@@ -475,6 +478,24 @@ After the application restarts, refresh the homepage to verify the latest releas
 ## Maintenance Tasks
 
 The following GitHub Actions workflows are used to run maintenance tasks:
+- [Check reindexing job status](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/check-reindexing-job-status.yml):
+
+    <a name="check-reindexing-job-status"></a>
+
+    This workflow should be ran to check the status of the [Reindex content](#reindex-content) job.
+
+    It will query the Google Cloud Run API and return a description of the latest job execution:
+    
+    <img width="890" alt="image" src="https://github.com/scaife-viewer/scaife-viewer/assets/629062/1ebbe29f-0273-45ba-8da8-a4b028bfb6da">
+    
+    It also checks the completion status of the execution.  If the execution has not completed, an error will be returned:
+    
+    <img width="883" alt="image" src="https://github.com/scaife-viewer/scaife-viewer/assets/629062/6f13c87e-0341-4943-bc1c-ffb2da1456c0">
+
+    When the execution has completed, no error is returned:
+
+    <img width="883" alt="image" src="https://github.com/scaife-viewer/scaife-viewer/assets/629062/8341ada1-6c92-4f08-a833-dc4a7261f867">
+
 
 - [Delete indices](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/delete-indices.yml):
 
