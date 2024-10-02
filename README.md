@@ -364,7 +364,7 @@ To deploy a new version, trigger the following GitHub Actions workflows:
   - Manually merge the PR into the branch (e.g. [a3f9ba6](https://github.com/scaife-viewer/scaife-viewer/commit/a3f9ba6c5b681e02d4f746d4b51519890aeeb1e9))
 - [Build artifacts image](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/build-artifacts-image.yml):
 
-    Fetches content as defined in [data/content-manifests/production.yaml](data/content-manifests/production.yaml) and removes non-essential files.
+    Fetches content as defined in [data/content-manifests/production.yaml](data/content-manifests/production.yaml) and removes non-essential files. Note that dev branch needs to match gh-actions/update-content-manifest branch if/when new repo is added to build.
 - [Build base image](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/build-base-image.yml): _(optional)_
 
     This workflow should be ran each time the source code / code dependencies are changed.
