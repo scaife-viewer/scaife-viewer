@@ -50,3 +50,7 @@ jacobwegner/Multepal-CTS:
   ref: v0.0.1-rc4
   sha: 976a340223666380ece66a936bdd58330b822e40
   tarball_url: https://api.github.com/repos/jacobwegner/Multepal-CTS/tarball/v0.0.1-rc4
+telota/galen:
+  ref: 0.0.10833297219
+  sha: bcc007194a440b0c87d2ce50179f120aee9a2100
+  tarball_url: https://api.github.com/repos/telota/galen/tarball/0.0.10833297219

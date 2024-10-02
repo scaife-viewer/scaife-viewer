@@ -98,6 +98,8 @@
           </div>
         </template>
         <template slot="right">
+          <widget-morpheus />
+          <widget-word-list />
           <widget-attributions />
           <widget-passage-links />
           <widget-text-mode />
@@ -106,9 +108,7 @@
           <widget-highlight />
           <widget-passage-exports />
           <widget-repo-metadata />
-          <widget-morpheus />
           <widget-token-list />
-          <widget-word-list />
           <widget-new-alexandria-commentary />
         </template>
       </skeleton>
