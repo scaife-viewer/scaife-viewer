@@ -24,7 +24,7 @@ PerseusDL/canonical-pdlpsci:
   tarball_url: https://api.github.com/repos/PerseusDL/canonical-pdlpsci/tarball/v0.4.0
 OpenGreekAndLatin/First1KGreek:
   ref: 1.1.12657993682
-  sha: 11f91fc3de25e2ef4ad3d18565d2a72da2c18df8
+  sha: eb81494731fd632f582c4b94634127bdbd596b43
   tarball_url: https://api.github.com/repos/OpenGreekAndLatin/First1KGreek/tarball/1.1.12657993682
 OpenGreekAndLatin/Latin:
   ref: v1.14.0
