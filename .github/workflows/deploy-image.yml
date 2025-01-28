@@ -39,5 +39,8 @@ jobs:
             docker tag ghcr.io/${{ github.repository }}/webapp-deploy:${{ github.event.inputs.imageTag }} registry.heroku.com/${{ github.event.inputs.herokuAppName }}/web:latest
             docker push registry.heroku.com/${{ github.event.inputs.herokuAppName }}/web:latest
 
+        - name: Install Heroku CLI
+          run: curl https://cli-assets.heroku.com/install.sh | sh
+
         - name: Release
           run: heroku container:release --app ${{ github.event.inputs.herokuAppName }} web
