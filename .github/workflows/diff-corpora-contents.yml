@@ -26,7 +26,7 @@ jobs:
         printf '```\n' >> $GITHUB_STEP_SUMMARY
         cat $GITHUB_STEP_SUMMARY
     - name: Upload diff.patch
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: diff-patch
         path: |
