@@ -56,5 +56,5 @@ telota/galen:
   tarball_url: https://api.github.com/repos/telota/galen/tarball/0.0.11140466376
 PatristicTextArchive/pta_data:
   ref: 1.1.12315518284
-  sha: 35091203469e2c6e2925bd86a5b1dfc418f64fb4
+  sha: 885ef1658d9189f335520b53bb5aec22f2104137
   tarball_url: https://api.github.com/repos/PatristicTextArchive/pta_data/tarball/1.1.12315518284
