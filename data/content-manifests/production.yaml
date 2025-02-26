@@ -27,9 +27,9 @@ OpenGreekAndLatin/First1KGreek:
   sha: eb81494731fd632f582c4b94634127bdbd596b43
   tarball_url: https://api.github.com/repos/OpenGreekAndLatin/First1KGreek/tarball/1.1.12657993682
 OpenGreekAndLatin/Latin:
-  ref: v1.14.0
-  sha: 9a3e833b515adad490bdd11977eaf1a84d24b246
-  tarball_url: https://api.github.com/repos/OpenGreekAndLatin/Latin/tarball/v1.14.0
+  ref: 1.1.13528514871
+  sha: 78a03e635536bcd7ddea586fbdff9fbe8a897917
+  tarball_url: https://api.github.com/repos/OpenGreekAndLatin/Latin/tarball/1.1.13528514871
 lascivaroma/priapeia:
   ref: 1.1.18
   sha: 3dfc11fe1bbbe5f34c435e6cd56cc277cdacbe8f
