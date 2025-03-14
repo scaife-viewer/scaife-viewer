@@ -1,7 +1,7 @@
 PerseusDL/canonical-latinLit:
-  ref: 0.0.13267625203
-  sha: 6363776c6d016e0785e78cb2337258044597e884
-  tarball_url: https://api.github.com/repos/PerseusDL/canonical-latinLit/tarball/0.0.13267625203
+  ref: 0.0.13846520157
+  sha: 63b6c1c089f396d7f6199c0983c7284478b65850
+  tarball_url: https://api.github.com/repos/PerseusDL/canonical-latinLit/tarball/0.0.13846520157
 PerseusDL/canonical-greekLit:
   ref: 0.0.13121237276
   sha: 70589bd4a5a26ae932b41c0bc19842f8d8ab2674
@@ -27,9 +27,9 @@ OpenGreekAndLatin/First1KGreek:
   sha: eb81494731fd632f582c4b94634127bdbd596b43
   tarball_url: https://api.github.com/repos/OpenGreekAndLatin/First1KGreek/tarball/1.1.12657993682
 OpenGreekAndLatin/Latin:
-  ref: v1.14.0
-  sha: 9a3e833b515adad490bdd11977eaf1a84d24b246
-  tarball_url: https://api.github.com/repos/OpenGreekAndLatin/Latin/tarball/v1.14.0
+  ref: 1.1.13528514871
+  sha: 78a03e635536bcd7ddea586fbdff9fbe8a897917
+  tarball_url: https://api.github.com/repos/OpenGreekAndLatin/Latin/tarball/1.1.13528514871
 lascivaroma/priapeia:
   ref: 1.1.18
   sha: 3dfc11fe1bbbe5f34c435e6cd56cc277cdacbe8f
@@ -56,5 +56,5 @@ telota/galen:
   tarball_url: https://api.github.com/repos/telota/galen/tarball/0.0.11140466376
 PatristicTextArchive/pta_data:
   ref: 1.1.12315518284
-  sha: 35091203469e2c6e2925bd86a5b1dfc418f64fb4
+  sha: 885ef1658d9189f335520b53bb5aec22f2104137
   tarball_url: https://api.github.com/repos/PatristicTextArchive/pta_data/tarball/1.1.12315518284
