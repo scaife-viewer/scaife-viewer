@@ -361,13 +361,16 @@ To deploy a new version, trigger the following GitHub Actions workflows:
 - [Update content manifest](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/update-content-manifest.yml): _(optional)_
 
     This workflow [scheduled to run daily](https://github.com/scaife-viewer/scaife-viewer/blob/6d1b12b1e993b58d25507b8bb2ff6235f900f385/.github/workflows/update-content-manifest.yml#L5), and if a change is found, it will open a PR against the default GitHub branch (e.g. [#592](https://github.com/scaife-viewer/scaife-viewer/pull/592))
+
+    To add a new repository, manually edit [data/content-manifests/production.yaml](https://github.com/scaife-viewer/scaife-viewer/blob/dev/data/content-manifests/production.yaml). Then merge this into [gh-actions branch](https://github.com/scaife-viewer/scaife-viewer/blob/gh-actions/update-content-manifest/data/content-manifests/production.yaml) to ensure automatic capture of updates.
+    
   - Manually merge the PR into the branch (e.g. [a3f9ba6](https://github.com/scaife-viewer/scaife-viewer/commit/a3f9ba6c5b681e02d4f746d4b51519890aeeb1e9))
 - [Build artifacts image](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/build-artifacts-image.yml):
 
     Fetches content as defined in [data/content-manifests/production.yaml](data/content-manifests/production.yaml) and removes non-essential files. Note that dev branch needs to match gh-actions/update-content-manifest branch if/when new repo is added to build.
 - [Build base image](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/build-base-image.yml): _(optional)_
 
-    This workflow should be ran each time the source code / code dependencies are changed.
+    This workflow should be run each time the source code / code dependencies are changed.
 
     If there have been no changes to the code since the last deployment, the last built base image will be used when creating the deployment image.
 - [Build deployment image](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/build-deployment-image.yml):
