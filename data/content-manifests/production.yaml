@@ -54,10 +54,10 @@ telota/galen:
   ref: 0.0.11140466376
   sha: b9facb598e7db305844698771adc93c0b0592c22
   tarball_url: https://api.github.com/repos/telota/galen/tarball/0.0.11140466376
-PatristicTextArchive/pta_data:
+<!--PatristicTextArchive/pta_data:
   ref: 1.1.12315518284
   sha: 885ef1658d9189f335520b53bb5aec22f2104137
-  tarball_url: https://api.github.com/repos/PatristicTextArchive/pta_data/tarball/1.1.12315518284
+  tarball_url: https://api.github.com/repos/PatristicTextArchive/pta_data/tarball/1.1.12315518284-->
 nauarchus/src_data:
   ref: 1.1.14369673244
   sha: c37ee6e0bbd314ce02664ed5fada378672397e2f
