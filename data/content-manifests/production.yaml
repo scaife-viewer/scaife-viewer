@@ -1,7 +1,7 @@
 PerseusDL/canonical-latinLit:
-  ref: 0.0.13846520157
-  sha: 63b6c1c089f396d7f6199c0983c7284478b65850
-  tarball_url: https://api.github.com/repos/PerseusDL/canonical-latinLit/tarball/0.0.13846520157
+  ref: 0.0.14603298936
+  sha: 4e6de4cf0279d8377fa4a16c4f94d131d70a8d04
+  tarball_url: https://api.github.com/repos/PerseusDL/canonical-latinLit/tarball/0.0.14603298936
 PerseusDL/canonical-greekLit:
   ref: 0.0.14134910902
   sha: 48240f7fcf96ce78ad4dacaf3fe12e10cfe8f30f
@@ -54,11 +54,11 @@ telota/galen:
   ref: 0.0.11140466376
   sha: b9facb598e7db305844698771adc93c0b0592c22
   tarball_url: https://api.github.com/repos/telota/galen/tarball/0.0.11140466376
-PatristicTextArchive/pta_data:
+<!--PatristicTextArchive/pta_data:
   ref: 1.1.12315518284
   sha: 885ef1658d9189f335520b53bb5aec22f2104137
-  tarball_url: https://api.github.com/repos/PatristicTextArchive/pta_data/tarball/1.1.12315518284
+  tarball_url: https://api.github.com/repos/PatristicTextArchive/pta_data/tarball/1.1.12315518284-->
 nauarchus/src_data:
-  ref: 1.1.13846463037
-  sha: 5c2fb62bb5d358d0c2bae6e5891ba826f0792b9b
-  tarball_url: https://api.github.com/repos/nauarchus/src_data/tarball/1.1.13846463037
+  ref: 1.1.14369673244
+  sha: c37ee6e0bbd314ce02664ed5fada378672397e2f
+  tarball_url: https://api.github.com/repos/nauarchus/src_data/tarball/1.1.14369673244
