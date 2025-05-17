@@ -55,6 +55,6 @@ telota/galen:
   sha: b9facb598e7db305844698771adc93c0b0592c22
   tarball_url: https://api.github.com/repos/telota/galen/tarball/0.0.11140466376
 nauarchus/src_data:
-  ref: 1.1.15042337537
-  sha: b553a92bb76b31aad0d72c55b326a9d7a547226a
-  tarball_url: https://api.github.com/repos/nauarchus/src_data/tarball/1.1.15042337537
+  ref: 1.1.15069840035
+  sha: 55ff76a06335f0451fa606502871d88019e700d8
+  tarball_url: https://api.github.com/repos/nauarchus/src_data/tarball/1.1.15069840035
