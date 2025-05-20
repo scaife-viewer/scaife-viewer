@@ -27,7 +27,7 @@ nvm use 12
 ```shell
 npm i
 ```
-- Re the `node-sass` dependency:
+- Rebuild the `node-sass` dependency:
 ```shell
 npm rebuild node-sass
 ```
