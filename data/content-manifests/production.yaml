@@ -51,9 +51,9 @@ jacobwegner/Multepal-CTS:
   sha: 976a340223666380ece66a936bdd58330b822e40
   tarball_url: https://api.github.com/repos/jacobwegner/Multepal-CTS/tarball/v0.0.1-rc4
 telota/galen:
-  ref: 0.0.11140466376
-  sha: b9facb598e7db305844698771adc93c0b0592c22
-  tarball_url: https://api.github.com/repos/telota/galen/tarball/0.0.11140466376
+  ref: 0.0.15210742643
+  sha: b919a5e086b50e6dadbecf2f625abf57c80e12e8
+  tarball_url: https://api.github.com/repos/telota/galen/tarball/0.0.15210742643
 nauarchus/src_data:
   ref: 1.1.15069840035
   sha: 55ff76a06335f0451fa606502871d88019e700d8
