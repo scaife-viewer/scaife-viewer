@@ -1,11 +1,11 @@
 PerseusDL/canonical-latinLit:
-  ref: 0.0.14603298936
-  sha: 4e6de4cf0279d8377fa4a16c4f94d131d70a8d04
-  tarball_url: https://api.github.com/repos/PerseusDL/canonical-latinLit/tarball/0.0.14603298936
+  ref: 0.0.16199533352
+  sha: c694a64f4e9a492a56f2e3e9f587c723af2e3af3
+  tarball_url: https://api.github.com/repos/PerseusDL/canonical-latinLit/tarball/0.0.16199533352
 PerseusDL/canonical-greekLit:
-  ref: 0.0.14735104034
-  sha: 3853d97a72d5a60a5107ab3dce82087e41c269e2
-  tarball_url: https://api.github.com/repos/PerseusDL/canonical-greekLit/tarball/0.0.14735104034
+  ref: 0.0.16156563702
+  sha: d91cb00ec3d1291fc7eb262ccee95d424209bea4
+  tarball_url: https://api.github.com/repos/PerseusDL/canonical-greekLit/tarball/0.0.16156563702
 PerseusDL/canonical-engLit:
   ref: 0.0.10065281755
   sha: 1f15cabc0ea0b8b3e82fe7bd8570d8ee2d137405
@@ -51,9 +51,9 @@ jacobwegner/Multepal-CTS:
   sha: 976a340223666380ece66a936bdd58330b822e40
   tarball_url: https://api.github.com/repos/jacobwegner/Multepal-CTS/tarball/v0.0.1-rc4
 telota/galen:
-  ref: 0.0.11140466376
-  sha: b9facb598e7db305844698771adc93c0b0592c22
-  tarball_url: https://api.github.com/repos/telota/galen/tarball/0.0.11140466376
+  ref: 0.0.15896933115
+  sha: eeb8da0ce066e6f4a90067c2f0d5b7d921cbb76c
+  tarball_url: https://api.github.com/repos/telota/galen/tarball/0.0.15896933115
 nauarchus/src_data:
   ref: 1.1.15069840035
   sha: 55ff76a06335f0451fa606502871d88019e700d8
