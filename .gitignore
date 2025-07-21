@@ -19,3 +19,4 @@ deploy/.env
 /sv_pdl/stats/library_stats.json
 .venv
 archive/
+.envrc
