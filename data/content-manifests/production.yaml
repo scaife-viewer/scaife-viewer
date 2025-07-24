@@ -43,9 +43,9 @@ nevenjovanovic/sophocles-ajax-latinus:
   sha: aee7611f65a30b8fe17f1833154988c811e886b3
   tarball_url: https://api.github.com/repos/nevenjovanovic/sophocles-ajax-latinus/tarball/aee7611f65a30b8fe17f1833154988c811e886b3
 jacobwegner/PDL:
-  ref: master
-  sha: 1d9ec2450d62874f60dc5fd9e6c55c7048c5a36c
-  tarball_url: https://api.github.com/repos/jacobwegner/PDL/tarball/1d9ec2450d62874f60dc5fd9e6c55c7048c5a36c
+  ref: v0.0.2
+  sha: eca3d09f9516c85173bece362749d0cb40c261df
+  tarball_url: https://api.github.com/repos/jacobwegner/PDL/tarball/v0.0.2
 jacobwegner/Multepal-CTS:
   ref: v0.0.1-rc4
   sha: 976a340223666380ece66a936bdd58330b822e40
