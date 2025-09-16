@@ -1,24 +1,21 @@
-import api from '../../api';
-import constants from '../../constants';
-import URN from '../../urn';
+import api from "../../api";
+import constants from "../../constants";
+import URN from "../../urn";
 
 export default {
-  [constants.READER_LOAD]: ({ dispatch, commit, state }, {
-    leftUrn,
-    rightUrn,
-    lowerUrn,
-    query,
-    initial,
-  }) => {
+  [constants.READER_LOAD]: (
+    { dispatch, commit, state },
+    { leftUrn, rightUrn, lowerUrn, query, initial },
+  ) => {
     if (state.error) {
-      commit(constants.SET_ERROR, { error: '' });
+      commit(constants.SET_ERROR, { error: "" });
     }
     const ps = [];
     if (state.versions === null) {
       ps.push(
-        api.getCollection(leftUrn.upTo('work'), (work) => {
+        api.getCollection(leftUrn.upTo("work"), (work) => {
           const params = {
-            e: work.texts.map(text => new URN(text.urn).version),
+            e: work.texts.map((text) => new URN(text.urn).version),
           };
           api.getLibraryVector(work.urn, params, (versions) => {
             commit(constants.SET_VERSIONS, { versions });
@@ -27,15 +24,29 @@ export default {
       );
     }
 
-    const leftTextUrn = leftUrn.upTo('version');
+    ps.push(
+      api.getPerseusCommentaryEntries(leftUrn, (response) => {
+        commit(constants.SET_PERSEUS_COMMENTARY_ENTRIES, response);
+      }),
+    );
+
+    const leftTextUrn = leftUrn.upTo("version");
     if (!state.leftText || state.leftText.urn.toString() !== leftTextUrn) {
       ps.push(
-        api.getCollection(leftTextUrn, (text) => {
-          commit(constants.SET_LEFT_TEXT, { urn: leftTextUrn, metadata: text });
-        }).catch(err => commit(constants.SET_ERROR, { error: err.message })),
+        api
+          .getCollection(leftTextUrn, (text) => {
+            commit(constants.SET_LEFT_TEXT, {
+              urn: leftTextUrn,
+              metadata: text,
+            });
+          })
+          .catch((err) => commit(constants.SET_ERROR, { error: err.message })),
       );
     }
-    if (!state.leftPassage || state.leftPassage.urn.toString() !== leftUrn.toString()) {
+    if (
+      !state.leftPassage ||
+      state.leftPassage.urn.toString() !== leftUrn.toString()
+    ) {
       if (!initial) {
         dispatch(constants.READER_SET_SELECTED_TOKEN, { token: null });
       }
@@ -43,75 +54,100 @@ export default {
       commit(constants.SET_LEFT_PASSAGE, {
         urn: leftUrn,
         ready: false,
-        error: '',
+        error: "",
         redirected: null,
       });
       ps.push(
-        api.getPassage(leftUrn, (passage) => {
-          const urn = new URN(passage.urn);
-          commit(constants.SET_LEFT_PASSAGE_TEXT, { text: passage.text_html });
-          delete passage.text_html;
-          commit(constants.SET_LEFT_PASSAGE, { urn });
-          if (leftUrn.reference !== urn.reference) {
-            commit(constants.SET_LEFT_PASSAGE, {
-              metadata: passage,
-              redirected: { previousUrn: leftUrn },
-              ready: true,
+        api
+          .getPassage(leftUrn, (passage) => {
+            const urn = new URN(passage.urn);
+            commit(constants.SET_LEFT_PASSAGE_TEXT, {
+              text: passage.text_html,
             });
-            // @@@
-            // const { default: router } = require('../router');
-            // router.push({
-            // name: 'reader',
-            // params: { leftUrn: urn.toString() },
-            // query: rootState.route.query
-            // });
-          } else {
-            commit(constants.SET_LEFT_PASSAGE, { metadata: passage, ready: true });
-          }
-        }).catch((err) => {
-          commit(constants.SET_ERROR, { error: err.message });
-        }),
+            delete passage.text_html;
+            commit(constants.SET_LEFT_PASSAGE, { urn });
+            if (leftUrn.reference !== urn.reference) {
+              commit(constants.SET_LEFT_PASSAGE, {
+                metadata: passage,
+                redirected: { previousUrn: leftUrn },
+                ready: true,
+              });
+              // @@@
+              // const { default: router } = require('../router');
+              // router.push({
+              // name: 'reader',
+              // params: { leftUrn: urn.toString() },
+              // query: rootState.route.query
+              // });
+            } else {
+              commit(constants.SET_LEFT_PASSAGE, {
+                metadata: passage,
+                ready: true,
+              });
+            }
+          })
+          .catch((err) => {
+            commit(constants.SET_ERROR, { error: err.message });
+          }),
       );
     }
 
     if (rightUrn) {
-      const rightTextUrn = rightUrn.upTo('version');
-      if (!state.rightText || state.rightText.urn.toString() !== rightTextUrn.toString()) {
+      const rightTextUrn = rightUrn.upTo("version");
+      if (
+        !state.rightText ||
+        state.rightText.urn.toString() !== rightTextUrn.toString()
+      ) {
         ps.push(
-          api.getCollection(rightTextUrn, (text) => {
-            commit(constants.SET_RIGHT_TEXT, { urn: rightTextUrn, metadata: text });
-          }).catch((err) => {
-            commit(constants.SET_ERROR, { error: err.message });
-          }),
+          api
+            .getCollection(rightTextUrn, (text) => {
+              commit(constants.SET_RIGHT_TEXT, {
+                urn: rightTextUrn,
+                metadata: text,
+              });
+            })
+            .catch((err) => {
+              commit(constants.SET_ERROR, { error: err.message });
+            }),
         );
       }
 
-      if (!state.rightPassage || state.rightPassage.urn.toString() !== rightUrn.toString()) {
+      if (
+        !state.rightPassage ||
+        state.rightPassage.urn.toString() !== rightUrn.toString()
+      ) {
         commit(constants.SET_RIGHT_PASSAGE_TEXT, { text: null });
         commit(constants.SET_RIGHT_PASSAGE, {
           urn: rightUrn,
           ready: false,
-          error: '',
+          error: "",
           redirected: null,
         });
         ps.push(
-          api.getPassage(rightUrn, (passage) => {
-            const urn = new URN(passage.urn);
-            commit(constants.SET_RIGHT_PASSAGE_TEXT, { text: passage.text_html });
-            delete passage.text_html;
-            commit(constants.SET_RIGHT_PASSAGE, { urn });
-            if (rightUrn.reference !== urn.reference) {
-              commit(constants.SET_RIGHT_PASSAGE, {
-                metadata: passage,
-                redirected: { previousUrn: rightUrn },
-                ready: true,
+          api
+            .getPassage(rightUrn, (passage) => {
+              const urn = new URN(passage.urn);
+              commit(constants.SET_RIGHT_PASSAGE_TEXT, {
+                text: passage.text_html,
               });
-            } else {
-              commit(constants.SET_RIGHT_PASSAGE, { metadata: passage, ready: true });
-            }
-          }).catch((err) => {
-            commit(constants.SET_RIGHT_PASSAGE, { error: err.message });
-          }),
+              delete passage.text_html;
+              commit(constants.SET_RIGHT_PASSAGE, { urn });
+              if (rightUrn.reference !== urn.reference) {
+                commit(constants.SET_RIGHT_PASSAGE, {
+                  metadata: passage,
+                  redirected: { previousUrn: rightUrn },
+                  ready: true,
+                });
+              } else {
+                commit(constants.SET_RIGHT_PASSAGE, {
+                  metadata: passage,
+                  ready: true,
+                });
+              }
+            })
+            .catch((err) => {
+              commit(constants.SET_RIGHT_PASSAGE, { error: err.message });
+            }),
         );
       }
     } else if (state.rightText) {
@@ -119,71 +155,99 @@ export default {
     }
 
     if (lowerUrn) {
-      const lowerTextUrn = lowerUrn.upTo('version');
-      if (!state.lowerText || state.lowerText.urn.toString() !== lowerTextUrn.toString()) {
+      const lowerTextUrn = lowerUrn.upTo("version");
+      if (
+        !state.lowerText ||
+        state.lowerText.urn.toString() !== lowerTextUrn.toString()
+      ) {
         ps.push(
-          api.getCollection(lowerTextUrn, (text) => {
-            commit(constants.SET_LOWER_TEXT, { urn: lowerTextUrn, metadata: text });
-          }).catch((err) => {
-            commit(constants.SET_ERROR, { error: err.message });
-          }),
+          api
+            .getCollection(lowerTextUrn, (text) => {
+              commit(constants.SET_LOWER_TEXT, {
+                urn: lowerTextUrn,
+                metadata: text,
+              });
+            })
+            .catch((err) => {
+              commit(constants.SET_ERROR, { error: err.message });
+            }),
         );
       }
 
-      if (!state.lowerPassage || state.lowerPassage.urn.toString() !== lowerUrn.toString()) {
+      if (
+        !state.lowerPassage ||
+        state.lowerPassage.urn.toString() !== lowerUrn.toString()
+      ) {
         commit(constants.SET_LOWER_PASSAGE_TEXT, { text: null });
         commit(constants.SET_LOWER_PASSAGE, {
           urn: lowerUrn,
           ready: false,
-          error: '',
+          error: "",
           redirected: null,
         });
         ps.push(
-          api.getPassage(lowerUrn, (passage) => {
-            const urn = new URN(passage.urn);
-            commit(constants.SET_LOWER_PASSAGE_TEXT, { text: passage.text_html });
-            delete passage.text_html;
-            commit(constants.SET_LOWER_PASSAGE, { urn });
-            if (lowerUrn.reference !== urn.reference) {
-              commit(constants.SET_LOWER_PASSAGE, {
-                metadata: passage,
-                redirected: { previousUrn: lowerUrn },
-                ready: true,
+          api
+            .getPassage(lowerUrn, (passage) => {
+              const urn = new URN(passage.urn);
+              commit(constants.SET_LOWER_PASSAGE_TEXT, {
+                text: passage.text_html,
               });
-            } else {
-              commit(constants.SET_LOWER_PASSAGE, { metadata: passage, ready: true });
-            }
-          }).catch((err) => {
-            commit(constants.SET_LOWER_PASSAGE, { error: err.message });
-          }),
+              delete passage.text_html;
+              commit(constants.SET_LOWER_PASSAGE, { urn });
+              if (lowerUrn.reference !== urn.reference) {
+                commit(constants.SET_LOWER_PASSAGE, {
+                  metadata: passage,
+                  redirected: { previousUrn: lowerUrn },
+                  ready: true,
+                });
+              } else {
+                commit(constants.SET_LOWER_PASSAGE, {
+                  metadata: passage,
+                  ready: true,
+                });
+              }
+            })
+            .catch((err) => {
+              commit(constants.SET_LOWER_PASSAGE, { error: err.message });
+            }),
         );
       }
     } else if (state.lowerText) {
       commit(constants.SET_LOWER_PASSAGE, null);
     }
 
-    return Promise.all(ps).then(() => {
-      if (query.highlight && query.highlight !== state.highlight) {
-        dispatch(constants.READER_HIGHLIGHT, {
-          highlight: query.highlight,
-          route: false,
-        });
-      }
-    }).catch((err) => {
-      commit(constants.SET_ERROR, { error: `failed to load reader: ${err}` });
-    });
+    return Promise.all(ps)
+      .then(() => {
+        if (query.highlight && query.highlight !== state.highlight) {
+          dispatch(constants.READER_HIGHLIGHT, {
+            highlight: query.highlight,
+            route: false,
+          });
+        }
+      })
+      .catch((err) => {
+        commit(constants.SET_ERROR, { error: `failed to load reader: ${err}` });
+      });
   },
 
-  [constants.READER_SET_SELECTED_TOKEN]: ({ dispatch, commit, state }, { token }) => {
+  [constants.READER_SET_SELECTED_TOKEN]: (
+    { dispatch, commit, state },
+    { token },
+  ) => {
     commit(constants.SET_SELECTED_TOKEN_RANGE, { start: token, end: null });
     if (token === null) {
       dispatch(constants.READER_HIGHLIGHT, { highlight: null });
     } else {
-      dispatch(constants.READER_HIGHLIGHT, { highlight: `@${state.selectedTokenRange.start}` });
+      dispatch(constants.READER_HIGHLIGHT, {
+        highlight: `@${state.selectedTokenRange.start}`,
+      });
     }
   },
 
-  [constants.READER_SELECT_TOKEN_RANGE]: ({ dispatch, commit, state }, { token }) => {
+  [constants.READER_SELECT_TOKEN_RANGE]: (
+    { dispatch, commit, state },
+    { token },
+  ) => {
     if (state.selectedTokenRange.start === null) {
       const firstToken = state.leftPassage.metadata.word_tokens[0];
       const start = `${firstToken.w}[${firstToken.i}]`;
@@ -191,36 +255,40 @@ export default {
     } else {
       commit(constants.SET_SELECTED_TOKEN_RANGE, { end: token });
     }
-    dispatch(constants.READER_HIGHLIGHT, { highlight: `@${state.selectedTokenRange.start}-${state.selectedTokenRange.end}` });
+    dispatch(constants.READER_HIGHLIGHT, {
+      highlight: `@${state.selectedTokenRange.start}-${state.selectedTokenRange.end}`,
+    });
   },
 
   [constants.READER_HIGHLIGHT]: ({ commit, state }, { highlight }) => {
     if (highlight !== null) {
-      if (state.mode !== 'clickable') {
-        commit(constants.SET_TEXT_MODE, { mode: 'clickable' });
+      if (state.mode !== "clickable") {
+        commit(constants.SET_TEXT_MODE, { mode: "clickable" });
       }
       let singleton = false;
       const selectedTokens = [];
-      if (highlight.indexOf('@') === -1) {
+      if (highlight.indexOf("@") === -1) {
         highlight = `@${highlight}`;
       }
-      if (highlight.indexOf('-') >= 0) {
+      if (highlight.indexOf("-") >= 0) {
         const allTokens = state.leftPassage.metadata.word_tokens;
-        let [start, end] = highlight.substr(1).split('-');
-        if (start.indexOf('[') === -1) {
+        let [start, end] = highlight.substr(1).split("-");
+        if (start.indexOf("[") === -1) {
           start = `${start}[1]`;
         }
-        if (end.indexOf('[') === -1) {
+        if (end.indexOf("[") === -1) {
           end = `${end}[1]`;
         }
-        const startIdx = allTokens.findIndex(t => `${t.w}[${t.i}]` === start);
-        const endIdx = allTokens.findIndex(t => `${t.w}[${t.i}]` === end);
+        const startIdx = allTokens.findIndex((t) => `${t.w}[${t.i}]` === start);
+        const endIdx = allTokens.findIndex((t) => `${t.w}[${t.i}]` === end);
         Array.prototype.push.apply(
           selectedTokens,
-          allTokens.slice(Math.min(startIdx, endIdx), Math.max(startIdx, endIdx) + 1).map(t => `${t.w}[${t.i}]`),
+          allTokens
+            .slice(Math.min(startIdx, endIdx), Math.max(startIdx, endIdx) + 1)
+            .map((t) => `${t.w}[${t.i}]`),
         );
       } else {
-        if (highlight.indexOf('[') === -1) {
+        if (highlight.indexOf("[") === -1) {
           highlight = `${highlight}[1]`;
         }
         selectedTokens.push(highlight.substr(1));
@@ -229,7 +297,7 @@ export default {
       selectedTokens.forEach((token) => {
         commit(constants.SET_ANNOTATION, {
           token,
-          key: 'selected',
+          key: "selected",
           value: true,
           singleton,
         });
@@ -239,7 +307,7 @@ export default {
       //   query = { ...query, highlight };
       // }
     } else {
-      commit(constants.CLEAR_ANNOTATION, { key: 'selected' });
+      commit(constants.CLEAR_ANNOTATION, { key: "selected" });
       commit(constants.SET_HIGHLIGHT, null);
       // if (route) {
       //   query = (({ highlight: deleted, ...o }) => o)(query);

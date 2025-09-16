@@ -173,6 +173,10 @@ export default {
     state.annotationChange += 1;
   },
 
+  [constants.SET_PERSEUS_COMMENTARY_ENTRIES]: (state, { results, previous, next }) => {
+    state.commentaryEntries = results;
+  },
+
   [constants.SET_ANNOTATIONS]: (state, { tokens, key, value }) => {
     const { annotations } = state;
     tokens.forEach((token) => {
