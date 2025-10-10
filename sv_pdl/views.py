@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.core.cache import cache
 from django.db.models import Count
 from django.http import JsonResponse
@@ -49,7 +50,7 @@ def about(request):
 
 
 def commentaries(request, *args, **kwargs):
-    response = requests.get(f"http://localhost:8082/commentaries/passage/{kwargs['urn']}")
+    response = requests.get(f"{settings.SV_NEW_ATLAS_API_URL}/commentaries/passage/{kwargs['urn']}")
 
     return JsonResponse(response.json())
 
