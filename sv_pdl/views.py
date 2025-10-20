@@ -54,6 +54,12 @@ def commentaries(request, *args, **kwargs):
 
     return JsonResponse(response.json())
 
+def dictionaries(request):
+    response = requests.get(f"{settings.SV_NEW_ATLAS_API_URL}/dictionaries/json", headers={"accept": "application/json"})
+
+    print(response.text)
+    return JsonResponse(response.json())
+
 def profile(request):
     return render(request, "profile.html", {})
 

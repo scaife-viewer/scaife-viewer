@@ -21,7 +21,7 @@ from scaife_viewer.core.views import (
     search_json,
 )
 
-from .views import about, app, commentaries, home, profile
+from .views import about, app, commentaries, dictionaries, home, profile
 
 
 api_patterns = (
@@ -35,6 +35,7 @@ api_patterns = (
         path("library/passage/<str:urn>/text/", LibraryPassageView.as_view(format="text"), name="library_passage_text"),
         path("library/passage/<str:urn>/xml/", LibraryPassageView.as_view(format="xml"), name="library_passage_xml"),
         path("library/commentaries/<str:urn>/json/", commentaries, name="commentaries"),
+        path("library/dictionaries/json/", dictionaries, name="dictionaries"),
         path("library/<str:urn>/cts-api-xml/reffs/", CTSApiGetValidReffView.as_view(), name="library_cts_api_get_valid_reff"),
         path("library/<str:urn>/cts-api-xml/", CTSApiGetPassageView.as_view(), name="library_cts_api_xml"),
         path("library/<str:urn>/json/", LibraryCollectionView.as_view(format="json"), name="library_collection"),

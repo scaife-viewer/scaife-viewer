@@ -177,6 +177,10 @@ export default {
     state.commentaryEntries = results;
   },
 
+  [constants.SET_PERSEUS_AVAILABLE_DICTIONARIES]: (state, { results }) => {
+    state.availableDictionaries = results;
+  },
+
   [constants.SET_ANNOTATIONS]: (state, { tokens, key, value }) => {
     const { annotations } = state;
     tokens.forEach((token) => {

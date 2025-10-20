@@ -50,6 +50,7 @@ export default {
     HTTP.get(`library/passage/${urn}/json/`).then((r) =>
       cb({ ...r.data, ...pagination(r) }),
     ),
+  getPerseusDictionaries: (cb) => HTTP.get('library/dictionaries/json').then((r) => cb({ ...r.data })),
   getPerseusCommentaryEntries: (urn, cb) =>
     HTTP.get(`library/commentaries/${urn}/json/`).then((r) =>
       cb({ ...r.data }),

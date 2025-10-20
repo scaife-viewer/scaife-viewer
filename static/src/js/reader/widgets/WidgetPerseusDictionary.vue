@@ -1,16 +1,14 @@
 <template>
-  <base-widget class="perseus-commentary">
-    <span slot="header">Perseus Dictionary</span>
+  <base-widget class="perseus-dictionary">
+    <span slot="header">Perseus Dictionaries</span>
     <div slot="body">
       <div>
         <div
-          v-for="entry in commentaryEntries"
-          :key="entry.idx"
-          :id="entry.urn"
-          :corresp="entry.corresp"
+          v-for="dictionary in availableDictionaries"
+          :key="dictionary.urn"
+          :id="dictionary.urn"
         >
-          <span>{{ entry.corresp.split(":").at(-1) }}. </span>
-          <div v-html="entry.content" />
+          <span>{{ dictionary.label }} </span>
         </div>
       </div>
     </div>
@@ -27,10 +25,10 @@
 // Dictionaries have lists of relevant URN fragments
 // Default to LSJ or Lewis and Short
 export default {
-  name: "widget-perseus-commentary",
+  name: "widget-perseus-dictionary",
   computed: {
-    commentaryEntries() {
-      return this.$store.state.reader.commentaryEntries;
+    availableDictionaries() {
+      return this.$store.state.reader.availableDictionaries;
     },
   },
 };

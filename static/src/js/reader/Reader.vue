@@ -99,6 +99,7 @@
         </template>
         <template slot="right">
           <widget-perseus-commentary />
+          <widget-perseus-dictionary />
           <widget-morpheus />
           <widget-word-list />
           <widget-attributions />
@@ -130,6 +131,7 @@ import WidgetPassageAncestors from './widgets/WidgetPassageAncestors.vue';
 import WidgetPassageChildren from './widgets/WidgetPassageChildren.vue';
 import WidgetPassageReference from './widgets/WidgetPassageReference.vue';
 import WidgetPerseusCommentary from './widgets/WidgetPerseusCommentary.vue';
+import WidgetPerseusDictionary from './widgets/WidgetPerseusDictionary.vue';
 import WidgetSearch from './widgets/WidgetSearch.vue';
 import WidgetHighlight from './widgets/WidgetHighlight.vue';
 import WidgetPassageLinks from './widgets/WidgetPassageLinks.vue';
@@ -154,6 +156,7 @@ const widgets = {
   WidgetRepoMetadata,
   WidgetPassageExports,
   WidgetPerseusCommentary,
+  WidgetPerseusDictionary,
   WidgetTextMode,
   WidgetTextSize,
   WidgetHighlight,

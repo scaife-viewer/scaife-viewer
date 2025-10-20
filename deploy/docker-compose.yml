@@ -14,7 +14,7 @@ services:
     container_name: sv-postgres
     image: postgres:9.6-alpine
     ports:
-      - 5432:5432
+      - ${POSTGRES_PORT:-5432}:5432
     environment:
       - POSTGRES_USER=scaife
       - POSTGRES_PASSWORD=scaife

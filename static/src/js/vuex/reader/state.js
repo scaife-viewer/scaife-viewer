@@ -20,4 +20,5 @@ export default {
   error: "",
   selectedTokenRange: { start: null, end: null },
   commentaryEntries: null,
+  availableDictionaries: null,
 };

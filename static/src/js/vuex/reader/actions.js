@@ -30,6 +30,12 @@ export default {
       }),
     );
 
+    ps.push(
+      api.getPerseusDictionaries((response) => {
+        commit(constants.SET_PERSEUS_AVAILABLE_DICTIONARIES, response);
+      }),
+    );
+
     const leftTextUrn = leftUrn.upTo("version");
     if (!state.leftText || state.leftText.urn.toString() !== leftTextUrn) {
       ps.push(
