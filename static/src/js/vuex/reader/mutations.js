@@ -178,7 +178,7 @@ export default {
   },
 
   [constants.SET_PERSEUS_AVAILABLE_DICTIONARIES]: (state, { results }) => {
-    state.availableDictionaries = results;
+    state.availableDictionaries = results.toSorted((a, b) => a.label.localeCompare(b.label));
   },
 
   [constants.SET_ANNOTATIONS]: (state, { tokens, key, value }) => {
