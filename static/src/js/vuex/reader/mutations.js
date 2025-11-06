@@ -173,6 +173,14 @@ export default {
     state.annotationChange += 1;
   },
 
+  [constants.SET_PERSEUS_COMMENTARY_ENTRIES]: (state, { results, previous, next }) => {
+    state.commentaryEntries = results;
+  },
+
+  [constants.SET_PERSEUS_AVAILABLE_DICTIONARIES]: (state, { results }) => {
+    state.availableDictionaries = results.toSorted((a, b) => a.label.localeCompare(b.label));
+  },
+
   [constants.SET_ANNOTATIONS]: (state, { tokens, key, value }) => {
     const { annotations } = state;
     tokens.forEach((token) => {

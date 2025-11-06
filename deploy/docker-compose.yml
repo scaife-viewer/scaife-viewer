@@ -1,7 +1,4 @@
-version: '3.7'
-
 services:
-
   scaife-viewer:
     build:
       context: ../
@@ -11,14 +8,13 @@ services:
     command: gunicorn --preload scaife_viewer.wsgi
     ports:
       - ${SCAIFE_VIEWER_PORT:-8000}:8000
-    env_file:
-      .env
+    env_file: .env
 
   sv-postgres:
     container_name: sv-postgres
     image: postgres:9.6-alpine
     ports:
-      - 5432:5432
+      - ${POSTGRES_PORT:-5432}:5432
     environment:
       - POSTGRES_USER=scaife
       - POSTGRES_PASSWORD=scaife

@@ -58,9 +58,10 @@
   }
 }
 
-.widget.children, .widget.ancestors {
+.widget.children,
+.widget.ancestors {
   div.body {
-    font-family: 'Noto Serif';
+    font-family: "Noto Serif";
     font-size: 12px;
     line-height: 16px;
     a {
@@ -72,7 +73,7 @@
 .widget.children {
   div.body {
     a:not(:last-child):after {
-      content: ' ';
+      content: " ";
     }
   }
 }
@@ -119,9 +120,21 @@
   }
 }
 
+.widget.perseus-commentary {
+  div.body {
+    font-size: 12px;
+    font-family: "Noto Serif";
+    color: $gray-700;
+
+    .comment-body {
+      padding-right: 4px;
+    }
+  }
+}
+
 .widget.selected-word {
   div.body {
-    font-family: 'Noto Serif';
+    font-family: "Noto Serif";
     font-size: 18px;
     font-weight: bold;
   }
@@ -130,13 +143,13 @@
 .widget.word-list {
   div.body {
     font-size: 12px;
-    font-family: 'Noto Serif';
+    font-family: "Noto Serif";
     color: $gray-700;
   }
   p.legend {
     padding: 4px 0 8px;
     font-size: 12px;
-    font-family: 'Noto Serif';
+    font-family: "Noto Serif";
     font-style: italic;
     line-height: 12px;
     color: $gray-600;
@@ -160,7 +173,7 @@
       padding-left: 1em;
     }
     .text {
-      font-family: 'Noto Serif';
+      font-family: "Noto Serif";
     }
     .parse {
       font-family: monospace;
@@ -172,7 +185,7 @@
 .widget.text-mode {
   .mode a {
     padding: 3px 6px;
-    font-family: 'Noto Serif';
+    font-family: "Noto Serif";
     font-size: 12px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -224,7 +237,8 @@
     .search-hits {
       margin: 0;
 
-      p.instructions, p.no-results {
+      p.instructions,
+      p.no-results {
         font-size: 12px;
         color: $gray-600;
         margin: 0;
@@ -233,7 +247,7 @@
         list-style: none;
         padding: 0 4px;
         li {
-          font-family: 'Noto Serif';
+          font-family: "Noto Serif";
           font-size: 12px;
           line-height: 14px;
           margin-top: 4px;
@@ -263,7 +277,7 @@
 .widget.new-alexandria-commentary {
   div.body {
     font-size: 12px;
-    font-family: 'Noto Serif';
+    font-family: "Noto Serif";
     color: $gray-700;
   }
   p.no-comment {
@@ -272,8 +286,9 @@
   }
   .comment {
     margin: 2em 0;
-    h6, h4 {
-      font-family: 'Noto Serif';
+    h6,
+    h4 {
+      font-family: "Noto Serif";
       font-size: 1rem;
       margin-bottom: 0;
       font-weight: normal;
@@ -293,7 +308,7 @@
 .widget.morpheus {
   div.body {
     font-size: 12px;
-    font-family: 'Noto Serif';
+    font-family: "Noto Serif";
     color: $gray-700;
   }
   p.no-results {
@@ -301,13 +316,13 @@
     color: $gray-600;
   }
   p.instructions {
-    font-family: 'Noto Sans';
+    font-family: "Noto Sans";
     font-size: 12px;
     color: $gray-600;
     margin: 0 0 0 22px;
     span.mode {
       color: $black;
-      font-family: 'Noto Serif';
+      font-family: "Noto Serif";
       letter-spacing: 0.1em;
       text-transform: uppercase;
     }
@@ -328,7 +343,7 @@
       .pofs-decl {
         margin-left: 1em;
         font-size: 14px;
-        font-family: 'Noto Sans';
+        font-family: "Noto Sans";
         color: $gray-600;
       }
     }
@@ -343,12 +358,12 @@
         }
         .props {
           margin-left: 1em;
-          font-family: 'Noto Sans';
+          font-family: "Noto Sans";
           color: $gray-600;
         }
         .dial {
           font-style: italic;
-          font-family: 'Noto Sans';
+          font-family: "Noto Sans";
           color: $gray-600;
         }
       }
@@ -359,7 +374,8 @@
 /*
 START scaife-widgets style overrides
 */
-.text-width-widget, .text-size-widget {
+.text-width-widget,
+.text-size-widget {
   margin: 0 0 0 22px !important;
 }
 /*

@@ -53,7 +53,7 @@ source .venv/bin/activate
 - Install dependencies:
 ```shell
 pip install pip wheel --upgrade
-pip install -r requirements.txt
+pip install -r requirements.txt # or requirements-dev.txt if developing locally
 pip install PyGithub
 ```
 - Set required environment variables:
