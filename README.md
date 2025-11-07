@@ -360,11 +360,10 @@ The production instance of the application is built using [GitHub Actions](https
 To deploy a new version, trigger the following GitHub Actions workflows:
 - [Update content manifest](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/update-content-manifest.yml): _(optional)_
 
-    This workflow [scheduled to run daily](https://github.com/scaife-viewer/scaife-viewer/blob/6d1b12b1e993b58d25507b8bb2ff6235f900f385/.github/workflows/update-content-manifest.yml#L5), and if a change is found, it will open a PR against the default GitHub branch (e.g. [#592](https://github.com/scaife-viewer/scaife-viewer/pull/592))
+    This workflow [scheduled to run daily](https://github.com/scaife-viewer/scaife-viewer/blob/6d1b12b1e993b58d25507b8bb2ff6235f900f385/.github/workflows/update-content-manifest.yml#L5), and if a change is found, it will open a PR against the default GitHub branch (e.g. [#592](https://github.com/scaife-viewer/scaife-viewer/pull/592))  Manually merge the PR into the branch (e.g. [a3f9ba6](https://github.com/scaife-viewer/scaife-viewer/commit/a3f9ba6c5b681e02d4f746d4b51519890aeeb1e9))
 
     To add a new repository, manually edit [data/content-manifests/production.yaml](https://github.com/scaife-viewer/scaife-viewer/blob/dev/data/content-manifests/production.yaml). Then merge this into [gh-actions branch](https://github.com/scaife-viewer/scaife-viewer/blob/gh-actions/update-content-manifest/data/content-manifests/production.yaml) to ensure automatic capture of updates.
     
-  - Manually merge the PR into the branch (e.g. [a3f9ba6](https://github.com/scaife-viewer/scaife-viewer/commit/a3f9ba6c5b681e02d4f746d4b51519890aeeb1e9))
   - Delete the old branch gh-actions/update-content-manifest via search https://github.com/scaife-viewer/scaife-viewer/branches/all?query=update&lastTab=overview
 
 - [Build artifacts image](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/build-artifacts-image.yml):
