@@ -364,7 +364,6 @@ To deploy a new version, trigger the following GitHub Actions workflows:
 
     To add a new repository, manually edit [data/content-manifests/production.yaml](https://github.com/scaife-viewer/scaife-viewer/blob/dev/data/content-manifests/production.yaml). Then merge this into [gh-actions branch](https://github.com/scaife-viewer/scaife-viewer/blob/gh-actions/update-content-manifest/data/content-manifests/production.yaml) to ensure automatic capture of updates.
     
-  - Delete the old branch gh-actions/update-content-manifest via search https://github.com/scaife-viewer/scaife-viewer/branches/all?query=update&lastTab=overview
 
 - [Build artifacts image](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/build-artifacts-image.yml):
 
