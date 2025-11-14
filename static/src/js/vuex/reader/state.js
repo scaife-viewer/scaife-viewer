@@ -1,5 +1,5 @@
 export default {
-  textMode: 'browser',
+  textMode: "browser",
   sidebarLeftOpened: true,
   sidebarRightOpened: true,
   versions: null,
@@ -17,6 +17,8 @@ export default {
   annotationsHash: {},
   annotationChange: 0,
   selectedLemmas: null,
-  error: '',
+  error: "",
   selectedTokenRange: { start: null, end: null },
+  commentaryEntries: null,
+  availableDictionaries: null,
 };

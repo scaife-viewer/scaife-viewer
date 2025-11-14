@@ -6,6 +6,9 @@ django-letsencrypt==3.0.1
 django-oidc-provider==0.7.0
 django-user-accounts==3.0.2
 django-webpack-loader==0.6.0
+# NOTE: Pinned at 7.10.x;
+# refs https://bonsai.io/docs/which-versions-bonsai-supports
+elasticsearch==7.10.1
 Django==2.2.28
 gunicorn==19.9.0
 honcho==1.0.1
@@ -14,13 +17,13 @@ MyCapytain @https://github.com/jacobwegner/MyCapytain/archive/7b3c18b57214765357
 pinax-eventlog[django-lts]==5.1.0
 pinax-theme-bootstrap==8.0.1
 pinax-webanalytics==4.0.2
-psycopg2-binary==2.8.6
+psycopg2==2.9.10
 PyYAML==6.0.1
 raven==6.10.0
 requests==2.22.0
 # @@@ atlas package is not yet released to pypi
 scaife-viewer-atlas @https://github.com/scaife-viewer/backend/archive/scaife-viewer-atlas@0.1a15.zip#subdirectory=atlas
 # @@@ core package is not yet released to pypi
-scaife-viewer-core @https://github.com/scaife-viewer/backend/archive/8ca4c2e2328a7deaeb41fa3f388943d1a4c24328.zip#subdirectory=core
+scaife-viewer-core @https://github.com/scaife-viewer/backend/archive/ed7f8777be86b9f58ae58a303d34913261f4f7df.zip#subdirectory=core
 six==1.12.0
 whitenoise==4.1.2

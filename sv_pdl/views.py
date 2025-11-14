@@ -1,9 +1,13 @@
+from django.conf import settings
 from django.core.cache import cache
 from django.db.models import Count
+from django.http import JsonResponse
 from django.shortcuts import render
 
 from github import Github
 from scaife_viewer.atlas.models import Repo
+
+import requests
 
 from .changelog.keyfile import cachekeys
 from .stats import get_library_stats
@@ -44,6 +48,28 @@ def about(request):
     )
     return render(request, "about.html", {"repos": repos})
 
+
+def commentaries(request, *args, **kwargs):
+    response = requests.get(f"{settings.SV_NEW_ATLAS_API_URL}/commentaries/passage/{kwargs['urn']}")
+
+    return JsonResponse(response.json())
+
+def dictionary_entries(request, *args, **kwargs):
+    url = f"{settings.SV_NEW_ATLAS_API_URL}/dictionaries/{kwargs['slug']}/entries"
+
+    q = request.GET.get("q", None)
+
+    if q is not None:
+        url = f"{url}?q={q}"
+
+    response = requests.get(url)
+
+    return JsonResponse(response.json())
+
+def dictionaries(request):
+    response = requests.get(f"{settings.SV_NEW_ATLAS_API_URL}/dictionaries/json", headers={"accept": "application/json"})
+
+    return JsonResponse(response.json())
 
 def profile(request):
     return render(request, "profile.html", {})

@@ -53,7 +53,7 @@ source .venv/bin/activate
 - Install dependencies:
 ```shell
 pip install pip wheel --upgrade
-pip install -r requirements.txt
+pip install -r requirements.txt # or requirements-dev.txt if developing locally
 pip install PyGithub
 ```
 - Set required environment variables:
@@ -91,7 +91,7 @@ We'll ingest a portion of the data into ElasticSearch
 
 - Fetch the ElasticSearch template:
 ```shell
-curl -O https://gist.githubusercontent.com/jacobwegner/68e538edf66539feb25786cc3c9cc6c6/raw/3d17cde6a72d4526aa15fe79a07265c6638dd71c/scaife-viewer-tmp.json
+curl -O https://gist.githubusercontent.com/jacobwegner/68e538edf66539feb25786cc3c9cc6c6/raw/252e01a4c7e633b4663777a7e12dcb81119131e1/scaife-viewer-tmp.json
 ```
 - Install the template:
 ```shell
@@ -212,6 +212,8 @@ Note that, although running Scaife locally, this is relying on the Nautilus serv
 You can run the Vue unit tests, via:
 
     npm run unit
+
+Cross-browser testing is provided by BrowserStack through their [open source program](](https://www.browserstack.com/open-source)).  
 
 ## Translations
 
@@ -358,14 +360,17 @@ The production instance of the application is built using [GitHub Actions](https
 To deploy a new version, trigger the following GitHub Actions workflows:
 - [Update content manifest](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/update-content-manifest.yml): _(optional)_
 
-    This workflow [scheduled to run daily](https://github.com/scaife-viewer/scaife-viewer/blob/6d1b12b1e993b58d25507b8bb2ff6235f900f385/.github/workflows/update-content-manifest.yml#L5), and if a change is found, it will open a PR against the default GitHub branch (e.g. [#592](https://github.com/scaife-viewer/scaife-viewer/pull/592))
-  - Manually merge the PR into the branch (e.g. [a3f9ba6](https://github.com/scaife-viewer/scaife-viewer/commit/a3f9ba6c5b681e02d4f746d4b51519890aeeb1e9))
+    This workflow [scheduled to run daily](https://github.com/scaife-viewer/scaife-viewer/blob/6d1b12b1e993b58d25507b8bb2ff6235f900f385/.github/workflows/update-content-manifest.yml#L5), and if a change is found, it will open a PR against the default GitHub branch (e.g. [#592](https://github.com/scaife-viewer/scaife-viewer/pull/592))  Manually merge the PR into the branch (e.g. [a3f9ba6](https://github.com/scaife-viewer/scaife-viewer/commit/a3f9ba6c5b681e02d4f746d4b51519890aeeb1e9))
+
+    To add a new repository, manually edit [data/content-manifests/production.yaml](https://github.com/scaife-viewer/scaife-viewer/blob/dev/data/content-manifests/production.yaml). Then merge this into [gh-actions branch](https://github.com/scaife-viewer/scaife-viewer/blob/gh-actions/update-content-manifest/data/content-manifests/production.yaml) to ensure automatic capture of updates.
+    
+
 - [Build artifacts image](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/build-artifacts-image.yml):
 
-    Fetches content as defined in [data/content-manifests/production.yaml](data/content-manifests/production.yaml) and removes non-essential files.
+    Fetches content as defined in [data/content-manifests/production.yaml](data/content-manifests/production.yaml) and removes non-essential files. Note that dev branch needs to match gh-actions/update-content-manifest branch if/when new repo is added to build.
 - [Build base image](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/build-base-image.yml): _(optional)_
 
-    This workflow should be ran each time the source code / code dependencies are changed.
+    This workflow should be run each time the source code / code dependencies are changed.
 
     If there have been no changes to the code since the last deployment, the last built base image will be used when creating the deployment image.
 - [Build deployment image](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/build-deployment-image.yml):
@@ -385,10 +390,13 @@ To deploy a new version, trigger the following GitHub Actions workflows:
 
     This image with code + data + lemmatization data is used to rebuild the search index.
 - [Reindex content](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/reindex-content.yml):
+    <a name="reindex-content"></a>
 
     Use the search indexer image to run a reindex task (currently on Google Cloud Run).
 
     The job output includes the new index as `ELASTICSEARCH_INDEX_NAME`.
+    
+    Check the status of the job using the [Check reindexing job status workflow](#check-reindexing-job-status)
 - [Promote search index](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/promote-index.yml):
 
     Updates the search index on Heroku to the provided index name (from the "Reindex content" workflow above).
@@ -435,7 +443,7 @@ After the application restarts, refresh the homepage to verify the latest releas
 
 ## Release Tasks
 
-- [Diff corpora contents](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/workflows/diff-corpora-contents.yml):
+- [Diff corpora contents](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/diff-corpora-contents.yml):
 
     Diff two versions of the corpus-metadata manifest.
 
@@ -473,6 +481,24 @@ After the application restarts, refresh the homepage to verify the latest releas
 ## Maintenance Tasks
 
 The following GitHub Actions workflows are used to run maintenance tasks:
+- [Check reindexing job status](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/check-reindexing-job-status.yml):
+
+    <a name="check-reindexing-job-status"></a>
+
+    This workflow should be ran to check the status of the [Reindex content](#reindex-content) job.
+
+    It will query the Google Cloud Run API and return a description of the latest job execution:
+    
+    <img width="890" alt="image" src="https://github.com/scaife-viewer/scaife-viewer/assets/629062/1ebbe29f-0273-45ba-8da8-a4b028bfb6da">
+    
+    It also checks the completion status of the execution.  If the execution has not completed, an error will be returned:
+    
+    <img width="883" alt="image" src="https://github.com/scaife-viewer/scaife-viewer/assets/629062/6f13c87e-0341-4943-bc1c-ffb2da1456c0">
+
+    When the execution has completed, no error is returned:
+
+    <img width="883" alt="image" src="https://github.com/scaife-viewer/scaife-viewer/assets/629062/8341ada1-6c92-4f08-a833-dc4a7261f867">
+
 
 - [Delete indices](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/delete-indices.yml):
 

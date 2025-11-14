@@ -16,12 +16,18 @@ jobs:
         python-version: '3.10'
     - run: pip install pip wheel --upgrade
     - name: Install scaife-cli and dependencies
-      run: pip install "scaife-viewer-core @https://github.com/scaife-viewer/backend/archive/8ca4c2e2328a7deaeb41fa3f388943d1a4c24328.zip#subdirectory=core" PyGithub
+      run: pip install "scaife-viewer-core @https://github.com/scaife-viewer/backend/archive/8ca4c2e2328a7deaeb41fa3f388943d1a4c24328.zip#subdirectory=core" PyGithub==1.53
     - name: Diff corpora contents
       run: |
         scaife diff-corpora-contents > diff.patch
         echo 'Copying diff.patch to step summary'
-        printf '```\n```diff\n' > $GITHUB_STEP_SUMMARY
+        printf '```diff\n' > $GITHUB_STEP_SUMMARY
         cat diff.patch >> $GITHUB_STEP_SUMMARY
-        printf '```\n```\n' >> $GITHUB_STEP_SUMMARY
+        printf '```\n' >> $GITHUB_STEP_SUMMARY
         cat $GITHUB_STEP_SUMMARY
+    - name: Upload diff.patch
+      uses: actions/upload-artifact@v4
+      with:
+        name: diff-patch
+        path: |
+          diff.patch

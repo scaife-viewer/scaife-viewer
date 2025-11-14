@@ -20,5 +20,7 @@ jobs:
         HEROKU_APP: ${{ github.event.inputs.herokuAppName }}
         ELASTICSEARCH_INDEX_NAME: ${{ github.event.inputs.indexName }}
       steps:
+        - name: Install Heroku CLI
+          run: curl https://cli-assets.heroku.com/install.sh | sh      
         - name: Release
           run: heroku config:set ELASTICSEARCH_INDEX_NAME=${ELASTICSEARCH_INDEX_NAME}

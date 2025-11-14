@@ -24,10 +24,18 @@ jobs:
         python-version: '3.10'
     - run: pip install pip wheel --upgrade
     - name: Install scaife-cli and dependencies
-      run: pip install "scaife-viewer-core @https://github.com/scaife-viewer/backend/archive/10e66fc47f36a308f8cdcd1a2c84344ae2cdd23e.zip#subdirectory=core" PyGithub
-    - name: Checkout a new branch
+      run: pip install "scaife-viewer-core @https://github.com/scaife-viewer/backend/archive/10e66fc47f36a308f8cdcd1a2c84344ae2cdd23e.zip#subdirectory=core" "PyGithub==1.53"
+    - name: Fetch branches
+      run: git fetch
+    - name: Checkout the existing content branch
+      id: checkout_existing_branch
+      continue-on-error: true
       run: |
-        git checkout -B ${{ env.CONTENT_BRANCH }}
+        git switch -c ${{ env.CONTENT_BRANCH }} --track origin/${{ env.CONTENT_BRANCH }}
+    - name: Checkout the non-existent content branch
+      if: ${{ steps.checkout_existing_branch.outcome == 'failure'  }}
+      run: |
+        git switch -c ${{ env.CONTENT_BRANCH }}
     - name: Update content manifest
       run: scaife update-manifest --github-access-token=$GITHUB_TOKEN
       env:
@@ -47,14 +55,16 @@ jobs:
         git config user.email 'github-actions[bot]@users.noreply.github.com'
         git add data/content-manifests/production.yaml
         git commit -m "Update corpora SHAs `date -I`"
-        git push --set-upstream origin ${{ env.CONTENT_BRANCH }}
+        git push origin HEAD
     # NOTE: Requires change at https://github.com/scaife-viewer/scaife-viewer/settings/actions
     # [√] Allow GitHub Actions to create and approve pull requests
     # NOTE: Only runs when changes have been pushed
+    # NOTE: Will fail if the PR already exists
     - name: Create pull request
       id: create-pr
       if: ${{ steps.commit_and_push.outcome == 'success'  }}
-      run: gh pr create --fill
+      run: gh pr create --fill-first
+      continue-on-error: true
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Report if no changes were detected
