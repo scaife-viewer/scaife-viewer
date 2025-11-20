@@ -50,24 +50,28 @@ def about(request):
 
 
 def commentaries(request, *args, **kwargs):
-    response = requests.get(f"{settings.SV_NEW_ATLAS_API_URL}/commentaries/passage/{kwargs['urn']}")
+    page = request.GET.get("page", 1)
+    url = f"{settings.SV_NEW_ATLAS_API_URL}/commentaries/passage/{kwargs['urn']}/?page={page}"
+
+    response = requests.get(url)
 
     return JsonResponse(response.json())
 
 def dictionary_entries(request, *args, **kwargs):
-    url = f"{settings.SV_NEW_ATLAS_API_URL}/dictionaries/{kwargs['slug']}/entries"
+    page = request.GET.get("page", 1)
+    url = f"{settings.SV_NEW_ATLAS_API_URL}/dictionaries/{kwargs['slug']}/entries/?page={page}"
 
     q = request.GET.get("q", None)
 
     if q is not None:
-        url = f"{url}?q={q}"
+        url = f"{url}&q={q}"
 
     response = requests.get(url)
 
     return JsonResponse(response.json())
 
 def dictionaries(request):
-    response = requests.get(f"{settings.SV_NEW_ATLAS_API_URL}/dictionaries/json", headers={"accept": "application/json"})
+    response = requests.get(f"{settings.SV_NEW_ATLAS_API_URL}/dictionaries/json/", headers={"accept": "application/json"})
 
     return JsonResponse(response.json())
 

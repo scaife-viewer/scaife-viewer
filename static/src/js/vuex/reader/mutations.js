@@ -173,8 +173,8 @@ export default {
     state.annotationChange += 1;
   },
 
-  [constants.SET_PERSEUS_COMMENTARY_ENTRIES]: (state, { results, previous, next }) => {
-    state.commentaryEntries = results;
+  [constants.SET_PERSEUS_COMMENTARY_ENTRIES]: (state, data) => {
+    state.perseusCommentaries = data;
   },
 
   [constants.SET_PERSEUS_AVAILABLE_DICTIONARIES]: (state, { results }) => {

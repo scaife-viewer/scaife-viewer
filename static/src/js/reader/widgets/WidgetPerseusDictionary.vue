@@ -20,7 +20,22 @@
           />
         </div>
 
-        <div v-for="result in results" :key="result.urn">{{ result.headword }}</div>
+        <details v-for="result in results" :key="result.urn">
+          <summary>{{ result.headword }} ({{ result.intro_text }})</summary>
+          <div v-for="sense in result.data.senses" :key="sense.urn" class="senses">
+            <div v-for="child in sense.children" :key="child.urn">
+              <span v-html="child.definition" />
+            </div>
+          </div>
+        </details>
+        <div v-if="totalPages > 1">
+          <a v-on:click="previousPage" :style="{ cursor: currentPage - 1 > 0 ? 'pointer' : 'auto' }">
+            <span class="text-muted"><i class="fa fa-chevron-left"></i></span>
+          </a>
+          <a v-on:click="nextPage" :style="{ cursor: currentPage + 1 < totalPages ? 'pointer' : 'auto' }">
+            <span class="text-muted"><i class="fa fa-chevron-right"></i></span>
+          </a>
+        </div>
       </div>
     </div>
   </base-widget>
@@ -76,22 +91,55 @@ export default {
     }
 
     return {
+      currentPage: 0,
       error: "",
       loading: false,
       q: "",
       results: [],
       dictionary,
-      totalCount: null,
+      totalPages: 0,
     };
   },
 
   methods: {
+    nextPage: debounce(function _nextPage() {
+      if (this.currentPage + 1 > this.totalPages) {
+        return;
+      }
+
+      api.searchPerseusDictionary(
+        this.selectedDictionary,
+        { q: this.query, page: this.currentPage + 1 },
+        ({ current_page, results, total_pages }) => {
+          this.results = results;
+          this.currentPage = current_page;
+          this.totalPages = total_pages;
+        },
+      );
+    }, 250),
+    previousPage: debounce(function _previousPage() {
+      if (this.currentPage - 1 <= 0) {
+        return;
+      }
+
+      api.searchPerseusDictionary(
+        this.selectedDictionary,
+        { q: this.query, page: this.currentPage - 1 },
+        ({ current_page, results, total_pages }) => {
+          this.results = results;
+          this.currentPage = current_page;
+          this.totalPages = total_pages;
+        },
+      );
+    }, 250),
     updateSearch: debounce(function _updateSearch() {
       api.searchPerseusDictionary(
         this.selectedDictionary,
         { q: this.query },
         ({ current_page, results, total_pages }) => {
           this.results = results;
+          this.currentPage = current_page;
+          this.totalPages = total_pages;
         },
       );
     }, 250),

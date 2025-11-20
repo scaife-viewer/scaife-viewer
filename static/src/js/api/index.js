@@ -52,15 +52,15 @@ export default {
     ),
   getPerseusDictionaries: (cb) =>
     HTTP.get("library/dictionaries/json/").then((r) => cb({ ...r.data })),
-  getPerseusCommentaryEntries: (urn, cb) =>
-    HTTP.get(`library/commentaries/${urn}/json/`).then((r) =>
+  getPerseusCommentaryEntries: (urn, params, cb) =>
+    HTTP.get(`library/commentaries/${urn}/json/`, { params }).then((r) =>
       cb({ ...r.data }),
     ),
-  searchPerseusDictionary: (dictionarySlug, params, cb) =>
-    HTTP.get(
-      `library/dictionaries/${dictionarySlug}/entries/`,
-      { params },
-    ).then((r) => cb({ ...r.data })),
+  searchPerseusDictionary: (dictionarySlug, params, cb) => {
+    return HTTP.get(`library/dictionaries/${dictionarySlug}/entries/`, {
+      params,
+    }).then((r) => cb({ ...r.data }));
+  },
   searchText: (params, url, cb) =>
     HTTP.get("search/json/", { params }).then((r) => cb(r.data)),
   getLibraryInfo: (cb) => HTTP.get("library/json/info").then((r) => cb(r.data)),

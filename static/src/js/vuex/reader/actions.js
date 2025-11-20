@@ -25,7 +25,7 @@ export default {
     }
 
     ps.push(
-      api.getPerseusCommentaryEntries(leftUrn, (response) => {
+      api.getPerseusCommentaryEntries(leftUrn, {}, (response) => {
         commit(constants.SET_PERSEUS_COMMENTARY_ENTRIES, response);
       }),
     );

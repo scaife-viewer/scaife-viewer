@@ -132,6 +132,18 @@
   }
 }
 
+.widget.perseus-dictionary {
+  div.body {
+    font-size: 12px;
+    font-family: "Noto Serif";
+    color: $gray-700;
+
+    .senses {
+      padding-left: 1rem;
+    }
+  }
+}
+
 .widget.selected-word {
   div.body {
     font-family: "Noto Serif";

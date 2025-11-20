@@ -19,6 +19,6 @@ export default {
   selectedLemmas: null,
   error: "",
   selectedTokenRange: { start: null, end: null },
-  commentaryEntries: null,
+  perseusCommentaries: { results: [], currentPage: 1, totalPages: 1 },
   availableDictionaries: null,
 };
