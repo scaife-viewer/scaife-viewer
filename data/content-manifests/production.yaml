@@ -55,6 +55,6 @@ telota/galen:
   sha: eeb8da0ce066e6f4a90067c2f0d5b7d921cbb76c
   tarball_url: https://api.github.com/repos/telota/galen/tarball/0.0.15896933115
 Mythologos/Notre-Dame-Digitized-Latin-Collection:
-  ref: v1.0.6
-  sha: baf849dde5e70e1f44830388664b7b9c83a71c7b
-  tarball_url: https://api.github.com/repos/Mythologos/Notre-Dame-Digitized-Latin-Collection/tarball/v1.0.6
+  ref: v1.0.7
+  sha: 4425478ad58e8e5b11031fb4d52ad70c1f2531dc
+  tarball_url: https://api.github.com/repos/Mythologos/Notre-Dame-Digitized-Latin-Collection/tarball/v1.0.7
