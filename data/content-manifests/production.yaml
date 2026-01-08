@@ -1,7 +1,7 @@
 PerseusDL/canonical-latinLit:
-  ref: 0.0.20665659914
+  ref: 0.0.20799475916
   sha: 59b5cf177fb8788c5af1c1ccf0119929b4784ec3
-  tarball_url: https://api.github.com/repos/PerseusDL/canonical-latinLit/tarball/0.0.20665659914
+  tarball_url: https://api.github.com/repos/PerseusDL/canonical-latinLit/tarball/0.0.20799475916
 PerseusDL/canonical-greekLit:
   ref: 0.0.20730181171
   sha: a80f3c09d87cf76e0ba1553d92a063552325c0f9
@@ -55,6 +55,6 @@ telota/galen:
   sha: eeb8da0ce066e6f4a90067c2f0d5b7d921cbb76c
   tarball_url: https://api.github.com/repos/telota/galen/tarball/0.0.15896933115
 Mythologos/Notre-Dame-Digitized-Latin-Collection:
-  ref: v1.0.8
-  sha: f9f2c2ee9800aae3e7b9c39d46103faae1a68551
-  tarball_url: https://api.github.com/repos/Mythologos/Notre-Dame-Digitized-Latin-Collection/tarball/v1.0.8
+  ref: v1.0.9
+  sha: 977a0ba28582eb32b3c83c8933d97efb689fb0b6
+  tarball_url: https://api.github.com/repos/Mythologos/Notre-Dame-Digitized-Latin-Collection/tarball/v1.0.9
