@@ -390,6 +390,7 @@ SV_ATLAS_DATA_DIR = os.getenv(
 )
 
 SV_ATLAS_HOOKSET = "sv_pdl.atlas.hooks.ATLASHookSet"
+SCAIFE_VIEWER_CORE_HOOKSET = "sv_pdl.core.hooks.CoreHookSet"
 
 SV_ATLAS_DB_LABEL = "atlas"
 SV_ATLAS_DB_PATH = os.getenv(

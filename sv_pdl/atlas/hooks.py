@@ -3,6 +3,7 @@ from scaife_viewer.atlas.resolvers.cts_collection import (
     resolve_cts_collection_library,
 )
 from scaife_viewer.core.cts import text_inventory
+from scaife_viewer.core.cts.exceptions import InvalidPassageReference
 
 
 PROBLEM_URNS = [urn for urn in """
@@ -76,7 +77,11 @@ class ATLASHookSet(DefaultHookSet):
             # process for TOC purposes
             # FIXME: Improve TOC performance for these URNs
             return None
-        return super().get_first_passage_urn(version)
+        try:
+            return super().get_first_passage_urn(version)
+        except InvalidPassageReference as err:
+            print(err)
+            return None
 
     def extract_cts_textpart_metadata(self, version):
         # NOTE: We don't yet use ATLAS to resolve anything past the version-text
