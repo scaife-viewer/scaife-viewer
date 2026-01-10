@@ -20,13 +20,16 @@
           />
         </div>
 
-        <details v-for="result in results" :key="result.urn">
+        <details v-for="result in results" :key="result.urn" class="mt-2">
           <summary>{{ result.headword }} ({{ result.intro_text }})</summary>
-          <div v-for="sense in result.data.senses" :key="sense.urn" class="senses">
-            <div v-for="child in sense.children" :key="child.urn">
-              <span v-html="child.definition" />
+            <div v-for="sense in result.data.senses" :key="sense.urn" class="senses">
+              <div v-for="child in sense.children" :key="child.urn">
+                <span v-html="child.definition" />
+              </div>
             </div>
-          </div>
+            <div v-for="citation in result.data.citations" :key="citation.urn" class="senses">
+              <span>{{ citation.data.ref }}</span>
+            </div>
         </details>
         <div v-if="totalPages > 1">
           <a v-on:click="previousPage" :style="{ cursor: currentPage - 1 > 0 ? 'pointer' : 'auto' }">
