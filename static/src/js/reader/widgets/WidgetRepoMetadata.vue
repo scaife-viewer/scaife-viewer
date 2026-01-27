@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import RepoMetadataWidget from '@scaife-viewer/widget-repo-metadata';
+import RepoMetadataWidget from './RepoMetadataWidget.vue';
 
 export default {
   name: 'WidgetRepoMetadata',

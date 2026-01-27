@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import AttributionsWidget from '@scaife-viewer/widget-attributions';
+import AttributionsWidget from './AttributionsWidget.vue';
 
 export default {
   name: 'widget-attributions',

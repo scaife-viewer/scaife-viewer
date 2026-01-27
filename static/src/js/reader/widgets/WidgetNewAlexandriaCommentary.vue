@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import NewAlexandriaWidget from '@scaife-viewer/widget-new-alexandria';
+import NewAlexandriaWidget from './NewAlexandriaWidget.vue';
 
 export default {
   name: 'widget-attributions',
