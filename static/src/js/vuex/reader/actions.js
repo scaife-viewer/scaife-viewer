@@ -1,21 +1,23 @@
-import api from "../../api";
-import constants from "../../constants";
-import URN from "../../urn";
+import api from '../../api';
+import constants from '../../constants';
+import URN from '../../urn';
 
 export default {
   [constants.READER_LOAD]: (
     { dispatch, commit, state },
-    { leftUrn, rightUrn, lowerUrn, query, initial },
+    {
+      leftUrn, rightUrn, lowerUrn, query, initial,
+    },
   ) => {
     if (state.error) {
-      commit(constants.SET_ERROR, { error: "" });
+      commit(constants.SET_ERROR, { error: '' });
     }
     const ps = [];
     if (state.versions === null) {
       ps.push(
-        api.getCollection(leftUrn.upTo("work"), (work) => {
+        api.getCollection(leftUrn.upTo('work'), (work) => {
           const params = {
-            e: work.texts.map((text) => new URN(text.urn).version),
+            e: work.texts.map(text => new URN(text.urn).version),
           };
           api.getLibraryVector(work.urn, params, (versions) => {
             commit(constants.SET_VERSIONS, { versions });
@@ -36,7 +38,7 @@ export default {
       }),
     );
 
-    const leftTextUrn = leftUrn.upTo("version");
+    const leftTextUrn = leftUrn.upTo('version');
     if (!state.leftText || state.leftText.urn.toString() !== leftTextUrn) {
       ps.push(
         api
@@ -46,12 +48,12 @@ export default {
               metadata: text,
             });
           })
-          .catch((err) => commit(constants.SET_ERROR, { error: err.message })),
+          .catch(err => commit(constants.SET_ERROR, { error: err.message })),
       );
     }
     if (
-      !state.leftPassage ||
-      state.leftPassage.urn.toString() !== leftUrn.toString()
+      !state.leftPassage
+      || state.leftPassage.urn.toString() !== leftUrn.toString()
     ) {
       if (!initial) {
         dispatch(constants.READER_SET_SELECTED_TOKEN, { token: null });
@@ -60,7 +62,7 @@ export default {
       commit(constants.SET_LEFT_PASSAGE, {
         urn: leftUrn,
         ready: false,
-        error: "",
+        error: '',
         redirected: null,
       });
       ps.push(
@@ -99,10 +101,10 @@ export default {
     }
 
     if (rightUrn) {
-      const rightTextUrn = rightUrn.upTo("version");
+      const rightTextUrn = rightUrn.upTo('version');
       if (
-        !state.rightText ||
-        state.rightText.urn.toString() !== rightTextUrn.toString()
+        !state.rightText
+        || state.rightText.urn.toString() !== rightTextUrn.toString()
       ) {
         ps.push(
           api
@@ -119,14 +121,14 @@ export default {
       }
 
       if (
-        !state.rightPassage ||
-        state.rightPassage.urn.toString() !== rightUrn.toString()
+        !state.rightPassage
+        || state.rightPassage.urn.toString() !== rightUrn.toString()
       ) {
         commit(constants.SET_RIGHT_PASSAGE_TEXT, { text: null });
         commit(constants.SET_RIGHT_PASSAGE, {
           urn: rightUrn,
           ready: false,
-          error: "",
+          error: '',
           redirected: null,
         });
         ps.push(
@@ -161,10 +163,10 @@ export default {
     }
 
     if (lowerUrn) {
-      const lowerTextUrn = lowerUrn.upTo("version");
+      const lowerTextUrn = lowerUrn.upTo('version');
       if (
-        !state.lowerText ||
-        state.lowerText.urn.toString() !== lowerTextUrn.toString()
+        !state.lowerText
+        || state.lowerText.urn.toString() !== lowerTextUrn.toString()
       ) {
         ps.push(
           api
@@ -181,14 +183,14 @@ export default {
       }
 
       if (
-        !state.lowerPassage ||
-        state.lowerPassage.urn.toString() !== lowerUrn.toString()
+        !state.lowerPassage
+        || state.lowerPassage.urn.toString() !== lowerUrn.toString()
       ) {
         commit(constants.SET_LOWER_PASSAGE_TEXT, { text: null });
         commit(constants.SET_LOWER_PASSAGE, {
           urn: lowerUrn,
           ready: false,
-          error: "",
+          error: '',
           redirected: null,
         });
         ps.push(
@@ -268,33 +270,33 @@ export default {
 
   [constants.READER_HIGHLIGHT]: ({ commit, state }, { highlight }) => {
     if (highlight !== null) {
-      if (state.mode !== "clickable") {
-        commit(constants.SET_TEXT_MODE, { mode: "clickable" });
+      if (state.mode !== 'clickable') {
+        commit(constants.SET_TEXT_MODE, { mode: 'clickable' });
       }
       let singleton = false;
       const selectedTokens = [];
-      if (highlight.indexOf("@") === -1) {
+      if (highlight.indexOf('@') === -1) {
         highlight = `@${highlight}`;
       }
-      if (highlight.indexOf("-") >= 0) {
+      if (highlight.indexOf('-') >= 0) {
         const allTokens = state.leftPassage.metadata.word_tokens;
-        let [start, end] = highlight.substr(1).split("-");
-        if (start.indexOf("[") === -1) {
+        let [start, end] = highlight.substr(1).split('-');
+        if (start.indexOf('[') === -1) {
           start = `${start}[1]`;
         }
-        if (end.indexOf("[") === -1) {
+        if (end.indexOf('[') === -1) {
           end = `${end}[1]`;
         }
-        const startIdx = allTokens.findIndex((t) => `${t.w}[${t.i}]` === start);
-        const endIdx = allTokens.findIndex((t) => `${t.w}[${t.i}]` === end);
+        const startIdx = allTokens.findIndex(t => `${t.w}[${t.i}]` === start);
+        const endIdx = allTokens.findIndex(t => `${t.w}[${t.i}]` === end);
         Array.prototype.push.apply(
           selectedTokens,
           allTokens
             .slice(Math.min(startIdx, endIdx), Math.max(startIdx, endIdx) + 1)
-            .map((t) => `${t.w}[${t.i}]`),
+            .map(t => `${t.w}[${t.i}]`),
         );
       } else {
-        if (highlight.indexOf("[") === -1) {
+        if (highlight.indexOf('[') === -1) {
           highlight = `${highlight}[1]`;
         }
         selectedTokens.push(highlight.substr(1));
@@ -303,7 +305,7 @@ export default {
       selectedTokens.forEach((token) => {
         commit(constants.SET_ANNOTATION, {
           token,
-          key: "selected",
+          key: 'selected',
           value: true,
           singleton,
         });
@@ -313,7 +315,7 @@ export default {
       //   query = { ...query, highlight };
       // }
     } else {
-      commit(constants.CLEAR_ANNOTATION, { key: "selected" });
+      commit(constants.CLEAR_ANNOTATION, { key: 'selected' });
       commit(constants.SET_HIGHLIGHT, null);
       // if (route) {
       //   query = (({ highlight: deleted, ...o }) => o)(query);
