@@ -57,6 +57,7 @@ def commentaries(request, *args, **kwargs):
 
     return JsonResponse(response.json())
 
+
 def dictionary_entries(request, *args, **kwargs):
     page = request.GET.get("page", 1)
     url = f"{settings.SV_NEW_ATLAS_API_URL}/dictionaries/{kwargs['slug']}/entries/?page={page}"
@@ -70,10 +71,15 @@ def dictionary_entries(request, *args, **kwargs):
 
     return JsonResponse(response.json())
 
+
 def dictionaries(request):
-    response = requests.get(f"{settings.SV_NEW_ATLAS_API_URL}/dictionaries/json/", headers={"accept": "application/json"})
+    response = requests.get(
+        f"{settings.SV_NEW_ATLAS_API_URL}/dictionaries/json/",
+        headers={"accept": "application/json"},
+    )
 
     return JsonResponse(response.json())
+
 
 def profile(request):
     return render(request, "profile.html", {})
