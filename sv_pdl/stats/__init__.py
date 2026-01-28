@@ -1,10 +1,12 @@
-import os
 import json
 import logging
+import os
 
 from django.core.cache import cache
-from django.contrib.humanize.templatetags.humanize import intword, intcomma
 from django.core.management import call_command
+
+from django.contrib.humanize.templatetags.humanize import intcomma, intword
+
 
 LIBRARY_STATS_PATH = os.path.join(
     os.path.dirname(os.path.realpath(__file__)), "library_stats.json"

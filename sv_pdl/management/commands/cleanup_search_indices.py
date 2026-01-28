@@ -1,5 +1,5 @@
-from django.core.management.base import BaseCommand, CommandParser
 from django.conf import settings
+from django.core.management.base import BaseCommand, CommandParser
 
 from scaife_viewer.core.search import get_es_client as elasticsearch_client
 

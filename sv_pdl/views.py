@@ -4,10 +4,9 @@ from django.db.models import Count
 from django.http import JsonResponse
 from django.shortcuts import render
 
+import requests
 from github import Github
 from scaife_viewer.atlas.models import Repo
-
-import requests
 
 from .changelog.keyfile import cachekeys
 from .stats import get_library_stats

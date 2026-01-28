@@ -7,9 +7,9 @@ from pathlib import Path
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
+
 import requests
 import yaml
-
 from scaife_viewer.core.hooks import hookset
 
 
