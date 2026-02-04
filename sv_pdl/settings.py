@@ -3,7 +3,6 @@ import sys
 
 import dj_database_url
 
-
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 PACKAGE_ROOT = os.path.abspath(os.path.dirname(__file__))
 BASE_DIR = PACKAGE_ROOT
@@ -144,11 +143,7 @@ PER_REQUEST_MIDDLEWARE = {
 # AuthenticationMiddleware and MessageMiddleware, we must silence related
 # SystemCheckErrors
 # refs https://code.djangoproject.com/ticket/30237#comment:10
-SILENCED_SYSTEM_CHECKS = [
-    "admin.E408",
-    "admin.E409",
-    "admin.E410"
-]
+SILENCED_SYSTEM_CHECKS = ["admin.E408", "admin.E409", "admin.E410"]
 
 ROOT_URLCONF = "sv_pdl.urls"
 
@@ -164,13 +159,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.sites",
     "django.contrib.staticfiles",
-
     "webpack_loader",
-
     # theme
     "bootstrapform",
     "pinax_theme_bootstrap",
-
     # external
     "account",
     "corsheaders",
@@ -182,11 +174,9 @@ INSTALLED_APPS = [
     "pinax.eventlog",
     "pinax.webanalytics",
     "raven.contrib.django.raven_compat",
-
     # scaife-viewer
     "scaife_viewer.atlas",
     "scaife_viewer.core",
-
     # project
     "sv_pdl",
     "sv_pdl.atlas",
@@ -199,10 +189,12 @@ WEBPACK_LOADER = {
     "DEFAULT": {
         "CACHE": not DEBUG,
         "BUNDLE_DIR_NAME": "",
-        "STATS_FILE": os.path.join(PROJECT_ROOT, "static", "stats", "webpack-stats.json"),
+        "STATS_FILE": os.path.join(
+            PROJECT_ROOT, "static", "stats", "webpack-stats.json"
+        ),
         "POLL_INTERVAL": 0.1,
         "TIMEOUT": None,
-        "IGNORE": [".*.hot-update.js", ".+.map"]
+        "IGNORE": [".*.hot-update.js", ".+.map"],
     }
 }
 
@@ -214,16 +206,12 @@ WEBPACK_LOADER = {
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
-    "filters": {
-        "require_debug_false": {
-            "()": "django.utils.log.RequireDebugFalse"
-        }
-    },
+    "filters": {"require_debug_false": {"()": "django.utils.log.RequireDebugFalse"}},
     "handlers": {
         "mail_admins": {
             "level": "ERROR",
             "filters": ["require_debug_false"],
-            "class": "django.utils.log.AdminEmailHandler"
+            "class": "django.utils.log.AdminEmailHandler",
         },
         "sentry": {
             "level": "WARNING",
@@ -232,8 +220,8 @@ LOGGING = {
         "console": {
             "level": "INFO",
             "class": "logging.StreamHandler",
-            "stream": sys.stdout
-        }
+            "stream": sys.stdout,
+        },
     },
     "loggers": {
         "django.request": {
@@ -257,9 +245,9 @@ LOGGING = {
         "": {
             "handlers": ["console"],
             "level": "DEBUG" if DEBUG else "INFO",
-            "propagate": True
-        }
-    }
+            "propagate": True,
+        },
+    },
 }
 
 FIXTURE_DIRS = [
@@ -299,7 +287,9 @@ OIDC_USERINFO = "sv_pdl.oidc.userinfo"
 DEFAULT_FROM_EMAIL = "Scaife Viewer <perseus_webmaster@tufts.edu>"
 THEME_CONTACT_EMAIL = "perseus_webmaster@tufts.edu"
 
-EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend")
+EMAIL_BACKEND = os.environ.get(
+    "EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend"
+)
 EMAIL_HOST = os.environ.get("EMAIL_HOST", "")
 EMAIL_PORT = os.environ.get("EMAIL_PORT", "")
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "")
@@ -321,21 +311,29 @@ CACHES = {
     },
 }
 
-CTS_RESOLVER_CACHE_LOCATION = os.environ.get("CTS_RESOLVER_CACHE_LOCATION", "cts_resolver_cache")
+CTS_RESOLVER_CACHE_LOCATION = os.environ.get(
+    "CTS_RESOLVER_CACHE_LOCATION", "cts_resolver_cache"
+)
 SCAIFE_VIEWER_CORE_RESOLVER_CACHE_LABEL = "cts-resolver"
 CTS_RESOLVER_CACHE_KWARGS = {
     "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
     "LOCATION": CTS_RESOLVER_CACHE_LOCATION,
 }
-CACHES.update({
-    SCAIFE_VIEWER_CORE_RESOLVER_CACHE_LABEL: CTS_RESOLVER_CACHE_KWARGS,
-})
+CACHES.update(
+    {
+        SCAIFE_VIEWER_CORE_RESOLVER_CACHE_LABEL: CTS_RESOLVER_CACHE_KWARGS,
+    }
+)
 
-XSL_STYLESHEET_PATH = os.environ.get("XSL_STYLESHEET_PATH", os.path.join(PACKAGE_ROOT, "tei.xsl"))
+XSL_STYLESHEET_PATH = os.environ.get(
+    "XSL_STYLESHEET_PATH", os.path.join(PACKAGE_ROOT, "tei.xsl")
+)
 
 resolver = os.environ.get("CTS_RESOLVER", "local")
 if resolver == "api":
-    CTS_API_ENDPOINT = os.environ.get("CTS_API_ENDPOINT", "https://scaife-cts-dev.perseus.org/api/cts")
+    CTS_API_ENDPOINT = os.environ.get(
+        "CTS_API_ENDPOINT", "https://scaife-cts-dev.perseus.org/api/cts"
+    )
     CTS_RESOLVER = {
         "type": "api",
         "kwargs": {
@@ -366,10 +364,16 @@ if FORCE_SCRIPT_NAME:
 
 ELASTICSEARCH_HOSTS = os.environ.get("ELASTICSEARCH_HOSTS", "localhost:9200").split(",")
 ELASTICSEARCH_INDEX_NAME = os.environ.get("ELASTICSEARCH_INDEX_NAME", "scaife-viewer")
-ELASTICSEARCH_SNIFF_ON_START = bool(int(os.environ.get("ELASTICSEARCH_SNIFF_ON_START", "0")))
-ELASTICSEARCH_SNIFF_ON_CONNECTION_FAIL = bool(int(os.environ.get("ELASTICSEARCH_SNIFF_ON_CONNECTION_FAIL", "0")))
+ELASTICSEARCH_SNIFF_ON_START = bool(
+    int(os.environ.get("ELASTICSEARCH_SNIFF_ON_START", "0"))
+)
+ELASTICSEARCH_SNIFF_ON_CONNECTION_FAIL = bool(
+    int(os.environ.get("ELASTICSEARCH_SNIFF_ON_CONNECTION_FAIL", "0"))
+)
 
-DEPLOYMENT_TIMESTAMP_VAR_NAME = os.environ.get("DEPLOYMENT_TIMESTAMP_VAR_NAME", "HEROKU_RELEASE_CREATED_AT")
+DEPLOYMENT_TIMESTAMP_VAR_NAME = os.environ.get(
+    "DEPLOYMENT_TIMESTAMP_VAR_NAME", "HEROKU_RELEASE_CREATED_AT"
+)
 
 
 GRAPHENE = {
@@ -379,22 +383,20 @@ GRAPHENE = {
     "RELAY_CONNECTION_MAX_LIMIT": None,
 }
 
-SCAIFE_VIEWER_CORE_USE_CLOUD_INDEXER = bool(int(os.environ.get("USE_CLOUD_INDEXER", "0")))
+SCAIFE_VIEWER_CORE_USE_CLOUD_INDEXER = bool(
+    int(os.environ.get("USE_CLOUD_INDEXER", "0"))
+)
 
 
 SV_ATLAS_DATA_DIR = os.getenv(
-    "ATLAS_DATA_DIR",
-    os.path.join(
-        PROJECT_ROOT, "atlas_data"
-    )
+    "ATLAS_DATA_DIR", os.path.join(PROJECT_ROOT, "atlas_data")
 )
 
 SV_ATLAS_HOOKSET = "sv_pdl.atlas.hooks.ATLASHookSet"
 
 SV_ATLAS_DB_LABEL = "atlas"
 SV_ATLAS_DB_PATH = os.getenv(
-    "ATLAS_DB_PATH",
-    os.path.join(SV_ATLAS_DATA_DIR, "atlas.sqlite")
+    "ATLAS_DB_PATH", os.path.join(SV_ATLAS_DATA_DIR, "atlas.sqlite")
 )
 
 SV_ATLAS_INGESTION_PIPELINE = [
@@ -406,16 +408,18 @@ SV_ATLAS_INGESTION_PIPELINE = [
     "scaife_viewer.atlas.importers.attributions.import_attributions",
 ]
 
-SV_NEW_ATLAS_API_URL = os.getenv("NEW_ATLAS_API_URL", "http://localhost:8082")
+SV_NEW_ATLAS_API_URL = os.getenv("NEW_ATLAS_API_URL", "https://atlas.perseus.tufts.edu")
 
 # ATLAS uses an isolated database with a custom router that ensures
 # that SV_ATLAS_DB_LABEL database only contains data from the ATLAS application.
-DATABASES.update({
-    SV_ATLAS_DB_LABEL: {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": SV_ATLAS_DB_PATH,
+DATABASES.update(
+    {
+        SV_ATLAS_DB_LABEL: {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": SV_ATLAS_DB_PATH,
+        }
     }
-})
+)
 
 DATABASE_ROUTERS = ["scaife_viewer.atlas.db_routers.ATLASRouter"]
 

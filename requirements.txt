@@ -17,7 +17,7 @@ MyCapytain @https://github.com/jacobwegner/MyCapytain/archive/7b3c18b57214765357
 pinax-eventlog[django-lts]==5.1.0
 pinax-theme-bootstrap==8.0.1
 pinax-webanalytics==4.0.2
-psycopg2==2.9.10
+psycopg2==2.9
 PyYAML==6.0.1
 raven==6.10.0
 requests==2.22.0

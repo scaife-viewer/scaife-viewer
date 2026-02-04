@@ -6,55 +6,55 @@ PerseusDL/canonical-greekLit:
   ref: 0.0.20730181171
   sha: a80f3c09d87cf76e0ba1553d92a063552325c0f9
   tarball_url: https://api.github.com/repos/PerseusDL/canonical-greekLit/tarball/0.0.20730181171
-PerseusDL/canonical-engLit:
-  ref: 0.0.10065281755
-  sha: 1f15cabc0ea0b8b3e82fe7bd8570d8ee2d137405
-  tarball_url: https://api.github.com/repos/PerseusDL/canonical-engLit/tarball/0.0.10065281755
-OpenGreekAndLatin/csel-dev:
-  ref: 0.0.3678995538
-  sha: d94f655c8cb5bd258cb1a72fe78f55a73a86fe52
-  tarball_url: https://api.github.com/repos/OpenGreekAndLatin/csel-dev/tarball/0.0.3678995538
-PerseusDL/canonical-farsiLit:
-  ref: 0.0.11
-  sha: 1ce632ece8a2af0646195a0531f5e8f39b161f72
-  tarball_url: https://api.github.com/repos/PerseusDL/canonical-farsiLit/tarball/0.0.11
-PerseusDL/canonical-pdlpsci:
-  ref: v0.4.0
-  sha: 02346d884baac129ab3e21374a54f5b8c5b12522
-  tarball_url: https://api.github.com/repos/PerseusDL/canonical-pdlpsci/tarball/v0.4.0
-OpenGreekAndLatin/First1KGreek:
-  ref: 1.1.18983254520
-  sha: 6812dab555d04ec9c6510a510571062284f6df3a
-  tarball_url: https://api.github.com/repos/OpenGreekAndLatin/First1KGreek/tarball/1.1.18983254520
-OpenGreekAndLatin/Latin:
-  ref: 1.1.13528514871
-  sha: 78a03e635536bcd7ddea586fbdff9fbe8a897917
-  tarball_url: https://api.github.com/repos/OpenGreekAndLatin/Latin/tarball/1.1.13528514871
-lascivaroma/priapeia:
-  ref: 1.1.18
-  sha: 3dfc11fe1bbbe5f34c435e6cd56cc277cdacbe8f
-  tarball_url: https://api.github.com/repos/lascivaroma/priapeia/tarball/1.1.18
-hlapin/ancJewLitCTS:
-  ref: 0.1.50
-  sha: f3534557c6cae678bccbbf0d97ac2b2cdf71cc2e
-  tarball_url: https://api.github.com/repos/hlapin/ancJewLitCTS/tarball/0.1.50
-nevenjovanovic/sophocles-ajax-latinus:
-  ref: master
-  sha: aee7611f65a30b8fe17f1833154988c811e886b3
-  tarball_url: https://api.github.com/repos/nevenjovanovic/sophocles-ajax-latinus/tarball/aee7611f65a30b8fe17f1833154988c811e886b3
-jacobwegner/PDL:
-  ref: v0.0.2
-  sha: eca3d09f9516c85173bece362749d0cb40c261df
-  tarball_url: https://api.github.com/repos/jacobwegner/PDL/tarball/v0.0.2
-jacobwegner/Multepal-CTS:
-  ref: v0.0.1-rc4
-  sha: 976a340223666380ece66a936bdd58330b822e40
-  tarball_url: https://api.github.com/repos/jacobwegner/Multepal-CTS/tarball/v0.0.1-rc4
-telota/galen:
-  ref: 0.0.15896933115
-  sha: eeb8da0ce066e6f4a90067c2f0d5b7d921cbb76c
-  tarball_url: https://api.github.com/repos/telota/galen/tarball/0.0.15896933115
-Mythologos/Notre-Dame-Digitized-Latin-Collection:
-  ref: v1.0.8
-  sha: f9f2c2ee9800aae3e7b9c39d46103faae1a68551
-  tarball_url: https://api.github.com/repos/Mythologos/Notre-Dame-Digitized-Latin-Collection/tarball/v1.0.8
+# PerseusDL/canonical-engLit:
+#   ref: 0.0.10065281755
+#   sha: 1f15cabc0ea0b8b3e82fe7bd8570d8ee2d137405
+#   tarball_url: https://api.github.com/repos/PerseusDL/canonical-engLit/tarball/0.0.10065281755
+# OpenGreekAndLatin/csel-dev:
+#   ref: 0.0.3678995538
+#   sha: d94f655c8cb5bd258cb1a72fe78f55a73a86fe52
+#   tarball_url: https://api.github.com/repos/OpenGreekAndLatin/csel-dev/tarball/0.0.3678995538
+# PerseusDL/canonical-farsiLit:
+#   ref: 0.0.11
+#   sha: 1ce632ece8a2af0646195a0531f5e8f39b161f72
+#   tarball_url: https://api.github.com/repos/PerseusDL/canonical-farsiLit/tarball/0.0.11
+# PerseusDL/canonical-pdlpsci:
+#   ref: v0.4.0
+#   sha: 02346d884baac129ab3e21374a54f5b8c5b12522
+#   tarball_url: https://api.github.com/repos/PerseusDL/canonical-pdlpsci/tarball/v0.4.0
+# OpenGreekAndLatin/First1KGreek:
+#   ref: 1.1.18983254520
+#   sha: 6812dab555d04ec9c6510a510571062284f6df3a
+#   tarball_url: https://api.github.com/repos/OpenGreekAndLatin/First1KGreek/tarball/1.1.18983254520
+# OpenGreekAndLatin/Latin:
+#   ref: 1.1.13528514871
+#   sha: 78a03e635536bcd7ddea586fbdff9fbe8a897917
+#   tarball_url: https://api.github.com/repos/OpenGreekAndLatin/Latin/tarball/1.1.13528514871
+# lascivaroma/priapeia:
+#   ref: 1.1.18
+#   sha: 3dfc11fe1bbbe5f34c435e6cd56cc277cdacbe8f
+#   tarball_url: https://api.github.com/repos/lascivaroma/priapeia/tarball/1.1.18
+# hlapin/ancJewLitCTS:
+#   ref: 0.1.50
+#   sha: f3534557c6cae678bccbbf0d97ac2b2cdf71cc2e
+#   tarball_url: https://api.github.com/repos/hlapin/ancJewLitCTS/tarball/0.1.50
+# nevenjovanovic/sophocles-ajax-latinus:
+#   ref: master
+#   sha: aee7611f65a30b8fe17f1833154988c811e886b3
+#   tarball_url: https://api.github.com/repos/nevenjovanovic/sophocles-ajax-latinus/tarball/aee7611f65a30b8fe17f1833154988c811e886b3
+# jacobwegner/PDL:
+#   ref: v0.0.2
+#   sha: eca3d09f9516c85173bece362749d0cb40c261df
+#   tarball_url: https://api.github.com/repos/jacobwegner/PDL/tarball/v0.0.2
+# jacobwegner/Multepal-CTS:
+#   ref: v0.0.1-rc4
+#   sha: 976a340223666380ece66a936bdd58330b822e40
+#   tarball_url: https://api.github.com/repos/jacobwegner/Multepal-CTS/tarball/v0.0.1-rc4
+# telota/galen:
+#   ref: 0.0.15896933115
+#   sha: eeb8da0ce066e6f4a90067c2f0d5b7d921cbb76c
+#   tarball_url: https://api.github.com/repos/telota/galen/tarball/0.0.15896933115
+# Mythologos/Notre-Dame-Digitized-Latin-Collection:
+#   ref: v1.0.8
+#   sha: f9f2c2ee9800aae3e7b9c39d46103faae1a68551
+#   tarball_url: https://api.github.com/repos/Mythologos/Notre-Dame-Digitized-Latin-Collection/tarball/v1.0.8

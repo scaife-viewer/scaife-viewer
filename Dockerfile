@@ -1,5 +1,7 @@
 FROM node:12.13-alpine AS static-build
 WORKDIR /opt/scaife-viewer/src/
+RUN apk add python2 make g++
+RUN ln -sf python2 /usr/bin/python
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY webpack.config.js babel.config.js .eslintrc.json ./
@@ -10,7 +12,7 @@ RUN npm run lint
 RUN npm run unit
 RUN npm run build
 
-FROM python:3.6-alpine3.7 AS python-build
+FROM python:3.8-alpine AS python-build
 WORKDIR /opt/scaife-viewer/src/
 RUN pip --no-cache-dir --disable-pip-version-check install virtualenv
 ENV PATH="/opt/scaife-viewer/bin:${PATH}" VIRTUAL_ENV="/opt/scaife-viewer"
@@ -22,11 +24,10 @@ RUN set -x \
     && pip install -r requirements.txt
 RUN pip install flake8 flake8-quotes isort
 
-FROM python:3.6-alpine3.7
+FROM python:3.8-alpine
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONPATH /opt/scaife-viewer/src/
 ENV PATH="/opt/scaife-viewer/bin:${PATH}" VIRTUAL_ENV="/opt/scaife-viewer"
-ENV SECRET_KEY="foo"
 WORKDIR /opt/scaife-viewer/src/
 COPY --from=static-build /opt/scaife-viewer/src/static/dist /opt/scaife-viewer/src/static/dist
 COPY --from=python-build /opt/scaife-viewer/ /opt/scaife-viewer/
