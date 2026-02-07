@@ -99,15 +99,14 @@
         </template>
         <template slot="right">
           <widget-perseus-commentary />
-          <widget-perseus-dictionary />
           <widget-morpheus />
           <widget-word-list />
+          <widget-perseus-dictionary />
           <widget-attributions />
           <widget-passage-links />
           <widget-text-mode />
-          <widget-text-size />
-          <widget-text-width />
           <widget-highlight />
+          <widget-display-settings />
           <widget-passage-exports />
           <widget-repo-metadata />
           <widget-token-list />
@@ -127,6 +126,7 @@ import PassageRedirectNotice from './PassageRedirectNotice.vue';
 import ReaderNavigationMixin from '../mixins/ReaderNavigationMixin.vue';
 import URN from '../urn';
 import VersionSelector from './VersionSelector.vue';
+import WidgetDisplaySettings from './widgets/WidgetDisplaySettings.vue';
 import WidgetPassageAncestors from './widgets/WidgetPassageAncestors.vue';
 import WidgetPassageChildren from './widgets/WidgetPassageChildren.vue';
 import WidgetPassageReference from './widgets/WidgetPassageReference.vue';
@@ -147,6 +147,7 @@ import WidgetNewAlexandriaCommentary from './widgets/WidgetNewAlexandriaCommenta
 import WidgetTextWidth from './widgets/WidgetTextWidth.vue';
 
 const widgets = {
+  WidgetDisplaySettings,
   WidgetPassageAncestors,
   WidgetPassageChildren,
   WidgetPassageReference,
@@ -158,12 +159,10 @@ const widgets = {
   WidgetPerseusCommentary,
   WidgetPerseusDictionary,
   WidgetTextMode,
-  WidgetTextSize,
   WidgetHighlight,
   WidgetMorpheus,
   WidgetWordList,
   WidgetTokenList,
-  WidgetTextWidth,
   'widget-new-alexandria-commentary': WidgetNewAlexandriaCommentary,
 };
 

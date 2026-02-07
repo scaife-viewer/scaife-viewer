@@ -1,6 +1,6 @@
 <template>
   <base-widget class="word-list" v-if="enabled && show">
-    <span slot="header">Glossary</span>
+    <span slot="header">Short Definitions</span>
     <div slot="sticky">
       <p v-if="!usedFallbackApi" class="legend">Number in parentheses is frequency per 10k in this work.</p>
     </div>

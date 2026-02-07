@@ -42,6 +42,17 @@
       }
     }
   }
+  h3 {
+    background: $white;
+    padding: 15px 0 5px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    margin: 0 0 0 22px !important;
+    color: $gray-600;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+  }
   &:hover .fixed-toggle {
     opacity: 1;
   }

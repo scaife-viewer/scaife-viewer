@@ -8,7 +8,6 @@
 </template>
 
 <script>
-import constants from '../../constants';
 import { TextSizeWidget } from '@scaife-viewer/scaife-widgets';
 import WIDGETS_NS from '@scaife-viewer/scaife-widgets';
 
