@@ -30,8 +30,7 @@
               .at(-1)
               .replace(/@.*/, "")
           }}. {{ entry.lemma }}
-        </span>
-        <div class="commentary-entry-content" v-html="entry.content" />
+        </span><div class="commentary-entry-content" v-html="entry.content" />
       </div>
     </div>
   </base-widget>
@@ -88,6 +87,10 @@ export default {
 </script>
 
 <style>
+gloss {
+  white-space: pre-wrap;
+}
+
 lem {
   font-weight: bold;
 }
@@ -101,7 +104,6 @@ s {
 }
 
 .commentary-entry-citation {
-  display: inline-block;
   float: left;
   font-weight: bold;
 }
