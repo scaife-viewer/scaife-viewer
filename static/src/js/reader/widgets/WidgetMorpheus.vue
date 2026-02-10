@@ -6,9 +6,10 @@
       <div v-else-if="morphBody">
         <div class="group" v-for="group in morphBody" :key="group.uri">
           <div class="head">
-            <span class="hdwd">{{ group.hdwd }}</span>
+            <span class="hdwd" @click="searchDictionary(group.hdwd)" style="cursor: pointer;">{{ group.hdwd }}</span>
             <span class="pofs-decl">{{ group.pofs }} {{ group.decl }}</span>
           </div>
+          <div v-if="shortDef(group.hdwd)" class="shortdef">{{ shortDef(group.hdwd) }}</div>
           <div class="entries">
             <div class="entry" v-for="entry in group.infl">
               <div class="form">
@@ -77,8 +78,15 @@ export default {
       const text = this.$store.getters['reader/text'];
       return text;
     },
+    wordList() {
+      return this.$store.state.reader.wordList;
+    },
   },
   methods: {
+    shortDef(hdwd) {
+      const entry = this.wordList.find(w => w.text === hdwd);
+      return entry ? entry.shortdef : null;
+    },
     fetchData() {
       const word = this.selectedWord;
       const lang = this.text.metadata.lang;
@@ -98,6 +106,7 @@ export default {
                 lemmas.push(hdwd);
               });
               this.$store.commit(`reader/${constants.READER_SET_SELECTED_LEMMAS}`, { lemmas });
+              this.$store.commit(`reader/${constants.READER_SET_DICTIONARY_QUERY}`, { query: this.morphBody[0].hdwd });
             } else {
               this.reset();
             }
@@ -108,9 +117,13 @@ export default {
         this.reset();
       }
     },
+    searchDictionary(hdwd) {
+      this.$store.commit(`reader/${constants.READER_SET_DICTIONARY_QUERY}`, { query: hdwd });
+    },
     reset() {
       this.morphBody = null;
       this.$store.commit(`reader/${constants.READER_SET_SELECTED_LEMMAS}`, { lemmas: null });
+      this.$store.commit(`reader/${constants.READER_SET_DICTIONARY_QUERY}`, { query: '' });
     },
   },
   components: {

@@ -17,6 +17,8 @@ export default {
   annotationsHash: {},
   annotationChange: 0,
   selectedLemmas: null,
+  wordList: [],
+  dictionaryQuery: '',
   error: '',
   selectedTokenRange: { start: null, end: null },
   perseusCommentaries: { results: [], currentPage: 1, totalPages: 1 },

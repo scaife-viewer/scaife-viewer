@@ -70,6 +70,9 @@ export default {
         this.dictionary = value;
       },
     },
+    dictionaryQuery() {
+      return this.$store.state.reader.dictionaryQuery;
+    },
     query: {
       get() {
         return this.q;
@@ -155,6 +158,9 @@ export default {
   },
 
   watch: {
+    dictionaryQuery(newVal) {
+      this.q = newVal;
+    },
     query: "updateSearch",
   },
 };

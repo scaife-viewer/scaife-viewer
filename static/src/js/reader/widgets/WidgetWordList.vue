@@ -16,6 +16,7 @@
 
 <script>
 import qs from 'query-string';
+import constants from '../../constants';
 
 export default {
   name: 'widget-word-list',
@@ -64,10 +65,12 @@ export default {
             }
             const data = await res.json();
             this.wordList = data.lemmas;
+            this.$store.commit(`reader/${constants.READER_SET_WORD_LIST}`, { wordList: this.wordList });
             this.usedFallbackApi = true;
             this.show = true;
           } else {
             this.show = false;
+            this.$store.commit(`reader/${constants.READER_SET_WORD_LIST}`, { wordList: [] });
           }
           return;
         }
@@ -82,6 +85,7 @@ export default {
         shortdef: lemma.shortdef,
         frequency: lemma.work_frequency.toFixed(2),
       }));
+      this.$store.commit(`reader/${constants.READER_SET_WORD_LIST}`, { wordList: this.wordList });
     },
   },
 };

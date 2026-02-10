@@ -138,9 +138,7 @@ export default {
     }
   },
 
-  [constants.SET_ANNOTATION]: (state, {
-    token, key, value, singleton,
-  }) => {
+  [constants.SET_ANNOTATION]: (state, { token, key, value, singleton }) => {
     const { annotations } = state;
     if (singleton !== undefined && singleton) {
       annotations.forEach((o) => {
@@ -154,7 +152,7 @@ export default {
     ta[key] = value;
     annotations.set(token, ta);
 
-    if (singleton !== undefined && singleton && key === 'selected') {
+    if (singleton !== undefined && singleton && key === "selected") {
       // set all selected keys to false
       const c = { ...state.annotationsHash };
       Object.keys(state.annotationsHash).forEach((k) => {
@@ -174,12 +172,13 @@ export default {
   },
 
   [constants.SET_PERSEUS_COMMENTARY_ENTRIES]: (state, data) => {
-    console.log(data);
     state.perseusCommentaries = data;
   },
 
   [constants.SET_PERSEUS_AVAILABLE_DICTIONARIES]: (state, { results }) => {
-    state.availableDictionaries = results.toSorted((a, b) => a.label.localeCompare(b.label));
+    state.availableDictionaries = results.toSorted((a, b) =>
+      a.label.localeCompare(b.label),
+    );
   },
 
   [constants.SET_ANNOTATIONS]: (state, { tokens, key, value }) => {
@@ -220,4 +219,11 @@ export default {
     state.error = error;
   },
 
+  [constants.READER_SET_WORD_LIST]: (state, { wordList }) => {
+    state.wordList = wordList;
+  },
+
+  [constants.READER_SET_DICTIONARY_QUERY]: (state, { query }) => {
+    state.dictionaryQuery = query;
+  },
 };
