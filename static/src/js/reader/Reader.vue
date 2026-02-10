@@ -98,14 +98,14 @@
           </div>
         </template>
         <template slot="right">
-          <widget-perseus-commentary />
           <widget-morpheus />
-          <widget-word-list />
-          <widget-perseus-dictionary />
-          <widget-attributions />
-          <widget-passage-links />
+          <widget-perseus-commentary />
           <widget-text-mode />
           <widget-highlight />
+          <widget-perseus-dictionary />
+          <widget-word-list />
+          <widget-attributions />
+          <widget-passage-links />
           <widget-display-settings />
           <widget-passage-exports />
           <widget-repo-metadata />
@@ -139,12 +139,10 @@ import WidgetAttributions from './widgets/WidgetAttributions.vue';
 import WidgetRepoMetadata from './widgets/WidgetRepoMetadata.vue';
 import WidgetPassageExports from './widgets/WidgetPassageExports.vue';
 import WidgetTextMode from './widgets/WidgetTextMode.vue';
-import WidgetTextSize from './widgets/WidgetTextSize.vue';
 import WidgetMorpheus from './widgets/WidgetMorpheus.vue';
 import WidgetWordList from './widgets/WidgetWordList.vue';
 import WidgetTokenList from './widgets/WidgetTokenList.vue';
 import WidgetNewAlexandriaCommentary from './widgets/WidgetNewAlexandriaCommentary.vue';
-import WidgetTextWidth from './widgets/WidgetTextWidth.vue';
 
 const widgets = {
   WidgetDisplaySettings,

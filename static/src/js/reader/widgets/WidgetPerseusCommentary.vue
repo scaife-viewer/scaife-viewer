@@ -2,20 +2,6 @@
   <base-widget class="perseus-commentary">
     <span slot="header">Perseus Commentary</span>
     <div slot="body">
-      <div v-if="totalPages > 1">
-        <a
-          v-on:click="previousPage"
-          :style="{ cursor: currentPage - 1 > 0 ? 'pointer' : 'auto' }"
-        >
-          <span class="text-muted"><i class="fa fa-chevron-left"></i></span>
-        </a>
-        <a
-          v-on:click="nextPage"
-          :style="{ cursor: currentPage + 1 < totalPages ? 'pointer' : 'auto' }"
-        >
-          <span class="text-muted"><i class="fa fa-chevron-right"></i></span>
-        </a>
-      </div>
       <div
         v-for="entry in entries"
         class="commentary-entry"
@@ -31,6 +17,20 @@
               .replace(/@.*/, "")
           }}. {{ entry.lemma }}
         </span><div class="commentary-entry-content" v-html="entry.content" />
+      </div>
+      <div v-if="totalPages > 1">
+        <a
+          v-on:click="previousPage"
+          :style="{ cursor: currentPage - 1 > 0 ? 'pointer' : 'auto' }"
+        >
+          <span class="text-muted"><i class="fa fa-chevron-left"></i></span>
+        </a>
+        <a
+          v-on:click="nextPage"
+          :style="{ cursor: currentPage + 1 < totalPages ? 'pointer' : 'auto' }"
+        >
+          <span class="text-muted"><i class="fa fa-chevron-right"></i></span>
+        </a>
       </div>
     </div>
   </base-widget>

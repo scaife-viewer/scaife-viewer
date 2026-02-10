@@ -174,6 +174,7 @@ export default {
   },
 
   [constants.SET_PERSEUS_COMMENTARY_ENTRIES]: (state, data) => {
+    console.log(data);
     state.perseusCommentaries = data;
   },
 

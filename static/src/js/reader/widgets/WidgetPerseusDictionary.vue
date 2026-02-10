@@ -31,14 +31,20 @@
               <span>{{ citation.data.ref }}</span>
             </div>
         </details>
-        <div v-if="totalPages > 1">
-          <a v-on:click="previousPage" :style="{ cursor: currentPage - 1 > 0 ? 'pointer' : 'auto' }">
-            <span class="text-muted"><i class="fa fa-chevron-left"></i></span>
-          </a>
-          <a v-on:click="nextPage" :style="{ cursor: currentPage + 1 < totalPages ? 'pointer' : 'auto' }">
-            <span class="text-muted"><i class="fa fa-chevron-right"></i></span>
-          </a>
-        </div>
+      </div>
+      <div v-if="totalPages > 1">
+        <a
+          v-on:click="previousPage"
+          :style="{ cursor: currentPage - 1 > 0 ? 'pointer' : 'auto' }"
+        >
+          <span class="text-muted"><i class="fa fa-chevron-left"></i></span>
+        </a>
+        <a
+          v-on:click="nextPage"
+          :style="{ cursor: currentPage + 1 < totalPages ? 'pointer' : 'auto' }"
+        >
+          <span class="text-muted"><i class="fa fa-chevron-right"></i></span>
+        </a>
       </div>
     </div>
   </base-widget>
