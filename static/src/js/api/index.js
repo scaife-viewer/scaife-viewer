@@ -26,41 +26,30 @@ async function chunkedVectorRequest(urn, params) {
 }
 
 export default {
-  getTextGroupList: (cb) => HTTP.get("library/json/").then((r) => cb(r.data)),
-  getLibraryVector: (urn, params, cb) =>
-    chunkedVectorRequest(urn, params).then((data) => cb(data)),
-  getCollection: (urn, cb) =>
-    HTTP.get(`library/${urn}/json/`)
-      .then((r) => cb(r.data))
-      .catch((err) => {
-        if (err.response && err.response.data && err.response.data.error) {
-          const { error } = err.response.data;
-          if (error.includes("refsDecl")) {
-            throw new Error(
-              "There is a problem with the XML for this document that prevents it from being shown.",
-            );
-          } else {
-            throw new Error(err.response.data.error);
-          }
+  getTextGroupList: cb => HTTP.get('library/json/').then(r => cb(r.data)),
+  getLibraryVector: (urn, params, cb) => chunkedVectorRequest(urn, params).then(data => cb(data)),
+  getCollection: (urn, cb) => HTTP.get(`library/${urn}/json/`)
+    .then(r => cb(r.data))
+    .catch((err) => {
+      if (err.response && err.response.data && err.response.data.error) {
+        const { error } = err.response.data;
+        if (error.includes('refsDecl')) {
+          throw new Error(
+            'There is a problem with the XML for this document that prevents it from being shown.',
+          );
         } else {
-          throw new Error(err);
+          throw new Error(err.response.data.error);
         }
-      }),
-  getPassage: (urn, cb) =>
-    HTTP.get(`library/passage/${urn}/json/`).then((r) =>
-      cb({ ...r.data, ...pagination(r) }),
-    ),
-  getPerseusDictionaries: (cb) =>
-    HTTP.get("library/dictionaries/json/").then((r) => cb({ ...r.data })),
-  getPerseusCommentaryEntries: (urn, params, cb) =>
-    HTTP.get(`library/commentaries/${urn}/json/`, { params }).then((r) =>
-      cb({ ...r.data }),
-    ),
-  searchPerseusDictionary: (dictionarySlug, params, cb) =>
-    HTTP.get(`library/dictionaries/${dictionarySlug}/entries/`, {
-      params,
-    }).then((r) => cb({ ...r.data })),
-  searchText: (params, url, cb) =>
-    HTTP.get("search/json/", { params }).then((r) => cb(r.data)),
-  getLibraryInfo: (cb) => HTTP.get("library/json/info").then((r) => cb(r.data)),
+      } else {
+        throw new Error(err);
+      }
+    }),
+  getPassage: (urn, cb) => HTTP.get(`library/passage/${urn}/json/`).then(r => cb({ ...r.data, ...pagination(r) })),
+  getPerseusDictionaries: cb => HTTP.get('library/dictionaries/json/').then(r => cb({ ...r.data })),
+  getPerseusCommentaryEntries: (urn, params, cb) => HTTP.get(`library/commentaries/${urn}/json/`, { params }).then(r => cb({ ...r.data })),
+  searchPerseusDictionary: (dictionarySlug, params, cb) => HTTP.get(`library/dictionaries/${dictionarySlug}/entries/`, {
+    params,
+  }).then(r => cb({ ...r.data })),
+  searchText: (params, url, cb) => HTTP.get('search/json/', { params }).then(r => cb(r.data)),
+  getLibraryInfo: cb => HTTP.get('library/json/info').then(r => cb(r.data)),
 };
