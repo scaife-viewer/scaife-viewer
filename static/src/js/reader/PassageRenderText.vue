@@ -8,6 +8,13 @@
 </template>
 
 <script>
+/* FIXME: (charles) l. 301 in tei.xsl outputs what looks like
+a JSON object, which Vue tries and fails to parse. This error
+throws an "Error compiling template" warning. First noticed at
+https://scaife-dev.perseus.org/reader/urn:cts:greekLit:tlg0011.tlg003.1st1K-grc2:31-60/
+I'm not sure what the original intent behind this XSL output was -- maybe it was
+to be read and turned into a note dynamically? -- so I'm not sure how to go about
+fixing it. */
 import constants from '../constants';
 import TextLoader from '../components/TextLoader.vue';
 import TextPart from './TextPart.vue';
