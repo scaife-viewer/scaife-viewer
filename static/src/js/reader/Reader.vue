@@ -98,12 +98,12 @@
           </div>
         </template>
         <template slot="right">
-          <widget-morpheus />
-          <widget-perseus-commentary />
           <widget-text-mode />
           <widget-highlight />
+          <widget-morpheus />
           <widget-perseus-dictionary />
           <widget-word-list />
+          <widget-perseus-commentary />
           <widget-attributions />
           <widget-passage-links />
           <widget-display-settings />

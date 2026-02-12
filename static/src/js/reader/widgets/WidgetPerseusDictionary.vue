@@ -13,6 +13,7 @@
           >
         </select>
         <div class="search-input mt-2">
+          <label>Search with <code>*</code> to match anywhere in the headword. E.g., <code>*εχω</code> will match ἀπέχω etc.</label>
           <input
             v-model="query"
             type="text"
