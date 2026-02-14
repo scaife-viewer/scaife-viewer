@@ -20,16 +20,19 @@ COPY requirements.txt /opt/scaife-viewer/src/
 RUN set -x \
     && virtualenv /opt/scaife-viewer \
     && apk --no-cache add \
-        build-base curl git libxml2-dev libxslt-dev postgresql-dev linux-headers \
+        build-base curl git libgcc libxml2-dev libxslt-dev postgresql-dev linux-headers python3-dev libffi-dev \
     && pip install -r requirements.txt
-RUN pip install flake8 flake8-quotes isort
+RUN pip install flake8 flake8-quotes isort PyGithub
 
 FROM python:3.8-alpine
+
+ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONPATH /opt/scaife-viewer/src/
 ENV PATH="/opt/scaife-viewer/bin:${PATH}" VIRTUAL_ENV="/opt/scaife-viewer"
+
 WORKDIR /opt/scaife-viewer/src/
-COPY --from=static-build /opt/scaife-viewer/src/static/dist /opt/scaife-viewer/src/static/dist
+COPY --from=static-build /opt/scaife-viewer/src/static /opt/scaife-viewer/src/static
 COPY --from=python-build /opt/scaife-viewer/ /opt/scaife-viewer/
 RUN set -x \
     && runDeps="$( \
@@ -37,9 +40,11 @@ RUN set -x \
             | tr ',' '\n' \
             | sort -u \
             | awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
+            | grep -v 'libgcc_s-' \
         )" \
     && apk --no-cache add \
         $runDeps \
+        libgcc \
         curl
 COPY . .
 RUN flake8 sv_pdl

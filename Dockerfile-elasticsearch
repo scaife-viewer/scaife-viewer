@@ -1,3 +1,5 @@
-FROM docker.elastic.co/elasticsearch/elasticsearch:7.17.10
+FROM docker.elastic.co/elasticsearch/elasticsearch:8.19.11
+
+ENV ES_SETTING_XPACK_SECURITY_ENABLED=false
 # analysis-icu plugin required by index template
 RUN bin/elasticsearch-plugin install analysis-icu

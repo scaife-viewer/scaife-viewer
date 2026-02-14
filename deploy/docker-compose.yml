@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
     container_name: scaife-viewer
     entrypoint: deploy/entrypoint.sh
-    command: gunicorn --preload scaife_viewer.wsgi
+    command: gunicorn sv_pdl.wsgi:application
     ports:
       - ${SCAIFE_VIEWER_PORT:-8000}:8000
     env_file: .env
