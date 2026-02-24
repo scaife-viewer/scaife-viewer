@@ -1,4 +1,4 @@
-name: Build deployment image
+name: "3. Build deployment image"
 
 on:
   workflow_dispatch:

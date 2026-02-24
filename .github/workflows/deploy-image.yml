@@ -1,4 +1,4 @@
-name: Deploy app image
+name: "4. Deploy app image"
 
 on:
   workflow_dispatch:

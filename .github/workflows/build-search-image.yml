@@ -1,4 +1,4 @@
-name: Build search indexer image
+name: "5. Build search indexer image"
 
 on:
   workflow_dispatch:

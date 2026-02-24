@@ -1,4 +1,4 @@
-name: Build base image
+name: "2. Build base image"
 
 on:
   workflow_dispatch:

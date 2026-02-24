@@ -1,4 +1,4 @@
-name: Reindex content
+name: "6. Reindex content"
 
 on:
   workflow_dispatch:

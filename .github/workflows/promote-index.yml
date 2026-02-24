@@ -1,4 +1,4 @@
-name: Promote search index
+name: "7. Promote search index"
 
 on:
   workflow_dispatch:
