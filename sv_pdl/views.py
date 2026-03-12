@@ -56,7 +56,7 @@ def commentaries(request, *args, **kwargs):
 
     if response.status_code == 200:
         return JsonResponse(response.json())
-    
+
     return JsonResponse({})
 
 
@@ -73,7 +73,7 @@ def dictionary_entries(request, *args, **kwargs):
 
     if response.status_code == 200:
         return JsonResponse(response.json())
-    
+
     return JsonResponse([])
 
 
