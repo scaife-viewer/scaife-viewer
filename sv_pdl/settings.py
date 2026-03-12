@@ -18,6 +18,7 @@ DATABASES = {
 }
 
 ALLOWED_HOSTS = [
+    "127.0.0.1",
     "localhost",
     "scaife.perseus.org",
     "scaife-dev.perseus.org",

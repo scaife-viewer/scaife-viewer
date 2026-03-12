@@ -1,5 +1,5 @@
 <template>
-  <base-widget class="perseus-commentary">
+  <base-widget class="perseus-commentary" v-if="(entries || []).length > 0">
     <span slot="header">Perseus Commentary</span>
     <div slot="body">
       <div

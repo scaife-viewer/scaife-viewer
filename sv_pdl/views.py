@@ -54,7 +54,10 @@ def commentaries(request, *args, **kwargs):
 
     response = requests.get(url)
 
-    return JsonResponse(response.json())
+    if response.status_code == 200:
+        return JsonResponse(response.json())
+    
+    return JsonResponse({})
 
 
 def dictionary_entries(request, *args, **kwargs):
@@ -68,7 +71,10 @@ def dictionary_entries(request, *args, **kwargs):
 
     response = requests.get(url)
 
-    return JsonResponse(response.json())
+    if response.status_code == 200:
+        return JsonResponse(response.json())
+    
+    return JsonResponse([])
 
 
 def dictionaries(request):
