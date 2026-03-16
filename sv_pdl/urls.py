@@ -119,9 +119,7 @@ scaife_viewer_patterns = [
 ]
 
 urlpatterns = (
-    site_patterns
-    + scaife_viewer_patterns
-    + [
+    site_patterns + scaife_viewer_patterns + [
         path("atlas/", include("scaife_viewer.atlas.urls")),
         path("<path:path>/", app, name="app"),
     ]
