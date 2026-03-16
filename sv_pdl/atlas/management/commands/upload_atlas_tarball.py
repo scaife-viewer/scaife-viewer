@@ -26,9 +26,7 @@ class Command(BaseCommand):
             msg = "The SV_ATLAS_DB_PATH setting is missing and is required for this management command to work."
             raise ImproperlyConfigured(msg)
 
-        self.stdout.write(
-            "--[Creating / uploading database tarball]--"
-        )
+        self.stdout.write("--[Creating / uploading database tarball]--")
 
         database_file = os.path.basename(database_path)
         result = self.do_shell_command(f"md5sum {database_path}")
@@ -57,10 +55,7 @@ class Command(BaseCommand):
         self.do_shell_command(rm_cmd)
 
         self.stdout.write(f"Writing {url} to .atlas-db-url")
-        atlas_db_url_path = os.path.join(
-            settings.PROJECT_ROOT,
-            ".atlas-db-url"
-        )
+        atlas_db_url_path = os.path.join(settings.PROJECT_ROOT, ".atlas-db-url")
         with open(atlas_db_url_path, "w") as f:
             f.write(url)
         self.stdout.write("--[Done!]--")

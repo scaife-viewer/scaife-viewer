@@ -2,6 +2,7 @@
 """
 Extract attribution data CTS-Compliant TEI XML
 """
+
 import json
 import logging
 import os
@@ -314,7 +315,7 @@ def write_annotations(name, attributions):
 
 def write_stats(source, stats):
     os.makedirs(STATS_DATA_PATH, exist_ok=True)
-    file_name = os.path.join(STATS_DATA_PATH, f'{source["name"]}-attributions.json')
+    file_name = os.path.join(STATS_DATA_PATH, f"{source['name']}-attributions.json")
 
     with open(file_name, "w") as f:
         json.dump(stats, f, ensure_ascii=False, indent=2)

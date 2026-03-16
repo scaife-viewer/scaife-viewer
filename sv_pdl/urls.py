@@ -34,20 +34,56 @@ from .views import (
 
 api_patterns = (
     [
-        path("corpora/corpus-metadata/", CorpusMetadata.as_view(), name="corpora_corpus_metadata"),
+        path(
+            "corpora/corpus-metadata/",
+            CorpusMetadata.as_view(),
+            name="corpora_corpus_metadata",
+        ),
         path("corpora/repos/", CorporaReposView.as_view(), name="corpora_repos"),
         path("library/json/", LibraryView.as_view(format="json"), name="library"),
         path("library/json/info", LibraryInfoView.as_view(), name="library_info"),
-        path("library/vector/<str:urn>/", LibraryCollectionVectorView.as_view(), name="library_collection_vector"),
-        path("library/passage/<str:urn>/json/", LibraryPassageView.as_view(format="json"), name="library_passage"),
-        path("library/passage/<str:urn>/text/", LibraryPassageView.as_view(format="text"), name="library_passage_text"),
-        path("library/passage/<str:urn>/xml/", LibraryPassageView.as_view(format="xml"), name="library_passage_xml"),
+        path(
+            "library/vector/<str:urn>/",
+            LibraryCollectionVectorView.as_view(),
+            name="library_collection_vector",
+        ),
+        path(
+            "library/passage/<str:urn>/json/",
+            LibraryPassageView.as_view(format="json"),
+            name="library_passage",
+        ),
+        path(
+            "library/passage/<str:urn>/text/",
+            LibraryPassageView.as_view(format="text"),
+            name="library_passage_text",
+        ),
+        path(
+            "library/passage/<str:urn>/xml/",
+            LibraryPassageView.as_view(format="xml"),
+            name="library_passage_xml",
+        ),
         path("library/commentaries/<str:urn>/json/", commentaries, name="commentaries"),
         path("library/dictionaries/json/", dictionaries, name="dictionaries"),
-        path("library/dictionaries/<str:slug>/entries/", dictionary_entries, name="dictionary_entries"),
-        path("library/<str:urn>/cts-api-xml/reffs/", CTSApiGetValidReffView.as_view(), name="library_cts_api_get_valid_reff"),
-        path("library/<str:urn>/cts-api-xml/", CTSApiGetPassageView.as_view(), name="library_cts_api_xml"),
-        path("library/<str:urn>/json/", LibraryCollectionView.as_view(format="json"), name="library_collection"),
+        path(
+            "library/dictionaries/<str:slug>/entries/",
+            dictionary_entries,
+            name="dictionary_entries",
+        ),
+        path(
+            "library/<str:urn>/cts-api-xml/reffs/",
+            CTSApiGetValidReffView.as_view(),
+            name="library_cts_api_get_valid_reff",
+        ),
+        path(
+            "library/<str:urn>/cts-api-xml/",
+            CTSApiGetPassageView.as_view(),
+            name="library_cts_api_xml",
+        ),
+        path(
+            "library/<str:urn>/json/",
+            LibraryCollectionView.as_view(format="json"),
+            name="library_collection",
+        ),
         path("search/json/", search_json, name="search"),
         path("morpheus/", morpheus, name="morpheus"),
     ],
@@ -69,18 +105,26 @@ site_patterns = [
 scaife_viewer_patterns = [
     path("", include(api_patterns)),
     path("library/", LibraryView.as_view(format="html"), name="library"),
-    path("library/<str:urn>/", LibraryCollectionView.as_view(format="html"), name="library_collection"),
-    path("library/<str:urn>/redirect/", library_text_redirect, name="library_text_redirect"),
-    path("reader/<str:urn>/", Reader.as_view(), name="reader"),
-
-]
-
-urlpatterns = site_patterns + scaife_viewer_patterns + [
     path(
-        "atlas/",
-        include("scaife_viewer.atlas.urls")
+        "library/<str:urn>/",
+        LibraryCollectionView.as_view(format="html"),
+        name="library_collection",
     ),
-    path("<path:path>/", app, name="app"),
+    path(
+        "library/<str:urn>/redirect/",
+        library_text_redirect,
+        name="library_text_redirect",
+    ),
+    path("reader/<str:urn>/", Reader.as_view(), name="reader"),
 ]
+
+urlpatterns = (
+    site_patterns
+    + scaife_viewer_patterns
+    + [
+        path("atlas/", include("scaife_viewer.atlas.urls")),
+        path("<path:path>/", app, name="app"),
+    ]
+)
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

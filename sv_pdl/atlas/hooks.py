@@ -5,7 +5,9 @@ from scaife_viewer.atlas.resolvers.cts_collection import (
 from scaife_viewer.core.cts import text_inventory
 
 
-PROBLEM_URNS = [urn for urn in """
+PROBLEM_URNS = [
+    urn
+    for urn in """
 urn:cts:greekLit:tlg0019.tlg006.perseus-eng1
 urn:cts:greekLit:tlg0074.tlg001.perseus-grc1
 urn:cts:greekLit:tlg0074.tlg002.perseus-grc1
@@ -50,7 +52,9 @@ urn:cts:perslit:seyf.divan.pdl
 urn:cts:perslit:shahnematollah.divan.pdl
 urn:cts:perslit:shater.divan.pdl
 urn:cts:perslit:vahshi.divan.pdl
-""".splitlines() if urn]
+""".splitlines()
+    if urn
+]
 
 PERSLIT_NS = "urn:cts:perslit:"
 

@@ -9,7 +9,6 @@ from django.utils.module_loading import import_string
 
 
 class PerRequestMiddleware:
-
     def __init__(self, get_response):
         self.get_response = get_response
         self.mws = {}
@@ -26,7 +25,9 @@ class PerRequestMiddleware:
             except MiddlewareNotUsed:
                 continue
             if mw_instance is None:
-                raise ImproperlyConfigured(f"Middleware factory {mw_path} returned None.")
+                raise ImproperlyConfigured(
+                    f"Middleware factory {mw_path} returned None."
+                )
             if hasattr(mw_instance, "process_view"):
                 view_mw.insert(0, mw_instance.process_view)
             if hasattr(mw_instance, "process_template_response"):
@@ -60,7 +61,9 @@ class PerRequestMiddleware:
                 return response
 
     def process_template_response(self, request, response):
-        for mw_method in self.mws[(self.resolve_key(request.path_info), "template_response")]:
+        for mw_method in self.mws[
+            (self.resolve_key(request.path_info), "template_response")
+        ]:
             response = mw_method(request, response)
         return response
 

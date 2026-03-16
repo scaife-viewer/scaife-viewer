@@ -31,6 +31,7 @@ def healthz(app):
             start_response("200 OK", [("Content-Type", "text/plain")])
             return [b"ok"]
         return app(environ, start_response)
+
     return healthz_wrapper
 
 

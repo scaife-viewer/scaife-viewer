@@ -14,7 +14,6 @@ from scaife_viewer.core.hooks import hookset
 
 
 class Command(BaseCommand):
-
     help = "Load text repos to disk"
 
     def add_arguments(self, parser):

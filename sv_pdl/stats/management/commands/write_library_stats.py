@@ -12,32 +12,22 @@ from ... import LIBRARY_STATS_PATH
 
 
 class Command(BaseCommand):
-
     help = "Generate library statistics"
 
     def calculate_word_counts(self):
         body = {
             "aggs": {
                 "language": {
-                    "terms": {
-                        "field": "language"
-                    },
-                    "aggs": {
-                        "word_count": {
-                            "sum": {
-                                "field": "word_count"
-                            }
-                        }
-                    }
+                    "terms": {"field": "language"},
+                    "aggs": {"word_count": {"sum": {"field": "word_count"}}},
                 }
             }
         }
-        aggregations = es.search(index=settings.ELASTICSEARCH_INDEX_NAME, body=body, params=dict(size=0))["aggregations"]
+        aggregations = es.search(
+            index=settings.ELASTICSEARCH_INDEX_NAME, body=body, params=dict(size=0)
+        )["aggregations"]
         buckets = aggregations["language"]["buckets"]
-        marquee_languages = {
-            "grc": "Greek",
-            "lat": "Latin"
-        }
+        marquee_languages = {"grc": "Greek", "lat": "Latin"}
         lookup = defaultdict(int)
         for entry in buckets:
             lookup["total"] += int(entry["word_count"]["value"])
@@ -70,7 +60,7 @@ class Command(BaseCommand):
             "works_count": len(works),
             "texts_count": len(texts),
             "grc_texts_count": text_language_counts["grc"],
-            "lat_texts_count": text_language_counts["lat"]
+            "lat_texts_count": text_language_counts["lat"],
         }
 
     def handle(self, *args, **options):

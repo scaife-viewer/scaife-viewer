@@ -1,3 +1,1 @@
-cachekeys = {
-    "LATEST_RELEASE": "latest-release"
-}
+cachekeys = {"LATEST_RELEASE": "latest-release"}
