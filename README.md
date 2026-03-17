@@ -9,6 +9,7 @@ This repository is part of the [Scaife Viewer](https://scaife-viewer.org) projec
 This project can be developed via [GitHub Codespaces](https://github.com/features/codespaces).
 
 ### Setting up the Codespace
+
 - Browse to https://github.com/scaife-viewer/scaife-viewer
 - (Optionally) fork the repo; if you're a part of the Scaife  Viewer development team, you can work from `scaife-viewer/scaife-viewer`
 - Create a codespace from the green "Code" button:
@@ -19,18 +20,22 @@ This project can be developed via [GitHub Codespaces](https://github.com/feature
   ![image-20230622050632620](https://f000.backblazeb2.com/file/typora-images-23-06-14/uPic/image-20230622050632620.png)
 
 ### Install and build the frontend
+
 - Install and activate Node 12:
 ```shell
 nvm use 12
 ```
+
 - Install dependencies:
 ```shell
 npm i
 ```
+
 - Rebuild the `node-sass` dependency:
 ```shell
 npm rebuild node-sass
 ```
+
 - Build the frontend:
 ```shell
 npm run build
@@ -38,13 +43,16 @@ npm run build
 
 
 ### Start up PostgreSQL and ElasticSearch
+
 _Note_: These may be made optional in the future
 Build and start up services via:
 ```shell
 touch deploy/.env
 docker-compose -f deploy/docker-compose.yml up -d sv-elasticsearch sv-postgres
 ```
+
 ### Prepare the backend
+
 - Create a virtual environment and activate it:
 ```shell
 python3 -m venv .venv
@@ -69,6 +77,7 @@ export CTS_RESOLVER=local \
 ./manage.py migrate
 ./manage.py loaddata sites
 ```
+
 - Copy the static assets
 ```shell
 ./manage.py collectstatic --noinput
@@ -80,6 +89,7 @@ mkdir -p $CTS_LOCAL_DATA_PATH
 ./manage.py load_text_repos
 ./manage.py slim_text_repos
 ```
+
 - Ingest the data and pre-populate CTS cache:
 ```shell
 mkdir -p atlas_data
@@ -87,20 +97,24 @@ mkdir -p atlas_data
 ```
 
 ### Seed the search index
+
 We'll ingest a portion of the data into ElasticSearch
 
 - Fetch the ElasticSearch template:
 ```shell
 curl -O https://gist.githubusercontent.com/jacobwegner/68e538edf66539feb25786cc3c9cc6c6/raw/252e01a4c7e633b4663777a7e12dcb81119131e1/scaife-viewer-tmp.json
 ```
+
 - Install the template:
 ```shell
 curl -X PUT "localhost:9200/_template/scaife-viewer?pretty" -H 'Content-Type: application/json' -d "$(cat scaife-viewer-tmp.json)"
 ```
+
 - Index content:
 ```shell
 python manage.py indexer --max-workers=1 --limit=1000
 ```
+
 - Cleanup the search index template:
 ```shell
 rm scaife-viewer-tmp.json
@@ -213,7 +227,7 @@ You can run the Vue unit tests, via:
 
     npm run unit
 
-Cross-browser testing is provided by BrowserStack through their [open source program](](https://www.browserstack.com/open-source)).  
+Cross-browser testing is provided by BrowserStack through their [open source program](](https://www.browserstack.com/open-source)).
 
 ## Translations
 
@@ -363,7 +377,7 @@ To deploy a new version, trigger the following GitHub Actions workflows:
     This workflow [scheduled to run daily](https://github.com/scaife-viewer/scaife-viewer/blob/6d1b12b1e993b58d25507b8bb2ff6235f900f385/.github/workflows/update-content-manifest.yml#L5), and if a change is found, it will open a PR against the default GitHub branch (e.g. [#592](https://github.com/scaife-viewer/scaife-viewer/pull/592))  Manually merge the PR into the branch (e.g. [a3f9ba6](https://github.com/scaife-viewer/scaife-viewer/commit/a3f9ba6c5b681e02d4f746d4b51519890aeeb1e9))
 
     To add a new repository, manually edit [data/content-manifests/production.yaml](https://github.com/scaife-viewer/scaife-viewer/blob/dev/data/content-manifests/production.yaml). Then merge this into [gh-actions branch](https://github.com/scaife-viewer/scaife-viewer/blob/gh-actions/update-content-manifest/data/content-manifests/production.yaml) to ensure automatic capture of updates.
-    
+
 
 - [Build artifacts image](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/build-artifacts-image.yml):
 
@@ -395,7 +409,7 @@ To deploy a new version, trigger the following GitHub Actions workflows:
     Use the search indexer image to run a reindex task (currently on Google Cloud Run).
 
     The job output includes the new index as `ELASTICSEARCH_INDEX_NAME`.
-    
+
     Check the status of the job using the [Check reindexing job status workflow](#check-reindexing-job-status)
 - [Promote search index](https://github.com/scaife-viewer/scaife-viewer/actions/workflows/promote-index.yml):
 
@@ -488,11 +502,11 @@ The following GitHub Actions workflows are used to run maintenance tasks:
     This workflow should be ran to check the status of the [Reindex content](#reindex-content) job.
 
     It will query the Google Cloud Run API and return a description of the latest job execution:
-    
+
     <img width="890" alt="image" src="https://github.com/scaife-viewer/scaife-viewer/assets/629062/1ebbe29f-0273-45ba-8da8-a4b028bfb6da">
-    
+
     It also checks the completion status of the execution.  If the execution has not completed, an error will be returned:
-    
+
     <img width="883" alt="image" src="https://github.com/scaife-viewer/scaife-viewer/assets/629062/6f13c87e-0341-4943-bc1c-ffb2da1456c0">
 
     When the execution has completed, no error is returned:
