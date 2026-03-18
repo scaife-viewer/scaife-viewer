@@ -50,6 +50,6 @@ COPY . .
 RUN flake8 sv_pdl
 RUN isort -c **/*.py
 
-ENTRYPOINT ["entrypoint.sh"]
+ENTRYPOINT ["/opt/scaife-viewer/src/entrypoint.sh"]
 
 CMD ["gunicorn", "sv_pdl.wsgi:application"]
