@@ -148,28 +148,37 @@ The Codespace has now been set up!  Close it by opening the "Codespaces" menu (`
 - Select the "..." menu and then "Open in..." and select "Open in browser" or another of the available options.
   ![image-20230622165503906](https://f000.backblazeb2.com/file/typora-images-23-06-14/uPic/image-20230622165503906.png)
 - After the Codespace launches, open a new terminal and reactivate the Python virtual environment:
+
 ```shell
 source .venv/bin/activate
 ```
+
 - Populate required envionment variables:
+
 ```shell
 export CTS_RESOLVER=local \
     CTS_LOCAL_DATA_PATH=data/cts \
     CONTENT_MANIFEST_PATH=data/content-manifests/test.yaml \
     DATABASE_URL=postgres://scaife:scaife@127.0.0.1:5432/scaife
 ```
+
 - Start up PostgreSQL and ElasticSearch:
+
 ```shell
 docker-compose -f deploy/docker-compose.yml up -d sv-elasticsearch sv-postgres
 # Optionally wait 10 seconds for Postgres to finish starting
 sleep 10
 ```
+
 - Run the dev server:
+
 ```shell
  ./manage.py runserver
 ```
+
 Codespaces should show a notification that a port has been mapped:
 ![image-20230622052553784](https://f000.backblazeb2.com/file/typora-images-23-06-14/uPic/image-20230622052553784.png)
+
 - Click "Open in Browser" to load the dev server.
 
 ## Getting Started with Local Development

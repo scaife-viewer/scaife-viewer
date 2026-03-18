@@ -49,4 +49,7 @@ RUN set -x \
 COPY . .
 RUN flake8 sv_pdl
 RUN isort -c **/*.py
-RUN python manage.py collectstatic --noinput
+
+ENTRYPOINT ["entrypoint.sh"]
+
+CMD ["gunicorn", "sv_pdl.wsgi:application"]
