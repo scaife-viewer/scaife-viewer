@@ -1,12 +1,13 @@
 FROM node:12.13-alpine AS static-build
+RUN apk --no-cache add \
+    g++ make python
 WORKDIR /opt/scaife-viewer/src/
-RUN apk add python2 make g++
-RUN ln -sf python2 /usr/bin/python
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY webpack.config.js babel.config.js .eslintrc.json ./
 COPY ./static static
 COPY ./test test
+
 ARG FORCE_SCRIPT_NAME
 RUN npm run lint
 RUN npm run unit
@@ -26,13 +27,13 @@ RUN pip install flake8 flake8-quotes isort PyGithub
 
 FROM python:3.8-alpine
 
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
-ENV PYTHONPATH /opt/scaife-viewer/src/
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONPATH=/opt/scaife-viewer/src/
 ENV PATH="/opt/scaife-viewer/bin:${PATH}" VIRTUAL_ENV="/opt/scaife-viewer"
 
 WORKDIR /opt/scaife-viewer/src/
-COPY --from=static-build /opt/scaife-viewer/src/static /opt/scaife-viewer/src/static
+
 COPY --from=python-build /opt/scaife-viewer/ /opt/scaife-viewer/
 RUN set -x \
     && runDeps="$( \
@@ -46,9 +47,17 @@ RUN set -x \
         $runDeps \
         libgcc \
         curl
+
 COPY . .
+
+# static files must be copied after COPY . . — otherwise the latter command overwrites
+# the Docker-built files with whatever exists from the last local build.
+COPY --from=static-build /opt/scaife-viewer/src/static/dist /opt/scaife-viewer/src/static/dist
+COPY --from=static-build /opt/scaife-viewer/src/static/stats /opt/scaife-viewer/src/static/stats
+
 RUN flake8 sv_pdl
 RUN isort -c **/*.py
+RUN python manage.py collectstatic --noinput
 
 ENTRYPOINT ["/opt/scaife-viewer/src/entrypoint.sh"]
 

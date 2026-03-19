@@ -37,12 +37,10 @@ def get_library_stats():
                 "works_count": intcomma(data["works_count"]),
                 "text_counts_total": intcomma(data["text_counts"]["total"]),
                 "text_counts_greek": intcomma(data["text_counts"]["grc"]),
-                "text_counts_latin": intcomma(data["text_counts"]["lat"]),
-                "word_counts_total": intword(data["word_counts"]["total"]).split(" ")[
-                    0
-                ],
-                "word_counts_greek": intword(data["word_counts"]["grc"]).split(" ")[0],
-                "word_counts_latin": intword(data["word_counts"]["lat"]).split(" ")[0],
+                "text_counts_latin": intcomma(data["text_counts"].get("lat")),
+                "word_counts_total": intword(data["word_counts"]["total"]),
+                "word_counts_greek": intword(data["word_counts"]["grc"]),
+                "word_counts_latin": intword(data["word_counts"].get("lat")),
             }
         except Exception as e:
             logger.critical("Could not retrieve library stats")

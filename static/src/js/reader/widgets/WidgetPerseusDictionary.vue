@@ -3,7 +3,7 @@
     <span slot="header">Perseus Dictionaries</span>
     <div slot="body">
       <div>
-        <select v-model="selectedDictionary">
+        <select v-model="selectedDictionary" name="perseus-dictionary-select">
           <option disabled value="">Please select a dictionary</option>
           <option
             v-for="dictionary in availableDictionaries"
@@ -100,7 +100,7 @@ export default {
     }
 
     if (language === "lat") {
-      dictionary = "lewis-and-short";
+      dictionary = "lewis-and-short-latin-dictionary";
     }
 
     return {
