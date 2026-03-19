@@ -15,8 +15,8 @@ then
 fi
 
 python manage.py loaddata sites
-python manage.py migrate sites
 python manage.py makemigrations
+python manage.py migrate sites
 python manage.py migrate
 
 mkdir -p ${CTS_LOCAL_DATA_PATH}
