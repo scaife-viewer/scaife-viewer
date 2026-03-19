@@ -59,4 +59,23 @@ RUN flake8 sv_pdl
 RUN isort -c **/*.py
 RUN python manage.py collectstatic --noinput
 
+RUN mkdir -p ${CTS_LOCAL_DATA_PATH}
+
+RUN python manage.py loaddata sites
+RUN python manage.py makemigrations
+RUN python manage.py migrate sites
+RUN python manage.py migrate
+
+RUN python manage.py load_text_repos
+RUN python manage.py slim_text_repos
+
+RUN mkdir -p atlas_data
+RUN python manage.py prepare_atlas_db --force
+
+RUN curl -O https://gist.githubusercontent.com/jacobwegner/68e538edf66539feb25786cc3c9cc6c6/raw/252e01a4c7e633b4663777a7e12dcb81119131e1/scaife-viewer-tmp.json
+RUN curl -X PUT "http://$SV_ELASTICSEARCH_HOST:$SV_ELASTICSEARCH_PORT/_template/scaife-viewer?pretty" -H 'Content-Type: application/json' -d "$(cat scaife-viewer-tmp.json)"
+RUN python manage.py indexer --max-workers=1 --limit=1000
+
+RUN rm scaife-viewer-tmp.json
+
 CMD ["gunicorn", "sv_pdl.wsgi:application"]
