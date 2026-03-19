@@ -1,3 +1,5 @@
+#!/bin/sh
+
 mkdir -p ${CTS_LOCAL_DATA_PATH}
 
 python manage.py loaddata sites
