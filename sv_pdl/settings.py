@@ -13,6 +13,8 @@ TRACING_ENABLED = bool(int(os.environ.get("TRACING_ENABLED", not DEBUG)))
 # FIXME: Deprecate or make this dynamic
 LIBRARY_VIEW_API_VERSION = int(os.environ.get("LIBRARY_VIEW_API_VERSION", 10))
 
+DATABASE_URL = os.getenv("DATABASE_URL")
+
 DATABASES = {
     "default": dj_database_url.config(default="postgres://localhost/scaife-viewer")
 }
