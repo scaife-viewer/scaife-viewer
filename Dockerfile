@@ -59,6 +59,4 @@ RUN flake8 sv_pdl
 RUN isort -c **/*.py
 RUN python manage.py collectstatic --noinput
 
-ENTRYPOINT ["/opt/scaife-viewer/src/entrypoint.sh"]
-
 CMD ["gunicorn", "sv_pdl.wsgi:application"]
