@@ -1,12 +1,5 @@
 #!/bin/sh
 
-echo "Waiting for postgres..."
-
-while ! nc -z $SV_POSTGRES_HOST $SV_POSTGRES_PORT; do
-  sleep 0.1
-done
-echo "PostgreSQL started"
-
 if [ "$USE_ELASTICSEARCH_SERVICE" = "1" ]
 then
   echo "Waiting for elasticsearch..."
@@ -20,7 +13,6 @@ then
   done
   echo "elasticsearch started"
 fi
-
 
 python manage.py loaddata sites
 python manage.py migrate sites
