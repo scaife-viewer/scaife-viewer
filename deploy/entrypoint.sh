@@ -21,9 +21,11 @@ then
   echo "elasticsearch started"
 fi
 
+
+python manage.py loaddata sites
+python manage.py migrate sites
 python manage.py makemigrations
 python manage.py migrate
-python manage.py loaddata sites
 
 mkdir -p ${CTS_LOCAL_DATA_PATH}
 python manage.py load_text_repos
