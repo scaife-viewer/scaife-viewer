@@ -1,0 +1,89 @@
+{
+  "index_patterns": [
+    "scaife-viewer*"
+  ],
+  "mappings": {
+    "properties": {
+      "@timestamp": {
+        "type": "date"
+      },
+      "@version": {
+        "type": "keyword"
+      },
+      "urn": {
+        "type": "keyword"
+      },
+      "language": {
+        "type": "keyword"
+      },
+      "word_count": {
+        "type": "integer"
+      },
+      "text_group": {
+        "type": "keyword"
+      },
+      "work": {
+        "type": "keyword"
+      },
+      "text": {
+        "properties": {
+          "urn": {
+            "type": "keyword"
+          },
+          "label": {
+            "type": "text"
+          },
+          "description": {
+            "type": "text"
+          }
+        }
+      },
+      "sort_idx": {
+        "type": "integer"
+      },
+      "lemma_content": {
+        "type": "text",
+        "term_vector": "with_positions_offsets",
+        "store": true,
+        "analyzer": "fulltext_analyzer"
+      },
+      "content": {
+        "type": "text",
+        "term_vector": "with_positions_offsets",
+        "store": true,
+        "analyzer": "fulltext_analyzer"
+      },
+      "raw_content": {
+        "type": "text",
+        "term_vector": "with_positions_offsets",
+        "store": true,
+        "analyzer": "fulltext_analyzer"
+      }
+    }
+  },
+  "settings": {
+    "index": {
+      "number_of_shards": 5,
+      "number_of_replicas": 0
+    },
+    "analysis": {
+      "analyzer": {
+        "fulltext_analyzer": {
+          "type": "custom",
+          "tokenizer": "icu_tokenizer",
+          "filter": [
+            "icu_folding"
+          ]
+        }
+      },
+      "normalizer": {
+        "fulltext_normalizer": {
+          "type": "custom",
+          "filter": [
+            "icu_folding"
+          ]
+        }
+      }
+    }
+  }
+}
