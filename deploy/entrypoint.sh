@@ -3,8 +3,9 @@
 mkdir -p ${CTS_LOCAL_DATA_PATH}
 
 python manage.py loaddata sites
-python manage.py makemigrations
 python manage.py migrate sites
+
+python manage.py makemigrations
 python manage.py migrate
 
 python manage.py load_text_repos
