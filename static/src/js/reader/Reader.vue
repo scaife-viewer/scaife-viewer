@@ -18,7 +18,9 @@
           <widget-passage-children />
           <widget-passage-reference />
           <widget-search />
+          <widget-attributions />
           <widget-passage-exports />
+          <widget-repo-metadata />
         </template>
         <template slot="body">
           <div class="passage-heading">
@@ -106,9 +108,7 @@
           <widget-perseus-dictionary />
           <widget-word-list />
           <widget-perseus-commentary />
-          <widget-attributions />
           <widget-display-settings />
-          <widget-repo-metadata />
           <widget-token-list />
           <widget-new-alexandria-commentary />
         </template>
