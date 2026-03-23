@@ -13,10 +13,14 @@
     <template v-else>
       <skeleton>
         <template slot="left">
+          <widget-passage-links />
           <widget-passage-ancestors />
           <widget-passage-children />
           <widget-passage-reference />
           <widget-search />
+          <widget-attributions />
+          <widget-passage-exports />
+          <widget-repo-metadata />
         </template>
         <template slot="body">
           <div class="passage-heading">
@@ -104,11 +108,7 @@
           <widget-perseus-dictionary />
           <widget-word-list />
           <widget-perseus-commentary />
-          <widget-attributions />
-          <widget-passage-links />
           <widget-display-settings />
-          <widget-passage-exports />
-          <widget-repo-metadata />
           <widget-token-list />
           <widget-new-alexandria-commentary />
         </template>
