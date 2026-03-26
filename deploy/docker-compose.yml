@@ -6,9 +6,9 @@ services:
     container_name: scaife-viewer
     command: gunicorn sv_pdl.wsgi:application
     depends_on:
-      scaife-postgres:
+      sv-postgres:
         condition: service_healthy
-      scaife-elasticsearch:
+      sv-elasticsearch:
         condition: service_healthy
     ports:
       - ${SCAIFE_VIEWER_PORT:-8000}:8000
@@ -18,7 +18,7 @@ services:
     container_name: sv-postgres
     image: postgres:9.6-alpine
     ports:
-      - ${SV_POSTGRES_PORT:-5432}:5432
+      - ${SV_POSTGRES_PORT:-5433}:5432
     environment:
       - POSTGRES_USER=scaife
       - POSTGRES_PASSWORD=scaife
