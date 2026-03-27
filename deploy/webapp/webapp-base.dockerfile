@@ -41,5 +41,6 @@ RUN apk --no-cache add so:libc.musl-x86_64.so.1 libgcc so:libpq.so.5 curl bash
 COPY . .
 RUN flake8 sv_pdl
 RUN isort -c **/*.py
+RUN pip install setuptools==81.0
 RUN python manage.py collectstatic --noinput
 CMD gunicorn --log-file=- --preload sv_pdl.wsgi
