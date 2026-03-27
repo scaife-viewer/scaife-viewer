@@ -57,7 +57,7 @@ COPY --from=static-build /opt/scaife-viewer/src/static/stats /opt/scaife-viewer/
 
 RUN flake8 sv_pdl
 RUN isort -c **/*.py
-RUN pip install setuptools
+RUN pip install setuptools==81.0
 RUN python manage.py collectstatic --noinput
 
 CMD ["gunicorn", "sv_pdl.wsgi:application"]
