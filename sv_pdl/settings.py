@@ -29,6 +29,11 @@ ALLOWED_HOSTS = [
 if "HEROKU_APP_NAME" in os.environ:
     ALLOWED_HOSTS.append(".herokuapp.com")
 
+extra_hosts = os.environ.get("SV_ALLOWED_HOSTS", "").split(",")
+
+if len(extra_hosts) > 0:
+    ALLOWED_HOSTS = ALLOWED_HOSTS + extra_hosts
+
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
