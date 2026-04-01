@@ -3,9 +3,18 @@
 SENTINEL_DIR=/sv-data/sentinels
 mkdir -p ${SENTINEL_DIR} ${CTS_LOCAL_DATA_PATH} ${ATLAS_DATA_DIR:-atlas_data}
 
-python manage.py makemigrations
+
+# FIXME: (charles) I have no idea why we need to run migrate
+# twice. Something is clearly wrong with what's
+# going on here, but Django complains about the
+# missing sites table unless we run these processes
+# in this order.
 python manage.py migrate
 python manage.py loaddata sites
+python manage.py makemigrations
+python manage.py migrate sites
+python manage.py migrate
+
 
 if [ ! -f ${SENTINEL_DIR}/.text_repos_loaded ]; then
     python manage.py load_text_repos

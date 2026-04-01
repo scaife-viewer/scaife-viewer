@@ -436,6 +436,9 @@ DATABASE_ROUTERS = ["scaife_viewer.atlas.db_routers.ATLASRouter"]
 def populate_cors_origin_whitelist():
     allowed = []
     for host in ALLOWED_HOSTS:
+        if host.strip() == "":
+            continue
+
         allowed.append(f"https://{host}")
         allowed.append(f"http://{host}")
     return allowed
