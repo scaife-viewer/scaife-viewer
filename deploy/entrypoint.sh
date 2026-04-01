@@ -1,21 +1,19 @@
 #!/bin/sh
 
 SENTINEL_DIR=/sv-data/sentinels
-mkdir -p ${SENTINEL_DIR}
+mkdir -p ${SENTINEL_DIR} ${CTS_LOCAL_DATA_PATH} ${ATLAS_DATA_DIR:-atlas_data}
 
 python manage.py makemigrations
 python manage.py migrate
 python manage.py loaddata sites
 
 if [ ! -f ${SENTINEL_DIR}/.text_repos_loaded ]; then
-    mkdir -p ${CTS_LOCAL_DATA_PATH}
     python manage.py load_text_repos
     python manage.py slim_text_repos
     touch ${SENTINEL_DIR}/.text_repos_loaded
 fi
 
 if [ ! -f ${SENTINEL_DIR}/.atlas_db_prepared ]; then
-    mkdir -p ${ATLAS_DATA_DIR:-atlas_data}
     python manage.py prepare_atlas_db --force
     touch ${SENTINEL_DIR}/.atlas_db_prepared
 fi
