@@ -11,5 +11,7 @@ jobs:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         HEROKU_APP: scaife-perseus-org
       steps:
+        - name: Install Heroku CLI
+          run: curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
         - name: Run cleanup_search_indices command
           run: heroku run --exit-code python manage.py cleanup_search_indices --force
