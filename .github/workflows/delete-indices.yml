@@ -14,4 +14,4 @@ jobs:
         - name: Install Heroku CLI
           run: curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
         - name: Run cleanup_search_indices command
-          run: heroku run --exit-code python manage.py cleanup_search_indices --force
+          run: heroku run --exit-code python manage.py cleanup_search_indices
