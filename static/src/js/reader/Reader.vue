@@ -105,8 +105,8 @@
           <widget-text-mode />
           <widget-highlight />
           <widget-morpheus />
-          <widget-perseus-dictionary />
           <widget-word-list />
+          <widget-perseus-dictionary />
           <widget-perseus-commentary />
           <widget-display-settings />
           <widget-token-list />
