@@ -50,7 +50,7 @@
             </div>
           </details>
         </div>
-        <div v-else class="mt-2"><span v-if="q.length">No results found.</span></div>
+        <div v-else class="mt-2"><span v-if="q.length && !loading">No results found.</span></div>
       </div>
 
       <div v-if="totalPages > 1 && q.length">
