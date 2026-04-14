@@ -55,6 +55,20 @@ COPY . .
 COPY --from=static-build /opt/scaife-viewer/src/static/dist /opt/scaife-viewer/src/static/dist
 COPY --from=static-build /opt/scaife-viewer/src/static/stats /opt/scaife-viewer/src/static/stats
 
+# Pre-bake ingestion sentinels when data already exists in the build context.
+# Sentinels live inside atlas_data/ so they travel with the data (volume or image layer)
+# rather than being lost on every container restart. The entrypoint skips expensive
+# re-ingestion steps when the corresponding sentinel is present.
+RUN mkdir -p atlas_data/sentinels && \
+    if [ -d data/cts ] && [ "$(ls -A data/cts 2>/dev/null)" ]; then \
+        sha256sum data/content-manifests/production.yaml 2>/dev/null | cut -d' ' -f1 \
+            > atlas_data/sentinels/.manifest_hash; \
+        touch atlas_data/sentinels/.text_repos_loaded; \
+    fi && \
+    if [ -f atlas_data/atlas.sqlite ]; then \
+        touch atlas_data/sentinels/.atlas_db_prepared; \
+    fi
+
 RUN python manage.py collectstatic --noinput
 
 CMD ["gunicorn", "sv_pdl.wsgi:application"]

@@ -1,7 +1,7 @@
 #!/bin/sh
 
-SENTINEL_DIR=/sv-data/sentinels
-mkdir -p ${SENTINEL_DIR} ${CTS_LOCAL_DATA_PATH} ${ATLAS_DATA_DIR:-atlas_data}
+SENTINEL_DIR=${ATLAS_DATA_DIR:-atlas_data}/sentinels
+mkdir -p ${SENTINEL_DIR} ${CTS_LOCAL_DATA_PATH:-data/cts} ${ATLAS_DATA_DIR:-atlas_data}
 
 
 # FIXME: (charles) I have no idea why we need to run migrate
@@ -16,22 +16,33 @@ python manage.py migrate sites
 python manage.py migrate
 
 
-if [ ! -f ${SENTINEL_DIR}/.text_repos_loaded ]; then
+# Re-load text repos if the content manifest has changed since last ingestion.
+MANIFEST_PATH="${CONTENT_MANIFEST_PATH:-data/content-manifests/production.yaml}"
+MANIFEST_HASH=$(sha256sum "${MANIFEST_PATH}" 2>/dev/null | cut -d' ' -f1 || echo "")
+STORED_HASH=""
+[ -f "${SENTINEL_DIR}/.manifest_hash" ] && STORED_HASH=$(cat "${SENTINEL_DIR}/.manifest_hash")
+
+if [ ! -f "${SENTINEL_DIR}/.text_repos_loaded" ] || [ "${MANIFEST_HASH}" != "${STORED_HASH}" ]; then
     python manage.py load_text_repos
     python manage.py slim_text_repos
-    touch ${SENTINEL_DIR}/.text_repos_loaded
+    echo "${MANIFEST_HASH}" > "${SENTINEL_DIR}/.manifest_hash"
+    touch "${SENTINEL_DIR}/.text_repos_loaded"
+    # Atlas must be rebuilt when repos change
+    rm -f "${SENTINEL_DIR}/.atlas_db_prepared"
 fi
 
-if [ ! -f ${SENTINEL_DIR}/.atlas_db_prepared ]; then
+if [ ! -f "${SENTINEL_DIR}/.atlas_db_prepared" ]; then
     ./bin/copy_corpus_repo_metadata
     python manage.py prepare_atlas_db --force
-    touch ${SENTINEL_DIR}/.atlas_db_prepared
+    touch "${SENTINEL_DIR}/.atlas_db_prepared"
+    # ES index must be rebuilt when atlas changes
+    rm -f "${SENTINEL_DIR}/.es_indexed"
 fi
 
-if [ ! -f ${SENTINEL_DIR}/.es_indexed ]; then
+if [ ! -f "${SENTINEL_DIR}/.es_indexed" ]; then
     curl -X PUT "http://${SV_ELASTICSEARCH_HOST}:${SV_ELASTICSEARCH_PORT}/_template/scaife-viewer?pretty" -H 'Content-Type: application/json' -d "$(cat deploy/scaife-viewer-es-template.json)"
     python manage.py indexer --max-workers=1 --limit=1000
-    touch ${SENTINEL_DIR}/.es_indexed
+    touch "${SENTINEL_DIR}/.es_indexed"
 fi
 
 exec "$@"
