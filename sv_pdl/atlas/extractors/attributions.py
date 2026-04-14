@@ -348,7 +348,7 @@ def extract_attributions(include_stats=False):
         config_path = source.get("config_path")
         if config_path:
             if not os.path.exists(config_path):
-                logger.warningf(
+                logger.warning(
                     f"Config file not found, skipping source '{source['name']}': {config_path}"
                 )
                 continue
