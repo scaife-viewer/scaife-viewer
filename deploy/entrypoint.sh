@@ -41,10 +41,9 @@ fi
 
 if [ ! -f "${SENTINEL_DIR}/.atlas_db_prepared" ]; then
     ./bin/copy_corpus_repo_metadata
-    python manage.py prepare_atlas_db --force
-    touch "${SENTINEL_DIR}/.atlas_db_prepared"
-    # ES index must be rebuilt when atlas changes
-    rm -f "${SENTINEL_DIR}/.es_indexed"
+    python manage.py prepare_atlas_db --force && \
+    touch "${SENTINEL_DIR}/.atlas_db_prepared" && \
+    rm -f "${SENTINEL_DIR}/.es_indexed" # rebuild ES index when ATLAS changes
 fi
 
 if [ ! -f "${SENTINEL_DIR}/.es_indexed" ]; then

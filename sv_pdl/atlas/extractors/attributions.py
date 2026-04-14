@@ -347,6 +347,11 @@ def extract_attributions(include_stats=False):
         lookup = build_attributions_lookup(resolver, source["qs"])
         config_path = source.get("config_path")
         if config_path:
+            if not os.path.exists(config_path):
+                logger.warningf(
+                    f"Config file not found, skipping source '{source['name']}': {config_path}"
+                )
+                continue
             config = get_attributions_config(config_path)
         else:
             config = None
