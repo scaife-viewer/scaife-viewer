@@ -89,8 +89,8 @@ def dictionaries(request):
 
     return JsonResponse(response.json())
 
-def search_json(request):
 
+def search_json(request):
     # get params from query string
     search_type = request.GET.get("type")
     q = request.GET.get("q", "")
@@ -215,7 +215,6 @@ def search_json(request):
             data["results"].append(r)
 
     return JsonResponse(data)
-
 
 
 def profile(request):

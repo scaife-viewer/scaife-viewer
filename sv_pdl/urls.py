@@ -28,7 +28,7 @@ from .views import (
     dictionary_entries,
     home,
     profile,
-    search_json, # moved from scaife_viewer.core for easier debugging
+    search_json,  # moved from scaife_viewer.core for easier debugging
 )
 
 

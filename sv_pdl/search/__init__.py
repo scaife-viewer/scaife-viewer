@@ -280,8 +280,8 @@ class Highlighter:
         for i, w in enumerate(L):
             fragment = []
             if regex.match(r"</?em>", w):
-                fragment.extend(L[max(0, i - context) : i])
+                fragment.extend(L[max(0, i - context):i])
                 fragment.append(w)
-                fragment.extend(L[i + 1 : i + context + 1])
+                fragment.extend(L[i + 1:i + context + 1])
                 acc.append(" ".join(fragment))
         return acc
