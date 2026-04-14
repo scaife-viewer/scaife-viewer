@@ -15,6 +15,14 @@ python manage.py makemigrations
 python manage.py migrate sites
 python manage.py migrate
 
+# Apply any pending schema migrations to the ATLAS SQLite database.
+# This handles the case where the atlas.sqlite on the volume was built
+# with an older version of scaife_viewer.atlas that is missing tables
+# added in later migrations (e.g. scaife_viewer_atlas_attributionrecord).
+# Running migrate here is safe: it only applies what is missing and
+# never touches the ingested data.
+python manage.py migrate --database=atlas
+
 
 # Re-load text repos if the content manifest has changed since last ingestion.
 MANIFEST_PATH="${CONTENT_MANIFEST_PATH:-data/content-manifests/production.yaml}"
