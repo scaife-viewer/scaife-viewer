@@ -18,7 +18,6 @@ from scaife_viewer.core.views import (
     library_text_redirect,
     morpheus,
     search,
-    search_json,
 )
 
 from .views import (
@@ -29,6 +28,7 @@ from .views import (
     dictionary_entries,
     home,
     profile,
+    search_json, # moved from scaife_viewer.core for easier debugging
 )
 
 
