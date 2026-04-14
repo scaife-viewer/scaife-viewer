@@ -23,6 +23,7 @@ if [ ! -f ${SENTINEL_DIR}/.text_repos_loaded ]; then
 fi
 
 if [ ! -f ${SENTINEL_DIR}/.atlas_db_prepared ]; then
+    ./bin/copy_corpus_repo_metadata
     python manage.py prepare_atlas_db --force
     touch ${SENTINEL_DIR}/.atlas_db_prepared
 fi
