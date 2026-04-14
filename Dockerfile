@@ -69,6 +69,10 @@ RUN mkdir -p atlas_data/sentinels && \
         touch atlas_data/sentinels/.atlas_db_prepared; \
     fi
 
+# bash is needed for some of the ingestion
+# scripts
+RUN apk --no-cache add bash
+
 RUN python manage.py collectstatic --noinput
 
 CMD ["gunicorn", "sv_pdl.wsgi:application"]
