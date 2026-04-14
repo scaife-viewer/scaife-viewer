@@ -55,7 +55,6 @@ COPY . .
 COPY --from=static-build /opt/scaife-viewer/src/static/dist /opt/scaife-viewer/src/static/dist
 COPY --from=static-build /opt/scaife-viewer/src/static/stats /opt/scaife-viewer/src/static/stats
 
-RUN isort -c **/*.py
 RUN python manage.py collectstatic --noinput
 
 CMD ["gunicorn", "sv_pdl.wsgi:application"]

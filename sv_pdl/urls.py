@@ -21,6 +21,9 @@ from scaife_viewer.core.views import (
 )
 
 from .views import (
+    search_json,  # moved from scaife_viewer.core for easier debugging
+)
+from .views import (
     about,
     app,
     commentaries,
@@ -28,7 +31,6 @@ from .views import (
     dictionary_entries,
     home,
     profile,
-    search_json,  # moved from scaife_viewer.core for easier debugging
 )
 
 

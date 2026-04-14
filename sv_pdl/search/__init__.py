@@ -7,7 +7,6 @@ from django.utils.functional import SimpleLazyObject
 import regex
 from elasticsearch import Elasticsearch
 from elasticsearch.helpers import scan as scanner
-
 from scaife_viewer.core import cts
 
 
