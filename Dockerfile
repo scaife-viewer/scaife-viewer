@@ -21,8 +21,14 @@ COPY requirements.frozen.txt /opt/scaife-viewer/src/
 RUN set -x \
     && virtualenv /opt/scaife-viewer \
     && apk --no-cache add \
-        build-base curl git libgcc libxml2-dev libxslt-dev postgresql-dev linux-headers python3-dev libffi-dev \
+    build-base curl git libgcc libxml2-dev libxslt-dev postgresql-dev linux-headers python3-dev libffi-dev \
     && pip install -r requirements.frozen.txt
+
+# We need to uninstall and reinstall urllib3 manually
+# to avoid conflicts
+RUN pip uninstall -y urllib3
+RUN pip install urllib3==1.26.15
+
 
 FROM python:3.8-alpine
 
@@ -36,16 +42,16 @@ WORKDIR /opt/scaife-viewer/src/
 COPY --from=python-build /opt/scaife-viewer/ /opt/scaife-viewer/
 RUN set -x \
     && runDeps="$( \
-        scanelf --needed --nobanner --format '%n#p' --recursive /opt/scaife-viewer \
-            | tr ',' '\n' \
-            | sort -u \
-            | awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
-            | grep -v 'libgcc_s-' \
-        )" \
+    scanelf --needed --nobanner --format '%n#p' --recursive /opt/scaife-viewer \
+    | tr ',' '\n' \
+    | sort -u \
+    | awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
+    | grep -v 'libgcc_s-' \
+    )" \
     && apk --no-cache add \
-        $runDeps \
-        libgcc \
-        curl
+    $runDeps \
+    libgcc \
+    curl
 
 COPY . .
 
@@ -60,12 +66,12 @@ COPY --from=static-build /opt/scaife-viewer/src/static/stats /opt/scaife-viewer/
 # re-ingestion steps when the corresponding sentinel is present.
 RUN mkdir -p atlas_data/sentinels && \
     if [ -d data/cts ] && [ "$(ls -A data/cts 2>/dev/null)" ]; then \
-        sha256sum data/content-manifests/production.yaml 2>/dev/null | cut -d' ' -f1 \
-            > atlas_data/sentinels/.manifest_hash; \
-        touch atlas_data/sentinels/.text_repos_loaded; \
+    sha256sum data/content-manifests/production.yaml 2>/dev/null | cut -d' ' -f1 \
+    > atlas_data/sentinels/.manifest_hash; \
+    touch atlas_data/sentinels/.text_repos_loaded; \
     fi && \
     if [ -f atlas_data/atlas.sqlite ]; then \
-        touch atlas_data/sentinels/.atlas_db_prepared; \
+    touch atlas_data/sentinels/.atlas_db_prepared; \
     fi
 
 # bash is needed for some of the ingestion
