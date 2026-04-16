@@ -17,13 +17,12 @@ FROM python:3.8-alpine AS python-build
 WORKDIR /opt/scaife-viewer/src/
 RUN pip --no-cache-dir --disable-pip-version-check install virtualenv
 ENV PATH="/opt/scaife-viewer/bin:${PATH}" VIRTUAL_ENV="/opt/scaife-viewer"
-COPY requirements.txt /opt/scaife-viewer/src/
+COPY requirements.frozen.txt /opt/scaife-viewer/src/
 RUN set -x \
     && virtualenv /opt/scaife-viewer \
     && apk --no-cache add \
         build-base curl git libgcc libxml2-dev libxslt-dev postgresql-dev linux-headers python3-dev libffi-dev \
-    && pip install -r requirements.txt
-RUN pip install flake8 flake8-quotes isort PyGithub
+    && pip install -r requirements.frozen.txt
 
 FROM python:3.8-alpine
 
