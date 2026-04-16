@@ -17,7 +17,6 @@ honcho==1.0.1
 isort
 # @@@ pin to MyCapytain fork until performance improvements are merged
 MyCapytain @https://github.com/jacobwegner/MyCapytain/archive/7b3c18b5721476535796ae4241934aea3afa85f8.zip
-pandas
 pinax-eventlog[django-lts]==5.1.0
 pinax-theme-bootstrap==8.0.1
 pinax-webanalytics==4.0.2
