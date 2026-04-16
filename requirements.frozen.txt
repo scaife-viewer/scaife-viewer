@@ -60,9 +60,7 @@ lxml==6.0.4
 matplotlib-inline==0.1.7
 mccabe==0.7.0
 MyCapytain @ https://github.com/jacobwegner/MyCapytain/archive/7b3c18b5721476535796ae4241934aea3afa85f8.zip#sha256=05cc1abc9dbc916ccfaf89fc47fb5df1e4cc31cf9554572ba20bc120e4a49606
-numpy==1.21.5
 packaging==26.1
-pandas==1.3.1
 parso==0.8.6
 partd==1.4.1
 pexpect==4.9.0
