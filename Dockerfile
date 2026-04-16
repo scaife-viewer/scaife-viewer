@@ -17,17 +17,18 @@ FROM python:3.8-alpine AS python-build
 WORKDIR /opt/scaife-viewer/src/
 RUN pip --no-cache-dir --disable-pip-version-check install virtualenv
 ENV PATH="/opt/scaife-viewer/bin:${PATH}" VIRTUAL_ENV="/opt/scaife-viewer"
-COPY requirements.frozen.txt /opt/scaife-viewer/src/
+COPY requirements.txt /opt/scaife-viewer/src/
 RUN set -x \
     && virtualenv /opt/scaife-viewer \
     && apk --no-cache add \
     build-base curl git libgcc libxml2-dev libxslt-dev postgresql-dev linux-headers python3-dev libffi-dev \
-    && pip install -r requirements.frozen.txt
+    && pip install -r requirements.txt
 
 # We need to uninstall and reinstall urllib3 manually
 # to avoid conflicts
 RUN pip uninstall -y urllib3
 RUN pip install urllib3==1.26.15
+RUN pip install PyGithub
 
 
 FROM python:3.8-alpine
