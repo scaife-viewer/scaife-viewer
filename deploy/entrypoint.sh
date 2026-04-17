@@ -48,7 +48,7 @@ fi
 
 if [ ! -f "${SENTINEL_DIR}/.es_indexed" ]; then
     curl -X PUT "http://${SV_ELASTICSEARCH_HOST}:${SV_ELASTICSEARCH_PORT}/_template/scaife-viewer?pretty" -H 'Content-Type: application/json' -d "$(cat deploy/scaife-viewer-es-template.json)"
-    python manage.py indexer --max-workers=1 --limit=1000
+    python manage.py indexer --max-workers=1
     touch "${SENTINEL_DIR}/.es_indexed"
 fi
 
