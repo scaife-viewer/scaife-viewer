@@ -4,14 +4,6 @@ import pagination from './pagination';
 const chunkFunc = require('lodash.chunk');
 const mergeFunc = require('lodash.merge');
 
-// FIXME (charles): Restrict dictionaries
-// to those that have definitions available
-const ALLOWED_DICTIONARIES = [
-  "brunetti-short-defs-for-beowulf",
-  "lewis-and-short-latin-dictionary",
-  "lsj",
-]
-
 async function chunkedVectorRequest(urn, params) {
   const urns = params.e;
   delete params.e;
@@ -53,12 +45,10 @@ export default {
       }
     }),
   getPassage: (urn, cb) => HTTP.get(`library/passage/${urn}/json/`).then(r => cb({ ...r.data, ...pagination(r) })),
-  getPerseusDictionaries: cb => HTTP.get('library/dictionaries/json/').then(r => {
-    console.log(r.data)
+  getPerseusDictionaries: cb => HTTP.get('library/dictionaries/json/').then((r) => {
+    const { results } = r.data;
 
-    const results = (r.data.results || []).filter(r => true || ALLOWED_DICTIONARIES.includes(r.slug))
-
-    cb({ results })
+    cb({ results });
   }),
   getPerseusCommentaryEntries: (urn, params, cb) => HTTP.get(`library/commentaries/${urn}/json/`, { params }).then(r => cb({ ...r.data })),
   searchPerseusDictionary: (dictionarySlug, params, cb) => HTTP.get(`library/dictionaries/${dictionarySlug}/entries/`, {
