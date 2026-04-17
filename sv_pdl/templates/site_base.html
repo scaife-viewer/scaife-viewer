@@ -25,7 +25,20 @@
     <nav>
       <div class="container">
         {% block topbar %}
-          {% block site_brand %}<a class="navbar-brand" href="{% url "home" %}"><img src="{% webpack_static 'images/perseus_running_man_small.png' %}"> {% block site_name %}Scaife Viewer{% endblock %}</a>{% endblock %}
+          {% block site_brand %}
+          <div class="row">
+            <div class="col pr-0">
+              <a class="navbar-brand" href="{% url "home" %}">
+                <img src="{% webpack_static 'images/perseus_running_man_small.png' %}" style="margin: 0;">
+              </a>
+            </div>
+            <div class="col pl-0">
+              <a class="navbar-brand" href="{% url "home" %}">
+                <span>Scaife Viewer <br /><small class="fs-6 mt-2">Hosted by Tufts University</small></span>
+              </a>
+            </div>
+          </div>
+          {% endblock %}
           {% block navbar-toggler %}
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
               <span class="fa fa-bars"></span>

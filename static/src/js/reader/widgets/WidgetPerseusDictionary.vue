@@ -28,27 +28,26 @@
         <div class="loading-container mt-2" v-if="loading"><div class="dot" /></div>
 
         <div v-if="(results || []).length > 0 && q.length">
-          <details v-for="result in results" :key="result.urn" class="mt-2">
-            <summary>
-              {{ result.headword_normalized }} ({{ result.intro_text }})
-            </summary>
-            <div
-              v-for="sense in result.data.senses"
-              :key="sense.urn"
-              class="senses"
-            >
-              <div v-for="child in sense.children" :key="child.urn">
-                <span v-html="child.definition" />
-              </div>
+          <div v-for="result in results" :key="result.urn" class="mt-2">
+            <details
+              v-if="(result.data.senses || []).length > 0 &&
+                (result.data.senses || []).some(s => Boolean(s.definition) || (s.children || []).length > 0)"
+              >
+              <summary>
+                {{ result.headword_normalized }} ({{ result.intro_text }})
+              </summary>
+              <perseus-dictionary-sense v-for="sense in result.data.senses"
+                :key="sense.urn"
+                :children="sense.children"
+                :citations="sense.citations"
+                :definition="sense.definition"
+                :label="sense.label"
+                :urn="sense.urn" />
+            </details>
+            <div v-else>
+              <span><strong>{{ result.headword_normalized }}</strong>: <span v-html="result.intro_text"></span></span>
             </div>
-            <div
-              v-for="citation in result.data.citations"
-              :key="citation.urn"
-              class="senses"
-            >
-              <span>{{ citation.data.ref }}</span>
-            </div>
-          </details>
+          </div>
         </div>
         <div v-else class="mt-2"><span v-if="q.length && !loading">No results found.</span></div>
       </div>
@@ -73,11 +72,15 @@
 
 <script>
 import api from "../../api";
+import PerseusDictionarySense from './PerseusDictionarySense.vue';
 
 const debounce = require("lodash.debounce");
 
 export default {
   name: "widget-perseus-dictionary",
+  components: {
+    PerseusDictionarySense,
+  },
   computed: {
     availableDictionaries() {
       return this.$store.state.reader.availableDictionaries;
