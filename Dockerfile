@@ -32,7 +32,7 @@ RUN pip install urllib3==1.26.15
 RUN pip install PyGithub
 RUN apk add --update make automake gcc g++ subversion
 # install pandas currently breaks the build -- not ready for prod
-RUN pip install pandas==2.0.3
+RUN pip install pandas
 
 FROM python:3.8-alpine
 
