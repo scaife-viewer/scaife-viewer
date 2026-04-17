@@ -28,6 +28,7 @@ RUN set -x \
 # to avoid conflicts
 RUN pip uninstall -y urllib3
 RUN pip install urllib3==1.26.15
+# Likewise, we install PyGithub here to avoid conflicts
 RUN pip install PyGithub
 
 
