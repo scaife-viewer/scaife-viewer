@@ -46,7 +46,8 @@ export default {
     }),
   getPassage: (urn, cb) => HTTP.get(`library/passage/${urn}/json/`).then(r => cb({ ...r.data, ...pagination(r) })),
   getPerseusDictionaries: cb => HTTP.get('library/dictionaries/json/').then((r) => {
-    const { results } = r.data;
+    // remove cambridge-greek-lexicon because the entries aren't formatting well
+    const results = r.data.results.filter(dict => dict.slug !== 'cambridge-greek-lexicon');
 
     cb({ results });
   }),
