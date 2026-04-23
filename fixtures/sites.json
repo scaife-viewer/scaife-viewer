@@ -4,7 +4,7 @@
         "model": "sites.site",
         "fields": {
             "domain": "localhost:8000",
-            "name": "Scaife Viewer [localhost]"
+            "name": "Scaife Viewer"
         }
     },
     {
@@ -16,11 +16,11 @@
         }
     },
     {
-      "pk": 3,
-      "model": "sites.site",
-      "fields": {
-          "domain": "scaife-dev.perseus.org",
-          "name": "Scaife Viewer"
-      }
-  }
+        "pk": 3,
+        "model": "sites.site",
+        "fields": {
+            "domain": "scaife-dev.perseus.org",
+            "name": "Scaife Viewer"
+        }
+    }
 ]
