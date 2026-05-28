@@ -30,7 +30,6 @@ def _latest_release():
     except Exception:
         return {}
 
-
 def home(request):
     release = cache.get(LATEST_RELEASE_KEY, None)
     if not release:
@@ -57,7 +56,7 @@ def commentaries(request, *args, **kwargs):
     page = request.GET.get("page", 1)
     url = f"{settings.SV_NEW_ATLAS_API_URL}/commentaries/passage/{kwargs['urn']}/?page={page}"
 
-    response = requests.get(url)
+    response = requests.get(url, timeout=30)
 
     if response.status_code == 200:
         return JsonResponse(response.json())
@@ -74,7 +73,7 @@ def dictionary_entries(request, *args, **kwargs):
     if q is not None:
         url = f"{url}&q={q}"
 
-    response = requests.get(url)
+    response = requests.get(url, timeout=30)
 
     if response.status_code == 200:
         return JsonResponse(response.json())
@@ -86,6 +85,7 @@ def dictionaries(request):
     response = requests.get(
         f"{settings.SV_NEW_ATLAS_API_URL}/dictionaries/json/",
         headers={"accept": "application/json"},
+        timeout=30
     )
 
     return JsonResponse(response.json())
@@ -166,7 +166,6 @@ def search_json(request):
         )
 
     else:
-
         offset = int(request.GET.get("offset", "0"))
         pivot = request.GET.get("pivot")
         work_urn = request.GET.get("work")
