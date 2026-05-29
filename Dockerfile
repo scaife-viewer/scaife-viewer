@@ -32,7 +32,7 @@ RUN pip install urllib3==1.26.15
 RUN pip install PyGithub
 RUN apk add --update make automake gcc g++ subversion
 
-FROM python:3.8-alpine
+FROM python:3.8-alpine AS webapp
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
@@ -83,3 +83,17 @@ RUN apk --no-cache add bash
 RUN python manage.py collectstatic --noinput
 
 CMD ["gunicorn", "sv_pdl.wsgi:application"]
+
+FROM alpine AS search-annotations
+ARG ANNOTATIONS_TARBALL="https://github.com/scaife-viewer/ogl-pdl-annotations/tarball/main"
+RUN apk --no-cache add curl
+RUN mkdir -p /opt/scaife-viewer/src/data/search-annotations
+WORKDIR /opt/scaife-viewer/src/data/search-annotations
+RUN curl -L $ANNOTATIONS_TARBALL -o archive.tgz && \
+    tar -xf archive.tgz --strip-components=1 && \
+    rm archive.tgz
+
+FROM webapp AS search-index
+COPY --from=search-annotations /opt/scaife-viewer/src/data/search-annotations /opt/scaife-viewer/src/data/search-annotations
+ENV LEMMA_CONTENT=1
+ENV TOKEN_ANNOTATIONS_PATH=/opt/scaife-viewer/src/data/search-annotations/data/token-annotations
