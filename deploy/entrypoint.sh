@@ -14,10 +14,7 @@ python manage.py migrate
 python manage.py migrate sites
 python manage.py migrate --database=atlas
 
-if [ ! -f "${SENTINEL_DIR}/.sites_loaded" ]; then
-    python manage.py loaddata sites
-    touch "${SENTINEL_DIR}/.sites_loaded"
-fi
+python manage.py loaddata sites
 
 # Re-load text repos if the content manifest has changed since last ingestion.
 MANIFEST_PATH="${CONTENT_MANIFEST_PATH:-data/content-manifests/production.yaml}"
