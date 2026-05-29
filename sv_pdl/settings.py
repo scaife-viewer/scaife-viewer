@@ -128,11 +128,13 @@ TEMPLATES = [
 ]
 
 MIDDLEWARE = [
+    "django.middleware.cache.UpdateCacheMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "sv_pdl.middleware.PerRequestMiddleware",
+    "django.middleware.cache.FetchFromCacheMiddleware",
 ]
 
 PER_REQUEST_MIDDLEWARE = {
@@ -313,12 +315,22 @@ SECURE_REDIRECT_EXEMPT = [
 
 DEFAULT_HTTP_PROTOCOL = "https" if SECURE_SSL_REDIRECT else "http"
 
+_REDIS_URL = os.environ.get("REDIS_URL")
+
 CACHES = {
     "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": _REDIS_URL,
+        "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"},
+    }
+    if _REDIS_URL
+    else {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
         "LOCATION": "sv-cache",
     },
 }
+
+CACHE_MIDDLEWARE_SECONDS = 900
 
 CTS_RESOLVER_CACHE_LOCATION = os.environ.get(
     "CTS_RESOLVER_CACHE_LOCATION", "cts_resolver_cache"

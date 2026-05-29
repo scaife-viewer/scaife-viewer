@@ -30,6 +30,7 @@ def _latest_release():
     except Exception:
         return {}
 
+
 def home(request):
     release = cache.get(LATEST_RELEASE_KEY, None)
     if not release:
@@ -85,7 +86,7 @@ def dictionaries(request):
     response = requests.get(
         f"{settings.SV_NEW_ATLAS_API_URL}/dictionaries/json/",
         headers={"accept": "application/json"},
-        timeout=30
+        timeout=30,
     )
 
     return JsonResponse(response.json())
@@ -113,7 +114,6 @@ def search_json(request):
 
     # conduct search
     if search_type == "library":
-
         page_num = int(request.GET.get("page_num", "1"))
         aggregate_fields = {
             "filtered_text_group": {"terms": {"field": "text_group", "size": 300}}

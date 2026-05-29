@@ -9,6 +9,7 @@ mkdir -p ${SENTINEL_DIR} ${CTS_LOCAL_DATA_PATH:-data/cts} ${ATLAS_DATA_DIR:-atla
 # going on here, but Django complains about the
 # missing sites table unless we run these processes
 # in this order.
+python manage.py makemigrations
 python manage.py migrate
 python manage.py migrate sites
 python manage.py migrate --database=atlas
