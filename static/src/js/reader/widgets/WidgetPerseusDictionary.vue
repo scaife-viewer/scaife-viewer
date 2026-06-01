@@ -25,31 +25,44 @@
           />
         </div>
 
-        <div class="loading-container mt-2" v-if="loading"><div class="dot" /></div>
+        <div class="loading-container mt-2" v-if="loading">
+          <div class="dot" />
+        </div>
 
         <div v-if="(results || []).length > 0 && q.length">
           <div v-for="result in results" :key="result.urn" class="mt-2">
             <details
-              v-if="(result.data.senses || []).length > 0 &&
-                (result.data.senses || []).some(s => Boolean(s.definition) || (s.children || []).length > 0)"
-              >
+              v-if="
+                (result.data.senses || []).length > 0 &&
+                (result.data.senses || []).some(
+                  (s) => Boolean(s.definition) || (s.children || []).length > 0,
+                )
+              "
+            >
               <summary>
                 {{ result.headword_normalized }} ({{ result.intro_text }})
               </summary>
-              <perseus-dictionary-sense v-for="sense in result.data.senses"
+              <perseus-dictionary-sense
+                v-for="sense in result.data.senses"
                 :key="sense.urn"
                 :children="sense.children"
                 :citations="sense.citations"
                 :definition="sense.definition"
                 :label="sense.label"
-                :urn="sense.urn" />
+                :urn="sense.urn"
+              />
             </details>
             <div v-else>
-              <span><strong>{{ result.headword_normalized }}</strong>: <span v-html="result.intro_text"></span></span>
+              <span
+                ><strong>{{ result.headword_normalized }}</strong
+                >: <span v-html="result.intro_text"></span
+              ></span>
             </div>
           </div>
         </div>
-        <div v-else class="mt-2"><span v-if="q.length && !loading">No results found.</span></div>
+        <div v-else class="mt-2">
+          <span v-if="q.length && !loading">No results found.</span>
+        </div>
       </div>
 
       <div v-if="totalPages > 1 && q.length">
@@ -72,9 +85,29 @@
 
 <script>
 import api from "../../api";
-import PerseusDictionarySense from './PerseusDictionarySense.vue';
+import PerseusDictionarySense from "./PerseusDictionarySense.vue";
 
 const debounce = require("lodash.debounce");
+
+const GREEK_DICTIONARIES = [
+  "anabasis-mather",
+  "cunliffe-hompers",
+  "cunliffe-lex-entries",
+  "lexicon-thucydideum",
+  "lsj",
+  "middle-liddel",
+  "short-defs",
+  "slater-pindar",
+];
+
+const LATIN_DICTIONARIES = [
+  "elementary-latin",
+  "latin-short-defs",
+  "lewis-and-short-latin-dictionary",
+  "short-defs",
+];
+
+const OTHER_DICTIONARIES = ["brunetti-short-defs-for-beowulf"];
 
 export default {
   name: "widget-perseus-dictionary",
@@ -83,6 +116,18 @@ export default {
   },
   computed: {
     availableDictionaries() {
+      const urn = this.$store.state.reader.leftPassage.urn.value;
+
+      if (urn.includes("-grc")) {
+        return this.$store.state.reader.availableDictionaries.filter((d) =>
+          GREEK_DICTIONARIES.includes(d.slug),
+        );
+      } else if (urn.includes("-lat")) {
+        return this.$store.state.reader.availableDictionaries.filter((d) =>
+          LATIN_DICTIONARIES.includes(d.slug),
+        );
+      }
+
       return this.$store.state.reader.availableDictionaries;
     },
     selectedDictionary: {
@@ -189,6 +234,7 @@ export default {
     dictionaryQuery(newVal) {
       this.q = newVal;
     },
+    selectedDictionary: "updateSearch",
     query: "updateSearch",
   },
 };
