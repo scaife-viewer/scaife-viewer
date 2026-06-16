@@ -95,7 +95,7 @@ const GREEK_DICTIONARIES = [
   "cunliffe-lex-entries",
   "lexicon-thucydideum",
   "lsj",
-  "middle-liddel",
+  "middle-liddell",
   "short-defs",
   "slater-pindar",
 ];
