@@ -1,7 +1,7 @@
 PerseusDL/canonical-latinLit:
-  ref: 0.0.29767943852
-  sha: 5eb9657e711a412212b79f08db7c91d7b1772b4e
-  tarball_url: https://api.github.com/repos/PerseusDL/canonical-latinLit/tarball/0.0.29767943852
+  ref: 0.0.29848681322
+  sha: e69eee761e5bd89c00a5d0744efa2367c5e1d7e3
+  tarball_url: https://api.github.com/repos/PerseusDL/canonical-latinLit/tarball/0.0.29848681322
 PerseusDL/canonical-greekLit:
   ref: 0.0.29771386908
   sha: 91595f89e15b4d3000cd93efcf8990720c8be2b9
@@ -35,9 +35,9 @@ lascivaroma/priapeia:
   sha: 3dfc11fe1bbbe5f34c435e6cd56cc277cdacbe8f
   tarball_url: https://api.github.com/repos/lascivaroma/priapeia/tarball/1.1.18
 hlapin/ancJewLitCTS:
-  ref: master
+  ref: 0.1.50
   sha: f3534557c6cae678bccbbf0d97ac2b2cdf71cc2e
-  tarball_url: https://api.github.com/repos/hlapin/ancJewLitCTS/tarball/f3534557c6cae678bccbbf0d97ac2b2cdf71cc2e
+  tarball_url: https://api.github.com/repos/hlapin/ancJewLitCTS/tarball/0.1.50
 nevenjovanovic/sophocles-ajax-latinus:
   ref: master
   sha: aee7611f65a30b8fe17f1833154988c811e886b3
