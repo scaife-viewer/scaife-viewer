@@ -21,3 +21,4 @@ deploy/.env
 archive/
 .envrc
 .ropeproject
+logs

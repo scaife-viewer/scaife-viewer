@@ -8,6 +8,9 @@ PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir
 PACKAGE_ROOT = os.path.abspath(os.path.dirname(__file__))
 BASE_DIR = PACKAGE_ROOT
 
+REQUEST_LOG_DIR = os.environ.get("REQUEST_LOG_DIR", os.path.join(PROJECT_ROOT, "logs"))
+os.makedirs(REQUEST_LOG_DIR, exist_ok=True)
+
 DEBUG = bool(int(os.environ.get("DEBUG", "1")))
 TRACING_ENABLED = bool(int(os.environ.get("TRACING_ENABLED", not DEBUG)))
 # FIXME: Deprecate or make this dynamic
@@ -226,6 +229,11 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "filters": {"require_debug_false": {"()": "django.utils.log.RequireDebugFalse"}},
+    "formatters": {
+        "request_log": {
+            "format": "%(asctime)s %(message)s",
+        },
+    },
     "handlers": {
         "mail_admins": {
             "level": "ERROR",
@@ -241,6 +249,14 @@ LOGGING = {
             "class": "logging.StreamHandler",
             "stream": sys.stdout,
         },
+        "request_log_file": {
+            "level": "INFO",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": os.path.join(REQUEST_LOG_DIR, "requests.log"),
+            "maxBytes": 10 * 1024 * 1024,
+            "backupCount": 5,
+            "formatter": "request_log",
+        },
     },
     "loggers": {
         "django.request": {
@@ -252,7 +268,7 @@ LOGGING = {
             "level": "ERROR",
         },
         "sv_pdl.request_log": {
-            "handlers": ["console"],
+            "handlers": ["request_log_file"],
             "level": "INFO",
             "propagate": False,
         },
