@@ -134,9 +134,16 @@ MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "sv_pdl.middleware.RequestLoggingMiddleware",
+    "sv_pdl.middleware.RateLimitMiddleware",
     "sv_pdl.middleware.PerRequestMiddleware",
     "django.middleware.cache.FetchFromCacheMiddleware",
 ]
+
+# Per-IP request rate limit, enforced by RateLimitMiddleware. Backed by the
+# "default" cache (Redis in production; see CACHES below), so the limit is
+# shared across all gunicorn workers/dynos.
+RATELIMIT_ENABLE = bool(int(os.environ.get("RATELIMIT_ENABLE", "1")))
+RATELIMIT_DEFAULT_RATE = os.environ.get("RATELIMIT_DEFAULT_RATE", "200/m")
 
 PER_REQUEST_MIDDLEWARE = {
     "default": [

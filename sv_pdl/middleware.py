@@ -6,8 +6,11 @@ from functools import lru_cache
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured, MiddlewareNotUsed
 from django.core.handlers.exception import convert_exception_to_response
+from django.http import HttpResponse
 from django.urls import get_resolver
 from django.utils.module_loading import import_string
+
+from django_ratelimit.core import get_usage
 
 
 request_logger = logging.getLogger("sv_pdl.request_log")
@@ -52,6 +55,36 @@ class RequestLoggingMiddleware:
             },
         )
         return response
+
+
+def ratelimit_key(group, request):
+    # django_ratelimit's built-in "ip" key reads REMOTE_ADDR directly, which
+    # is the reverse proxy's address here, not the client's.
+    return get_client_ip(request)
+
+
+class RateLimitMiddleware:
+    """
+    Enforces a global per-IP request rate limit (settings.RATELIMIT_DEFAULT_RATE),
+    backed by the default cache so the limit is shared across workers.
+    """
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        usage = get_usage(
+            request,
+            group="global",
+            key=ratelimit_key,
+            rate=settings.RATELIMIT_DEFAULT_RATE,
+            increment=True,
+        )
+        if usage and usage["should_limit"]:
+            response = HttpResponse("Too Many Requests", status=429)
+            response["Retry-After"] = str(max(usage["time_left"], 0))
+            return response
+        return self.get_response(request)
 
 
 class PerRequestMiddleware:
