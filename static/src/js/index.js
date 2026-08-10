@@ -5,6 +5,7 @@ import '@/images/perseus_running_man.png';
 import '@/images/perseus_running_man_small.png';
 
 import loadApp from './app';
+import initGdprNotice from './gdprNotice';
 
 // for the bootstrap
 window.Popper = Popper;
@@ -12,6 +13,7 @@ require('bootstrap');
 
 $(() => {
   loadApp();
+  initGdprNotice();
 
   // Topbar active tab support
   $('.topbar li').removeClass('active');

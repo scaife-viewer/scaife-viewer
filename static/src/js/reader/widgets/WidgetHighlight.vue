@@ -58,9 +58,12 @@ export default {
       } else {
         queryParams.highlight = this.value;
       }
-      this.$router.replace({
-        query: queryParams,
-      });
+
+      if (({...this.$route.query}).toString() !== queryParams.toString()) {
+        this.$router.replace({
+          query: queryParams,
+        });
+      }
     },
     handleKeyUp(e) {
       if (e.keyCode === 13) {

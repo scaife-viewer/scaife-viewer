@@ -1,4 +1,6 @@
 import copy
+import logging
+import time
 from functools import lru_cache
 
 from django.conf import settings
@@ -6,6 +8,50 @@ from django.core.exceptions import ImproperlyConfigured, MiddlewareNotUsed
 from django.core.handlers.exception import convert_exception_to_response
 from django.urls import get_resolver
 from django.utils.module_loading import import_string
+
+
+request_logger = logging.getLogger("sv_pdl.request_log")
+
+
+def get_client_ip(request):
+    forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
+    if forwarded_for:
+        # The reverse proxy in front of gunicorn sets this header; the
+        # client IP is the first entry in the (potentially chained) list.
+        return forwarded_for.split(",")[0].strip()
+    return request.META.get("REMOTE_ADDR")
+
+
+class RequestLoggingMiddleware:
+    """
+    Logs one line per request with the client IP address, so that access
+    patterns and abuse can be investigated after the fact.
+    """
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        started_at = time.monotonic()
+        response = self.get_response(request)
+        duration_ms = int((time.monotonic() - started_at) * 1000)
+        ip_address = get_client_ip(request)
+        request_logger.info(
+            "%s %s %s %s %sms",
+            ip_address,
+            request.method,
+            request.get_full_path(),
+            response.status_code,
+            duration_ms,
+            extra={
+                "ip_address": ip_address,
+                "method": request.method,
+                "path": request.get_full_path(),
+                "status_code": response.status_code,
+                "duration_ms": duration_ms,
+            },
+        )
+        return response
 
 
 class PerRequestMiddleware:

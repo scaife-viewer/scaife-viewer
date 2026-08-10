@@ -133,6 +133,7 @@ MIDDLEWARE = [
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
+    "sv_pdl.middleware.RequestLoggingMiddleware",
     "sv_pdl.middleware.PerRequestMiddleware",
     "django.middleware.cache.FetchFromCacheMiddleware",
 ]
@@ -242,6 +243,11 @@ LOGGING = {
         },
         "scaife_viewer.cts": {
             "level": "ERROR",
+        },
+        "sv_pdl.request_log": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": False,
         },
         "raven": {
             "level": "WARNING",

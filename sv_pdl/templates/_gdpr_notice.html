@@ -1,0 +1,18 @@
+<div class="gdpr-notice alert alert-info alert-dismissible fade show" id="gdprNotice" role="alert">
+  This site logs visitor IP addresses for security and access-monitoring purposes.
+  <button type="button" class="close" data-dismiss="alert" aria-label="Dismiss">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<script>
+  (function () {
+    try {
+      if (window.localStorage.getItem('sv-gdpr-notice-dismissed') === '1') {
+        var el = document.getElementById('gdprNotice');
+        if (el) { el.parentNode.removeChild(el); }
+      }
+    } catch (e) {
+      // localStorage unavailable (e.g. private browsing); leave the notice visible
+    }
+  }());
+</script>
