@@ -23,13 +23,13 @@ PerseusDL/canonical-pdlpsci:
   sha: 13730472599c94b90cb11946b4946697ed8680fc
   tarball_url: https://api.github.com/repos/PerseusDL/canonical-pdlpsci/tarball/v0.6.0
 OpenGreekAndLatin/First1KGreek:
-  ref: 1.1.36770798044
+  ref: master
   sha: 03776b39f4047c5cff06f5296fae4b2bae4b08fb
-  tarball_url: https://api.github.com/repos/OpenGreekAndLatin/First1KGreek/tarball/1.1.36770798044
+  tarball_url: https://api.github.com/repos/OpenGreekAndLatin/First1KGreek/tarball/03776b39f4047c5cff06f5296fae4b2bae4b08fb
 OpenGreekAndLatin/Latin:
-  ref: 1.1.37987699360
-  sha: 8241443b0146bc66901fea6cbfa879e02d2ce320
-  tarball_url: https://api.github.com/repos/OpenGreekAndLatin/Latin/tarball/1.1.37987699360
+  ref: 1.1.38463048418
+  sha: 44489601c8d83e43e813d28acf644a6723b24a1d
+  tarball_url: https://api.github.com/repos/OpenGreekAndLatin/Latin/tarball/1.1.38463048418
 lascivaroma/priapeia:
   ref: 1.1.18
   sha: 3dfc11fe1bbbe5f34c435e6cd56cc277cdacbe8f
