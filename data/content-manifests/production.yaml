@@ -3,9 +3,9 @@ PerseusDL/canonical-latinLit:
   sha: 8b536bdf3ed1f43494055efe112433b4a58eab67
   tarball_url: https://api.github.com/repos/PerseusDL/canonical-latinLit/tarball/0.0.33195683883
 PerseusDL/canonical-greekLit:
-  ref: 0.0.40587770849
-  sha: a6eb0cc3e6f6e382934a2c8b33577d2fb4371e00
-  tarball_url: https://api.github.com/repos/PerseusDL/canonical-greekLit/tarball/0.0.40587770849
+  ref: 0.0.41483628976
+  sha: 282e6f5a3ec12e6ca67e44cd4fa3487526e3b421
+  tarball_url: https://api.github.com/repos/PerseusDL/canonical-greekLit/tarball/0.0.41483628976
 PerseusDL/canonical-engLit:
   ref: 0.0.27775717410
   sha: f73fc156828cbf97b7a06f1eefa320b0af7b5a2b
