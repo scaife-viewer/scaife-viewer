@@ -1,6 +1,6 @@
 PerseusDL/canonical-latinLit:
   ref: 0.0.33195683883
-  sha: 8b536bdf3ed1f43494055efe112433b4a58eab67
+  sha: bfdcd062840c67dc85993eb942fcc75e68457f6d
   tarball_url: https://api.github.com/repos/PerseusDL/canonical-latinLit/tarball/0.0.33195683883
 PerseusDL/canonical-greekLit:
   ref: 0.0.41483628976
