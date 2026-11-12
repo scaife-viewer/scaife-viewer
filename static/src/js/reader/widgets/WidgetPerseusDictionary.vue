@@ -61,7 +61,8 @@
           </div>
         </div>
         <div v-else class="mt-2">
-          <span v-if="q.length && !loading">No results found.</span>
+          <span v-if="error && !loading">{{ error }}</span>
+          <span v-else-if="q.length && !loading">No results found.</span>
         </div>
       </div>
 
@@ -215,18 +216,26 @@ export default {
     }, 250),
     updateSearch: debounce(function _updateSearch() {
       this.loading = true;
+      this.error = "";
 
-      api.searchPerseusDictionary(
-        this.selectedDictionary,
-        { q: this.query },
-        ({ current_page, results, total_pages }) => {
-          this.results = results;
-          this.currentPage = current_page;
-          this.totalPages = total_pages;
-
+      api
+        .searchPerseusDictionary(
+          this.selectedDictionary,
+          { q: this.query },
+          ({ current_page, results, total_pages }) => {
+            this.results = results;
+            this.currentPage = current_page;
+            this.totalPages = total_pages;
+          },
+        )
+        .catch(() => {
+          this.results = [];
+          this.totalPages = 0;
+          this.error = "The dictionary could not be reached. Please try again.";
+        })
+        .finally(() => {
           this.loading = false;
-        },
-      );
+        });
     }, 250),
   },
 
