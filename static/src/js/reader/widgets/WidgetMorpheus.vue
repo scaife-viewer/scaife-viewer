@@ -44,6 +44,14 @@
 import constants from '../../constants';
 import TextLoader from '../../components/TextLoader.vue';
 
+// Morpheus numbers homographs (`περάω1`, `ἅλιος1`), but the dictionaries and
+// the word list key their entries by the bare lemma.
+const lemmaWithoutHomographNumber = hdwd => hdwd.replace(/\d+$/, '');
+
+// Texts mark elision with U+2019 or U+02BC (`δʼ`), but Morpheus only
+// analyses elided forms written with U+0027 (`δ'`).
+const morpheusForm = word => word.replace(/[’ʼ]/g, "'");
+
 export default {
   name: 'widget-morpheus',
   watch: {
@@ -84,7 +92,7 @@ export default {
   },
   methods: {
     shortDef(hdwd) {
-      const entry = this.wordList.find(w => w.text === hdwd);
+      const entry = this.wordList.find(w => w.text === lemmaWithoutHomographNumber(hdwd));
       return entry ? entry.shortdef : null;
     },
     fetchData() {
@@ -93,7 +101,7 @@ export default {
       if (word) {
         this.loading = true;
         const baseURL = this.$router.options.base;
-        const url = `${baseURL}morpheus/?word=${word.w}&lang=${lang}`;
+        const url = `${baseURL}morpheus/?word=${morpheusForm(word.w)}&lang=${lang}`;
         const headers = new Headers({
           Accept: 'application/json',
         });
@@ -103,10 +111,10 @@ export default {
               this.morphBody = data.Body;
               const lemmas = [];
               this.morphBody.forEach(({ hdwd }) => {
-                lemmas.push(hdwd);
+                lemmas.push(lemmaWithoutHomographNumber(hdwd));
               });
               this.$store.commit(`reader/${constants.READER_SET_SELECTED_LEMMAS}`, { lemmas });
-              this.$store.commit(`reader/${constants.READER_SET_DICTIONARY_QUERY}`, { query: this.morphBody[0].hdwd });
+              this.$store.commit(`reader/${constants.READER_SET_DICTIONARY_QUERY}`, { query: lemmaWithoutHomographNumber(this.morphBody[0].hdwd) });
             } else {
               this.reset();
             }
@@ -118,7 +126,7 @@ export default {
       }
     },
     searchDictionary(hdwd) {
-      this.$store.commit(`reader/${constants.READER_SET_DICTIONARY_QUERY}`, { query: hdwd });
+      this.$store.commit(`reader/${constants.READER_SET_DICTIONARY_QUERY}`, { query: lemmaWithoutHomographNumber(hdwd) });
     },
     reset() {
       this.morphBody = null;
